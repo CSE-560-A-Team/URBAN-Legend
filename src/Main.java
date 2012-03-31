@@ -1,5 +1,5 @@
 /**
- * 
+ * Pfff... I got this SOLO!
  * @author Ratul Khosla, Eric Smith, Noah Torrance, Josh Ventura
  *
  */
