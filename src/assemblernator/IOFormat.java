@@ -13,7 +13,7 @@ public class IOFormat {
 	 * Check a label for validity against the URBAN specification, V1.0.
 	 * 
 	 * @date Apr 3, 2012; 2:33:00 PM
-	 * @modifications UNMODIFIED
+	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors This function facilitates reporting errors. It does not generate
 	 *         them.
@@ -44,7 +44,7 @@ public class IOFormat {
 	 * Format an integer to a zero-padded decimal representation.
 	 * 
 	 * @author Josh Ventura
-	 * @modifications UNMODIFIED
+	 * @modified UNMODIFIED
 	 * @tested Apr 3, 2012; 3:10:00 PM: Tested the decimal number 1337,
 	 *         printed with 10, 5, 4, 2, 1, and 0 digits of allowance.
 	 * 
@@ -80,7 +80,7 @@ public class IOFormat {
 	 * Format an integer to a zero-padded hexadecimal representation.
 	 * 
 	 * @author Josh Ventura
-	 * @modifications UNMODIFIED
+	 * @modified UNMODIFIED
 	 * @tested Apr 3, 2012; 3:10:30 PM: Tested the decimal number 1337,
 	 *         printed with 10, 4, 3, 2, 1, and 0 digits of allowance.
 	 * @codingStandards Awaiting signature
@@ -106,7 +106,7 @@ public class IOFormat {
 	 * Format a date as "YYYYDDD,HH:MM:SS".
 	 * 
 	 * @author Josh Ventura
-	 * @modifications UNMODIFIED
+	 * @modified UNMODIFIED
 	 * @tested Apr 3, 2012; 5:39:00 PM: Tested with a new Date object
 	 *         representing the current date and time.
 	 * @codingStandards Awaiting signature

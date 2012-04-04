@@ -17,8 +17,8 @@ public class Instruction {
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
-	 * @codingStyle Awaiting signature
-	 * @testingStyle Awaiting signature
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
 	 * @param operands
 	 *            The string of parameters to parse.
 	 */
@@ -46,8 +46,8 @@ public class Instruction {
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
-	 * @codingStyle Awaiting signature
-	 * @testingStyle Awaiting signature
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
 	 * @return Returns an integer containing the instruction's byte code.
 	 */
 	public int assemble() {
@@ -60,11 +60,10 @@ public class Instruction {
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
-	 * @codingStyle Awaiting signature
-	 * @testingStyle Awaiting signature
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
 	 */
 	public void execute() {
 		throw new NullPointerException("No method");
 	}
-
 }

@@ -13,7 +13,7 @@ public class ObjectWriter {
 	/**
 	 * @date 2012-04-03 Tuesday 02:33PM Check a label for validity against the
 	 *       URBAN specification, V1.0.
-	 * @modifications UNMODIFIED
+	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors This function facilitates reporting errors. It does not
 	 *                  generate them.
