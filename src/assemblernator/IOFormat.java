@@ -1,18 +1,18 @@
+package assemblernator;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
  * Formating class to format objects and check the formatting of objects.
- * 
- * @date 2012-04-03 Tuesday 02:32PM
+ * @date Apr 3, 2012; 2:32:00 PM
  * @author Josh Ventura
  */
 public class IOFormat {
 	/**
 	 * Check a label for validity against the URBAN specification, V1.0.
 	 * 
-	 * @date 2012-04-03 Tuesday 02:33PM
+	 * @date Apr 3, 2012; 2:33:00 PM
 	 * @modifications UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors This function facilitates reporting errors. It does not generate
@@ -45,7 +45,7 @@ public class IOFormat {
 	 * 
 	 * @author Josh Ventura
 	 * @modifications UNMODIFIED
-	 * @tested 2012-04-03 Tuesday 03:10PM: Tested the decimal number 1337,
+	 * @tested Apr 3, 2012; 3:10:00 PM: Tested the decimal number 1337,
 	 *         printed with 10, 5, 4, 2, 1, and 0 digits of allowance.
 	 * 
 	 *         2012-04-03 Tuesday 05:54PM: Tested the decimal number 9001, to
@@ -81,7 +81,7 @@ public class IOFormat {
 	 * 
 	 * @author Josh Ventura
 	 * @modifications UNMODIFIED
-	 * @tested 2012-04-03 Tuesday 03:10PM: Tested the decimal number 1337,
+	 * @tested Apr 3, 2012; 3:10:30 PM: Tested the decimal number 1337,
 	 *         printed with 10, 4, 3, 2, 1, and 0 digits of allowance.
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
@@ -107,7 +107,7 @@ public class IOFormat {
 	 * 
 	 * @author Josh Ventura
 	 * @modifications UNMODIFIED
-	 * @tested 2012-04-03 Tuesday 05:39PM: Tested with a new Date object
+	 * @tested Apr 3, 2012; 5:39:00 PM: Tested with a new Date object
 	 *         representing the current date and time.
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
