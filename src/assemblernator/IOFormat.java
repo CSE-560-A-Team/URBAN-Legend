@@ -1,10 +1,12 @@
 package assemblernator;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
  * Formating class to format objects and check the formatting of objects.
+ * 
  * @date Apr 3, 2012; 2:32:00 PM
  * @author Josh Ventura
  */
@@ -26,7 +28,9 @@ public class IOFormat {
 	 * @specRef S2.1
 	 */
 	public static boolean isValidLabel(String label) {
-		for (int i = 0; i < label.length(); ++i)
+		if (label.length() < 1) return false;
+		if (Character.isLetter(label.charAt(0)))
+		for (int i = 1; i < label.length(); ++i)
 			switch (label.charAt(i)) {
 			case ':':
 				return false;
@@ -45,8 +49,8 @@ public class IOFormat {
 	 * 
 	 * @author Josh Ventura
 	 * @modified UNMODIFIED
-	 * @tested Apr 3, 2012; 3:10:00 PM: Tested the decimal number 1337,
-	 *         printed with 10, 5, 4, 2, 1, and 0 digits of allowance.
+	 * @tested Apr 3, 2012; 3:10:00 PM: Tested the decimal number 1337, printed
+	 *         with 10, 5, 4, 2, 1, and 0 digits of allowance.
 	 * 
 	 *         2012-04-03 Tuesday 05:54PM: Tested the decimal number 9001, to
 	 *         verify there was no issue with 0-result modulus.
@@ -81,8 +85,8 @@ public class IOFormat {
 	 * 
 	 * @author Josh Ventura
 	 * @modified UNMODIFIED
-	 * @tested Apr 3, 2012; 3:10:30 PM: Tested the decimal number 1337,
-	 *         printed with 10, 4, 3, 2, 1, and 0 digits of allowance.
+	 * @tested Apr 3, 2012; 3:10:30 PM: Tested the decimal number 1337, printed
+	 *         with 10, 4, 3, 2, 1, and 0 digits of allowance.
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param number
