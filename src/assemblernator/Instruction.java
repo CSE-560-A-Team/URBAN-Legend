@@ -36,7 +36,7 @@ public abstract class Instruction {
 		EQUATE,
 		/** Entry point */
 		ENTRY,
-		/** The label of some instruction */
+		/** A local label of some instruction */
 		LABEL
 	}
 
@@ -63,11 +63,8 @@ public abstract class Instruction {
 	int lc;
 	/** A hash map of any instructions encountered. */
 	HashMap<String, String> operands;
-	/**
-	 * The type of this instruction; External, Equate, Label, or None. I don't
-	 * actually understand what that means.
-	 */
-	short usage;
+	/** The type of this instruction as one of the {@link Usage} constants. */
+	Usage usage;
 
 	/**
 	 * Parse a string containing the operands of an instruction, storing the
@@ -101,7 +98,7 @@ public abstract class Instruction {
 	public abstract boolean check();
 
 	/**
-	 * Assemble this instruction after it has been checked.
+	 * Assemble this instruction to byte code after it has been checked.
 	 * 
 	 * @author Josh Ventura
 	 * @date Apr 4, 2012; 1:40:52 AM
@@ -110,7 +107,7 @@ public abstract class Instruction {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @return Returns an integer containing the instruction's byte code.
+	 * @return Returns an integer containing this instruction's byte code.
 	 */
 	public abstract int assemble();
 
