@@ -22,7 +22,7 @@ public class Main {
 		MOVD_Instruction.getInstance();
 		
 		try {
-			Instruction i = Instruction.parse("lolol MOVD EX:'For great justice';");
+			Instruction i = Instruction.parse("v4L1d_l4b3l_{}... MOVD EX:'For great justice';");
 			if (i != null) {
 				System.out.println("Success!");
 				System.out.println(i);

@@ -3,52 +3,73 @@ package instructions;
 import assemblernator.Instruction;
 
 /**
- * The MOVD instruction.
+ * Specialized Instruction for full-line comments, since they must be included
+ * in the user report.
  * 
  * @author Josh Ventura
- * @date Apr 6, 2012; 12:17:38 AM
- * @specRef MV0
+ * @date Apr 6, 2012; 11:36:23 AM
  */
-public class MOVD_Instruction extends Instruction {
-	/** The operation identifier of this instruction */
-	private static final String opId = "MOVD";
+public class Comment extends Instruction {
+	/**
+	 * The operation identifier of this instruction; while comments should not
+	 * be treated as an instruction, specification says they must be included in
+	 * the user report. Hence, we will simply give this class a semicolon as its
+	 * instruction ID.
+	 */
+	private static final String opId = ";";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0; // 0b000000
+	private static final int opCode = -1; // Comments do not have an opcode
 
 	/** The static instance for this instruction. */
-	static MOVD_Instruction staticInstance = new MOVD_Instruction(true);
+	static Comment staticInstance = new Comment(true);
+
+	/** The actual text given for this comment */
+	private String comment_text = "";
 
 	/** @see assemblernator.Instruction#getWordCount() */
 	@Override
 	public int getWordCount() {
-		return 1;
+		return 0;
 	}
 
 	/** @see assemblernator.Instruction#check() */
 	@Override
 	public boolean check() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override
 	public int[] assemble() {
-		// TODO Auto-generated method stub
-		return null;
+		return new int[0];
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
 	@Override
 	public void execute(int instruction) {
-		// TODO Auto-generated method stub
 	}
 
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override
 	public Instruction getNewInstance() {
-		return new MOVD_Instruction();
+		return new Comment();
+	}
+
+	/**
+	 * Construct a new comment with text.
+	 * 
+	 * @param c
+	 *            The comment text.
+	 */
+	public Comment(String c) {
+		comment_text = c;
+	}
+
+	/** Return the text of this comment, preceded by a semicolon. */
+	@Override
+	public String toString() {
+		return "; " + comment_text;
 	}
 
 	// =========================================================
@@ -86,11 +107,11 @@ public class MOVD_Instruction extends Instruction {
 	 *            Unused parameter; used to distinguish the constructor for the
 	 *            static instance.
 	 */
-	private MOVD_Instruction(boolean ignored) {
+	private Comment(boolean ignored) {
 		super(opId, opCode);
 	}
 
 	/** Default constructor; does nothing. */
-	private MOVD_Instruction() {
+	private Comment() {
 	}
 }

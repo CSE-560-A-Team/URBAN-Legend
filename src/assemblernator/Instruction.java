@@ -1,5 +1,8 @@
 package assemblernator;
 
+import instructions.Comment;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -139,9 +142,22 @@ public abstract class Instruction {
 	 * Parse a string containing the operands of an instruction, storing the
 	 * operands locally.
 	 * 
+	 * If the given code does not contain an instruction, null is returned.
+	 * 
+	 * If the instruction is not concluded on the given line, this method will
+	 * throw an IOException with the message "RAL". "RAL" is short for "Request
+	 * Another Line"; the caller should read an additional line from the input,
+	 * append it to the string that was passed to the instance of this method
+	 * that generated the "RAL" exception, and then pass the concatenated string
+	 * back to this method to obtain the complete Instruction. This can happen
+	 * any number of times in sequence.
+	 * 
 	 * @author Josh Ventura
 	 * @date Apr 4, 2012; 1:40:21 AM
 	 * @modified Apr 5, 2012: 10:02:26 PM: Wrote body.
+	 * 
+	 *           Apr 6, 2012: 11:04:12 AM: Modified behavior for incomplete
+	 *           lines to more gracefully account for non-operational lines.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -149,14 +165,39 @@ public abstract class Instruction {
 	 * @param line
 	 *            A String containing the line of code to be parsed for an
 	 *            Instruction.
-	 * @return A new Instruction as defined in the given line of URBAN-ASM code.
+	 * @return A new Instruction as defined in the given line of URBAN-ASM code,
+	 *         or null if the line was syntactically correct but did not contain
+	 *         an instruction.
 	 * @throws Exception
 	 *             Throws a general exception when a syntax error occurs.
+	 * @throws IOException
+	 *             Throws an IOException with the message "RAL" when the
+	 *             instruction is not concluded in the given string. The caller
+	 *             should re-invoke this method with the original parameter
+	 *             suffixed with the next line in the file.
+	 * @specRef S2.1
+	 * @specRef S4.1
 	 */
-	public static final Instruction parse(String line) throws Exception {
+	public static final Instruction parse(String line) throws Exception,
+			IOException {
 		int i = 0;
+
+		// Skip leading whitespace and check boundaries.
+		if (i >= line.length()) // If the line is empty,
+			return null; // Then there's no point asking for another.
 		while (Character.isWhitespace(line.charAt(i)))
 			++i; // Skip leading whitespace
+		if (i >= line.length()) // If the line is empty except whitespace,
+			return null; // Then there's no point asking for another.
+
+		// Exit if comment line.
+		if (line.charAt(i) == ';') // If the line is just a comment,
+			return new Comment(line.substring(++i));
+
+		// From here on out, we assume there is a valid instruction on this line
+		// which may or may not expand to other lines.
+
+		// Read in label and instruction data.
 		String label = IOFormat.readLabel(line, i); // Read in a label
 		String instruction;
 
@@ -187,11 +228,21 @@ public abstract class Instruction {
 			}
 		}
 
-		while (Character.isWhitespace(line.charAt(i)))
-			++i; // Skip whitespace between instruction and operands
+		if (i >= line.length())
+			throw new IOException("RAL"); // Request another line
 
-		while (line.charAt(i) != ';')
-			++i;
+		// Skip whitespace between instruction and operands.
+		while (Character.isWhitespace(line.charAt(i))) {
+			if (++i >= line.length()) // If we overrun this line looking,
+				throw new IOException("RAL"); // Request another line.
+		}
+
+		// Our method can now handle a number of operand instructions.
+		while (line.charAt(i) != ';') {
+
+			if (++i >= line.length()) // If we overrun this line looking,
+				throw new IOException("RAL"); // Request another line.
+		}
 
 		Instruction res;
 		res = Assembler.instructions.get(instruction).getNewInstance();
@@ -220,9 +271,10 @@ public abstract class Instruction {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @return Returns an integer containing this instruction's byte code.
+	 * @return Returns an array of getWordCount() integers representing this
+	 *         instruction's byte code.
 	 */
-	public abstract int assemble();
+	public abstract int[] assemble();
 
 	/**
 	 * @author Josh Ventura
@@ -261,9 +313,24 @@ public abstract class Instruction {
 	}
 
 	/**
-	 * Default constructor. The constructor is private so that the parse()
+	 * Default constructor. The constructor is protected so that the parse()
 	 * method must be used externally to obtain an Instruction.
 	 */
 	protected Instruction() {
+	}
+
+	/**
+	 * Default constructor. The constructor is protected so that the parse()
+	 * method must be used externally to obtain an Instruction.
+	 * 
+	 * @param iname
+	 *            The name of this instruction as returned by getOpId().
+	 * @param opcode
+	 *            The byte code for this instruction as returned by getOpCode().
+	 */
+	protected Instruction(String iname, int opcode) {
+		System.out.println("Registered `" + iname + "' instruction");
+		Assembler.instructions.put(iname, this);
+		Assembler.byteCodes.put(opcode, this);
 	}
 }
