@@ -94,8 +94,7 @@ public class Assembler {
 				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
 					module.startAddr = startAddr;
 				} 
-				
-				
+							
 				if (instr.label != null) {
 					//add Instruction to symbol table.
 				} 
