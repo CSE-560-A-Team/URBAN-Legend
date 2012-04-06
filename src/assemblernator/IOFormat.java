@@ -28,19 +28,110 @@ public class IOFormat {
 	 * @specRef S2.1
 	 */
 	public static boolean isValidLabel(String label) {
-		if (label.length() < 1) return false;
+		if (label.length() < 1)
+			return false;
 		if (Character.isLetter(label.charAt(0)))
-		for (int i = 1; i < label.length(); ++i)
-			switch (label.charAt(i)) {
-			case ':':
+			for (int i = 1; i < label.length(); ++i)
+				if (!isValidLabelChar(label.charAt(i)))
+					return false;
+		return true;
+	}
+
+	/**
+	 * Checks whether a given character can be used in columns other than the
+	 * first column in a label, according to specification.
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 5, 2012; 10:23:08 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param c
+	 *            The character to validate as a label character.
+	 * @return Returns true if the character is valid in a label.
+	 * @specRef S2.1
+	 */
+	private static boolean isValidLabelChar(char c) {
+		if (Character.isWhitespace(c))
+			return false;
+		switch (c) {
+		case ':':
+			return false;
+		case ';':
+			return false;
+		case ',':
+			return false;
+		case '+':
+			return false;
+		case '-':
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Copy a label from a given string at a given position. This method does
+	 * not error at any non-label character so long as at least one character
+	 * was read successfully.
+	 * 
+	 * Since the specification requires that all instructions are alpha, and
+	 * that labels can be all alpha, this method can be used to read an
+	 * instruction as well. If the instruction contains non-alpha characters,
+	 * then it will not be found in the instructions table, and an error will be
+	 * generated either way.
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 5, 2012; 10:16:23 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors If invoked with position past the length of the string, an
+	 *         exception will be thrown.
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param from
+	 *            The string from which the label will be copied.
+	 * @param pos
+	 *            The position of the first character of the label.
+	 * @return A copy of the complete label.
+	 * @throws Exception
+	 *             If the label does not meet specification, an exception is
+	 *             thrown with information on the violation.
+	 * @specRef S2.1
+	 */
+	public static String readLabel(String from, int pos) throws Exception {
+		final int spos = pos;
+		if (!Character.isLetter(from.charAt(pos)))
+			throw new Exception("Labels must start with a letter.");
+		while (++pos < from.length() && isValidLabelChar(from.charAt(pos)))
+			; // Skip to the first invalid label character.
+		if (pos - spos > 32)
+			throw new Exception(
+					"Labels must be at most 32 characters in length; given label is "
+							+ (pos - spos) + " characters.");
+		return from.substring(spos, pos);
+	}
+
+	/**
+	 * Check if a string contains all alpha characters (letters).
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 5, 2012; 11:05:33 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param str The string to check as alpha.
+	 * @return True if the string is composed entirely of letters, false
+	 *         otherwise.
+	 * @specRef N/A
+	 */
+	public static boolean isAlpha(String str) {
+		for (int i = 0; i < str.length(); i++)
+			if (!Character.isLetter(str.charAt(i)))
 				return false;
-			case ';':
-				return false;
-			case ' ':
-				return false;
-			case '\t':
-				return false;
-			}
 		return true;
 	}
 

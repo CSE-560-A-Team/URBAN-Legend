@@ -16,5 +16,12 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Hello World\n");
+		
+		try {
+			Instruction i = Instruction.parse("lolol MOVD EX:'For great justice';");
+		} catch (Exception e) {
+			System.out.println("CRITICAL FAILURE. HAHAHAHAHAHAHAHA");
+			e.printStackTrace();
+		}
 	}
 }
