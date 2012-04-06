@@ -24,6 +24,9 @@ public class Assembler {
 	/** set of operand keywords. */
 	public static Set<String> keyWords = new HashSet<String>();
 	
+	/**
+	 * Default constructor.  Adds keywords to set of keywords.
+	 */
 	Assembler() {
 		keyWords.add("DM");
 		keyWords.add("DR");
