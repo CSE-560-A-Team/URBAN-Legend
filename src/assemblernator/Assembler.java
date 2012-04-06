@@ -25,9 +25,9 @@ public class Assembler {
 	public static Set<String> keyWords = new HashSet<String>();
 	
 	/**
-	 * Default constructor.  Adds keywords to set of keywords.
+	 * fills keyWords with key words.
 	 */
-	Assembler() {
+	static {
 		keyWords.add("DM");
 		keyWords.add("DR");
 		keyWords.add("DX");
@@ -70,18 +70,32 @@ public class Assembler {
 	 *  </pre>
 	 * @specRef N/A
 	 */
-	public final Module parseFile(File file) {
-		Module module = new Module();
-		
-		
+	public static final Module parseFile(File file) {
 		try {
 			Scanner fileScan = new Scanner(file);
-			fileScan.useDelimiter(";");
-			
-			while (fileScan.hasNext()) {
+			int startAddr = 0;
+			while (fileScan.hasNextLine()) {
+				Module module = new Module();
 				String line = fileScan.nextLine();
-			
 				
+				Instruction instr = Instruction.parse(line);
+				
+				//increment lc of instr by word count;
+				//increment startAddr by word count;
+				
+				/*
+				 * if start of module, record startAddr of module.
+				 * execStart of module.
+				 */
+				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
+					module.startAddr = startAddr;
+				} 
+				
+				if (instr.label != null) {
+					//add Instruction to symbol table.
+				} 
+				
+				module.assembly.add(instr);
 				
 			}
 		} catch (FileNotFoundException e) {
