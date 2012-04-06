@@ -100,6 +100,9 @@ public class Assembler {
 			}
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
+		} catch (Exception e) {
+			System.err.println("Error in parsing file: " + e.getMessage());
+			e.printStackTrace();
 		}
 		
 		return new Module();
