@@ -15,7 +15,7 @@ public class Assembler {
 	public static Map<String, Instruction> instructions = new HashMap<String, Instruction>();
 	/** Map of opCodes to static Instructions*/ 
 	public static  Map<Integer, Instruction> byteCodes = new HashMap<Integer, Instruction>();
-	/** version of Assembler?*/
+	/** version of Assembler*/
 	public static int version = 1;
 	
 	/**
