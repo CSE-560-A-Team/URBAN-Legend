@@ -33,19 +33,6 @@ import java.util.Map.Entry;
 public abstract class Instruction {
 	/**
 	 * @author Josh Ventura
-	 * @date Apr 4, 2012; 4:22:13 PM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
-	 * @return Returns a pointer to the static instance of this instruction.
-	 * @specRef N/A
-	 */
-	public abstract Instruction getInstance();
-
-	/**
-	 * @author Josh Ventura
 	 * @date Apr 5, 2012; 10:40:23 PM
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
@@ -144,7 +131,7 @@ public abstract class Instruction {
 	/** The line counter index at which this instruction was read. */
 	public int lc;
 	/** A hash map of any instructions encountered. */
-	public HashMap<String, String> operands;
+	public HashMap<String, String> operands = new HashMap<String, String>();
 	/** The type of this instruction as one of the {@link Usage} constants. */
 	public Usage usage;
 
@@ -277,6 +264,6 @@ public abstract class Instruction {
 	 * Default constructor. The constructor is private so that the parse()
 	 * method must be used externally to obtain an Instruction.
 	 */
-	private Instruction() {
+	protected Instruction() {
 	}
 }
