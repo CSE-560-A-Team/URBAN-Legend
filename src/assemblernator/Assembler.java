@@ -1,8 +1,12 @@
 package assemblernator;
 
+import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The Assembler class parses a file into a Module object.
@@ -17,6 +21,24 @@ public class Assembler {
 	public static  Map<Integer, Instruction> byteCodes = new HashMap<Integer, Instruction>();
 	/** version of Assembler*/
 	public static final int VERSION = 1;
+	/** set of operand keywords. */
+	public static Set<String> keyWords = new HashSet<String>();
+	
+	Assembler() {
+		keyWords.add("DM");
+		keyWords.add("DR");
+		keyWords.add("DX");
+		keyWords.add("EX");
+		keyWords.add("FC");
+		keyWords.add("FL");
+		keyWords.add("FM");
+		keyWords.add("FR");
+		keyWords.add("FS");
+		keyWords.add("FX");
+		keyWords.add("LR");
+		keyWords.add("NW");
+		keyWords.add("ST");
+	}
 	
 	/**
 	 * Parses a file into a Module.
@@ -30,8 +52,7 @@ public class Assembler {
 	 * @param file source code for module.
 	 * @return <pre>
 	 * {@code let line = a line of characters in a file.
-	 * let instr = sub-string of characters before a ';' character in a line.
-	 * Instruction i = Instruction.parse(instr);
+	 * Instruction i = Instruction.parse(line);
 	 * startOp = first line of file = name * "KICKO" * "FC:" * address,
 	 * 	where name is a string of characters representing the name of the module, 
 	 * 		and address is a string of characters representing a memory address.
@@ -47,6 +68,22 @@ public class Assembler {
 	 * @specRef N/A
 	 */
 	public final Module parseFile(File file) {
+		Module module = new Module();
+		
+		
+		try {
+			Scanner fileScan = new Scanner(file);
+			fileScan.useDelimiter(";");
+			
+			while (fileScan.hasNext()) {
+				String line = fileScan.nextLine();
+			
+				
+				
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
 		
 		return new Module();
 	}
