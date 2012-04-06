@@ -11,8 +11,11 @@ import java.util.Map;
  *
  */
 public class Assembler {
+	/** Map of opId's to static Instructions*/
 	private Map<String, Instruction> instructions = new HashMap<String, Instruction>();
-	private Map<String, Instruction> byteCodes = new HashMap<String, Instruction>();
+	/** Map of opCodes to static Instructions*/ 
+	private Map<Integer, Instruction> byteCodes = new HashMap<Integer, Instruction>();
+	/** version of Assembler?*/
 	private int version = 1;
 	
 	/**
@@ -30,15 +33,17 @@ public class Assembler {
 	 * let instr = sub-string of characters before a ';' character in a line.
 	 * Instruction i = Instruction.parse(instr);
 	 * startOp = first line of file = name * "KICKO" * "FC:" * address,
-	 * where name is a string of characters and address is a string of characters
-	 * representing a memory address.
+	 * 	where name is a string of characters representing the name of the module, 
+	 * 		and address is a string of characters representing a memory address.
+	 * module = sub-string from startOp to keyword "END".
 	 * returns Module m, where for all lines in file,
 	 * 	m.assembly = sequence of i;
 	 * 	m.symbols = Map of (i.label, i);
 	 * 	m.programName = name;
-	 * 	m.startAddr = number of 
+	 * 	m.startAddr = number of modules from start of file.
 	 *  m.moduleLength = length of substring from programName to keyword "End" in file.
-	 *  m.execStart = address;
+	 *  m.execStart = address;}
+	 *  </pre>
 	 * @specRef N/A
 	 */
 	public Module parseFile(File file) {
