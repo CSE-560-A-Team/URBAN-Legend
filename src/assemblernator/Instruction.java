@@ -110,7 +110,7 @@ public abstract class Instruction {
 	 *            Instruction.
 	 * @return A new Instruction as defined in the given line of URBAN-ASM code.
 	 */
-	public final Instruction parse(String line) {
+	public static final Instruction parse(String line) {
 		// TODO: IMPLEMENT
 		return null;
 	}
