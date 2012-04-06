@@ -44,14 +44,42 @@ public abstract class Instruction {
 	// == Members valid in the global instance, obtained with getInstance()
 	// =====================================================================
 
-	/** The identifier by which this tag is referenced */
-	String id;
 	/**
-	 * The byte code that identifies this instruction. It should be possible to
-	 * compare against this instruction by ANDing the complete instruction by
-	 * this opcode, and then comparing the result to this opcode.
+	 * Get the operation identifier used to refer to this instruction, such as
+	 * "MOVD", "IADD", or "NUM". Literally, get the name of this instruction.
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 5, 2012; 6:52:21 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @return The name of this instruction.
+	 * @specRef N/A
 	 */
-	int opcode;
+	abstract String getOpId();
+
+	/**
+	 * The byte code that identifies this instruction to the machine. It should
+	 * be possible to compare against this instruction by ANDing the complete
+	 * instruction by this opcode, and then comparing the result to this opcode.
+	 * 
+	 * This is NOT a complete instruction opcode, just the segment that
+	 * identifies WHICH instruction is affiliated. To get the complete
+	 * instruction's opcode, use assemble().
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 5, 2012; 6:53:30 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @return The byte code identifying this instruction.
+	 * @specRef N/A
+	 */
+	abstract int getOpcode();
 
 	// =====================================================================
 	// == Members valid with new instances =================================
