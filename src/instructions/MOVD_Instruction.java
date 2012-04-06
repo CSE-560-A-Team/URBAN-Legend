@@ -4,6 +4,7 @@ import assemblernator.Instruction;
 
 /**
  * The MOVD instruction.
+ * 
  * @author Josh Ventura
  * @date Apr 6, 2012; 6:15:36 PM
  */
@@ -31,19 +32,19 @@ public class MOVD_Instruction extends Instruction {
 	/** @see assemblernator.Instruction#check() */
 	@Override
 	public boolean check() {
-		return false; //TODO: IMPLEMENT
+		return false; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override
 	public int[] assemble() {
-		return null; //TODO: IMPLEMENT
+		return null; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
 	@Override
 	public void execute(int instruction) {
-		//TODO: IMPLEMENT
+		// TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#getNewInstance() */

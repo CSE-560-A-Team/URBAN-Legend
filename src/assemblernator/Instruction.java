@@ -206,18 +206,23 @@ public abstract class Instruction {
 			i += label.length(); // Skip the label
 			instruction = label;
 			label = null;
-		} else {
-			if (i != 0)
-				throw new Exception(
-						"URBAN specification says labels must start at column 0 ("
-								+ label
-								+ " is "
-								+ (IOFormat.isAlpha(label) ? "not an"
-										: "an invalid")
-								+ " instruction, starts at column" + i + ")");
-			i += label.length(); // Skip the label we read earlier
-			while (Character.isWhitespace(line.charAt(i)))
-				++i; // Skip whitespace between label and instruction
+		}
+		else {
+			if (i != 0)// @formatter:off
+				throw new Exception("URBAN specification says labels must start at column 0 ("
+						+ label + " is " + (IOFormat.isAlpha(label) ? "not an" : "an invalid")
+						+ " instruction, starts at column" + i + ")");
+				// @formatter:on
+
+			// Skip the label we read earlier
+			i += label.length();
+
+			do
+				// Skip whitespace between label and instruction
+				if (++i > line.length())
+					throw new IOException("RAL");
+			while (Character.isWhitespace(line.charAt(i)));
+
 			instruction = IOFormat.readLabel(line, i); // Read instruction now
 			if (!Assembler.instructions.containsKey(instruction)) {
 				if (IOFormat.isAlpha(instruction))
@@ -302,8 +307,7 @@ public abstract class Instruction {
 	 * @return Returns a semantic match to the original instruction code string.
 	 * @specRef N/A
 	 */
-	@Override
-	public String toString() {
+	@Override public String toString() {
 		String res = (label.length() > 0 ? label + "\t" : "") + getOpId();
 		for (Entry<String, String> op : operands.entrySet()) {
 			res += "\t" + op.getKey() + ":" + op.getValue();
@@ -315,8 +319,7 @@ public abstract class Instruction {
 	 * Default constructor. The constructor is protected so that the parse()
 	 * method must be used externally to obtain an Instruction.
 	 */
-	protected Instruction() {
-	}
+	protected Instruction() {}
 
 	/**
 	 * Default constructor. The constructor is protected so that the parse()
