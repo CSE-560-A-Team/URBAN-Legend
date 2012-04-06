@@ -41,6 +41,8 @@ public class Assembler {
 		keyWords.add("LR");
 		keyWords.add("NW");
 		keyWords.add("ST");
+		
+		
 	}
 	
 	/**
@@ -74,15 +76,17 @@ public class Assembler {
 		try {
 			Scanner fileScan = new Scanner(file);
 			int startAddr = 0;
+			int lc = 0;
 			while (fileScan.hasNextLine()) {
 				Module module = new Module();
 				String line = fileScan.nextLine();
 				
 				Instruction instr = Instruction.parse(line);
 				
-				//increment lc of instr by word count;
-				//increment startAddr by word count;
-				
+				//increment location counter of instruction by word count of instruction.
+				lc += instr.getWordCount();
+				instr.lc = lc;
+
 				/*
 				 * if start of module, record startAddr of module.
 				 * execStart of module.
@@ -91,12 +95,14 @@ public class Assembler {
 					module.startAddr = startAddr;
 				} 
 				
+				
 				if (instr.label != null) {
 					//add Instruction to symbol table.
 				} 
 				
 				module.assembly.add(instr);
 				
+				module.startAddr += lc;
 			}
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
