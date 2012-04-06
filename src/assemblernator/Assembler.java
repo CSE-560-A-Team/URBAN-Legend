@@ -16,7 +16,7 @@ public class Assembler {
 	/** Map of opCodes to static Instructions*/ 
 	public static  Map<Integer, Instruction> byteCodes = new HashMap<Integer, Instruction>();
 	/** version of Assembler*/
-	public static int version = 1;
+	public static final int VERSION = 1;
 	
 	/**
 	 * Parses a file into a Module.
@@ -35,18 +35,18 @@ public class Assembler {
 	 * startOp = first line of file = name * "KICKO" * "FC:" * address,
 	 * 	where name is a string of characters representing the name of the module, 
 	 * 		and address is a string of characters representing a memory address.
-	 * module = sub-string from startOp to keyword "END".
+	 * module = sub-string from programName to keyword "END".
 	 * returns Module m, where for all lines in file,
 	 * 	m.assembly = sequence of i;
 	 * 	m.symbols = Map of (i.label, i);
 	 * 	m.programName = name;
 	 * 	m.startAddr = number of modules from start of file.
-	 *  m.moduleLength = length of substring from programName to keyword "End" in file.
+	 *  m.moduleLength = length in lines of module;
 	 *  m.execStart = address;}
 	 *  </pre>
 	 * @specRef N/A
 	 */
-	public Module parseFile(File file) {
+	public final Module parseFile(File file) {
 		
 		return new Module();
 	}
