@@ -12,11 +12,11 @@ import java.util.Map;
  */
 public class Assembler {
 	/** Map of opId's to static Instructions*/
-	private Map<String, Instruction> instructions = new HashMap<String, Instruction>();
+	public static Map<String, Instruction> instructions = new HashMap<String, Instruction>();
 	/** Map of opCodes to static Instructions*/ 
-	private Map<Integer, Instruction> byteCodes = new HashMap<Integer, Instruction>();
+	public static  Map<Integer, Instruction> byteCodes = new HashMap<Integer, Instruction>();
 	/** version of Assembler?*/
-	private int version = 1;
+	public static int version = 1;
 	
 	/**
 	 * Parses a file into a Module.
