@@ -1,60 +1,8 @@
 package assemblernator;
 
-import instructions.Comment;
-import instructions.Generator;
-import instructions.USI_ADRC;
-import instructions.USI_AEXS;
-import instructions.USI_AND;
-import instructions.USI_CHAR;
-import instructions.USI_CLR;
-import instructions.USI_CLRA;
-import instructions.USI_CLRX;
-import instructions.USI_CRKB;
-import instructions.USI_CWSR;
-import instructions.USI_DMP;
-import instructions.USI_END;
-import instructions.USI_ENT;
-import instructions.USI_EQU;
-import instructions.USI_EQUE;
-import instructions.USI_EXT;
-import instructions.USI_HLT;
-import instructions.USI_IAA;
-import instructions.USI_IADD;
-import instructions.USI_IDIV;
-import instructions.USI_IMAD;
-import instructions.USI_IMUL;
-import instructions.USI_IRKB;
-import instructions.USI_ISHL;
-import instructions.USI_ISHR;
-import instructions.USI_ISLA;
-import instructions.USI_ISRA;
-import instructions.USI_ISRG;
-import instructions.USI_ISUB;
-import instructions.USI_IWSR;
-import instructions.USI_KICKO;
-import instructions.USI_MOVD;
-import instructions.USI_MOVDN;
-import instructions.USI_NEWLC;
-import instructions.USI_NOP;
-import instructions.USI_NUM;
-import instructions.USI_OR;
-import instructions.USI_POP;
-import instructions.USI_PSH;
-import instructions.USI_PST;
-import instructions.USI_PWR;
-import instructions.USI_RET;
-import instructions.USI_ROL;
-import instructions.USI_ROR;
-import instructions.USI_SKIPS;
-import instructions.USI_SKT;
-import instructions.USI_TR;
-import instructions.USI_TRDR;
-import instructions.USI_TREQ;
-import instructions.USI_TRGT;
-import instructions.USI_TRLK;
-import instructions.USI_TRLT;
-
-import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
 
 /**
  * @author Ratul Khosla, Eric Smith, Noah Torrance, Josh Ventura
@@ -72,46 +20,61 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
-		System.out.println("Hello World\n");
+		String a[] = { System.getProperty("user.home") + "/Desktop/test.s" };
+		if (args.length < 1) {
+			System.out.println("URBAN Legend v" + Assembler.VERSION);
+			System.out
+					.println("Usage: java -jar urban.jar file1 file2 file3... -o executablename");
+			args = a;
+		}
 
-		String sample[] = {
-				"label MovD EX:'lol what';",
-				"xx MOVD DR:1,FM:Mud,FX:1;",
-				"CC MOVD DM:Mud,FR:1,DX:1;",
-				"dd MOVD DR:1,FR:2; Register to register",
-				"; Full-line comment",
-				"birch movd FR:SomeEQUlabel+1, DM:someotherequlabellol-100;"
-		};
+		String outputFile = null;
+		ArrayList<String> filesToAssemble = new ArrayList<String>();
 
-		for (String l : sample)
-			try {
-				Instruction i = Instruction.parse(l);
-				if (i != null) {
-					System.out.println(i);
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].length() < 1)
+				continue;
+			if (args[i].charAt(0) == '-') {
+				if (args[i].equals("-o")) {
+					if (++i > args.length) {
+						System.err
+								.println("Expected output filename following -o");
+						System.exit(1);
+					}
+					outputFile = args[i];
+					continue;
 				}
-				else
-					System.out.println("More info requested.");
-			} catch (IOException e) {
-				System.out.println("Requested another line (" + e.getMessage()
-						+ ")");
-			} catch (Exception e) {
-				System.out.println("CRITICAL FAILURE. HAHAHAHAHAHAHAHA");
-				e.printStackTrace();
+				if (args[i].equals("-v") || args[i].equals("--version")) {
+					System.out.println("URBAN Legend v" + Assembler.VERSION);
+					System.exit(0);
+				}
+				System.err.println("Unknown command " + args[i]);
+				System.exit(1);
 			}
-		
-		System.out.print(IOFormat.formatInteger(1337, 20) + ", ");
-		System.out.print(IOFormat.formatInteger(1337, 11) + ", ");
-		System.out.print(IOFormat.formatInteger(1337, 5) + ", ");
-		System.out.println(IOFormat.formatInteger(1337, 4));
-		
-		System.out.print(IOFormat.formatHexInteger(1337, 20) + ", ");
-		System.out.print(IOFormat.formatHexInteger(1337, 11) + ", ");
-		System.out.print(IOFormat.formatHexInteger(1337, 5) + ", ");
-		System.out.print(IOFormat.formatHexInteger(1337, 4) + ", ");
-		System.out.println(IOFormat.formatHexInteger(1337, 3));
-		
-		System.out.print(IOFormat.formatBinInteger(1337, 20) + ", ");
-		System.out.println(IOFormat.formatBinInteger(1337, 11));
-		
+			filesToAssemble.add(args[i]);
+		}
+		if (filesToAssemble.size() == 0) {
+			System.err.println("URBAN Legend: No input files");
+		}
+		for (int i = 0; i < filesToAssemble.size(); i++) {
+			System.out.println("Assembling " + filesToAssemble.get(i));
+			
+			File f = new File(filesToAssemble.get(i));
+			if (f.canRead()) {
+				try {
+					Assembler.parseFile(f);
+				} catch (NullPointerException npe) {
+					System.err.println("Failed to read file `"
+							+ filesToAssemble.get(i)
+							+ "': Null pointer exception");
+					npe.printStackTrace();
+				}
+			}
+			else {
+				System.err.println("Cannot open file `"
+						+ filesToAssemble.get(i) + "'");
+				System.exit(1);
+			}
+		}
 	}
 }
