@@ -156,9 +156,15 @@ public abstract class Instruction {
 	 * @date Apr 4, 2012; 1:40:21 AM
 	 * @modified Apr 5, 2012: 10:02:26 PM: Wrote body.
 	 * 
-	 *           Apr 6, 2012: 11:04:12 AM: Modified behavior for incomplete
+	 *           Apr 6, 2012; 11:04:12 AM: Modified behavior for incomplete
 	 *           lines to more gracefully account for non-operational lines.
-	 * @tested UNTESTED
+	 * 
+	 *           Apr 7, 2012; 12:32:17 AM: Completed first working draft; more
+	 *           instruction classes required to test properly.
+	 * @tested Apr 7, 2012; 12:52:43 AM: Tested with basic MOVD codes, given
+	 *         various kinds of expressions. While more instructions are
+	 *         necessary to get a full idea of whether or not this code is
+	 *         working, for the time being, it seems to function as required.
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
@@ -186,9 +192,8 @@ public abstract class Instruction {
 		if (i >= line.length()) // If the line is empty,
 			return null; // Then there's no point asking for another.
 		while (Character.isWhitespace(line.charAt(i)))
-			++i; // Skip leading whitespace
-		if (i >= line.length()) // If the line is empty except whitespace,
-			return null; // Then there's no point asking for another.
+			if (++i >= line.length()) // If the line is empty except whitespace,
+				return null; // Then there's no point asking for another.
 
 		// Exit if comment line.
 		if (line.charAt(i) == ';') // If the line is just a comment,
@@ -202,7 +207,7 @@ public abstract class Instruction {
 		String instruction;
 
 		// Check if we are at an instruction or a label
-		if (Assembler.instructions.containsKey(label)) {
+		if (Assembler.instructions.containsKey(label.toUpperCase())) {
 			i += label.length(); // Skip the label
 			instruction = label;
 			label = null;
@@ -211,46 +216,100 @@ public abstract class Instruction {
 			if (i != 0)// @formatter:off
 				throw new Exception("URBAN specification says labels must start at column 0 ("
 						+ label + " is " + (IOFormat.isAlpha(label) ? "not an" : "an invalid")
-						+ " instruction, starts at column" + i + ")");
-				// @formatter:on
+						+ " instruction, starts at column" + i + ")"); // @formatter:on
 
 			// Skip the label we read earlier
 			i += label.length();
 
-			do
-				// Skip whitespace between label and instruction
+			do { // Skip whitespace between label and instruction
 				if (++i > line.length())
-					throw new IOException("RAL");
-			while (Character.isWhitespace(line.charAt(i)));
+					throw new IOException("RAL1");
+			} while (Character.isWhitespace(line.charAt(i)));
 
 			instruction = IOFormat.readLabel(line, i); // Read instruction now
-			if (!Assembler.instructions.containsKey(instruction)) {
+			if (!Assembler.instructions.containsKey(instruction.toUpperCase())) {
 				if (IOFormat.isAlpha(instruction))
 					throw new Exception("`" + instruction
 							+ "' is not a known instruction");
 				throw new Exception("`" + instruction
 						+ "' is not a valid instruction");
 			}
+			i += instruction.length();
 		}
 
 		if (i >= line.length())
-			throw new IOException("RAL"); // Request another line
+			throw new IOException("RAL2"); // Request another line
+
+		// So, now we know a bit about our instruction.
+		Instruction res;
+		res = Assembler.instructions.get(instruction.toUpperCase())
+				.getNewInstance();
+		res.label = label;
 
 		// Skip whitespace between instruction and operands.
 		while (Character.isWhitespace(line.charAt(i))) {
 			if (++i >= line.length()) // If we overrun this line looking,
-				throw new IOException("RAL"); // Request another line.
+				throw new IOException("RAL3"); // Request another line.
 		}
 
 		// Our method can now handle a number of operand instructions.
 		while (line.charAt(i) != ';') {
-			if (++i >= line.length()) // If we overrun this line looking,
-				throw new IOException("RAL"); // Request another line.
-		}
+			// All operand keywords contain only letters.
+			if (!Character.isLetter(line.charAt(i)))
+				throw new Exception("Expected operand keyword before '"
+						+ line.charAt(i) + "'");
 
-		Instruction res;
-		res = Assembler.instructions.get(instruction).getNewInstance();
-		res.label = label;
+			// Isolate the keyword
+			final int sp = i;
+			while (Character.isLetter(line.charAt(++i)));
+			String operand = line.substring(sp, i);
+			if (!Assembler.keyWords.contains(operand))
+				throw new Exception("Unrecognized operand keyword `" + operand
+						+ "'");
+
+			if (line.charAt(i) != ':')
+				throw new Exception("Expected colon following `" + operand
+						+ "' keyword");
+
+			final int exsp = i + 1;
+			do { // Now we're reading in the value of this expression
+				if (++i >= line.length()) // If we overrun this line looking,
+					throw new IOException("RAL4"); // Request another line.
+
+				/* Don't get tripped up by string literals.
+				 * Specification says that the single quote is the delimiter.
+				 * This loop searches for a matching quote, while observing
+				 * escape sequences. When a backslash is encountered, the
+				 * character proceeding it is skipped. We can prove the validity
+				 * of this design by examining its three basic cases:
+				 * 
+				 * If the escape sequence is \', the quote is skipped, and the
+				 * behavior is correct.
+				 * 
+				 * If the escape sequence is \\, the second slash is skipped,
+				 * and cannot accidentally escape another character, so '\\' is
+				 * correct.
+				 * 
+				 * In any other case, \r \n \xFF \100, the proceeding character
+				 * is immaterial, and can safely be skipped. */
+				if (line.charAt(i) == '\'') {
+					while (++i < line.length() && line.charAt(i) != '\'')
+						if (line.charAt(i) == '\\')
+							++i;
+					// Make sure we didn't just run out of line
+					if (++i >= line.length())
+						throw new IOException("RAL5");
+				}
+			} while (line.charAt(i) != ';' && line.charAt(i) != ',');
+
+			String exp = line.substring(exsp, i);
+			res.operands.put(operand, exp);
+
+			//
+			if (line.charAt(i) == ',')//@formatter:off
+				do if (++i >= line.length()) throw new IOException("RAL6");
+			while (Character.isWhitespace(line.charAt(i))); //@formatter:on
+		}
 
 		return res;
 	}
@@ -299,8 +358,9 @@ public abstract class Instruction {
 	 * 
 	 * @author Josh Ventura
 	 * @date Apr 5, 2012; 9:37:34 PM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
+	 * @modified Apr 7 2012; 12:39:44 AM: Corrected formatting for printing
+	 *           multiple operands (added a comma between them).
+	 * @tested Apr 7 2012; 12:38:06 AM: Tested with basic MOVD instructions.
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
@@ -309,8 +369,10 @@ public abstract class Instruction {
 	 */
 	@Override public String toString() {
 		String res = (label.length() > 0 ? label + "\t" : "") + getOpId();
+		boolean prent = false;
 		for (Entry<String, String> op : operands.entrySet()) {
-			res += "\t" + op.getKey() + ":" + op.getValue();
+			res += (prent ? ",\t" : "\t") + op.getKey() + ":" + op.getValue();
+			prent = true;
 		}
 		return res + ';';
 	}

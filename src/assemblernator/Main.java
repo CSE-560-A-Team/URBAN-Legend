@@ -2,6 +2,7 @@ package assemblernator;
 
 import java.io.IOException;
 
+import instructions.Comment;
 import instructions.MOVD_Instruction;
 
 /**
@@ -22,21 +23,32 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Hello World\n");
 
+		Comment.getInstance();
 		MOVD_Instruction.getInstance();
 
-		try {
-			Instruction i = Instruction.parse("lolol");
-			if (i != null) {
-				System.out.println("Success!");
-				System.out.println(i);
+		String sample[] = {
+				"label MovD EX:'lol what';",
+				"xx MOVD DR:1,FM:Mud,FX:1;",
+				"CC MOVD DM:Mud,FR:1,DX:1;",
+				"dd MOVD DR:1,FR:2; Register to register",
+				"; Full-line comment",
+				"birch movd FR:SomeEQUlabel+1, DM:someotherequlabellol-100;"
+		};
+
+		for (String l : sample)
+			try {
+				Instruction i = Instruction.parse(l);
+				if (i != null) {
+					System.out.println(i);
+				}
+				else
+					System.out.println("More info requested.");
+			} catch (IOException e) {
+				System.out.println("Requested another line (" + e.getMessage()
+						+ ")");
+			} catch (Exception e) {
+				System.out.println("CRITICAL FAILURE. HAHAHAHAHAHAHAHA");
+				e.printStackTrace();
 			}
-			else
-				System.out.println("More info requested.");
-		} catch (IOException e) {
-			System.out.println("Requested another line (" + e.getMessage() + ")");
-		} catch (Exception e) {
-			System.out.println("CRITICAL FAILURE. HAHAHAHAHAHAHAHA");
-			e.printStackTrace();
-		}
 	}
 }
