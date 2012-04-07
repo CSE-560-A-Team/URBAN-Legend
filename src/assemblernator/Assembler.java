@@ -43,13 +43,14 @@ public class Assembler {
 		keyWords.add("ST");
 		
 		
+		
 	}
 	
 	/**
 	 * Parses a file into a Module.
 	 * @author Noah
 	 * @date Apr 5, 2012; 7:33:45 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 7, 2012; 9:28:15AM added line to add instructions w/ labels to symbol table.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -96,7 +97,7 @@ public class Assembler {
 				} 
 							
 				if (instr.label != null) {
-					module.addSymbolTableEntry(instr);
+					module.getSymbolTable().addEntry(instr);
 				} 
 				
 				module.assembly.add(instr);
