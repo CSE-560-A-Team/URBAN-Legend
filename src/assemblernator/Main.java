@@ -74,59 +74,6 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Hello World\n");
 
-		USI_KICKO.getInstance();
-		USI_NEWLC.getInstance();
-		USI_EQU.getInstance();
-		USI_EQUE.getInstance();
-		USI_ENT.getInstance();
-		USI_EXT.getInstance();
-		USI_END.getInstance();
-		USI_AEXS.getInstance();
-		USI_SKIPS.getInstance();
-		USI_CHAR.getInstance();
-		USI_NUM.getInstance();
-		USI_ADRC.getInstance();
-		USI_MOVD.getInstance();
-		USI_MOVDN.getInstance();
-		USI_IADD.getInstance();
-		USI_IMAD.getInstance();
-		USI_IAA.getInstance();
-		USI_ISRG.getInstance();
-		USI_ISUB.getInstance();
-		USI_IMUL.getInstance();
-		USI_IDIV.getInstance();
-		USI_PWR.getInstance();
-		USI_CLR.getInstance();
-		USI_CLRA.getInstance();
-		USI_CLRX.getInstance();
-		USI_ISHR.getInstance();
-		USI_ISHL.getInstance();
-		USI_ISRA.getInstance();
-		USI_ISLA.getInstance();
-		USI_ROL.getInstance();
-		USI_ROR.getInstance();
-		USI_AND.getInstance();
-		USI_OR.getInstance();
-		USI_TREQ.getInstance();
-		USI_TRLT.getInstance();
-		USI_TRGT.getInstance();
-		USI_TR.getInstance();
-		USI_TRDR.getInstance();
-		USI_TRLK.getInstance();
-		USI_RET.getInstance();
-		USI_SKT.getInstance();
-		USI_IWSR.getInstance();
-		USI_IRKB.getInstance();
-		USI_CWSR.getInstance();
-		USI_CRKB.getInstance();
-		USI_PSH.getInstance();
-		USI_POP.getInstance();
-		USI_PST.getInstance();
-		USI_NOP.getInstance();
-		USI_DMP.getInstance();
-		USI_HLT.getInstance();
-		Comment.getInstance();
-
 		String sample[] = {
 				"label MovD EX:'lol what';",
 				"xx MOVD DR:1,FM:Mud,FX:1;",
@@ -166,6 +113,5 @@ public class Main {
 		System.out.print(IOFormat.formatBinInteger(1337, 20) + ", ");
 		System.out.println(IOFormat.formatBinInteger(1337, 11));
 		
-		Generator.generate();
 	}
 }
