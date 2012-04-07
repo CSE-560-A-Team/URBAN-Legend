@@ -80,7 +80,7 @@ public class Assembler {
 			while (fileScan.hasNextLine()) {
 				Module module = new Module();
 				String line = fileScan.nextLine();
-				
+
 				Instruction instr = Instruction.parse(line);
 				
 				//increment location counter of instruction by word count of instruction.
@@ -96,7 +96,7 @@ public class Assembler {
 				} 
 							
 				if (instr.label != null) {
-					//add Instruction to symbol table.
+					module.addSymbolTableEntry(instr);
 				} 
 				
 				module.assembly.add(instr);
