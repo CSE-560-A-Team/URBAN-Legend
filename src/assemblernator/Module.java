@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -67,6 +66,15 @@ public class Module {
 		
 		/**
 		 * provides an Iterator over the elements of the symbol table.
+		 * @author Noah
+		 * @date Apr 7, 2012; 4:19:44 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @return an Iterator over elements of symbol table.
+		 * @specRef N/A
 		 */
 		@Override
 		public Iterator<Map.Entry<String, Instruction>> iterator() {
@@ -79,7 +87,7 @@ public class Module {
 		 * @date Apr 6, 2012; 8:58:56 AM
 		 * @modified Apr 7, 1:26:50 PM; added opcode to lines. - Noah <br>
 		 * Apr 6, 11:02:08 AM; removed remove() call to prevent destruction of symbol table, <br>
-		 * 	also, cleaned code up. <br>
+		 * 	also, cleaned code up. -Noah<br>
 		 * @tested UNTESTED
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
