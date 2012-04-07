@@ -15,12 +15,7 @@ import assemblernator.Instruction.Usage;
  * 
  * <pre> 
  * {@code assembly = a sequence of Instructions.
- * symbolTable is a sequence of entry's where an entry = (label, address, usage, string);
- * 	for an instruction with the label, 
- * 	the address is the location of the instruction,
- * 	the usage is how the instruction is used,
- * 	and the string is the string of characters that the label is equated to if 
- * 	the opcode of the instruction = EQU or EQUe.
+ * symbolTable is a Module.SymbolTable
  * startAddr is the integer address at which the module starts.
  * moduleLength is the integer length of the module.}
  * </pre>
@@ -32,9 +27,16 @@ import assemblernator.Instruction.Usage;
  */
 public class Module {
 	/**
-	 * A symbolTable as defined in specifications.
+	 * <pre>
+	 * symbolTable is a sequence of entry's where an entry = (label, address, usage, string);
+	 * 	for an instruction with the label, 
+	 * 	the address is the location of the instruction,
+	 * 	the usage is how the instruction is used,
+	 * 	and the string is the string of characters that the label is equated to if 
+	 * 	the opcode of the instruction = EQU or EQUe.
+	 * </pre>
 	 */
-	private class SymbolTable {
+	public static class SymbolTable implements Iterable<Map.Entry<String, Instruction>>{
 		
 		/** 
 		 * let (label, Instruction) = p.
@@ -64,6 +66,13 @@ public class Module {
 		}
 		
 		/**
+		 * provides an Iterator over the elements of the symbol table.
+		 */
+		public Iterator<Map.Entry<String, Instruction>> iterator() {
+			return symbols.entrySet().iterator();
+		}
+		
+		/**
 		 * String representation of they symbol table.
 		 * @author Noah
 		 * @date Apr 6, 2012; 8:32:43 PM
@@ -72,7 +81,6 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @param instr instruction to add.
 		 * @return <pre>
 		 * {@code let line = a string of character representing a single entry
 		 * 	in the symbol table. specifically:
@@ -153,39 +161,18 @@ public class Module {
 	int moduleLength;
 	
 	/**
-	 * 	Adds a single entry into the symbol table given an Instruction. <br>
+	 * Returns a reference to the symbol table.
 	 * @author Noah
-	 * @date Apr 6, 2012; 7:53:39 PM
+	 * @date Apr 7, 2012; 10:24:23 AM
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param instr the Instruction entry to add into symbol table.
-	 */
-	public void addSymbolTableEntry(Instruction instr) {
-		symbolTable.addEntry(instr);
-	}
-	
-	/**
-	 * 	Returns a the String representation of the symbol table.
-	 * @author Noah
-	 * @date Apr 7, 2012; 9:33:05 AM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
-	 * @return <pre>
-	 * {@code let line = a string of character representing a single entry
-	 * 	in the symbol table. specifically, line =
-	 * 		label + " " + address + " " + " " + usage + " " + string.
-	 * 	each line is unique.
-	 * returns a sequence of lines for all the entries in the symbol table.}
-	 * </pre>
+	 * @return this.symbolTable
 	 * @specRef N/A
 	 */
-	public String getSymbTableStringRep() {
-		return symbolTable.toString();
+	public SymbolTable getSymbolTable() {
+		return symbolTable;
 	}
 }
