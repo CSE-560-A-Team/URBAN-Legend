@@ -139,6 +139,7 @@ public class Assembler {
 
 				Instruction instr = Instruction.parse(line);
 				
+				
 				//increment location counter of instruction by word count of instruction.
 				lc += instr.getWordCount();
 				instr.lc = lc;

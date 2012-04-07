@@ -2,6 +2,7 @@ package assemblernator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -153,7 +154,7 @@ public class Module {
 	}
 
 	/** An array of parsed instructions in the order they appeared in the file. **/
-	ArrayList<Instruction> assembly;
+	List<Instruction> assembly = new ArrayList<Instruction>();
 	
 	/** 
 	 * a symbol table.
