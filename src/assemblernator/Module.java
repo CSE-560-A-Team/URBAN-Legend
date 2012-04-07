@@ -13,20 +13,37 @@ import assemblernator.Instruction.Usage;
 /**
  * A class representing an assembled urban module.
  * 
+ * <pre> 
+ * {@code assembly = a sequence of Instructions.
+ * symbolTable is a sequence of entry's where an entry = (label, address, usage, string);
+ * 	for an instruction with the label, 
+ * 	the address is the location of the instruction,
+ * 	the usage is how the instruction is used,
+ * 	and the string is the string of characters that the label is equated to if 
+ * 	the opcode of the instruction = EQU or EQUe.
+ * startAddr is the integer address at which the module starts.
+ * moduleLength is the integer length of the module.}
+ * </pre>
+ * 
+ * Module = (assembly, symbolTable, startAddr, moduleLength).
+ * 
  * @author Josh Ventura
  * @date Apr 5, 2012; 7:15:44 PM
  */
 public class Module {
 	/**
-	 * Symbol Table.
-	 * @author Noah
-	 * @date Apr 5, 2012; 10:03:26 PM
+	 * A symbolTable as defined in specifications.
 	 */
 	private class SymbolTable {
 		
 		/** 
-		 * label = Instruction.label;
-		 * a Map of (label, Instruction) sorted according to order of label. 
+		 * let (label, Instruction) = p.
+		 * symbols is a sorted Map of p's.
+		 * Each p is a single entry in SymbolTable, where 
+		 * 	label = Instruction.label,
+		 * 	address = Instruction.lc, 
+		 * 	usage = Instruction.usage,
+		 *  and string = the value of the operand in Instruction.
 		 */
 		private SortedMap<String, Instruction> symbols =  new TreeMap<String, Instruction>();
 	
@@ -47,7 +64,23 @@ public class Module {
 		}
 		
 		/**
-		 * Makes the entire symbolTable into a string which can easily printed to the screen
+		 * String representation of they symbol table.
+		 * @author Noah
+		 * @date Apr 6, 2012; 8:32:43 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @param instr instruction to add.
+		 * @return <pre>
+		 * {@code let line = a string of character representing a single entry
+		 * 	in the symbol table. specifically:
+		 * 		label + " " + address + " " + " " + usage + " " + string.
+		 * 	each line is unique.
+		 * returns a sequence of lines for all the entries in the symbol table.}
+		 * </pre>
+		 * @specRef N/A
 		 */
 		@Override
 		public String toString() {
@@ -99,8 +132,10 @@ public class Module {
 	/** An array of parsed instructions in the order they appeared in the file. **/
 	ArrayList<Instruction> assembly;
 	
-	/** instance of symbol table */
-	SymbolTable symbolTable = new SymbolTable();
+	/** 
+	 * a symbol table.
+	 */
+	private SymbolTable symbolTable = new SymbolTable();
 	
 	/**
 	 * The address at which execution will begin; set from the KICKO instruction
@@ -116,5 +151,20 @@ public class Module {
 	 * @specRef OB1.3
 	 */
 	int moduleLength;
+	
+	/**
+	 * 	Adds a single entry into the symbol table given an Instruction. <br>
+	 * @author Noah
+	 * @date Apr 6, 2012; 7:53:39 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param instr the Instruction entry to add into symbol table.
+	 */
+	public void addSymbolTableEntry(Instruction instr) {
+		symbolTable.addEntry(instr);
+	}
 	
 }
