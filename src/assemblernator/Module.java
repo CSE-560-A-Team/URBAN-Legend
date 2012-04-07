@@ -167,4 +167,25 @@ public class Module {
 		symbolTable.addEntry(instr);
 	}
 	
+	/**
+	 * 	Returns a the String representation of the symbol table.
+	 * @author Noah
+	 * @date Apr 7, 2012; 9:33:05 AM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @return <pre>
+	 * {@code let line = a string of character representing a single entry
+	 * 	in the symbol table. specifically, line =
+	 * 		label + " " + address + " " + " " + usage + " " + string.
+	 * 	each line is unique.
+	 * returns a sequence of lines for all the entries in the symbol table.}
+	 * </pre>
+	 * @specRef N/A
+	 */
+	public String getSymbTableStringRep() {
+		return symbolTable.toString();
+	}
 }
