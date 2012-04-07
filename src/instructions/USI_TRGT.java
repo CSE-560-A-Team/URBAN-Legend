@@ -3,25 +3,26 @@ package instructions;
 import assemblernator.Instruction;
 
 /**
- * The MOVD instruction.
+ * The TRGT instruction.
  * 
- * @author Josh Ventura
- * @date Apr 6, 2012; 6:15:36 PM
+ * @author Generate.java
+ * @date Apr 07, 2012; 04:41:01
+ * @specRef JT2
  */
-public class MOVD_Instruction extends Instruction {
+public class USI_TRGT extends Instruction {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
 	 * the user report. Hence, we will simply give this class a semicolon as its
 	 * instruction ID.
 	 */
-	private static final String opId = "MOVD";
+	private static final String opId = "TRGT";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0; // 0b000000
+	private static final int opCode = 0x00000022; // 0b10001000000000000000000000000000
 
 	/** The static instance for this instruction. */
-	static MOVD_Instruction staticInstance = new MOVD_Instruction(true);
+	static USI_TRGT staticInstance = new USI_TRGT(true);
 
 	/** @see assemblernator.Instruction#getWordCount() */
 	@Override public int getWordCount() {
@@ -48,7 +49,7 @@ public class MOVD_Instruction extends Instruction {
 	// =========================================================
 	// === This code's the same in all instruction classes, ====
 	// === But Java lacks the mechanism to allow stuffing it ===
-	// === in super() where it belongs =========================
+	// === in super() where it belongs. ========================
 	// =========================================================
 
 	/**
@@ -71,7 +72,7 @@ public class MOVD_Instruction extends Instruction {
 
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override public Instruction getNewInstance() {
-		return new MOVD_Instruction();
+		return new USI_TRGT();
 	}
 
 	/**
@@ -81,10 +82,11 @@ public class MOVD_Instruction extends Instruction {
 	 *            Unused parameter; used to distinguish the constructor for the
 	 *            static instance.
 	 */
-	private MOVD_Instruction(boolean ignored) {
+	private USI_TRGT(boolean ignored) {
 		super(opId, opCode);
 	}
 
 	/** Default constructor; does nothing. */
-	private MOVD_Instruction() {}
+	private USI_TRGT() {}
 }
+
