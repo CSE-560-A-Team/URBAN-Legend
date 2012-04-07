@@ -128,8 +128,8 @@ public class Assembler {
 	 * @specRef N/A
 	 */
 	public static final Module parseFile(File file) {
+		int lineNum = 1;
 		try {
-		
 			Scanner fileScan = new Scanner(file);
 			int startAddr = 0;
 			int lc = 0;
@@ -159,12 +159,13 @@ public class Assembler {
 				module.assembly.add(instr);
 				
 				module.startAddr += lc;
+				lineNum++;
 			}
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
-		} catch (Exception e) {
-			System.err.println("Error in parsing file: " + e.getMessage());
 			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("Line " + lineNum + ": " +  "Error in parsing file: " + e.getMessage());
 		}
 		
 		

@@ -265,7 +265,7 @@ public abstract class Instruction {
 			final int sp = i;
 			while (Character.isLetter(line.charAt(++i)));
 			String operand = line.substring(sp, i);
-			if (!Assembler.keyWords.contains(operand))
+			if (!Assembler.keyWords.contains(operand.toUpperCase()))
 				throw new Exception("Unrecognized operand keyword `" + operand
 						+ "'");
 
@@ -305,7 +305,7 @@ public abstract class Instruction {
 			} while (line.charAt(i) != ';' && line.charAt(i) != ',');
 
 			String exp = line.substring(exsp, i);
-			res.operands.put(operand, exp);
+			res.operands.put(operand.toUpperCase(), exp);
 
 			//
 			if (line.charAt(i) == ',')//@formatter:off
