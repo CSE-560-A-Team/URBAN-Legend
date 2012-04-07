@@ -68,12 +68,13 @@ public class Module {
 		/**
 		 * provides an Iterator over the elements of the symbol table.
 		 */
+		@Override
 		public Iterator<Map.Entry<String, Instruction>> iterator() {
 			return symbols.entrySet().iterator();
 		}
 		
 		/**
-		 * String representation of they symbol table.
+		 * String representation of the symbol table.
 		 * @author Noah
 		 * @date Apr 6, 2012; 8:32:43 PM
 		 * @modified UNMODIFIED
@@ -92,12 +93,11 @@ public class Module {
 		 */
 		@Override
 		public String toString() {
-			//way of storing each string line of the symbol table
+			//way of storing each line of the symbol table
 			ArrayList<String> completeTable = new ArrayList<String>();
 
-			//dumps symbol table into a set which can be iterated through
-			Set<Entry<String, Instruction>> table = symbols.entrySet();
-			Iterator<Entry<String, Instruction>> tableIt = table.iterator();
+			//iterator over elements of set of label, Instruction pairs.
+			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet().iterator();
 			
 			//loop runs through the whole symbol table
 			while (tableIt.hasNext()) { 
@@ -113,9 +113,10 @@ public class Module {
 		     
 		        //since equate are the only one with a string in the symbol table i use this to get the value of that string
 		        if (usage == Usage.EQUATE) {
-		        	Set<Entry<String, String>> operands = instr.operands.entrySet();
-		        	Iterator<Entry<String, String>> operandsIt = operands.iterator();
+		        	//gets iterator over set of operands.
+		        	Iterator<Entry<String, String>> operandsIt = instr.operands.entrySet().iterator();
 		        	
+		        	//only one operand if usage = EQUATE.
 		        	oneLine = oneLine + operandsIt.next().getValue(); //value of operand not operand Key. 
 		        } 
 		        
