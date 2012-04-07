@@ -27,6 +27,7 @@ public class Assembler {
 	
 	/**
 	 * fills keyWords with key words.
+	 * calls getInstance on all extensions of Instruction.
 	 */
 	static {
 		//add all key words.
@@ -114,22 +115,21 @@ public class Assembler {
 	 * @return <pre>
 	 * {@code let line = a line of characters in a file.
 	 * Instruction i = Instruction.parse(line);
-	 * startOp = first line of file = name * "KICKO" * "FC:" * address,
+	 * startOp = first line of file = name + "KICKO" + "FC:" + address,
 	 * 	where name is a string of characters representing the name of the module, 
 	 * 		and address is a string of characters representing a memory address.
 	 * module = sub-string from programName to keyword "END".
 	 * returns Module m, where for all lines in file,
 	 * 	m.assembly = sequence of i;
 	 * 	m.symbols = Map of (i.label, i);
-	 * 	m.programName = name;
 	 * 	m.startAddr = number of modules from start of file.
-	 *  m.moduleLength = length in lines of module;
-	 *  m.execStart = address;}
+	 *  m.moduleLength = length in lines of module;}
 	 *  </pre>
 	 * @specRef N/A
 	 */
 	public static final Module parseFile(File file) {
 		try {
+		
 			Scanner fileScan = new Scanner(file);
 			int startAddr = 0;
 			int lc = 0;
@@ -165,6 +165,7 @@ public class Assembler {
 			System.err.println("Error in parsing file: " + e.getMessage());
 			e.printStackTrace();
 		}
+		
 		
 		return new Module();
 	}
