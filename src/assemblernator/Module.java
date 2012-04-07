@@ -75,17 +75,20 @@ public class Module {
 		
 		/**
 		 * String representation of the symbol table.
-		 * @author Noah
-		 * @date Apr 6, 2012; 8:32:43 PM
-		 * @modified UNMODIFIED
+		 * @author Eric
+		 * @date Apr 6, 2012; 8:58:56 AM
+		 * @modified Apr 7, 1:26:50 PM; added opcode to lines. - Noah <br>
+		 * Apr 6, 11:02:08 AM; removed remove() call to prevent destruction of symbol table, <br>
+		 * 	also, cleaned code up. <br>
 		 * @tested UNTESTED
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
 		 * @return <pre>
 		 * {@code let line = a string of character representing a single entry
-		 * 	in the symbol table. specifically:
-		 * 		label + " " + address + " " + " " + usage + " " + string.
+		 * 	in the symbol table, concatenated w/ the opcode of the instruction with
+		 * 	the label in hex format, uppercased. specifically:
+		 * 		opcode + " " + label + " " + address + " " + " " + usage + " " + string + "\n".
 		 * 	each line is unique.
 		 * returns a sequence of lines for all the entries in the symbol table.}
 		 * </pre>
@@ -104,12 +107,15 @@ public class Module {
 				//gets the set values <K,V> stored into a map entry which can be used to get the values/key of K and V
 				Map.Entry<String, Instruction> pairs = tableIt.next();
 				
+				//retrieve string representation of the opcode from the Instruction associated w/ the label.
+				//an opcode is 6 digits.
+				String opcode = IOFormat.formatHexInteger(pairs.getValue().getOpcode(), 6);
 		        String label = pairs.getKey();
 		        Instruction instr = pairs.getValue();
 		        int addr = instr.lc;
 		        Usage usage = instr.usage;
 		        
-		        String oneLine = label + " " + addr + " " + usage;
+		        String oneLine = opcode + " " + label + " " + addr + " " + usage;
 		     
 		        //since equate are the only one with a string in the symbol table i use this to get the value of that string
 		        if (usage == Usage.EQUATE) {
