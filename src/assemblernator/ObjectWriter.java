@@ -76,15 +76,15 @@ public class ObjectWriter {
 		// OB1.2: ':' - Single character
 		out.write(':');
 		// OB1.3: `Assembler-assigned program load address` - 4 digit hex number HHHH
-		out.write(IOFormat.formatInteger(programAddr, 4));
+		out.write(IOFormat.formatIntegerWithRadix(programAddr, 10, 4));
 		// OB1.2: ':' - Single character
 		out.write(':');
 		// OB1.3: `Total Module length` - 4 nybble hex number (0 to 03FF)
-		out.write(IOFormat.formatInteger(moduleLength, 4));
+		out.write(IOFormat.formatIntegerWithRadix(moduleLength, 10, 4));
 		// OB1.4: ':' - Single character
 		out.write(':');
 		// OB1.5: `Execution start address` - 4 nybble hex number (0 to 03FF)
-		out.write(IOFormat.formatInteger(execStart, 4));
+		out.write(IOFormat.formatIntegerWithRadix(execStart, 10, 4));
 		// OB1.6: ':' - Single character
 		out.write(':');
 		// OB1.7: `Date/time of Assembly` - "YYYYDDD,HH:MM:SS"
@@ -92,7 +92,7 @@ public class ObjectWriter {
 		// OB1.8: ':' - Single character
 		out.write(':');
 		// OB1.9: `Assembler version number` - 4 digit integer
-		out.write(IOFormat.formatInteger(asmblrVersion, 4));
+		out.write(IOFormat.formatIntegerWithRadix(asmblrVersion, 10, 4));
 		// OB1.18: ':' - Single character
 		out.write(':');
 		// OB1.19: "URBAN-ASM" - 9 character string

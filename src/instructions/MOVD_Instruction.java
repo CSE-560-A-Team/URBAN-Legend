@@ -24,33 +24,23 @@ public class MOVD_Instruction extends Instruction {
 	static MOVD_Instruction staticInstance = new MOVD_Instruction(true);
 
 	/** @see assemblernator.Instruction#getWordCount() */
-	@Override
-	public int getWordCount() {
+	@Override public int getWordCount() {
 		return 1;
 	}
 
 	/** @see assemblernator.Instruction#check() */
-	@Override
-	public boolean check() {
+	@Override public boolean check() {
 		return false; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
-	@Override
-	public int[] assemble() {
+	@Override public int[] assemble() {
 		return null; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
-	@Override
-	public void execute(int instruction) {
+	@Override public void execute(int instruction) {
 		// TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#getNewInstance() */
-	@Override
-	public Instruction getNewInstance() {
-		return new MOVD_Instruction();
 	}
 
 	// =========================================================
@@ -70,15 +60,18 @@ public class MOVD_Instruction extends Instruction {
 	}
 
 	/** @see assemblernator.Instruction#getOpId() */
-	@Override
-	public String getOpId() {
+	@Override public String getOpId() {
 		return opId;
 	}
 
 	/** @see assemblernator.Instruction#getOpcode() */
-	@Override
-	public int getOpcode() {
+	@Override public int getOpcode() {
 		return opCode;
+	}
+
+	/** @see assemblernator.Instruction#getNewInstance() */
+	@Override public Instruction getNewInstance() {
+		return new MOVD_Instruction();
 	}
 
 	/**
@@ -93,6 +86,5 @@ public class MOVD_Instruction extends Instruction {
 	}
 
 	/** Default constructor; does nothing. */
-	private MOVD_Instruction() {
-	}
+	private MOVD_Instruction() {}
 }

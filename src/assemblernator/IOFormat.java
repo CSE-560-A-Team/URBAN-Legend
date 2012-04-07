@@ -104,8 +104,8 @@ public class IOFormat {
 		final int spos = pos;
 		if (!Character.isLetter(from.charAt(pos)))
 			throw new Exception("Labels must start with a letter.");
-		while (++pos < from.length() && isValidLabelChar(from.charAt(pos)))
-			; // Skip to the first invalid label character.
+		// Skip to the first invalid label character.
+		while (++pos < from.length() && isValidLabelChar(from.charAt(pos)));
 		if (pos - spos > 32)
 			throw new Exception(
 					"Labels must be at most 32 characters in length; given label is "
@@ -123,7 +123,8 @@ public class IOFormat {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param str The string to check as alpha.
+	 * @param str
+	 *            The string to check as alpha.
 	 * @return True if the string is composed entirely of letters, false
 	 *         otherwise.
 	 * @specRef N/A
@@ -138,13 +139,12 @@ public class IOFormat {
 	/**
 	 * Format an integer to a zero-padded decimal representation.
 	 * 
+	 * @date Apr 3, 2012; 3:09:00 PM
 	 * @author Josh Ventura
-	 * @modified UNMODIFIED
-	 * @tested Apr 3, 2012; 3:10:00 PM: Tested the decimal number 1337, printed
-	 *         with 10, 5, 4, 2, 1, and 0 digits of allowance.
-	 * 
-	 *         2012-04-03 Tuesday 05:54PM: Tested the decimal number 9001, to
-	 *         verify there was no issue with 0-result modulus.
+	 * @modified Apr 7, 2012; 1:00:44 PM: Modified to simply call
+	 *           formatIntegerWithRadix with 10 as the radix.
+	 * @tested This function depends entirely on the output of
+	 *         formatIntegerWithRadix.
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param number
@@ -153,15 +153,48 @@ public class IOFormat {
 	 *            The number of digits to return.
 	 * @return A byte[] containing the integer in decimal notation.
 	 */
-	public static byte[] formatInteger(int number, int digits) {
-		byte res[] = new byte[digits];
-		for (int i = 0; i < digits; ++i)
-			res[i] = '0';
-		for (int i = digits - 1; i >= 0 && number > 0; --i) {
-			res[i] = (byte) ('0' + (number % 10));
-			number /= 10;
-		}
-		return res;
+	public static String formatInteger(int number, int digits) {
+		return new String(formatIntegerWithRadix(number, 10, digits));
+	}
+
+	/**
+	 * Format an integer to a zero-padded hexadecimal representation.
+	 * 
+	 * @date Apr 3, 2012; 3:12:00 PM
+	 * @author Josh Ventura
+	 * @modified Apr 7, 2012; 1:00:44 PM: Modified to simply call
+	 *           formatIntegerWithRadix with 16 as the radix.
+	 * @tested This function depends entirely on the output of
+	 *         formatIntegerWithRadix.
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param number
+	 *            A number between 0 and (10^(digits+1)-1).
+	 * @param digits
+	 *            The number of digits to return.
+	 * @return A byte[] containing the integer in decimal notation.
+	 */
+	public static String formatHexInteger(int number, int digits) {
+		return new String(formatIntegerWithRadix(number, 16, digits));
+	}
+
+	/**
+	 * Format an integer to a zero-padded binary representation.
+	 * @date Apr 7, 2012; 1:00:44 PM
+	 * @author Josh Ventura
+	 * @modified UNMODIFIED
+	 * @tested This function depends entirely on the output of
+	 *         formatIntegerWithRadix.
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param number
+	 *            A number between 0 and (10^(digits+1)-1).
+	 * @param digits
+	 *            The number of digits to return.
+	 * @return A byte[] containing the integer in decimal notation.
+	 */
+	public static String formatBinInteger(int number, int digits) {
+		return new String(formatIntegerWithRadix(number, 2, digits));
 	}
 
 	/**
@@ -172,28 +205,41 @@ public class IOFormat {
 			'7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 	/**
-	 * Format an integer to a zero-padded hexadecimal representation.
-	 * 
 	 * @author Josh Ventura
+	 * @date Apr 7, 2012; 12:09:39 PM
 	 * @modified UNMODIFIED
-	 * @tested Apr 3, 2012; 3:10:30 PM: Tested the decimal number 1337, printed
-	 *         with 10, 4, 3, 2, 1, and 0 digits of allowance.
+	 * @tested Apr 7, 2012; 12:46:53 PM: Tested bases 2, 10, and 16 with the
+	 *         integer 1337, requesting 20, 11, 5, 4, 3, 2, 1, and 0 digits.
+	 * @errors An exception will be thrown if a string of negative size is
+	 *         requested; an error is printed to stderr when the resulting
+	 *         string does not contain sufficient digits to represent the
+	 *         input number.
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param number
-	 *            A number between 0 and (10^(digits+1)-1).
+	 *            The integer to format.
+	 * @param radix
+	 *            The radix with which to format, between 2 and 16.
 	 * @param digits
-	 *            The number of digits to return.
-	 * @return A byte[] containing the integer in decimal notation.
+	 *            The precise length of the string, or number of digits, to
+	 *            return.
+	 * @return A string representation of the given number in the given radix
+	 *         with the given number of digits.
+	 * @specRef N/A
 	 */
-	public static byte[] formatHexInteger(int number, int digits) {
+	public static byte[] formatIntegerWithRadix(int number, int radix,
+			int digits) {
+		final int onum = number;
 		byte res[] = new byte[digits];
 		for (int i = 0; i < digits; ++i)
 			res[i] = '0';
 		for (int i = digits - 1; i >= 0 && number > 0; --i) {
-			res[i] = hexNybbles[number % 16];
-			number /= 16;
+			res[i] = hexNybbles[number % radix];
+			number /= radix;
 		}
+		if (number > 0)
+			System.err.println(digits + " digits is insufficient to store "
+					+ onum + " in base " + radix);
 		return res;
 	}
 
@@ -219,22 +265,24 @@ public class IOFormat {
 		GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar
 				.getInstance();
 		calendar.setTime(date);
-		append = formatInteger(calendar.get(Calendar.YEAR), 4);
+		append = formatIntegerWithRadix(calendar.get(Calendar.YEAR), 10, 4);
 		for (int i = 0; i < 4; ++i)
 			res[appat++] = append[i];
-		append = formatInteger(calendar.get(Calendar.DAY_OF_YEAR), 3);
+		append = formatIntegerWithRadix(calendar.get(Calendar.DAY_OF_YEAR), 10,
+				3);
 		for (int i = 0; i < 3; ++i)
 			res[appat++] = append[i];
-		append = formatInteger(calendar.get(Calendar.HOUR_OF_DAY), 2);
+		append = formatIntegerWithRadix(calendar.get(Calendar.HOUR_OF_DAY), 10,
+				2);
 		res[appat++] = ',';
 		for (int i = 0; i < 2; ++i)
 			res[appat++] = append[i];
 		res[appat++] = ':';
-		append = formatInteger(calendar.get(Calendar.MINUTE), 2);
+		append = formatIntegerWithRadix(calendar.get(Calendar.MINUTE), 10, 2);
 		for (int i = 0; i < 2; ++i)
 			res[appat++] = append[i];
 		res[appat++] = ':';
-		append = formatInteger(calendar.get(Calendar.SECOND), 2);
+		append = formatIntegerWithRadix(calendar.get(Calendar.SECOND), 10, 2);
 		for (int i = 0; i < 2; ++i)
 			res[appat++] = append[i];
 		return res;

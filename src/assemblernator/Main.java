@@ -50,5 +50,32 @@ public class Main {
 				System.out.println("CRITICAL FAILURE. HAHAHAHAHAHAHAHA");
 				e.printStackTrace();
 			}
+		
+		System.out.print(IOFormat.formatInteger(1337, 20) + ", ");
+		System.out.print(IOFormat.formatInteger(1337, 11) + ", ");
+		System.out.print(IOFormat.formatInteger(1337, 5) + ", ");
+		System.out.print(IOFormat.formatInteger(1337, 4) + ", ");
+		System.out.print(IOFormat.formatInteger(1337, 3) + ", ");
+		System.out.print(IOFormat.formatInteger(1337, 2) + ", ");
+		System.out.print(IOFormat.formatInteger(1337, 1) + ": ");
+		System.out.println(IOFormat.formatInteger(1337, 0));
+		
+		System.out.print(IOFormat.formatHexInteger(1337, 20) + ", ");
+		System.out.print(IOFormat.formatHexInteger(1337, 11) + ", ");
+		System.out.print(IOFormat.formatHexInteger(1337, 5) + ", ");
+		System.out.print(IOFormat.formatHexInteger(1337, 4) + ", ");
+		System.out.print(IOFormat.formatHexInteger(1337, 3) + ", ");
+		System.out.print(IOFormat.formatHexInteger(1337, 2) + ", ");
+		System.out.print(IOFormat.formatHexInteger(1337, 1) + ": ");
+		System.out.println(IOFormat.formatHexInteger(1337, 0));
+		
+		System.out.print(IOFormat.formatBinInteger(1337, 20) + ", ");
+		System.out.print(IOFormat.formatBinInteger(1337, 11) + ", ");
+		System.out.print(IOFormat.formatBinInteger(1337, 5) + ", ");
+		System.out.print(IOFormat.formatBinInteger(1337, 4) + ", ");
+		System.out.print(IOFormat.formatBinInteger(1337, 3) + ", ");
+		System.out.print(IOFormat.formatBinInteger(1337, 2) + ", ");
+		System.out.print(IOFormat.formatBinInteger(1337, 1) + ": ");
+		System.out.println(IOFormat.formatBinInteger(1337, 0));
 	}
 }

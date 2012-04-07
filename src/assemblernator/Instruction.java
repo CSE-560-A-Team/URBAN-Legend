@@ -7,9 +7,11 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
- * The Instruction class is both a descriptor class and a storage class. It
- * represents the main mechanisms for tokenizing, lexing, and assembling URBAN
- * code.
+ * The Instruction class is the do-all, see-all, have-all class for instruction
+ * use and representation.
+ * 
+ * This class is both a descriptor class and a storage class. It represents the
+ * main mechanisms for tokenizing, lexing, and assembling URBAN code.
  * 
  * The Instruction class is designed such that every module of the
  * Assemblernator can utilize it in some form or another.
