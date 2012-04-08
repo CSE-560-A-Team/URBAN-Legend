@@ -47,7 +47,7 @@ public class Module {
 		 * 	usage = Instruction.usage,
 		 *  and string = the value of the operand in Instruction.
 		 */
-		private SortedMap<String, Instruction> symbols =  new TreeMap<String, Instruction>();
+		private SortedMap<String, Instruction> symbols =  new TreeMap<String, Instruction>(String.CASE_INSENSITIVE_ORDER);
 	
 		/**
 		 * adds an entry into the symbol table.
@@ -63,6 +63,7 @@ public class Module {
 		 */
 		public void addEntry(Instruction instr) {
 			symbols.put(instr.label, instr);
+			
 		}
 		
 		/**
@@ -100,6 +101,7 @@ public class Module {
 			return symbols.entrySet().iterator();
 		}
 		
+		
 		/**
 		 * String representation of the symbol table.
 		 * @author Eric
@@ -114,9 +116,8 @@ public class Module {
 		 * @return <pre>
 		 * {@code let line = a string of character representing a single entry
 		 * 	in the symbol table, concatenated w/ the opcode of the instruction with
-		 * 	the label in hex format, uppercased. If the opcode = "FFFFFF" indicating that 
-		 * 	the instruction is a directive, opcode = "------".  specifically:
-		 * 		opcode + " " + label + " " + address + " " + " " + usage + " " + string + "\n".
+		 * 	the label in hex format, uppercased.  specifically:
+		 * 		label + " " + address + " " + " " + usage + " " + string + "\n".
 		 * 	each line is unique.
 		 * returns a sequence of lines for all the entries in the symbol table.}
 		 * </pre>
@@ -135,21 +136,12 @@ public class Module {
 				//gets the set values <K,V> stored into a map entry which can be used to get the values/key of K and V
 				Map.Entry<String, Instruction> entry = tableIt.next();
 				
-				//retrieve string representation of the opcode from the Instruction associated w/ the label.
-				//an opcode is 6 digits.
-				String opcode = IOFormat.formatHexInteger(entry.getValue().getOpcode(), 6);
-				
-				
-				if (opcode.equals("FFFFFF")) { //the operation is not a directive
-					opcode = "------";
-				}
-				
 		        String label = entry.getKey();
 		        Instruction instr = entry.getValue();
 		        int addr = instr.lc;
 		        Usage usage = instr.usage;
 
-		        String oneLine = opcode + " " + label + " " + addr + " " + usage;
+		        String oneLine = label + " " + addr + " " + usage;
 		     
 		        //since equate are the only one with a string in the symbol table i use this to get the value of that string
 		        if (usage == Usage.EQUATE) {
@@ -215,6 +207,23 @@ public class Module {
 	 */
 	public SymbolTable getSymbolTable() {
 		return symbolTable;
+	}
+	
+	/**
+	 * 
+	 * @author Noah
+	 * @date Apr 8, 2012; 1:34:17 AM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param exp
+	 * @return
+	 * @specRef N/A
+	 */
+	public int evaluate(String exp) {
+		return IOFormat.isValidLabel(exp)? evaluate(symbolTable.getEntry(exp).operands.get("EX")) : Integer.parseInt(exp);
 	}
 	
 }
