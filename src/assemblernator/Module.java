@@ -66,6 +66,24 @@ public class Module {
 		}
 		
 		/**
+		 * Returns a reference to the Instruction w/ the label given
+		 * from the symbol table.
+		 * @author Noah
+		 * @date Apr 7, 2012; 10:22:52 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @param label label of Instruction to get reference to from symbol table.
+		 * @return Instruction with label, label from symbol table.
+		 * @specRef N/A
+		 */
+		public Instruction getEntry(String label) {
+			return symbols.get(label);
+		}
+		
+		/**
 		 * provides an Iterator over the elements of the symbol table.
 		 * @author Noah
 		 * @date Apr 7, 2012; 4:19:44 PM
@@ -130,7 +148,7 @@ public class Module {
 		        Instruction instr = entry.getValue();
 		        int addr = instr.lc;
 		        Usage usage = instr.usage;
-		        
+
 		        String oneLine = opcode + " " + label + " " + addr + " " + usage;
 		     
 		        //since equate are the only one with a string in the symbol table i use this to get the value of that string
