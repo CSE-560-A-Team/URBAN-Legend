@@ -37,8 +37,7 @@ public class Main {
 			if (args[i].charAt(0) == '-') {
 				if (args[i].equals("-o")) {
 					if (++i > args.length) {
-						System.err
-								.println("Expected output filename following -o");
+						System.err.println("Expected output filename following -o");
 						System.exit(1);
 					}
 					outputFile = args[i];
