@@ -1,7 +1,6 @@
 package assemblernator;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 
 /**
@@ -20,6 +19,8 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
+		System.out.println(IOFormat.formatBinInteger(-1,33));
+		
 		String a[] = { System.getProperty("user.home") + "/Desktop/test.s" };
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
