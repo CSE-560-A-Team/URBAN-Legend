@@ -4,6 +4,7 @@ import instructions.*;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -140,7 +141,8 @@ public class Assembler {
 				String line = fileScan.nextLine();
 
 				Instruction instr = Instruction.parse(line);
-				
+				if (instr == null)
+					continue;
 				
 				//increment location counter of instruction by word count of instruction.
 				lc += instr.getWordCount();
@@ -166,8 +168,15 @@ public class Assembler {
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
-		} catch (Exception e) {
-			System.err.println("Line " + lineNum + ": " +  "Error in parsing file: " + e.getMessage());
+		} catch (URBANSyntaxException e) {
+			System.err.println("Line " + lineNum + ", position " + e.index + ": Error in parsing file: " + e.getMessage());
+			if (e.getMessage() == null || e.getMessage().length() <= 5)
+				e.printStackTrace();
+		} catch (IOException e) {
+			if (!e.getMessage().startsWith("RAL"))
+				e.printStackTrace();
+			else
+				System.err.println("Line " + lineNum + " is not terminated by a semicolon.");
 		}
 		
 		

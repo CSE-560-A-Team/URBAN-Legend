@@ -276,18 +276,18 @@ public abstract class Instruction {
 	 * @return A new Instruction as defined in the given line of URBAN-ASM code,
 	 *         or null if the line was syntactically correct but did not contain
 	 *         an instruction.
-	 * @throws Exception
-	 *             Throws a general exception when a syntax error occurs.
 	 * @throws IOException
 	 *             Throws an IOException with the message "RAL" when the
 	 *             instruction is not concluded in the given string. The caller
 	 *             should re-invoke this method with the original parameter
 	 *             suffixed with the next line in the file.
+	 * @throws URBANSyntaxException
+	 *             Thrown when a syntax error occurs.
 	 * @specRef S2.1
 	 * @specRef S4.1
 	 */
-	public static final Instruction parse(String line) throws Exception,
-			IOException {
+	public static final Instruction parse(String line) throws IOException,
+			URBANSyntaxException {
 		int i = 0;
 
 		// Skip leading whitespace and check boundaries.
@@ -316,9 +316,9 @@ public abstract class Instruction {
 		}
 		else {
 			if (i != 0)// @formatter:off
-				throw new Exception("URBAN specification says labels must start at column 0 ("
+				throw new URBANSyntaxException("URBAN specification says labels must start at column 0 ("
 						+ label + " is " + (IOFormat.isAlpha(label) ? "not an" : "an invalid")
-						+ " instruction, starts at column" + i + ")"); // @formatter:on
+						+ " instruction)", i); // @formatter:on
 
 			// Skip the label we read earlier
 			i += label.length();
@@ -331,10 +331,10 @@ public abstract class Instruction {
 			instruction = IOFormat.readLabel(line, i); // Read instruction now
 			if (!Assembler.instructions.containsKey(instruction.toUpperCase())) {
 				if (IOFormat.isAlpha(instruction))
-					throw new Exception("`" + instruction
-							+ "' is not a known instruction");
-				throw new Exception("`" + instruction
-						+ "' is not a valid instruction");
+					throw new URBANSyntaxException("`" + instruction
+							+ "' is not a known instruction", i);
+				throw new URBANSyntaxException("`" + instruction
+						+ "' is not a valid instruction",i);
 			}
 			i += instruction.length();
 		}
@@ -358,20 +358,20 @@ public abstract class Instruction {
 		while (line.charAt(i) != ';') {
 			// All operand keywords contain only letters.
 			if (!Character.isLetter(line.charAt(i)))
-				throw new Exception("Expected operand keyword before '"
-						+ line.charAt(i) + "'");
+				throw new URBANSyntaxException("Expected operand keyword before '"
+						+ line.charAt(i) + "'", i);
 
 			// Isolate the keyword
 			final int sp = i;
 			while (Character.isLetter(line.charAt(++i)));
 			String operand = line.substring(sp, i);
 			if (!Assembler.keyWords.contains(operand.toUpperCase()))
-				throw new Exception("Unrecognized operand keyword `" + operand
-						+ "'");
+				throw new URBANSyntaxException("Unrecognized operand keyword `" + operand
+						+ "'", i);
 
 			if (line.charAt(i) != ':')
-				throw new Exception("Expected colon following `" + operand
-						+ "' keyword");
+				throw new URBANSyntaxException("Expected colon following `" + operand
+						+ "' keyword", i);
 
 			final int exsp = i + 1;
 			do { // Now we're reading in the value of this expression
