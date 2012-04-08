@@ -239,7 +239,7 @@ public class IOFormat {
 			res[i] = hexNybbles[(int) (fnum % radix)];
 			fnum /= radix;
 		}
-		if (fnum > 0)
+		if (fnum > 0 && number > 0)
 			System.err.println(digits + " digits is insufficient to store "
 					+ number + " in base " + radix);
 		return res;
