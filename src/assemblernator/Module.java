@@ -248,6 +248,22 @@ public class Module {
 	}
 
 	/**
+	 * Returns the address of the instruction with the label given.
+	 * @author Noah
+	 * @date Apr 8, 2012; 5:32:46 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param label the label of the instruction to look up for its lc.
+	 * @return instr.lc where instr.label = label.  
+	 * @specRef N/A
+	 */
+	public int getAddress(String label) {
+		return symbolTable.getEntry(label).lc;
+	}
+	/**
 	 * Returns a string representation of Module.
 	 * @author Noah
 	 * @date Apr 8, 2012; 12:26:15 PM
@@ -261,7 +277,7 @@ public class Module {
 	 * assemblyStr the string representation of assembly;
 	 * 	The string representation of assembly is a sequence of instrBreaks,
 	 * 		where for an Instruction instr in assembly, the corresponding 
-	 * 			instrBreak = origSourceLine + "Line number: " + instr.LineNum + " " + LC: " + instr.lc + " " + "Label: " + label + ",\n"
+	 * 			instrBreak = origSourceLine + "Line number: " + instr.LineNum + " " + LC: " + lc + " " + "Label: " + label + ",\n"
 	 * 			+ "instruction/Directive: " + instr.getOpID() + " " + Binary Equivalent: " + binEquiv + "\n" 
 	 * 			+ "operand " + i + operandKeyWord + ":" + operandValue;
 	 * 				where if instr does not have a label, then label = "", 
@@ -271,7 +287,8 @@ public class Module {
 	 * 				i represents the ith operand of instr, and
 	 * 					operandKeyword = the key word for the ith operand;
 	 * 					operandValue = the value associated w the operand with operandKeyword keyword for the ith operand, and
-	 * 				origSourceLine = instr.origSrcLine;
+	 * 				origSourceLine = instr.origSrcLine,
+	 * 				and lc = instr.lc displayed in hexadecimal w/ 4 bits.
 	 * 	
 	 * returns "Symbol Table:\n" + symbTableStr + "\nInstruction breakdowns:\n" + assemblyStr;}
 	 * </pre>
@@ -290,6 +307,7 @@ public class Module {
 			
 			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6); //binary equivalent of opcode keyword i.e. opcode.
 			String label = instr.label;
+			String lc = IOFormat.formatHexInteger(instr.lc, 4);
 			
 			//instr is a directive and thus has no opcode.
 			if(instr.getOpcode() == 0xFFFFFFFF) {
@@ -302,8 +320,9 @@ public class Module {
 				//also, can't print "------" b/c label may be "------".
 			}
 			
+			
 			String instrBreak = "Line number: " + instr.lineNum + " " 
-					+ "LC: " + instr.lc + " " + "Label: " + label + ",\n" 
+					+ "LC: " + lc + " " + "Label: " + label + ",\n" 
 					+ "instruction/Directive: " + instr.getOpId() + " "
 					+ "Binary Equivalent: " + binEquiv + "\n";
 			
