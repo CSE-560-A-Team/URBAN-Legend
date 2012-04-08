@@ -19,7 +19,7 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
-		System.out.println(IOFormat.formatBinInteger(-1,33));
+		//System.out.println(IOFormat.formatBinInteger(-1,33));
 		
 		String a[] = { System.getProperty("user.home") + "/Desktop/test.s" };
 		if (args.length < 1) {
@@ -62,7 +62,9 @@ public class Main {
 			if (f.canRead()) {
 				try {
 					Module aModule = Assembler.parseFile(f);
-					System.out.println(aModule.getSymbolTable().toString());
+					System.out.println("\n" + aModule.toString());
+					
+					
 				} catch (NullPointerException npe) {
 					System.err.println("Failed to read file `"
 							+ filesToAssemble.get(i)

@@ -144,9 +144,10 @@ public class Assembler {
 				if (instr == null)
 					continue;
 				
-				//increment location counter of instruction by word count of instruction.
-				lc += instr.getWordCount();
-				instr.lc = lc;
+				instr.lineNum = lineNum;
+				
+				//get new lc for next instruction.
+				lc = instr.getNewLC(lc);
 
 				/*
 				 * if start of module, record startAddr of module.

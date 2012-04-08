@@ -132,6 +132,23 @@ public abstract class Instruction {
 	abstract public int getOpcode();
 
 	/**
+	 * Temporarily public final so I can call it from Assembler.
+	 * @author Noah
+	 * @date Apr 8, 2012; 12:16:30 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param oldLC 
+	 * @return 
+	 * @specRef N/A
+	 */
+	public final int getNewLC(int oldLC) {
+		return 0;
+	}
+	
+	/**
 	 * Get the number of words this instruction will consume; useful for
 	 * incrementing the location counter. Instructions such as EQU will have a
 	 * word count of zero, while most instructions will have a word count of
@@ -162,6 +179,8 @@ public abstract class Instruction {
 	public ArrayList<Operand> operands = new ArrayList<Operand>();
 	/** The type of this instruction as one of the {@link Usage} constants. */
 	public Usage usage = Usage.NONE;
+	/** line number in source file.*/
+	public int lineNum;
 
 	/**
 	 * Trivial utility method to check if an operand is used in this particular
