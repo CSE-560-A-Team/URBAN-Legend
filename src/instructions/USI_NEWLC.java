@@ -1,12 +1,13 @@
 package instructions;
 
 import assemblernator.Instruction;
+import assemblernator.Module;
 
 /**
  * The NEWLC instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 01:33:40
+ * @date Apr 08, 2012; 05:05:02
  * @specRef D2
  */
 public class USI_NEWLC extends Instruction {
@@ -24,9 +25,9 @@ public class USI_NEWLC extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_NEWLC staticInstance = new USI_NEWLC(true);
 
-	/** @see assemblernator.Instruction#getNewLC(int) */
-	@Override public int getNewLC(int lc) {
-		return lc;
+	/** @see assemblernator.Instruction#getNewLC(int, Module) */
+	@Override public int getNewLC(int lc, Module mod) {
+		return (hasOperand("FC")?lc+mod.evaluate(getOperand("FC")):mod.getAddress(getOperand("LR")));
 	}
 
 	/** @see assemblernator.Instruction#check() */

@@ -241,6 +241,9 @@ public class Module {
 	 * @specRef N/A
 	 */
 	public int evaluate(String exp) {
+		exp = exp.trim();
+		if (IOFormat.isValidLabel(exp))
+			System.err.println("WHAT? " + exp);
 		return IOFormat.isValidLabel(exp) ? evaluate(symbolTable.getEntry(exp).getOperand("EX")) : Integer.parseInt(exp);
 	}
 
@@ -321,5 +324,10 @@ public class Module {
 		}
 		
 		return rep;
+	}
+
+	public int getAddress(String lbl) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

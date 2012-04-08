@@ -1,6 +1,7 @@
 package instructions;
 
 import assemblernator.Instruction;
+import assemblernator.Module;
 
 /**
  * Specialized Instruction for full-line comments, since they must be included
@@ -30,7 +31,7 @@ public class Comment extends Instruction {
 
 	/** @see assemblernator.Instruction#getNewLC(int) */
 	@Override
-	public int getNewLC(int lc) {
+	public int getNewLC(int lc, Module mod) {
 		return lc;
 	}
 

@@ -21,6 +21,7 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
+		Generator.generate();
 		//System.out.println(IOFormat.formatBinInteger(-1,33));
 		
 		String a[] = { System.getProperty("user.home") + "/Desktop/test.s" };

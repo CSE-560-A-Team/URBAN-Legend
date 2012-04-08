@@ -1,6 +1,7 @@
 package instructions;
 
 import assemblernator.Instruction;
+import assemblernator.Module;
 
 /**
  * The ${INSNAME} instruction.
@@ -24,8 +25,8 @@ public class ${INSCLASS} extends Instruction {
 	/** The static instance for this instruction. */
 	static ${INSCLASS} staticInstance = new ${INSCLASS}(true);
 
-	/** @see assemblernator.Instruction#getNewLC(int) */
-	@Override public int getNewLC(int lc) {
+	/** @see assemblernator.Instruction#getNewLC(int, Module) */
+	@Override public int getNewLC(int lc, Module mod) {
 		return ${LCEXP};
 	}
 

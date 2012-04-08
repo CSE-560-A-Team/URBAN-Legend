@@ -145,11 +145,13 @@ public abstract class Instruction {
 	 * @testingStandards Awaiting signature
 	 * @param lc
 	 *            The original value of the location counter.
+	 * @param mod
+	 *            The Module which can be used to look up symbols if needed.
 	 * @return The value of the location counter for the next instruction.
 	 * @specRef N/A: See specification reference for individual Instance
 	 *          subclasses.
 	 */
-	abstract public int getNewLC(int lc);
+	abstract public int getNewLC(int lc, Module mod);
 
 	// =====================================================================
 	// == Members valid with new instances =================================
@@ -165,7 +167,7 @@ public abstract class Instruction {
 	public Usage usage = Usage.NONE;
 	/** line number in source file. */
 	public int lineNum;
-	/** original source line.*/
+	/** original source line. */
 	public String origSrcLine;
 
 	/**

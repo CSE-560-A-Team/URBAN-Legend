@@ -1,12 +1,13 @@
 package instructions;
 
 import assemblernator.Instruction;
+import assemblernator.Module;
 
 /**
  * The PSH instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 01:33:40
+ * @date Apr 08, 2012; 05:05:02
  * @specRef S0
  */
 public class USI_PSH extends Instruction {
@@ -24,8 +25,8 @@ public class USI_PSH extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_PSH staticInstance = new USI_PSH(true);
 
-	/** @see assemblernator.Instruction#getNewLC(int) */
-	@Override public int getNewLC(int lc) {
+	/** @see assemblernator.Instruction#getNewLC(int, Module) */
+	@Override public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
 

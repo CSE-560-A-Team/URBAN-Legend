@@ -1,12 +1,13 @@
 package instructions;
 
 import assemblernator.Instruction;
+import assemblernator.Module;
 
 /**
  * The SKIPS instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 01:33:40
+ * @date Apr 08, 2012; 05:05:02
  * @specRef D9
  */
 public class USI_SKIPS extends Instruction {
@@ -24,9 +25,9 @@ public class USI_SKIPS extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_SKIPS staticInstance = new USI_SKIPS(true);
 
-	/** @see assemblernator.Instruction#getNewLC(int) */
-	@Override public int getNewLC(int lc) {
-		return Integer.parseInt(getOperand("FC"));
+	/** @see assemblernator.Instruction#getNewLC(int, Module) */
+	@Override public int getNewLC(int lc, Module mod) {
+		return mod.evaluate(getOperand("FC"));
 	}
 
 	/** @see assemblernator.Instruction#check() */

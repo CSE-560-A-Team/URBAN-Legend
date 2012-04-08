@@ -1,12 +1,13 @@
 package instructions;
 
 import assemblernator.Instruction;
+import assemblernator.Module;
 
 /**
  * The TR instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 01:33:40
+ * @date Apr 08, 2012; 05:05:02
  * @specRef JT3
  */
 public class USI_TR extends Instruction {
@@ -24,8 +25,8 @@ public class USI_TR extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_TR staticInstance = new USI_TR(true);
 
-	/** @see assemblernator.Instruction#getNewLC(int) */
-	@Override public int getNewLC(int lc) {
+	/** @see assemblernator.Instruction#getNewLC(int, Module) */
+	@Override public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
 

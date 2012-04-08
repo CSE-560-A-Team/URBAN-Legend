@@ -1,12 +1,12 @@
-D1	x	KICKO	rqlabel	PROGNAME	lc	FC or LR or FM
-D2	x	newlc	rqlabel	none		lc	EX
+D1	x	KICKO	rqlabel	PROGNAME	mod.evaluate(getOperand("FC"))	FC
+D2	x	newlc	rqlabel	none		(hasOperand("FC")?lc+mod.evaluate(getOperand("FC")):mod.getAddress(getOperand("LR")))	FC or LR
 D3	x	EQU	rqlabel	EQUATE		lc	LR
 D4	x	EQUe	rqlabel	EQUATE		lc	LR
 D5	x	ENT	none	ENTRY		lc	LR
 D6	x	EXT	none	EXTERNAL	lc	LR or FC
 D7	x	end	none	none		lc	FC
 D8	x	AEXS	olabel	none		lc	ST
-D9	x	SKIPS	olabel	none		Integer.parseInt(getOperand("FC"))		FC
+D9	x	SKIPS	olabel	none		mod.evaluate(getOperand("FC"))			FC
 D10	x	char	olabel	none		lc+Math.max(4,getOperand("ST").length()+3)/4	ST
 D11	x	num	olabel	none		lc+1	FC
 D12	x	adrc	olabel	none		lc	LR or EX

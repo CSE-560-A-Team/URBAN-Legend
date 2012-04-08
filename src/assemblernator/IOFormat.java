@@ -30,10 +30,11 @@ public class IOFormat {
 	public static boolean isValidLabel(String label) {
 		if (label.length() < 1)
 			return false;
-		if (Character.isLetter(label.charAt(0)))
-			for (int i = 1; i < label.length(); ++i)
-				if (!isValidLabelChar(label.charAt(i)))
-					return false;
+		if (!Character.isLetter(label.charAt(0)))
+			return false;
+		for (int i = 1; i < label.length(); ++i)
+			if (!isValidLabelChar(label.charAt(i)))
+				return false;
 		return true;
 	}
 

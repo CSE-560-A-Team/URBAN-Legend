@@ -148,7 +148,7 @@ public class Assembler {
 				instr.lineNum = lineNum;
 				
 				// Get new lc for next instruction.
-				lc = instr.getNewLC(lc);
+				lc = instr.getNewLC(lc, module);
 				instr.lc = lc;
 
 				/*
