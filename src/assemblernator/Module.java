@@ -114,13 +114,14 @@ public class Module {
 			//loop runs through the whole symbol table
 			while (tableIt.hasNext()) { 
 				//gets the set values <K,V> stored into a map entry which can be used to get the values/key of K and V
-				Map.Entry<String, Instruction> pairs = tableIt.next();
+				Map.Entry<String, Instruction> entry = tableIt.next();
 				
 				//retrieve string representation of the opcode from the Instruction associated w/ the label.
 				//an opcode is 6 digits.
-				String opcode = IOFormat.formatHexInteger(pairs.getValue().getOpcode(), 6);
-		        String label = pairs.getKey();
-		        Instruction instr = pairs.getValue();
+				String opcode = IOFormat.formatHexInteger(entry.getValue().getOpcode(), 6);
+				System.err.println(opcode);
+		        String label = entry.getKey();
+		        Instruction instr = entry.getValue();
 		        int addr = instr.lc;
 		        Usage usage = instr.usage;
 		        
@@ -191,4 +192,5 @@ public class Module {
 	public SymbolTable getSymbolTable() {
 		return symbolTable;
 	}
+	
 }

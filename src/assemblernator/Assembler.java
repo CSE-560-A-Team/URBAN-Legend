@@ -129,12 +129,14 @@ public class Assembler {
 	 */
 	public static final Module parseFile(File file) {
 		int lineNum = 1;
+		Module module = new Module();
 		try {
 			Scanner fileScan = new Scanner(file);
 			int startAddr = 0;
 			int lc = 0;
+
 			while (fileScan.hasNextLine()) {
-				Module module = new Module();
+				//Module module = new Module();
 				String line = fileScan.nextLine();
 
 				Instruction instr = Instruction.parse(line);
@@ -169,7 +171,7 @@ public class Assembler {
 		}
 		
 		
-		return new Module();
+		return module;
 	}
 	
 }

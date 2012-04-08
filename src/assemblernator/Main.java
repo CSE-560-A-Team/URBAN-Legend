@@ -23,8 +23,7 @@ public class Main {
 		String a[] = { System.getProperty("user.home") + "/Desktop/test.s" };
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
-			System.out
-					.println("Usage: java -jar urban.jar file1 file2 file3... -o executablename");
+			System.out.println("Usage: java -jar urban.jar file1 file2 file3... -o executablename");
 			args = a;
 		}
 
@@ -62,7 +61,8 @@ public class Main {
 			File f = new File(filesToAssemble.get(i));
 			if (f.canRead()) {
 				try {
-					Assembler.parseFile(f);
+					Module aModule = Assembler.parseFile(f);
+					System.out.println(aModule.getSymbolTable().toString());
 				} catch (NullPointerException npe) {
 					System.err.println("Failed to read file `"
 							+ filesToAssemble.get(i)
