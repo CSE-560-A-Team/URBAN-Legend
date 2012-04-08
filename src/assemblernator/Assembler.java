@@ -144,6 +144,7 @@ public class Assembler {
 				if (instr == null)
 					continue;
 				
+				instr.origSrcLine = line; //gives instr source line.
 				instr.lineNum = lineNum;
 				
 				//get new lc for next instruction.

@@ -181,6 +181,8 @@ public abstract class Instruction {
 	public Usage usage = Usage.NONE;
 	/** line number in source file.*/
 	public int lineNum;
+	/** original source line.*/
+	public String origSrcLine;
 
 	/**
 	 * Trivial utility method to check if an operand is used in this particular
