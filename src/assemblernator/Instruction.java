@@ -3,7 +3,7 @@ package assemblernator;
 import instructions.Comment;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map.Entry;
 
 /**
@@ -36,6 +36,28 @@ import java.util.Map.Entry;
  * @date Apr 4, 2012 1:39:03 AM
  */
 public abstract class Instruction {
+	/**
+	 * @author Josh Ventura
+	 * @date Apr 8, 2012; 1:51:01 AM
+	 */
+	public static class Operand {
+		/** The operand keyword */
+		public String operand;
+		/** The expression given to the operand */
+		public String expression;
+
+		/**
+		 * @param o
+		 *            The operand keyword.
+		 * @param e
+		 *            The expression.
+		 */
+		public Operand(String o, String e) {
+			operand = o;
+			expression = e;
+		}
+	}
+
 	/**
 	 * @author Josh Ventura
 	 * @date Apr 5, 2012; 10:40:23 PM
@@ -138,9 +160,83 @@ public abstract class Instruction {
 	/** The line counter index at which this instruction was read. */
 	public int lc;
 	/** A hash map of any instructions encountered. */
-	public HashMap<String, String> operands = new HashMap<String, String>();
+	public ArrayList<Operand> operands = new ArrayList<Operand>();
 	/** The type of this instruction as one of the {@link Usage} constants. */
 	public Usage usage = Usage.NONE;
+
+	/**
+	 * Trivial utility method to check if an operand is used in this particular
+	 * instruction.
+	 * 
+	 * @author Josh Ventura
+	 * @param op
+	 *            The operand to check for.
+	 * @return True if this Instruction contains at least one instance of the
+	 *         given operand, false otherwise.
+	 * @date Apr 8, 2012; 1:35:52 AM
+	 */
+	public boolean hasOperand(String op) {
+		for (int i = 0; i < operands.size(); i++)
+			if (operands.get(i).operand.equals(op))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Trivial utility method to get the number of times an operand is used
+	 * in this particular instruction.
+	 * 
+	 * @author Josh Ventura
+	 * @param op
+	 *            The operand to check for.
+	 * @return The number of times the given operand is given for this
+	 *         Instruction.
+	 * @date Apr 8, 2012; 1:35:52 AM
+	 */
+	public int countOperand(String op) {
+		int count = 0;
+		for (int i = 0; i < operands.size(); i++)
+			if (operands.get(i).operand.equals(op))
+				++count;
+		return count;
+	}
+
+	/**
+	 * Trivial utility method to get the expression of a given operand.
+	 * 
+	 * @author Josh Ventura
+	 * @param op
+	 *            The operand to check for.
+	 * @return The expression given to the operand.
+	 * @date Apr 8, 2012; 1:35:52 AM
+	 */
+	public String getOperand(String op) {
+		for (int i = 0; i < operands.size(); i++)
+			if (operands.get(i).operand.equals(op))
+				return operands.get(i).expression;
+		return null;
+	}
+
+	/**
+	 * Trivial utility method to get the expression of the Nth occurrence a
+	 * given
+	 * operand.
+	 * 
+	 * @author Josh Ventura
+	 * @param op
+	 *            The operand to check for.
+	 * @param indx
+	 *            The number of matching operands to skip.
+	 * @return The expression given to the operand.
+	 * @date Apr 8, 2012; 1:35:52 AM
+	 */
+	public String getOperand(String op, int indx) {
+		for (int i = 0; i < operands.size(); i++)
+			if (operands.get(i).operand.equals(op))
+				if (--indx <= 0)
+					return operands.get(i).expression;
+		return null;
+	}
 
 	/**
 	 * Parse a string containing the operands of an instruction, storing the
@@ -310,7 +406,7 @@ public abstract class Instruction {
 			} while (line.charAt(i) != ';' && line.charAt(i) != ',');
 
 			String exp = line.substring(exsp, i);
-			res.operands.put(operand.toUpperCase(), exp);
+			res.operands.add(new Operand(operand.toUpperCase(), exp));
 
 			//
 			if (line.charAt(i) == ',')//@formatter:off
@@ -380,8 +476,8 @@ public abstract class Instruction {
 	@Override public String toString() {
 		String res = (label.length() > 0 ? label + "\t" : "") + getOpId();
 		boolean prent = false;
-		for (Entry<String, String> op : operands.entrySet()) {
-			res += (prent ? ",\t" : "\t") + op.getKey() + ":" + op.getValue();
+		for (Operand op : operands) {
+			res += (prent ? ",\t" : "\t") + op.operand + ":" + op.expression;
 			prent = true;
 		}
 		return res + ';';
@@ -403,7 +499,6 @@ public abstract class Instruction {
 	 *            The byte code for this instruction as returned by getOpCode().
 	 */
 	protected Instruction(String iname, int opcode) {
-		System.out.println("Registered `" + iname + "' instruction");
 		Assembler.instructions.put(iname, this);
 		Assembler.byteCodes.put(opcode, this);
 	}
