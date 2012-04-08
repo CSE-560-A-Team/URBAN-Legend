@@ -138,8 +138,7 @@ public class Module {
 			ArrayList<String> completeTable = new ArrayList<String>();
 
 			// iterator over elements of set of label, Instruction pairs.
-			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet()
-					.iterator();
+			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet().iterator();
 
 			// loop runs through the whole symbol table
 			while (tableIt.hasNext()) {
@@ -160,14 +159,10 @@ public class Module {
 					// gets iterator over set of operands.
 					Iterator<Operand> operandsIt = instr.operands.iterator();
 
-					// only one operand if usage = EQUATE.
-					// FIXME: This'll fail when some jerk passes us an empty EQU
-					oneLine = oneLine + operandsIt.next().expression; // value
-																		// of
-																		// operand
-																		// not
-																		// operand
-																		// Key.
+					if(operandsIt.hasNext()) {
+						// only one operand if usage = EQUATE.
+						oneLine = oneLine + operandsIt.next().expression; 
+					} 
 				}
 
 				oneLine = oneLine + "\n";
