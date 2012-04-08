@@ -132,22 +132,22 @@ public abstract class Instruction {
 	abstract public int getOpcode();
 
 	/**
-	 * Get the number of words this instruction will consume; useful for
-	 * incrementing the location counter. Instructions such as EQU will have a
-	 * word count of zero, while most instructions will have a word count of
-	 * one. The CHAR instruction will return the number of words required to
-	 * contain the given string literal.
+	 * Get the location counter of the instruction following this instruction,
+	 * where the location counter at this instruction is provided as an
+	 * argument.
 	 * 
 	 * @author Josh Ventura
 	 * @date Apr 5, 2012; 11:36:32 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 8, 2012; 1:43:59 PM: Renamed method and
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param lc The original value of the location counter.
+	 * @param lc
+	 *            The original value of the location counter.
 	 * @return The value of the location counter for the next instruction.
-	 * @specRef N/A
+	 * @specRef N/A: See specification reference for individual Instance
+	 *          subclasses.
 	 */
 	abstract public int getNewLC(int lc);
 
@@ -163,6 +163,8 @@ public abstract class Instruction {
 	public ArrayList<Operand> operands = new ArrayList<Operand>();
 	/** The type of this instruction as one of the {@link Usage} constants. */
 	public Usage usage = Usage.NONE;
+	/** line number in source file. */
+	public int lineNum;
 
 	/**
 	 * Trivial utility method to check if an operand is used in this particular
@@ -335,7 +337,7 @@ public abstract class Instruction {
 					throw new URBANSyntaxException("`" + instruction
 							+ "' is not a known instruction", i);
 				throw new URBANSyntaxException("`" + instruction
-						+ "' is not a valid instruction",i);
+						+ "' is not a valid instruction", i);
 			}
 			i += instruction.length();
 		}
@@ -359,20 +361,21 @@ public abstract class Instruction {
 		while (line.charAt(i) != ';') {
 			// All operand keywords contain only letters.
 			if (!Character.isLetter(line.charAt(i)))
-				throw new URBANSyntaxException("Expected operand keyword before '"
-						+ line.charAt(i) + "'", i);
+				throw new URBANSyntaxException(
+						"Expected operand keyword before '" + line.charAt(i)
+								+ "'", i);
 
 			// Isolate the keyword
 			final int sp = i;
 			while (Character.isLetter(line.charAt(++i)));
 			String operand = line.substring(sp, i);
 			if (!Assembler.keyWords.contains(operand.toUpperCase()))
-				throw new URBANSyntaxException("Unrecognized operand keyword `" + operand
-						+ "'", i);
+				throw new URBANSyntaxException("Unrecognized operand keyword `"
+						+ operand + "'", i);
 
 			if (line.charAt(i) != ':')
-				throw new URBANSyntaxException("Expected colon following `" + operand
-						+ "' keyword", i);
+				throw new URBANSyntaxException("Expected colon following `"
+						+ operand + "' keyword", i);
 
 			final int exsp = i + 1;
 			do { // Now we're reading in the value of this expression

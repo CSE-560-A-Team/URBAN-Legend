@@ -138,8 +138,7 @@ public class Module {
 			ArrayList<String> completeTable = new ArrayList<String>();
 
 			// iterator over elements of set of label, Instruction pairs.
-			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet()
-					.iterator();
+			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet().iterator();
 
 			// loop runs through the whole symbol table
 			while (tableIt.hasNext()) {
@@ -160,14 +159,10 @@ public class Module {
 					// gets iterator over set of operands.
 					Iterator<Operand> operandsIt = instr.operands.iterator();
 
-					// only one operand if usage = EQUATE.
-					// FIXME: This'll fail when some jerk passes us an empty EQU
-					oneLine = oneLine + operandsIt.next().expression; // value
-																		// of
-																		// operand
-																		// not
-																		// operand
-																		// Key.
+					if(operandsIt.hasNext()) {
+						// only one operand if usage = EQUATE.
+						oneLine = oneLine + operandsIt.next().expression; 
+					} 
 				}
 
 				oneLine = oneLine + "\n";
@@ -249,4 +244,82 @@ public class Module {
 		return IOFormat.isValidLabel(exp) ? evaluate(symbolTable.getEntry(exp).getOperand("EX")) : Integer.parseInt(exp);
 	}
 
+	/**
+	 * Returns a string representation of Module.
+	 * @author Noah
+	 * @date Apr 8, 2012; 12:26:15 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @return <pre>
+	 * {@code symbTableStr is the string representation of the symbol table. 
+	 * assemblyStr the string representation of assembly;
+	 * 	The string representation of assembly is a sequence of instrBreaks,
+	 * 		where for an Instruction instr in assembly, the corresponding 
+	 * 			instrBreak = origSourceLine + "Line number: " + instr.LineNum + " " + LC: " + instr.lc + " " + "Label: " + label + ",\n"
+	 * 			+ "instruction/Directive: " + instr.getOpID() + " " + Binary Equivalent: " + binEquiv + "\n" 
+	 * 			+ "operand " + i + operandKeyWord + ":" + operandValue;
+	 * 				where if instr does not have a label, then label = "", 
+	 * 					else label = instr.label, and
+	 * 				if instr is a directive and thus has no opcode, then binEquiv = "------", 
+	 * 					else binEquiv = instr.opcode in binary format, and
+	 * 				i represents the ith operand of instr, and
+	 * 					operandKeyword = the key word for the ith operand;
+	 * 					operandValue = the value associated w the operand with operandKeyword keyword for the ith operand, and
+	 * 				origSourceLine = instr.origSrcLine;
+	 * 	
+	 * returns "Symbol Table:\n" + symbTableStr + "\nInstruction breakdowns:\n" + assemblyStr;}
+	 * </pre>
+	 * 	
+	 * @specRef N/A
+	 */
+	@Override
+	public String toString() {
+		String rep = "Symbol Table:\n" + symbolTable.toString() + "\nInstruction breakdowns:\n";
+		Iterator<Instruction> assemblyIt = assembly.iterator();
+		
+		while(assemblyIt.hasNext()) {
+			Instruction instr = assemblyIt.next();
+			
+			rep = rep + "original source line\n";
+			
+			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6); //binary equivalent of opcode keyword i.e. opcode.
+			String label = instr.label;
+			
+			//instr is a directive and thus has no opcode.
+			if(instr.getOpcode() == 0xFFFFFFFF) {
+				binEquiv = "------"; //so binary equivalent is non-existant.
+			}
+			
+			//if the instruction has no label
+			if(instr.label == null) {
+				label = ""; //no label to print.
+				//also, can't print "------" b/c label may be "------".
+			}
+			
+			String instrBreak = "Line number: " + instr.lineNum + " " 
+					+ "LC: " + instr.lc + " " + "Label: " + label + ",\n" 
+					+ "instruction/Directive: " + instr.getOpId() + " "
+					+ "Binary Equivalent: " + binEquiv + "\n";
+			
+			Iterator<Operand> operandIt = instr.operands.iterator();
+			
+			int i = 1;
+			while(operandIt.hasNext()) {
+				Operand oprnd = operandIt.next();
+				
+				instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand + ":" + oprnd.expression + "\n";
+				
+				i++;
+			}
+			
+			instrBreak = instrBreak + "\n";
+
+			rep = rep + instrBreak;
+		}
+		
+		return rep;
+	}
 }
