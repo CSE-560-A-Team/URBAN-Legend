@@ -283,7 +283,7 @@ public class Module {
 		while(assemblyIt.hasNext()) {
 			Instruction instr = assemblyIt.next();
 			
-			rep = rep + "original source line\n";
+			rep = rep + "original source line: " + instr.origSrcLine + "\n";
 			
 			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6); //binary equivalent of opcode keyword i.e. opcode.
 			String label = instr.label;

@@ -143,7 +143,10 @@ public class Assembler {
 				Instruction instr = Instruction.parse(line);
 				if (instr == null)
 					continue;
-
+				
+				instr.origSrcLine = line; // Gives instruction source line.
+				instr.lineNum = lineNum;
+				
 				// Get new lc for next instruction.
 				lc = instr.getNewLC(lc);
 				instr.lc = lc;
