@@ -1,51 +1,51 @@
-D1	x	KICKO	rqlabel	FC or LR or FM
-D2	x	newlc	rqlabel	EX
-D3	x	EQU	rqlabel	LR
-D4	x	EQUe	rqlabel	LR
-D5	x	ENT	none	LR
-D6	x	EXT	none	LR or FC
-D7	x	end	none	FC
-D8	x	AEXS	olabel	ST
-D9	x	SKIPS	olabel	FC
-D10	x	char	olabel	LR
-D11	x	num	olabel	LR or EX
-D12	x	adrc	olabel	EX
-MV0	000000	MOVD	olabel	REG,MREF or MREF,REG
-MV1	000001	MOVDN	olabel	REG,MREF or MREF,REG
-IA0	001000	IADD	olabel	REG,MREF or MREF,REG	
-IA1	001001	IMAD	olabel	REG,MREF or MREF,REG
-IA2	001010	IAA	olabel	REG,MREF or MREF,REG
-IA3	001011	ISRG	olabel	REG,MREF,NW or MREF,REG,NW
-IA4	001100	ISUB	olabel	REG,MREF or MREF,REG
-IA5	001101	IMUL	olabel	REG,MREF or MREF,REG
-IA6	001110	IDIV	olabel	REG,MREF or MREF,REG
-IA7	001111	PWR	olabel	REG,constant
-IS0	010000	CLR	olabel	DR or DX
-IS1	010001	CLRA	olabel	none
-IS2	010010	CLRX	olabel	none
-IM0	011000	ISHR	olabel	REG,FC or FC,REG
-IM1	011001	ISHL	olabel	REG,FC or FC,REG
-IM2	011010	ISRA	olabel	REG,FC or FC,REG
-IM3	011011	ISLA	olabel	REG,FC or FC,REG 
-IM4	011100	ROL	olabel	REG,FC or FC,REG
-IM5	011101	ROR	olabel	REG,FC or FC,REG
-IM6	011110	AND	olabel	REG,MREF or MREF,REG
-IM7	011111	OR	olabel	REG,MREF or MREF,REG
-JT0	100000	TREQ	olabel	FR,DM
-JT1	100001	TRLT	olabel	FR,DM
-JT2	100010	TRGT	olabel	FR,DM
-JT3	100011	TR	olabel	MREF
-JT4	100100	TRDR	olabel	FX,DM
-JT5	100101	TRLK	olabel	DR,MREF
-JT6	100110	RET	olabel	DM:MREF
-JT7	100111	SKT	olabel	DR
-IO0	101000	IWSR	olabel	MREF,NW
-IO1	101001	IRKB	olabel	MREF,NW
-IO2	101010	CWSR	olabel	MREF,NW
-IO3	101100	CRKB	olabel	MREF,NW
-S0	110000	PSH	olabel	MREF or Literal or FC
-S1	110001	POP	olabel	MREF
-S2	110010	PST	olabel	MREF or DR or Literal	
-C0	111101	NOP	olabel	none
-C1	111110	DMP	olabel	FC
-C2	111111	HLT	olabel	FC
+D1	x	KICKO	rqlabel	PROGNAME	0	FC or LR or FM
+D2	x	newlc	rqlabel	none		0	EX
+D3	x	EQU	rqlabel	EQUATE		0	LR
+D4	x	EQUe	rqlabel	EQUATE		0	LR
+D5	x	ENT	none	ENTRY		0	LR
+D6	x	EXT	none	EXTERNAL	0	LR or FC
+D7	x	end	none	none		0	FC
+D8	x	AEXS	olabel	none		0	ST
+D9	x	SKIPS	olabel	none		Integer.parseInt(getOperand("FC"))		FC
+D10	x	char	olabel	none		Math.max(4,getOperand("ST").length()+3)/4	ST
+D11	x	num	olabel	none		1	FC
+D12	x	adrc	olabel	none		0	LR or EX
+MV0	000000	MOVD	olabel	none		1	REG,MREF or MREF,REG
+MV1	000001	MOVDN	olabel	none		1	REG,MREF or MREF,REG
+IA0	001000	IADD	olabel	none		1	REG,MREF or MREF,REG	
+IA1	001001	IMAD	olabel	none		1	REG,MREF or MREF,REG
+IA2	001010	IAA	olabel	none		1	REG,MREF or MREF,REG
+IA3	001011	ISRG	olabel	none		1	REG,MREF,NW or MREF,REG,NW
+IA4	001100	ISUB	olabel	none		1	REG,MREF or MREF,REG
+IA5	001101	IMUL	olabel	none		1	REG,MREF or MREF,REG
+IA6	001110	IDIV	olabel	none		1	REG,MREF or MREF,REG
+IA7	001111	PWR	olabel	none		1	REG,constant
+IS0	010000	CLR	olabel	none		1	DR or DX
+IS1	010001	CLRA	olabel	none		1	none
+IS2	010010	CLRX	olabel	none		1	none
+IM0	011000	ISHR	olabel	none		1	REG,FC or FC,REG
+IM1	011001	ISHL	olabel	none		1	REG,FC or FC,REG
+IM2	011010	ISRA	olabel	none		1	REG,FC or FC,REG
+IM3	011011	ISLA	olabel	none		1	REG,FC or FC,REG 
+IM4	011100	ROL	olabel	none		1	REG,FC or FC,REG
+IM5	011101	ROR	olabel	none		1	REG,FC or FC,REG
+IM6	011110	AND	olabel	none		1	REG,MREF or MREF,REG
+IM7	011111	OR	olabel	none		1	REG,MREF or MREF,REG
+JT0	100000	TREQ	olabel	none		1	FR,DM
+JT1	100001	TRLT	olabel	none		1	FR,DM
+JT2	100010	TRGT	olabel	none		1	FR,DM
+JT3	100011	TR	olabel	none		1	MREF
+JT4	100100	TRDR	olabel	none		1	FX,DM
+JT5	100101	TRLK	olabel	none		1	DR,MREF
+JT6	100110	RET	olabel	none		1	DM:MREF
+JT7	100111	SKT	olabel	none		1	DR
+IO0	101000	IWSR	olabel	none		1	MREF,NW
+IO1	101001	IRKB	olabel	none		1	MREF,NW
+IO2	101010	CWSR	olabel	none		1	MREF,NW
+IO3	101100	CRKB	olabel	none		1	MREF,NW
+S0	110000	PSH	olabel	none		1	MREF or Literal or FC
+S1	110001	POP	olabel	none		1	MREF
+S2	110010	PST	olabel	none		1	MREF or DR or Literal	
+C0	111101	NOP	olabel	none		1	none
+C1	111110	DMP	olabel	none		1	FC
+C2	111111	HLT	olabel	none		1	FC

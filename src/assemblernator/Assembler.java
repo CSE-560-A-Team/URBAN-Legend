@@ -140,7 +140,8 @@ public class Assembler {
 				String line = fileScan.nextLine();
 
 				Instruction instr = Instruction.parse(line);
-				
+				if (instr == null)
+					continue;
 				
 				//increment location counter of instruction by word count of instruction.
 				lc += instr.getWordCount();
@@ -168,6 +169,8 @@ public class Assembler {
 			e.printStackTrace();
 		} catch (Exception e) {
 			System.err.println("Line " + lineNum + ": " +  "Error in parsing file: " + e.getMessage());
+			if (e.getMessage() == null || e.getMessage().length() <= 5)
+				e.printStackTrace();
 		}
 		
 		
