@@ -4,7 +4,6 @@ import instructions.Comment;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map.Entry;
 
 /**
  * The Instruction class is the do-all, see-all, have-all class for instruction
