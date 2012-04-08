@@ -96,7 +96,8 @@ public class Module {
 		 * @return <pre>
 		 * {@code let line = a string of character representing a single entry
 		 * 	in the symbol table, concatenated w/ the opcode of the instruction with
-		 * 	the label in hex format, uppercased. specifically:
+		 * 	the label in hex format, uppercased. If the opcode = "FFFFFF" indicating that 
+		 * 	the instruction is a directive, opcode = "------".  specifically:
 		 * 		opcode + " " + label + " " + address + " " + " " + usage + " " + string + "\n".
 		 * 	each line is unique.
 		 * returns a sequence of lines for all the entries in the symbol table.}
@@ -119,7 +120,12 @@ public class Module {
 				//retrieve string representation of the opcode from the Instruction associated w/ the label.
 				//an opcode is 6 digits.
 				String opcode = IOFormat.formatHexInteger(entry.getValue().getOpcode(), 6);
-				System.err.println(opcode);
+				
+				
+				if (opcode.equals("FFFFFF")) { //the operation is not a directive
+					opcode = "------";
+				}
+				
 		        String label = entry.getKey();
 		        Instruction instr = entry.getValue();
 		        int addr = instr.lc;
