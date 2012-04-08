@@ -19,7 +19,8 @@ public class USI_EXT extends Instruction {
 	private static final String opId = "EXT";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0xFFFFFFFF; // This instruction doesn't have an opcode.
+	private static final int opCode = 0xFFFFFFFF; // This instruction doesn't
+													// have an opcode.
 
 	/** The static instance for this instruction. */
 	static USI_EXT staticInstance = new USI_EXT(true);
@@ -43,6 +44,20 @@ public class USI_EXT extends Instruction {
 	@Override public void execute(int instruction) {
 		// TODO: IMPLEMENT
 	}
+
+	/**
+	 * Calls the Instance(String,int) constructor to track this instruction.
+	 * Overrides usage with custom constant.
+	 * 
+	 * @param ignored
+	 *            Unused parameter; used to distinguish the constructor for the
+	 *            static instance.
+	 */
+	private USI_EXT(boolean ignored) {
+		super(opId, opCode);
+		usage = Usage.EXTERNAL;
+	}
+
 
 	// =========================================================
 	// === Redundant code ======================================
@@ -75,18 +90,6 @@ public class USI_EXT extends Instruction {
 		return new USI_EXT();
 	}
 
-	/**
-	 * Calls the Instance(String,int) constructor to track this instruction.
-	 * 
-	 * @param ignored
-	 *            Unused parameter; used to distinguish the constructor for the
-	 *            static instance.
-	 */
-	private USI_EXT(boolean ignored) {
-		super(opId, opCode);
-	}
-
 	/** Default constructor; does nothing. */
 	private USI_EXT() {}
 }
-

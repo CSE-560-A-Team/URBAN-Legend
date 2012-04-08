@@ -44,6 +44,19 @@ public class USI_KICKO extends Instruction {
 		// TODO: IMPLEMENT
 	}
 
+	/**
+	 * Calls the Instance(String,int) constructor to track this instruction.
+	 * Overrides usage with custom constant.
+	 * 
+	 * @param ignored
+	 *            Unused parameter; used to distinguish the constructor for the
+	 *            static instance.
+	 */
+	private USI_KICKO(boolean ignored) {
+		super(opId, opCode);
+		usage = Usage.PROGNAME;
+	}
+
 	// =========================================================
 	// === Redundant code ======================================
 	// =========================================================
@@ -73,17 +86,6 @@ public class USI_KICKO extends Instruction {
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override public Instruction getNewInstance() {
 		return new USI_KICKO();
-	}
-
-	/**
-	 * Calls the Instance(String,int) constructor to track this instruction.
-	 * 
-	 * @param ignored
-	 *            Unused parameter; used to distinguish the constructor for the
-	 *            static instance.
-	 */
-	private USI_KICKO(boolean ignored) {
-		super(opId, opCode);
 	}
 
 	/** Default constructor; does nothing. */

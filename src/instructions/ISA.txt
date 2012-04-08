@@ -8,7 +8,7 @@ D7	x	end	none	FC
 D8	x	AEXS	olabel	ST
 D9	x	SKIPS	olabel	FC
 D10	x	char	olabel	LR
-D11	x	num	olabel	LR
+D11	x	num	olabel	LR or EX
 D12	x	adrc	olabel	EX
 MV0	000000	MOVD	olabel	REG,MREF or MREF,REG
 MV1	000001	MOVDN	olabel	REG,MREF or MREF,REG
