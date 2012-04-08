@@ -1,5 +1,7 @@
 package assemblernator;
 
+import instructions.Generator;
+
 import java.io.File;
 import java.util.ArrayList;
 

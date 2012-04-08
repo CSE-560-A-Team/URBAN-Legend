@@ -6,7 +6,7 @@ import assemblernator.Instruction;
  * The TRGT instruction.
  * 
  * @author Generate.java
- * @date Apr 07, 2012; 04:41:01
+ * @date Apr 08, 2012; 01:33:40
  * @specRef JT2
  */
 public class USI_TRGT extends Instruction {
@@ -24,9 +24,9 @@ public class USI_TRGT extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_TRGT staticInstance = new USI_TRGT(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return 1;
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return lc+1;
 	}
 
 	/** @see assemblernator.Instruction#check() */

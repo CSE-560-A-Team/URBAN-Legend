@@ -6,7 +6,7 @@ import assemblernator.Instruction;
  * The PWR instruction.
  * 
  * @author Generate.java
- * @date Apr 07, 2012; 04:41:01
+ * @date Apr 08, 2012; 01:33:40
  * @specRef IA7
  */
 public class USI_PWR extends Instruction {
@@ -24,9 +24,9 @@ public class USI_PWR extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_PWR staticInstance = new USI_PWR(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return 1;
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return lc+1;
 	}
 
 	/** @see assemblernator.Instruction#check() */

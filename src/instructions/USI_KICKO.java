@@ -6,7 +6,7 @@ import assemblernator.Instruction;
  * The KICKO instruction.
  * 
  * @author Generate.java
- * @date Apr 07, 2012; 04:41:01
+ * @date Apr 08, 2012; 01:33:40
  * @specRef D1
  */
 public class USI_KICKO extends Instruction {
@@ -24,9 +24,9 @@ public class USI_KICKO extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_KICKO staticInstance = new USI_KICKO(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return 0;
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return lc;
 	}
 
 	/** @see assemblernator.Instruction#check() */
@@ -42,19 +42,6 @@ public class USI_KICKO extends Instruction {
 	/** @see assemblernator.Instruction#execute(int) */
 	@Override public void execute(int instruction) {
 		// TODO: IMPLEMENT
-	}
-
-	/**
-	 * Calls the Instance(String,int) constructor to track this instruction.
-	 * Overrides usage with custom constant.
-	 * 
-	 * @param ignored
-	 *            Unused parameter; used to distinguish the constructor for the
-	 *            static instance.
-	 */
-	private USI_KICKO(boolean ignored) {
-		super(opId, opCode);
-		usage = Usage.PROGNAME;
 	}
 
 	// =========================================================
@@ -86,6 +73,18 @@ public class USI_KICKO extends Instruction {
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override public Instruction getNewInstance() {
 		return new USI_KICKO();
+	}
+
+	/**
+	 * Calls the Instance(String,int) constructor to track this instruction.
+	 * 
+	 * @param ignored
+	 *            Unused parameter; used to distinguish the constructor for the
+	 *            static instance.
+	 */
+	private USI_KICKO(boolean ignored) {
+		super(opId, opCode);
+		usage = Usage.PROGNAME;
 	}
 
 	/** Default constructor; does nothing. */

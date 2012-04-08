@@ -6,7 +6,7 @@ import assemblernator.Instruction;
  * The ADRC instruction.
  * 
  * @author Generate.java
- * @date Apr 07, 2012; 04:41:01
+ * @date Apr 08, 2012; 01:33:40
  * @specRef D12
  */
 public class USI_ADRC extends Instruction {
@@ -24,9 +24,9 @@ public class USI_ADRC extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_ADRC staticInstance = new USI_ADRC(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return 0;
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return lc;
 	}
 
 	/** @see assemblernator.Instruction#check() */

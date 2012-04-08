@@ -6,7 +6,7 @@ import assemblernator.Instruction;
  * The ISLA instruction.
  * 
  * @author Generate.java
- * @date Apr 07, 2012; 04:41:01
+ * @date Apr 08, 2012; 01:33:40
  * @specRef IM3
  */
 public class USI_ISLA extends Instruction {
@@ -24,9 +24,9 @@ public class USI_ISLA extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_ISLA staticInstance = new USI_ISLA(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return 1;
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return lc+1;
 	}
 
 	/** @see assemblernator.Instruction#check() */

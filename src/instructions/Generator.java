@@ -43,7 +43,8 @@ public class Generator {
 
 			String tok = scan.next();
 			while (scan.hasNext()) {
-				String specref = tok, opc, insname, lbltype, insclass, datetime, opcodehex, opcodebin, isinstruction = "1";
+				String specref = tok, opc, insname, lbltype, insclass, datetime,
+						usage, lcexp, opcodehex, opcodebin, isinstruction = "1";
 
 				System.out.print(specref + " ");
 				opc = scan.next();
@@ -52,6 +53,10 @@ public class Generator {
 				System.out.print(insname + " ");
 				lbltype = scan.next();
 				System.out.print(lbltype + " ");
+				usage = scan.next();
+				System.out.print(usage + " ");
+				lcexp = scan.next();
+				System.out.print(lcexp + " ");
 				insclass = "USI_" + insname.toUpperCase();
 
 				DateFormat df = new SimpleDateFormat("MMM dd, yyyy; hh:mm:ss");
@@ -89,6 +94,11 @@ public class Generator {
 					}
 				}
 				System.out.println();
+				
+				String usageovr = "";
+				if (!usage.equals("none")) {
+					usageovr = "\n\t\tusage = Usage." + usage + ";";
+				}
 
 				String fprint = fstr.replace("${SPECREF}", specref);
 				fprint = fprint.replace("${DATETIME}", datetime);
@@ -97,6 +107,8 @@ public class Generator {
 				fprint = fprint.replace("${OPCODEHEX}", opcodehex);
 				fprint = fprint.replace("${OPCODEBIN}", opcodebin);
 				fprint = fprint.replace("${ISINSTRUCTION}", isinstruction);
+				fprint = fprint.replace("${USAGEOVERRIDE}", usageovr);
+				fprint = fprint.replace("${LCEXP}", lcexp);
 
 				/* System.out.println("${SPECREF} = " + specref
 				 * + ", ${DATETIME} = `" + datetime + "', ${INSNAME} = `"

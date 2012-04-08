@@ -24,9 +24,9 @@ public class ${INSCLASS} extends Instruction {
 	/** The static instance for this instruction. */
 	static ${INSCLASS} staticInstance = new ${INSCLASS}(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return ${ISINSTRUCTION};
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return ${LCEXP};
 	}
 
 	/** @see assemblernator.Instruction#check() */
@@ -83,7 +83,7 @@ public class ${INSCLASS} extends Instruction {
 	 *            static instance.
 	 */
 	private ${INSCLASS}(boolean ignored) {
-		super(opId, opCode);
+		super(opId, opCode);${USAGEOVERRIDE}
 	}
 
 	/** Default constructor; does nothing. */

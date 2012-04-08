@@ -145,10 +145,11 @@ public abstract class Instruction {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @return The number of words this instruction requires.
+	 * @param lc The original value of the location counter.
+	 * @return The value of the location counter for the next instruction.
 	 * @specRef N/A
 	 */
-	abstract public int getWordCount();
+	abstract public int getNewLC(int lc);
 
 	// =====================================================================
 	// == Members valid with new instances =================================

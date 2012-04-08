@@ -6,7 +6,7 @@ import assemblernator.Instruction;
  * The CLR instruction.
  * 
  * @author Generate.java
- * @date Apr 07, 2012; 04:41:01
+ * @date Apr 08, 2012; 01:33:40
  * @specRef IS0
  */
 public class USI_CLR extends Instruction {
@@ -24,9 +24,9 @@ public class USI_CLR extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_CLR staticInstance = new USI_CLR(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return 1;
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return lc+1;
 	}
 
 	/** @see assemblernator.Instruction#check() */

@@ -28,10 +28,10 @@ public class Comment extends Instruction {
 	/** The actual text given for this comment */
 	private String comment_text = "";
 
-	/** @see assemblernator.Instruction#getWordCount() */
+	/** @see assemblernator.Instruction#getNewLC(int) */
 	@Override
-	public int getWordCount() {
-		return 0;
+	public int getNewLC(int lc) {
+		return lc;
 	}
 
 	/** @see assemblernator.Instruction#check() */

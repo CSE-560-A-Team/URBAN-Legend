@@ -6,7 +6,7 @@ import assemblernator.Instruction;
  * The CHAR instruction.
  * 
  * @author Generate.java
- * @date Apr 07, 2012; 04:41:01
+ * @date Apr 08, 2012; 01:33:40
  * @specRef D10
  */
 public class USI_CHAR extends Instruction {
@@ -24,9 +24,9 @@ public class USI_CHAR extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_CHAR staticInstance = new USI_CHAR(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return 0;
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return lc+Math.max(4,getOperand("ST").length()+3)/4;
 	}
 
 	/** @see assemblernator.Instruction#check() */

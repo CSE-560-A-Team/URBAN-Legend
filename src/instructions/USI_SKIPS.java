@@ -6,7 +6,7 @@ import assemblernator.Instruction;
  * The SKIPS instruction.
  * 
  * @author Generate.java
- * @date Apr 07, 2012; 04:41:01
+ * @date Apr 08, 2012; 01:33:40
  * @specRef D9
  */
 public class USI_SKIPS extends Instruction {
@@ -24,9 +24,9 @@ public class USI_SKIPS extends Instruction {
 	/** The static instance for this instruction. */
 	static USI_SKIPS staticInstance = new USI_SKIPS(true);
 
-	/** @see assemblernator.Instruction#getWordCount() */
-	@Override public int getWordCount() {
-		return 0;
+	/** @see assemblernator.Instruction#getNewLC(int) */
+	@Override public int getNewLC(int lc) {
+		return Integer.parseInt(getOperand("FC"));
 	}
 
 	/** @see assemblernator.Instruction#check() */
