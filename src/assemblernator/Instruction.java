@@ -54,7 +54,9 @@ public abstract class Instruction {
 	 * 
 	 * @author Josh Ventura
 	 */
-	enum Usage {
+	public enum Usage {
+		/** This item should not appear in the symbol table */
+		NONE,
 		/** Reference to external label */
 		EXTERNAL,
 		/** Preprocessor value */
@@ -138,7 +140,7 @@ public abstract class Instruction {
 	/** A hash map of any instructions encountered. */
 	public HashMap<String, String> operands = new HashMap<String, String>();
 	/** The type of this instruction as one of the {@link Usage} constants. */
-	public Usage usage;
+	public Usage usage = Usage.NONE;
 
 	/**
 	 * Parse a string containing the operands of an instruction, storing the
@@ -163,6 +165,9 @@ public abstract class Instruction {
 	 * 
 	 *           Apr 7, 2012; 12:32:17 AM: Completed first working draft; more
 	 *           instruction classes required to test properly.
+	 * 
+	 *           Apr 8, 2012; 12:11:32 AM: Added usage information to output
+	 *           Instructions.
 	 * @tested Apr 7, 2012; 12:52:43 AM: Tested with basic MOVD codes, given
 	 *         various kinds of expressions. While more instructions are
 	 *         necessary to get a full idea of whether or not this code is
@@ -243,9 +248,9 @@ public abstract class Instruction {
 			throw new IOException("RAL2"); // Request another line
 
 		// So, now we know a bit about our instruction.
-		Instruction res;
-		res = Assembler.instructions.get(instruction.toUpperCase())
-				.getNewInstance();
+		Instruction res, resp;
+		resp = Assembler.instructions.get(instruction.toUpperCase());
+		res = resp.getNewInstance();
 		res.label = label;
 
 		// Skip whitespace between instruction and operands.
@@ -313,6 +318,9 @@ public abstract class Instruction {
 			while (Character.isWhitespace(line.charAt(i))); //@formatter:on
 		}
 
+		res.usage = res.usage;
+		if (res.usage == Usage.NONE && res.label != null)
+			res.usage = Usage.LABEL;
 		return res;
 	}
 

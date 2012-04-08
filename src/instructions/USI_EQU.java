@@ -44,6 +44,19 @@ public class USI_EQU extends Instruction {
 		// TODO: IMPLEMENT
 	}
 
+	/**
+	 * Calls the Instance(String,int) constructor to track this instruction.
+	 * Overrides usage with custom constant.
+	 * 
+	 * @param ignored
+	 *            Unused parameter; used to distinguish the constructor for the
+	 *            static instance.
+	 */
+	private USI_EQU(boolean ignored) {
+		super(opId, opCode);
+		usage = Usage.EQUATE;
+	}
+
 	// =========================================================
 	// === Redundant code ======================================
 	// =========================================================
@@ -73,17 +86,6 @@ public class USI_EQU extends Instruction {
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override public Instruction getNewInstance() {
 		return new USI_EQU();
-	}
-
-	/**
-	 * Calls the Instance(String,int) constructor to track this instruction.
-	 * 
-	 * @param ignored
-	 *            Unused parameter; used to distinguish the constructor for the
-	 *            static instance.
-	 */
-	private USI_EQU(boolean ignored) {
-		super(opId, opCode);
 	}
 
 	/** Default constructor; does nothing. */
