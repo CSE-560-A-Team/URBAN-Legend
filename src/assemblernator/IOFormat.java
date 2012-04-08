@@ -180,6 +180,7 @@ public class IOFormat {
 
 	/**
 	 * Format an integer to a zero-padded binary representation.
+	 * 
 	 * @date Apr 7, 2012; 1:00:44 PM
 	 * @author Josh Ventura
 	 * @modified UNMODIFIED
@@ -207,7 +208,8 @@ public class IOFormat {
 	/**
 	 * @author Josh Ventura
 	 * @date Apr 7, 2012; 12:09:39 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 7, 2012; 9:31:52 PM: Cast value to long up front and
+	 *           dropped bits of higher order than 31 to simulate unsigned.
 	 * @tested Apr 7, 2012; 12:46:53 PM: Tested bases 2, 10, and 16 with the
 	 *         integer 1337, requesting 20, 11, 5, 4, 3, 2, 1, and 0 digits.
 	 * @errors An exception will be thrown if a string of negative size is
@@ -229,17 +231,17 @@ public class IOFormat {
 	 */
 	public static byte[] formatIntegerWithRadix(int number, int radix,
 			int digits) {
-		final int onum = number;
+		long fnum = (0L | number) & 0x00000000FFFFFFFFL;
 		byte res[] = new byte[digits];
 		for (int i = 0; i < digits; ++i)
 			res[i] = '0';
-		for (int i = digits - 1; i >= 0 && number > 0; --i) {
-			res[i] = hexNybbles[number % radix];
-			number /= radix;
+		for (int i = digits - 1; i >= 0 && fnum > 0; --i) {
+			res[i] = hexNybbles[(int) (fnum % radix)];
+			fnum /= radix;
 		}
-		if (number > 0)
+		if (fnum > 0)
 			System.err.println(digits + " digits is insufficient to store "
-					+ onum + " in base " + radix);
+					+ number + " in base " + radix);
 		return res;
 	}
 
