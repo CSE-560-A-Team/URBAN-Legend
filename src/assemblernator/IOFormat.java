@@ -95,21 +95,21 @@ public class IOFormat {
 	 * @param pos
 	 *            The position of the first character of the label.
 	 * @return A copy of the complete label.
-	 * @throws Exception
+	 * @throws URBANSyntaxException
 	 *             If the label does not meet specification, an exception is
 	 *             thrown with information on the violation.
 	 * @specRef S2.1
 	 */
-	public static String readLabel(String from, int pos) throws Exception {
+	public static String readLabel(String from, int pos) throws URBANSyntaxException {
 		final int spos = pos;
 		if (!Character.isLetter(from.charAt(pos)))
-			throw new Exception("Labels must start with a letter.");
+			throw new URBANSyntaxException("Labels must start with a letter.", pos);
 		// Skip to the first invalid label character.
 		while (++pos < from.length() && isValidLabelChar(from.charAt(pos)));
 		if (pos - spos > 32)
-			throw new Exception(
+			throw new URBANSyntaxException(
 					"Labels must be at most 32 characters in length; given label is "
-							+ (pos - spos) + " characters.");
+							+ (pos - spos) + " characters.", spos);
 		return from.substring(spos, pos);
 	}
 
