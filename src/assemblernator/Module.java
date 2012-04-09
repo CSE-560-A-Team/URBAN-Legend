@@ -177,7 +177,7 @@ public class Module {
 			 * @date Apr 9, 2012; 3:38:54 AM
 			 */
 			final class MapEntryComparator implements Comparator <Map.Entry<String, Instruction>> {
-				public int compare(Map.Entry<String, Instruction> o1, Map.Entry<String, Instruction> o2) {
+				@Override public int compare(Map.Entry<String, Instruction> o1, Map.Entry<String, Instruction> o2) {
 					return String.CASE_INSENSITIVE_ORDER.compare(o1.getKey(), o2.getKey()); //same ordering as values.
 				}
 			}

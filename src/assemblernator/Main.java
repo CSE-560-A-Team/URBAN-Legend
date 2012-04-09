@@ -21,12 +21,12 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
-		GUIMain.launch();
 		String a[] = { System.getProperty("user.home") + "/Desktop/test.s" };
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
 			System.out.println("Usage: java -jar urban.jar file1 file2 file3... -o executablename");
-			args = a;
+			GUIMain.launch();
+			return;
 		}
 
 		String outputFile = null;

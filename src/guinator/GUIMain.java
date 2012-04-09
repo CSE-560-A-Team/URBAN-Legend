@@ -59,11 +59,12 @@ public class GUIMain {
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 
 		JFrame mainWindow = new JFrame();
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		JTabbedPane tabPane = new JTabbedPane();
 
 		mainWindow.add(tabPane);
 		mainWindow.setSize(720, 540);
-		mainWindow.setVisible(true);
 
 		JMenuBar mb = new JMenuBar();
 		JMenu filemenu = new JMenu("File");
@@ -93,6 +94,8 @@ public class GUIMain {
 		jsp.setDividerLocation(540);
 		sjsp.setDividerLocation(360);
 		jt.grabFocus();
+		
+		mainWindow.setVisible(true);
 	}
 
 	/**
