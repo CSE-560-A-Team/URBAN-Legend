@@ -1,14 +1,12 @@
 package assemblernator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -85,8 +83,12 @@ public class Module {
 		 * @specRef N/A
 		 */
 		public void addEntry(Instruction instr) {
+			//keep track of instructions w/ opID "ENT" and "EXT" separately.
 			if (instr.getOpId().equalsIgnoreCase("ENT") || instr.getOpId().equalsIgnoreCase("EXT")) {
-				extEntSymbols.put(instr.getOperand("LR"), instr);
+				//put each operand as a separate entry into the symbol table.
+				for (int i = 1; i < instr.countOperand("LR") + 1; i++) { 
+					extEntSymbols.put(instr.getOperand("LR", i), instr);
+				}
 			} else {
 				symbols.put(instr.label, instr);
 			}
@@ -114,7 +116,7 @@ public class Module {
 			
 			if(symbols.containsKey(label)) {
 				entry = symbols.get(label);
-			} else {
+			} else { 
 				entry = extEntSymbols.get(label);
 			}
 			return entry;
@@ -134,7 +136,11 @@ public class Module {
 		 * @specRef N/A
 		 */
 		@Override public Iterator<Map.Entry<String, Instruction>> iterator() {
-			return symbols.entrySet().iterator();
+			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
+			combinedSymbols.addAll(symbols.entrySet()); //combine
+			combinedSymbols.addAll(extEntSymbols.entrySet()); //combine
+			
+			return combinedSymbols.iterator();
 		}
 
 
@@ -143,7 +149,9 @@ public class Module {
 		 * 
 		 * @author Eric
 		 * @date Apr 6, 2012; 8:58:56 AM
-		 * @modified Apr 7, 1:26:50 PM; added opcode to lines. - Noah <br>
+		 * @modified Apr 9, 11:23:41 AM; combined separate maps into one symbol table, <br>
+		 * 				and made a comparator to sort. <br> -Noah
+		 * 			 Apr 7, 1:26:50 PM; added opcode to lines. - Noah <br>
 		 *           Apr 6, 11:02:08 AM; removed remove() call to prevent
 		 *           destruction of symbol table, <br>
 		 *           also, cleaned code up. -Noah<br>
@@ -163,7 +171,11 @@ public class Module {
 		 */
 		@Override 
 		public String toString() {
-			//compares the entries for order.
+			/**
+			 * Compares two Map.Entry's.
+			 * @author Noah
+			 * @date Apr 9, 2012; 3:38:54 AM
+			 */
 			final class MapEntryComparator implements Comparator <Map.Entry<String, Instruction>> {
 				public int compare(Map.Entry<String, Instruction> o1, Map.Entry<String, Instruction> o2) {
 					return String.CASE_INSENSITIVE_ORDER.compare(o1.getKey(), o2.getKey()); //same ordering as values.
@@ -171,17 +183,16 @@ public class Module {
 			}
 			
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
-			combinedSymbols.addAll(symbols.entrySet());
-			combinedSymbols.addAll(extEntSymbols.entrySet());
+			combinedSymbols.addAll(symbols.entrySet()); //combine
+			combinedSymbols.addAll(extEntSymbols.entrySet()); //combine
 			
-			Collections.sort(combinedSymbols, new MapEntryComparator());
+			Collections.sort(combinedSymbols, new MapEntryComparator()); //sort
 					
 			// way of storing each line of the symbol table
 			List<String> completeTable = new ArrayList<String>();
 
 			// iterator over elements of set of label, Instruction pairs.
-			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet()
-					.iterator();
+			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols.iterator();
 
 			// loop runs through the whole symbol table
 			while (tableIt.hasNext()) {
