@@ -122,7 +122,7 @@ public class Assembler {
 	 * @author Noah
 	 * @date Apr 5, 2012; 7:33:45 PM
 	 * @modified Apr 7, 2012; 9:28:15AM added line to add instructions w/ labels to symbol table. <br>
-	 * Apr 9, 2012; 12:22:16AM reversed lc as
+	 * Apr 9, 2012; 12:22:16AM assigned lc above newLC
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
