@@ -27,7 +27,7 @@ public class USI_SKIPS extends Instruction {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return mod.evaluate(getOperand("FC"));
+		return lc+mod.evaluate(getOperand("FC"));
 	}
 
 	/** @see assemblernator.Instruction#check() */
