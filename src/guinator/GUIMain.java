@@ -130,6 +130,7 @@ public class GUIMain {
 							data[i-1][iw++] = "";
 					}
 					sTable.setModel(new DefaultTableModel(data, columnNames));
+					sTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 				}
 				else
 					sTable.setModel(null);
