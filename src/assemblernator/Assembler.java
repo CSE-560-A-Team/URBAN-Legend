@@ -174,7 +174,10 @@ public class Assembler {
 					module.startAddr = startAddr;
 				} 
 							
-				if (instr.label != null) {
+				if (instr.label != null || 
+						instr.getOpId().equalsIgnoreCase("EXT") || 
+						instr.getOpId().equalsIgnoreCase("ENT")) {
+					
 					module.getSymbolTable().addEntry(instr);
 				} 
 				

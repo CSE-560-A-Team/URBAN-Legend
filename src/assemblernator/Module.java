@@ -1,10 +1,14 @@
 package assemblernator;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -35,6 +39,7 @@ public class Module {
 	 * 	the usage is how the instruction is used,
 	 * 	and the string is the string of characters that the label is equated to if 
 	 * 	the opcode of the instruction = EQU or EQUe.
+	 * SymbolTable.symbols union SymbolTable.extEntSymbols = SymbolTable.
 	 * </pre>
 	 */
 	public static class SymbolTable implements
@@ -48,13 +53,27 @@ public class Module {
 		 * address = Instruction.lc,
 		 * usage = Instruction.usage,
 		 * and string = the value of the operand in Instruction.
+		 * 
+		 * does not include Instructions extEntInstr, where instr.opID = "EXT" or "ENT".
 		 */
 		private SortedMap<String, Instruction> symbols = new TreeMap<String, Instruction>(
 				String.CASE_INSENSITIVE_ORDER);
 
 		/**
-		 * adds an entry into the symbol table.
+		 * let (label, Instruction) = p.
+		 * symbols is a sorted Map of p's.
+		 * Each p is a single entry in SymbolTable, where
+		 * label = Instruction.label,
+		 * address = Instruction.lc,
+		 * usage = Instruction.usage,
+		 * and string = the value of the operand in Instruction.
 		 * 
+		 * only includes Instructions extEntInstr, where instr.opID = "EXT" or "ENT".
+		 */
+		private Map<String, Instruction> extEntSymbols = new TreeMap<String, Instruction>();
+		
+		/**
+		 * adds an entry into the symbol table.
 		 * @author Noah
 		 * @date Apr 6, 2012; 1:56:43 PM
 		 * @modified UNMODIFIED
@@ -62,19 +81,21 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @param instr
-		 *            instruction to add.
+		 * @param instr instruction to add.
 		 * @specRef N/A
 		 */
 		public void addEntry(Instruction instr) {
-			symbols.put(instr.label, instr);
+			if (instr.getOpId().equalsIgnoreCase("ENT") || instr.getOpId().equalsIgnoreCase("EXT")) {
+				extEntSymbols.put(instr.getOperand("LR"), instr);
+			} else {
+				symbols.put(instr.label, instr);
+			}
 
 		}
 
 		/**
 		 * Returns a reference to the Instruction w/ the label given
 		 * from the symbol table.
-		 * 
 		 * @author Noah
 		 * @date Apr 7, 2012; 10:22:52 PM
 		 * @modified UNMODIFIED
@@ -83,13 +104,20 @@ public class Module {
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
 		 * @param label
-		 *            label of Instruction to get reference to from symbol
+		 *            label of Instruction to get reference to from symbol <br>
 		 *            table.
 		 * @return Instruction with label, label from symbol table.
 		 * @specRef N/A
 		 */
 		public Instruction getEntry(String label) {
-			return symbols.get(label);
+			Instruction entry;
+			
+			if(symbols.containsKey(label)) {
+				entry = symbols.get(label);
+			} else {
+				entry = extEntSymbols.get(label);
+			}
+			return entry;
 		}
 
 		/**
@@ -133,9 +161,23 @@ public class Module {
 		 * </pre>
 		 * @specRef N/A
 		 */
-		@Override public String toString() {
+		@Override 
+		public String toString() {
+			//compares the entries for order.
+			final class MapEntryComparator implements Comparator <Map.Entry<String, Instruction>> {
+				public int compare(Map.Entry<String, Instruction> o1, Map.Entry<String, Instruction> o2) {
+					return String.CASE_INSENSITIVE_ORDER.compare(o1.getKey(), o2.getKey()); //same ordering as values.
+				}
+			}
+			
+			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
+			combinedSymbols.addAll(symbols.entrySet());
+			combinedSymbols.addAll(extEntSymbols.entrySet());
+			
+			Collections.sort(combinedSymbols, new MapEntryComparator());
+					
 			// way of storing each line of the symbol table
-			ArrayList<String> completeTable = new ArrayList<String>();
+			List<String> completeTable = new ArrayList<String>();
 
 			// iterator over elements of set of label, Instruction pairs.
 			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet()
