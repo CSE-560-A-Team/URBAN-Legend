@@ -104,6 +104,20 @@ public class Assembler {
 	}
 	
 	/**
+	 * 
+	 * @author Noah
+	 * @date Apr 8, 2012; 7:33:22 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @specRef N/A
+	 */
+	public static void initialize() {
+	}
+	
+	/**
 	 * Parses a file into a Module.
 	 * @author Noah
 	 * @date Apr 5, 2012; 7:33:45 PM
