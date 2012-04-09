@@ -127,7 +127,7 @@ public class Assembler {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param file source code for module.
+	 * @param source source code for module.
 	 * @return <pre>
 	 * {@code let line = a line of characters in a file.
 	 * Instruction i = Instruction.parse(line);
@@ -143,17 +143,16 @@ public class Assembler {
 	 *  </pre>
 	 * @specRef N/A
 	 */
-	public static final Module parseFile(File file) {
+	public static final Module parseFile(Scanner source) {
 		int lineNum = 1;
 		Module module = new Module();
 		try {
-			Scanner fileScan = new Scanner(file);
 			int startAddr = 0;
 			int lc = 0;
 
-			while (fileScan.hasNextLine()) {
+			while (source.hasNextLine()) {
 				//Module module = new Module();
-				String line = fileScan.nextLine();
+				String line = source.nextLine();
 
 				Instruction instr = Instruction.parse(line);
 				if (instr == null)
@@ -202,4 +201,54 @@ public class Assembler {
 		return module;
 	}
 	
+	/**
+	 * parses a file.
+	 * @author Noah
+	 * @date Apr 9, 2012; 1:12:19 AM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param file contains source code.
+	 * @return @see #:"parseFile(Scanner)"
+	 * @specRef N/A
+	 */
+	public static final Module parseFile(File file) {
+		Module module = new Module();
+		
+		try {
+			Scanner source = new Scanner(file);
+			
+			module = parseFile(source);
+
+		} catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		} 
+		
+		return module;
+	}
+	
+	/**
+	 * parses a string.
+	 * @author Noah
+	 * @date Apr 9, 2012; 1:15:59 AM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param strSrc String contains source code.
+	 * @return @see #"parsefile(Scanner)"
+	 * @specRef N/A
+	 */
+	public static final Module parseString(String strSrc) {
+		
+		Scanner source = new Scanner(strSrc);
+			
+		Module module = parseFile(source);
+
+		return module;
+	}
 }
