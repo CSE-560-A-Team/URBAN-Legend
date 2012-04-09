@@ -1,5 +1,9 @@
 package guinator;
 
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -29,6 +33,14 @@ public class GUIMain {
 		mainWindow.add(tabPane);
 		mainWindow.setSize(640, 480);
 		mainWindow.setVisible(true);
+		
+		MenuBar mb = new MenuBar();
+		Menu filemenu = new Menu("File");
+		MenuItem mi = new MenuItem("Compile");
+		filemenu.add(mi);
+		mb.add(filemenu);
+		mainWindow.setMenuBar(mb);
+		
 		
 		JoshText jt = new JoshText();
 		JScrollPane sp = new JScrollPane(jt);
