@@ -279,6 +279,22 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 				code.add(line);
 		fireLineChange(0,code.size());
 	}
+	
+	public String[] getLines()
+	{
+		String res[] = new String[code.size()];
+		for (int i = 0; i < code.size(); i++)
+			res[i] = code.get(i).sbuild.toString();
+		return res;
+	}
+
+	public String getText()
+	{
+		StringBuilder res = new StringBuilder();
+		for (int i = 0; i < code.size(); i++)
+			res.append(code.get(i).sbuild.toString() + "\n");
+		return res.toString();
+	}
 
 	/** Maps action names to their implementations */
 	public AbstractAction aLineDel = new AbstractAction("LINEDEL")

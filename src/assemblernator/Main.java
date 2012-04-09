@@ -1,5 +1,7 @@
 package assemblernator;
 
+import guinator.GUIMain;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
+		GUIMain.launch();
 		String a[] = { System.getProperty("user.home") + "/Desktop/test.s" };
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
