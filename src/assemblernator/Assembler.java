@@ -163,7 +163,7 @@ public class Assembler {
 				
 				// Get new lc for next instruction.
 				lc = instr.getNewLC(lc, module);
-				instr.lc = lc;
+				lc = instr.lc;
 
 				/*
 				 * if start of module, record startAddr of module.
