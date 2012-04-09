@@ -138,7 +138,8 @@ public class Module {
 			ArrayList<String> completeTable = new ArrayList<String>();
 
 			// iterator over elements of set of label, Instruction pairs.
-			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet().iterator();
+			Iterator<Entry<String, Instruction>> tableIt = symbols.entrySet()
+					.iterator();
 
 			// loop runs through the whole symbol table
 			while (tableIt.hasNext()) {
@@ -159,10 +160,10 @@ public class Module {
 					// gets iterator over set of operands.
 					Iterator<Operand> operandsIt = instr.operands.iterator();
 
-					if(operandsIt.hasNext()) {
+					if (operandsIt.hasNext()) {
 						// only one operand if usage = EQUATE.
-						oneLine = oneLine + operandsIt.next().expression; 
-					} 
+						oneLine = oneLine + operandsIt.next().expression;
+					}
 				}
 
 				oneLine = oneLine + "\n";
@@ -230,7 +231,8 @@ public class Module {
 	 * 
 	 * @author Noah
 	 * @date Apr 8, 2012; 1:34:17 AM
-	 * @modified UNMODIFIED
+	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible
+	 *           operands to EQU.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -242,13 +244,24 @@ public class Module {
 	 */
 	public int evaluate(String exp) {
 		exp = exp.trim();
-		if (IOFormat.isValidLabel(exp))
-			System.err.println("WHAT? " + exp);
-		return IOFormat.isValidLabel(exp) ? evaluate(symbolTable.getEntry(exp).getOperand("EX")) : Integer.parseInt(exp);
+		if (IOFormat.isValidLabel(exp)) {
+			Instruction i = symbolTable.getEntry(exp);
+			String wdwh = i.getOperand("FC");
+			if (wdwh == null)
+				wdwh = i.getOperand("LR");
+			if (wdwh != null)
+				return evaluate(wdwh);
+			wdwh = i.getOperand("FM");
+			if (wdwh != null)
+				return i.lc;
+			throw new NullPointerException("No correct operand to EQU at line " + i.lineNum + "!");
+		}
+		return Integer.parseInt(exp);
 	}
 
 	/**
 	 * Returns the address of the instruction with the label given.
+	 * 
 	 * @author Noah
 	 * @date Apr 8, 2012; 5:32:46 PM
 	 * @modified UNMODIFIED
@@ -256,15 +269,18 @@ public class Module {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param label the label of the instruction to look up for its lc.
-	 * @return instr.lc where instr.label = label.  
+	 * @param label
+	 *            the label of the instruction to look up for its lc.
+	 * @return instr.lc where instr.label = label.
 	 * @specRef N/A
 	 */
 	public int getAddress(String label) {
-		return symbolTable.getEntry(label).lc;
+		return evaluate(label); // symbolTable.getEntry(label).lc;
 	}
+
 	/**
 	 * Returns a string representation of Module.
+	 * 
 	 * @author Noah
 	 * @date Apr 8, 2012; 12:26:15 PM
 	 * @modified UNMODIFIED
@@ -292,56 +308,63 @@ public class Module {
 	 * 	
 	 * returns "Symbol Table:\n" + symbTableStr + "\nInstruction breakdowns:\n" + assemblyStr;}
 	 * </pre>
-	 * 	
+	 * 
 	 * @specRef N/A
 	 */
-	@Override
-	public String toString() {
-		String rep = "Symbol Table:\n" + symbolTable.toString() + "\nInstruction breakdowns:\n";
+	@Override public String toString() {
+		String rep = "Symbol Table:\n" + symbolTable.toString()
+				+ "\nInstruction breakdowns:\n";
 		Iterator<Instruction> assemblyIt = assembly.iterator();
-		
-		while(assemblyIt.hasNext()) {
+
+		while (assemblyIt.hasNext()) {
 			Instruction instr = assemblyIt.next();
-			
+
 			rep = rep + "original source line: " + instr.origSrcLine + "\n";
-			
-			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6); //binary equivalent of opcode keyword i.e. opcode.
+
+			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6); // binary
+																				// equivalent
+																				// of
+																				// opcode
+																				// keyword
+																				// i.e.
+																				// opcode.
 			String label = instr.label;
 			String lc = IOFormat.formatHexInteger(instr.lc, 4);
-			
-			//instr is a directive and thus has no opcode.
-			if(instr.getOpcode() == 0xFFFFFFFF) {
-				binEquiv = "------"; //so binary equivalent is non-existant.
+
+			// instr is a directive and thus has no opcode.
+			if (instr.getOpcode() == 0xFFFFFFFF) {
+				binEquiv = "------"; // so binary equivalent is non-existant.
 			}
-			
-			//if the instruction has no label
-			if(instr.label == null) {
-				label = ""; //no label to print.
-				//also, can't print "------" b/c label may be "------".
+
+			// if the instruction has no label
+			if (instr.label == null) {
+				label = ""; // no label to print.
+				// also, can't print "------" b/c label may be "------".
 			}
-			
-			
-			String instrBreak = "Line number: " + instr.lineNum + " " 
-					+ "LC: " + lc + " " + "Label: " + label + ",\n" 
+
+
+			String instrBreak = "Line number: " + instr.lineNum + " " + "LC: "
+					+ lc + " " + "Label: " + label + ",\n"
 					+ "instruction/Directive: " + instr.getOpId() + " "
 					+ "Binary Equivalent: " + binEquiv + "\n";
-			
+
 			Iterator<Operand> operandIt = instr.operands.iterator();
-			
+
 			int i = 1;
-			while(operandIt.hasNext()) {
+			while (operandIt.hasNext()) {
 				Operand oprnd = operandIt.next();
-				
-				instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand + ":" + oprnd.expression + "\n";
-				
+
+				instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand
+						+ ":" + oprnd.expression + "\n";
+
 				i++;
 			}
-			
+
 			instrBreak = instrBreak + "\n";
 
 			rep = rep + instrBreak;
 		}
-		
+
 		return rep;
 	}
 }
