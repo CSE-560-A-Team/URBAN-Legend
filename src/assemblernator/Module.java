@@ -194,6 +194,7 @@ public class Module {
 			// iterator over elements of set of label, Instruction pairs.
 			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols.iterator();
 
+			String megaTable = "Label:\tLC:\tUsage:\tEquString:\n";
 			// loop runs through the whole symbol table
 			while (tableIt.hasNext()) {
 				// gets the set values <K,V> stored into a map entry which can
@@ -205,7 +206,7 @@ public class Module {
 				int addr = instr.lc;
 				Usage usage = instr.usage;
 
-				String oneLine = label + " " + addr + " " + usage;
+				String oneLine = label + "\t " + addr + "\t" + usage;
 
 				// since equate are the only one with a string in the symbol
 				// table i use this to get the value of that string
@@ -215,7 +216,7 @@ public class Module {
 
 					if (operandsIt.hasNext()) {
 						// only one operand if usage = EQUATE.
-						oneLine = oneLine + " " + operandsIt.next().expression;
+						oneLine = oneLine + "\t" + operandsIt.next().expression;
 					}
 				}
 
@@ -225,7 +226,6 @@ public class Module {
 
 			}
 
-			String megaTable = "";
 			// makes one big string out of each line of the symbol table
 			while (!completeTable.isEmpty()) {
 				megaTable = megaTable + completeTable.remove(0);
