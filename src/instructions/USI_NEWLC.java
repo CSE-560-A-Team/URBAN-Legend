@@ -27,7 +27,7 @@ public class USI_NEWLC extends Instruction {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return (hasOperand("FC")?lc+mod.evaluate(getOperand("FC")):mod.getAddress(getOperand("LR")));
+		return (hasOperand("FC")?mod.evaluate(getOperand("FC")):mod.getAddress(getOperand("LR")));
 	}
 
 	/** @see assemblernator.Instruction#check() */
