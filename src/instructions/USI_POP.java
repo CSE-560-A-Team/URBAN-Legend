@@ -7,7 +7,7 @@ import assemblernator.Module;
  * The POP instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 05:05:02
+ * @date Apr 08, 2012; 08:26:19
  * @specRef S1
  */
 public class USI_POP extends Instruction {

@@ -7,7 +7,7 @@ import assemblernator.Module;
  * The IWSR instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 05:05:02
+ * @date Apr 08, 2012; 08:26:19
  * @specRef IO0
  */
 public class USI_IWSR extends Instruction {

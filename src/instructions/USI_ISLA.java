@@ -7,7 +7,7 @@ import assemblernator.Module;
  * The ISLA instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 05:05:02
+ * @date Apr 08, 2012; 08:26:19
  * @specRef IM3
  */
 public class USI_ISLA extends Instruction {

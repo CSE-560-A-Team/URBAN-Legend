@@ -7,7 +7,7 @@ import assemblernator.Module;
  * The PST instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 05:05:02
+ * @date Apr 08, 2012; 08:26:19
  * @specRef S2
  */
 public class USI_PST extends Instruction {

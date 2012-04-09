@@ -344,9 +344,4 @@ public class Module {
 		
 		return rep;
 	}
-
-	public int getAddress(String lbl) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

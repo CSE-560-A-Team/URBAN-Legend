@@ -7,7 +7,7 @@ import assemblernator.Module;
  * The TRGT instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 05:05:02
+ * @date Apr 08, 2012; 08:26:19
  * @specRef JT2
  */
 public class USI_TRGT extends Instruction {

@@ -7,7 +7,7 @@ import assemblernator.Module;
  * The EXT instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 05:05:02
+ * @date Apr 08, 2012; 08:26:19
  * @specRef D6
  */
 public class USI_EXT extends Instruction {

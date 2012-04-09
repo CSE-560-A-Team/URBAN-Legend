@@ -7,7 +7,7 @@ import assemblernator.Module;
  * The PSH instruction.
  * 
  * @author Generate.java
- * @date Apr 08, 2012; 05:05:02
+ * @date Apr 08, 2012; 08:26:19
  * @specRef S0
  */
 public class USI_PSH extends Instruction {
