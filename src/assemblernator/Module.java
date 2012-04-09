@@ -162,7 +162,7 @@ public class Module {
 
 					if (operandsIt.hasNext()) {
 						// only one operand if usage = EQUATE.
-						oneLine = oneLine + operandsIt.next().expression;
+						oneLine = oneLine + " " + operandsIt.next().expression;
 					}
 				}
 

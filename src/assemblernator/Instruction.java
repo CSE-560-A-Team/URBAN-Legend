@@ -421,7 +421,7 @@ public abstract class Instruction {
 			while (Character.isWhitespace(line.charAt(i))); //@formatter:on
 		}
 
-		res.usage = res.usage;
+		res.usage = resp.usage;
 		if (res.usage == Usage.NONE && res.label != null)
 			res.usage = Usage.LABEL;
 		return res;
