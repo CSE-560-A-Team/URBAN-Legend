@@ -6,7 +6,7 @@ D5	x	ENT	none	ENTRY		lc	LR
 D6	x	EXT	none	EXTERNAL	lc	LR or FC
 D7	x	end	none	none		lc	FC
 D8	x	AEXS	olabel	none		lc	ST
-D9	x	SKIPS	olabel	none		mod.evaluate(getOperand("FC"))			FC
+D9	x	SKIPS	olabel	none		lc+mod.evaluate(getOperand("FC"))		FC
 D10	x	char	olabel	none		lc+Math.max(4,getOperand("ST").length()+3)/4	ST
 D11	x	num	olabel	none		lc+1	FC
 D12	x	adrc	olabel	none		lc	LR or EX
