@@ -163,9 +163,9 @@ public class Module {
 		 * {@code let line = a string of character representing a single entry
 		 * 	in the symbol table, concatenated w/ the opcode of the instruction with
 		 * 	the label in hex format, uppercased.  specifically:
-		 * 		label + " " + address + " " + " " + usage + " " + string + "\n".
+		 * 		label + "\t" + address + "\t" + "\t" + usage + "\t" + string + "\n".
 		 * 	each line is unique.
-		 * returns a sequence of lines for all the entries in the symbol table.}
+		 * returns "Label:\tLC:\tUsage:\tEquString:\n" + a sequence of lines for all the entries in the symbol table.}
 		 * </pre>
 		 * @specRef N/A
 		 */
