@@ -10,8 +10,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 
 import org.lateralgm.joshedit.JoshText;
 
@@ -38,7 +40,7 @@ public class GUIMain {
 	/** Our editor */
 	static JoshText jt;
 	/** Our symbol table */
-	static JTextArea sTable;
+	static JTable sTable;
 	/** Our user report */
 	static JTextArea userReport;
 
@@ -59,11 +61,12 @@ public class GUIMain {
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 
 		JFrame mainWindow = new JFrame();
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		JTabbedPane tabPane = new JTabbedPane();
 
 		mainWindow.add(tabPane);
 		mainWindow.setSize(720, 540);
-		mainWindow.setVisible(true);
 
 		JMenuBar mb = new JMenuBar();
 		JMenu filemenu = new JMenu("File");
@@ -77,21 +80,23 @@ public class GUIMain {
 
 		jt = new JoshText();
 		JScrollPane sp = new JScrollPane(jt);
-		
-		userReport = new JTextArea();
-		sTable = new JTextArea();
-		
-		JSplitPane sjsp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sp, new JScrollPane(userReport));
-		JSplitPane jsp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sjsp, new JScrollPane(sTable));
 
+		userReport = new JTextArea();
 		userReport.setEditable(false);
-		sTable.setEditable(false);
-		
+		sTable = new JTable();
+
+		JSplitPane sjsp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sp,
+				new JScrollPane(userReport));
+		JSplitPane jsp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sjsp,
+				new JScrollPane(sTable));
+
 		sjsp.setOneTouchExpandable(true);
 		jsp.setOneTouchExpandable(true);
 		tabPane.addTab("Untitled", jsp);
 		jsp.setDividerLocation(540);
 		sjsp.setDividerLocation(360);
+
+		mainWindow.setVisible(true);
 		jt.grabFocus();
 	}
 
@@ -111,7 +116,24 @@ public class GUIMain {
 				System.out.println("this is what I have:\n" + str);
 				Module mod = Assembler.parseString(str);
 				userReport.setText(mod.toString());
-				sTable.setText(mod.getSymbolTable().toString());
+				String rawTable = mod.getSymbolTable().toString();
+				String[] allData = rawTable.trim().split("(\r\n|\n|\r)");
+				if (allData != null && allData.length > 0) {
+					String[] columnNames = allData[0].split("\\:\t");
+					String[][] data = new String[allData.length - 1][columnNames.length];
+					for (int i = 1; i < allData.length; i++) {
+						String dc[] = allData[i].split("\t");
+						int iw;
+						for (iw = 0; iw < dc.length && iw < data[i-1].length; iw++)
+							data[i-1][iw] = dc[iw];
+						while (iw < data[i-1].length)
+							data[i-1][iw++] = "";
+					}
+					sTable.setModel(new DefaultTableModel(data, columnNames));
+					sTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+				}
+				else
+					sTable.setModel(null);
 				return;
 			}
 			if (e.getSource() == exit) {

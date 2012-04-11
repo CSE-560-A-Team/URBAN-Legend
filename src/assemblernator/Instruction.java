@@ -225,8 +225,7 @@ public abstract class Instruction {
 
 	/**
 	 * Trivial utility method to get the expression of the Nth occurrence a
-	 * given
-	 * operand.
+	 * given operand.
 	 * 
 	 * @author Josh Ventura
 	 * @param op

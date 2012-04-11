@@ -29,7 +29,7 @@ public class Comment extends Instruction {
 	/** The actual text given for this comment */
 	private String comment_text = "";
 
-	/** @see assemblernator.Instruction#getNewLC(int) */
+	/** @see assemblernator.Instruction#getNewLC(int,Module) */
 	@Override
 	public int getNewLC(int lc, Module mod) {
 		return lc;

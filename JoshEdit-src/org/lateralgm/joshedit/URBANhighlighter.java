@@ -20,7 +20,7 @@ public class URBANhighlighter extends GenericHighlighter implements Highlighter 
 		super();
 		schemes.add(new BlockDescriptor("Comment", "(?<=;)", "[\r\n]", true, false,
 				(char) 0, new Color(165, 165, 165), Font.ITALIC));
-		schemes.add(new BlockDescriptor("String", "'", "'", true, false, '\\',
+		schemes.add(new BlockDescriptor("String", "'", "'", true, true, '\\',
 				new Color(0, 0, 255), 0));
 
 		KeywordSet kws = new KeywordSet("Instructions", new Color(0, 0, 128),
@@ -48,6 +48,6 @@ public class URBANhighlighter extends GenericHighlighter implements Highlighter 
 
 		default_kws = new KeywordSet("Label", new Color(128, 0, 128),
 				Font.ITALIC);
-		identifier_pattern = identifier_pattern = Pattern.compile("[a-z_A-Z]([^\\\\+\\\\-\\\\*/.,;:\\s']*)");
+		identifier_pattern = Pattern.compile("[a-z_A-Z]([^\\\\+\\\\-\\\\*/.,;:\\s']*)");
 	}
 }
