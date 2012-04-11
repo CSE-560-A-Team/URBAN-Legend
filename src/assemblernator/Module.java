@@ -135,7 +135,8 @@ public class Module {
 		 * @return an Iterator over elements of symbol table.
 		 * @specRef N/A
 		 */
-		@Override public Iterator<Map.Entry<String, Instruction>> iterator() {
+		@Override 
+		public Iterator<Map.Entry<String, Instruction>> iterator() {
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
 			combinedSymbols.addAll(symbols.entrySet()); //combine
 			combinedSymbols.addAll(extEntSymbols.entrySet()); //combine
@@ -374,13 +375,8 @@ public class Module {
 
 			rep = rep + "original source line: " + instr.origSrcLine + "\n";
 
-			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6); // binary
-																				// equivalent
-																				// of
-																				// opcode
-																				// keyword
-																				// i.e.
-																				// opcode.
+			//opcode.
+			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6); 
 			String label = instr.label;
 			String lc = IOFormat.formatHexInteger(instr.lc, 4);
 
