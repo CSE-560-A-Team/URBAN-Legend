@@ -27,7 +27,7 @@ public class USI_CHAR extends Instruction {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+Math.max(4,getOperand("ST").length()+3)/4;
+		return lc+Math.max(4,getOperand("ST").length()+2)/4;
 	}
 
 	/** @see assemblernator.Instruction#check() */

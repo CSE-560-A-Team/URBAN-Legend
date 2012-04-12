@@ -1,37 +1,93 @@
 package assemblernator;
 
-import instructions.*;
-import java.util.Scanner;
+import instructions.Comment;
+import instructions.USI_ADRC;
+import instructions.USI_AEXS;
+import instructions.USI_AND;
+import instructions.USI_CHAR;
+import instructions.USI_CLR;
+import instructions.USI_CLRA;
+import instructions.USI_CLRX;
+import instructions.USI_CRKB;
+import instructions.USI_CWSR;
+import instructions.USI_DMP;
+import instructions.USI_END;
+import instructions.USI_ENT;
+import instructions.USI_EQU;
+import instructions.USI_EQUE;
+import instructions.USI_EXT;
+import instructions.USI_HLT;
+import instructions.USI_IAA;
+import instructions.USI_IADD;
+import instructions.USI_IDIV;
+import instructions.USI_IMAD;
+import instructions.USI_IMUL;
+import instructions.USI_IRKB;
+import instructions.USI_ISHL;
+import instructions.USI_ISHR;
+import instructions.USI_ISLA;
+import instructions.USI_ISRA;
+import instructions.USI_ISRG;
+import instructions.USI_ISUB;
+import instructions.USI_IWSR;
+import instructions.USI_KICKO;
+import instructions.USI_MOVD;
+import instructions.USI_MOVDN;
+import instructions.USI_NEWLC;
+import instructions.USI_NOP;
+import instructions.USI_NUM;
+import instructions.USI_OR;
+import instructions.USI_POP;
+import instructions.USI_PSH;
+import instructions.USI_PST;
+import instructions.USI_PWR;
+import instructions.USI_RET;
+import instructions.USI_ROL;
+import instructions.USI_ROR;
+import instructions.USI_SKIPS;
+import instructions.USI_SKT;
+import instructions.USI_TR;
+import instructions.USI_TRDR;
+import instructions.USI_TREQ;
+import instructions.USI_TRGT;
+import instructions.USI_TRLK;
+import instructions.USI_TRLT;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
+
+import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.ErrorReporting.URBANSyntaxException;
 
 /**
  * The Assembler class parses a file into a Module object.
+ * 
  * @author Noah
  * @date Apr 5, 2012 7:48:36PM
- *
+ * 
  */
 public class Assembler {
-	/** Map of opId's to static Instructions*/
+	/** Map of opId's to static Instructions */
 	public static Map<String, Instruction> instructions = new HashMap<String, Instruction>();
-	/** Map of opCodes to static Instructions*/ 
-	public static  Map<Integer, Instruction> byteCodes = new HashMap<Integer, Instruction>();
-	/** version of Assembler*/
+	/** Map of opCodes to static Instructions */
+	public static Map<Integer, Instruction> byteCodes = new HashMap<Integer, Instruction>();
+	/** version of Assembler */
 	public static final int VERSION = 1;
 	/** set of operand keywords. */
 	public static Set<String> keyWords = new HashSet<String>();
-	
+
 	/**
 	 * fills keyWords with key words.
 	 * calls getInstance on all extensions of Instruction.
 	 */
 	static {
-		//add all key words.
+		// add all key words.
 		keyWords.add("DM");
 		keyWords.add("DR");
 		keyWords.add("DX");
@@ -45,8 +101,8 @@ public class Assembler {
 		keyWords.add("LR");
 		keyWords.add("NW");
 		keyWords.add("ST");
-		
-		//get static instances of all Instruction types.
+
+		// get static instances of all Instruction types.
 		USI_KICKO.getInstance();
 		USI_NEWLC.getInstance();
 		USI_EQU.getInstance();
@@ -99,10 +155,10 @@ public class Assembler {
 		USI_DMP.getInstance();
 		USI_HLT.getInstance();
 		Comment.getInstance();
-		
-		
+
+
 	}
-	
+
 	/**
 	 * 
 	 * @author Noah
@@ -114,20 +170,27 @@ public class Assembler {
 	 * @testingStandards Awaiting signature
 	 * @specRef N/A
 	 */
-	public static void initialize() {
-	}
-	
+	public static void initialize() {}
+
 	/**
 	 * Parses a file into a Module.
+	 * 
 	 * @author Noah
 	 * @date Apr 5, 2012; 7:33:45 PM
-	 * @modified Apr 7, 2012; 9:28:15AM added line to add instructions w/ labels to symbol table. <br>
-	 * Apr 9, 2012; 12:22:16AM assigned lc above newLC
+	 * @modified Apr 7, 2012; 9:28:15 AM: added line to add instructions w/ labels
+	 *           to symbol table. <br>
+	 *           
+	 *           Apr 9, 2012; 12:22:16 AM: Assigned lc above newLC
+	 *           
+	 *           Apr 11, 2012; 2:54:53 PM: (Josh) Added error handler instance.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param source source code for module.
+	 * @param source
+	 *            The source code for module.
+	 * @param hErr
+	 *            An error handler to which any problems will be reported.
 	 * @return <pre>
 	 * {@code let line = a line of characters in a file.
 	 * Instruction i = Instruction.parse(line);
@@ -140,118 +203,121 @@ public class Assembler {
 	 * 	m.symbols = Map of (i.label, i);
 	 * 	m.startAddr = number of modules from start of file.
 	 *  m.moduleLength = length in lines of module;}
-	 *  </pre>
+	 * </pre>
 	 * @specRef N/A
 	 */
-	public static final Module parseFile(Scanner source) {
-		int lineNum = 1;
+	public static final Module parseFile(Scanner source, ErrorHandler hErr) {
+		int lineNum = 0;
 		Module module = new Module();
 		try {
 			int startAddr = 0;
 			int lc = 0;
 
 			while (source.hasNextLine()) {
-				//Module module = new Module();
+				lineNum++;
+				// Module module = new Module();
 				String line = source.nextLine();
 
 				Instruction instr = Instruction.parse(line);
 				if (instr == null)
 					continue;
-				
+
 				instr.origSrcLine = line; // Gives instruction source line.
 				instr.lineNum = lineNum;
-				
+
 				// Get new lc for next instruction.
 				instr.lc = lc;
 				lc = instr.getNewLC(lc, module);
-				
 
-				/*
-				 * if start of module, record startAddr of module.
-				 * execStart of module.
-				 */
+
+				/* if start of module, record startAddr of module.
+				 * execStart of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
 					module.startAddr = startAddr;
-				} 
-							
-				if (instr.label != null || 
-						instr.getOpId().equalsIgnoreCase("EXT") || 
-						instr.getOpId().equalsIgnoreCase("ENT")) {
-					
+				}
+
+				// TODO: Noah: Consider replacing this with (instr.usage != Usage.NONE)
+				if (instr.label != null
+						|| instr.getOpId().equalsIgnoreCase("EXT")
+						|| instr.getOpId().equalsIgnoreCase("ENT")) {
+
 					module.getSymbolTable().addEntry(instr);
-				} 
-				
+				}
+
 				module.assembly.add(instr);
-				
+
 				module.startAddr += lc;
-				lineNum++;
 			}
-		} catch (FileNotFoundException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
 		} catch (URBANSyntaxException e) {
-			System.err.println("Line " + lineNum + ", position " + e.index + ": Error in parsing file: " + e.getMessage());
+			hErr.reportError(e.getMessage(), lineNum, e.index);
 			if (e.getMessage() == null || e.getMessage().length() <= 5)
 				e.printStackTrace();
 		} catch (IOException e) {
 			if (!e.getMessage().startsWith("RAL"))
 				e.printStackTrace();
 			else
-				System.err.println("Line " + lineNum + " is not terminated by a semicolon.");
+				System.err.println("Line " + lineNum
+						+ " is not terminated by a semicolon.");
 		}
-		
-		
+
+
 		return module;
 	}
-	
+
 	/**
 	 * parses a file.
+	 * 
 	 * @author Noah
 	 * @date Apr 9, 2012; 1:12:19 AM
-	 * @modified UNMODIFIED
+	 * @modified Apr 11, 2012; 2:54:53 PM: (Josh) Added error handler instance.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param file contains source code.
+	 * @param file
+	 *            contains source code.
+	 * @param hErr
+	 *            An error handler to which any problems will be reported.
 	 * @return @see #:"parseFile(Scanner)"
 	 * @specRef N/A
 	 */
-	public static final Module parseFile(File file) {
+	public static final Module parseFile(File file,ErrorHandler  hErr) {
 		Module module = new Module();
-		
+
 		try {
 			Scanner source = new Scanner(file);
-			
-			module = parseFile(source);
+
+			module = parseFile(source, hErr);
 
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
-		} 
-		
+			hErr.reportError("Failed to open file for parse: file not found.", -1, -1);
+		}
+
 		return module;
 	}
-	
+
 	/**
 	 * parses a string.
+	 * 
 	 * @author Noah
 	 * @date Apr 9, 2012; 1:15:59 AM
-	 * @modified UNMODIFIED
+	 * @modified Apr 11, 2012; 2:54:53 PM: (Josh) Added error handler instance.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param strSrc String contains source code.
+	 * @param strSrc
+	 *            String contains source code.
+	 * @param hErr
+	 *            An error handler to which any problems will be reported.
 	 * @return @see #"parsefile(Scanner)"
 	 * @specRef N/A
 	 */
-	public static final Module parseString(String strSrc) {
-		
+	public static final Module parseString(String strSrc, ErrorHandler hErr) {
 		Scanner source = new Scanner(strSrc);
-			
-		Module module = parseFile(source);
-
+		Module module = parseFile(source, hErr);
 		return module;
 	}
 }

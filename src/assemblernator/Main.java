@@ -5,6 +5,8 @@ import guinator.GUIMain;
 import java.io.File;
 import java.util.ArrayList;
 
+import assemblernator.ErrorReporting.DefaultErrorHandler;
+
 /**
  * @author Ratul Khosla, Eric Smith, Noah Torrance, Josh Ventura
  * 
@@ -62,7 +64,7 @@ public class Main {
 			File f = new File(filesToAssemble.get(i));
 			if (f.canRead()) {
 				try {
-					Module aModule = Assembler.parseFile(f);
+					Module aModule = Assembler.parseFile(f, new DefaultErrorHandler());
 					System.out.println("\n" + aModule.toString());
 					
 					
