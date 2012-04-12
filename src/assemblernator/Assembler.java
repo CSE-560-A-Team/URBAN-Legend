@@ -64,6 +64,7 @@ import java.util.Set;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
+import assemblernator.Instruction.Usage;
 
 /**
  * The Assembler class parses a file into a Module object.
@@ -215,7 +216,7 @@ public class Assembler {
 
 			while (source.hasNextLine()) {
 				lineNum++;
-				// Module module = new Module();
+
 				String line = source.nextLine();
 
 				Instruction instr = Instruction.parse(line);
@@ -236,11 +237,8 @@ public class Assembler {
 					module.startAddr = startAddr;
 				}
 
-				// TODO: Noah: Consider replacing this with (instr.usage != Usage.NONE)
-				if (instr.label != null
-						|| instr.getOpId().equalsIgnoreCase("EXT")
-						|| instr.getOpId().equalsIgnoreCase("ENT")) {
-
+				//if instr can be used in symbol table.
+				if (instr.usage != Usage.NONE) {
 					module.getSymbolTable().addEntry(instr);
 				}
 
@@ -281,7 +279,7 @@ public class Assembler {
 	 * @return @see #:"parseFile(Scanner)"
 	 * @specRef N/A
 	 */
-	public static final Module parseFile(File file,ErrorHandler  hErr) {
+	public static final Module parseFile(File file, ErrorHandler hErr) {
 		Module module = new Module();
 
 		try {
