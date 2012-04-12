@@ -18,8 +18,11 @@ public class URBANhighlighter extends GenericHighlighter implements Highlighter 
 	 */
 	public URBANhighlighter() {
 		super();
+		Color idColor = new Color(128, 0, 128);
 		schemes.add(new BlockDescriptor("Comment", "(?<=;)", "[\r\n]", true, false,
 				(char) 0, new Color(165, 165, 165), Font.ITALIC));
+		schemes.add(new BlockDescriptor("Funky Identifier", "[a-z_A-Z]([^\\\\+\\\\-\\\\*/.,;:\\s]*)'", "(?=[\\\\+\\\\-\\\\*/.,;:\\s])", true, false,
+				(char) 0, idColor, Font.ITALIC));
 		schemes.add(new BlockDescriptor("String", "'", "'", true, true, '\\',
 				new Color(0, 0, 255), 0));
 
@@ -46,7 +49,7 @@ public class URBANhighlighter extends GenericHighlighter implements Highlighter 
 		otherTokens.add(new SimpleToken("Numeric literal", "[0-9]+[FfUuLlDd]*",
 				0, new Color(0, 225, 175)));
 
-		default_kws = new KeywordSet("Label", new Color(128, 0, 128),
+		default_kws = new KeywordSet("Label", idColor,
 				Font.ITALIC);
 		identifier_pattern = Pattern.compile("[a-z_A-Z]([^\\\\+\\\\-\\\\*/.,;:\\s']*)");
 	}

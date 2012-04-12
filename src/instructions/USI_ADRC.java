@@ -27,7 +27,7 @@ public class USI_ADRC extends Instruction {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc;
+		return lc+1;
 	}
 
 	/** @see assemblernator.Instruction#check() */

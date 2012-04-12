@@ -210,7 +210,7 @@ public class GenericHighlighter implements Highlighter
 	/** A list of all other tokens to highlight. */
 	ArrayList<SimpleToken> otherTokens = new ArrayList<GenericHighlighter.SimpleToken>();
 	
-	/** Class for storing extre info about a scheme. */
+	/** Class for storing extra info about a scheme. */
 	static final class SchemeInfo
 	{
 		/** Enumeration of all possible scheme types. */

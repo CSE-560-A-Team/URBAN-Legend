@@ -3,6 +3,7 @@ package assemblernator;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import assemblernator.ErrorReporting.URBANSyntaxException;
 
 /**
  * Formating class to format objects and check the formatting of objects.
@@ -110,7 +111,7 @@ public class IOFormat {
 		if (pos - spos > 32)
 			throw new URBANSyntaxException(
 					"Labels must be at most 32 characters in length; given label is "
-							+ (pos - spos) + " characters.", spos);
+							+ (pos - spos) + " characters.", spos+32);
 		return from.substring(spos, pos);
 	}
 
