@@ -320,24 +320,6 @@ public class Module {
 		return value;
 	}
 
-	/**
-	 * Returns the address of the instruction with the label given.
-	 * 
-	 * @author Noah
-	 * @date Apr 8, 2012; 5:32:46 PM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
-	 * @param label
-	 *            the label of the instruction to look up for its lc.
-	 * @return instr.lc where instr.label = label.
-	 * @specRef N/A
-	 */
-	public int getAddress(String label) {
-		return evaluate(label); // symbolTable.getEntry(label).lc;
-	}
 
 	/**
 	 * Returns a string representation of Module.
