@@ -69,6 +69,10 @@ public class IOFormat {
 			return false;
 		case '-':
 			return false;
+		case '*':
+			return false;
+		case '/':
+			return false;
 		}
 		return true;
 	}

@@ -329,11 +329,17 @@ public abstract class Instruction {
 
 			// Skip the label we read earlier
 			i += label.length();
+			
+			if (i >= line.length())
+				throw new IOException("RAL");
+			
+			if (!Character.isWhitespace(line.charAt(i)))
+				throw new URBANSyntaxException("Unexpected symbol `" + line.charAt(i) + "' following label", i);
 
-			do { // Skip whitespace between label and instruction
-				if (++i > line.length())
-					throw new IOException("RAL1");
-			} while (Character.isWhitespace(line.charAt(i)));
+			while (++i < line.length() && Character.isWhitespace(line.charAt(i)));
+
+			if (i >= line.length())
+				throw new IOException("RAL");
 
 			instruction = IOFormat.readLabel(line, i); // Read instruction now
 			if (!Assembler.instructions.containsKey(instruction.toUpperCase())) {

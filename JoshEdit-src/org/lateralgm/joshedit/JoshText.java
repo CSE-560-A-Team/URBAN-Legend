@@ -8,6 +8,8 @@
 
 package org.lateralgm.joshedit;
 
+import guinator.URBANhighlighter;
+
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Container;
