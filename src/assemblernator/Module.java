@@ -286,9 +286,10 @@ public class Module {
 	 * 
 	 * @author Noah
 	 * @date Apr 8, 2012; 1:34:17 AM
-	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible
+	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible - Josh
 	 *           operands to EQU.
-	 *           Apr 12, 2012; 8:50:02 PM: modified for readability.
+	 *           Apr 12, 2012; 8:50:02 PM: modified for readability. - Noah
+	 *           Apr 13, 2012; 11:23:33 PM: modified for correctness - Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
