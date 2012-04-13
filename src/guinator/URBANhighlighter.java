@@ -1,9 +1,12 @@
-package org.lateralgm.joshedit;
+package guinator;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+
+import org.lateralgm.joshedit.GenericHighlighter;
+import org.lateralgm.joshedit.Highlighter;
 
 import assemblernator.Assembler;
 import assemblernator.Instruction;
@@ -21,7 +24,7 @@ public class URBANhighlighter extends GenericHighlighter implements Highlighter 
 		Color idColor = new Color(128, 0, 128);
 		schemes.add(new BlockDescriptor("Comment", "(?<=;)", "[\r\n]", true, false,
 				(char) 0, new Color(165, 165, 165), Font.ITALIC));
-		schemes.add(new BlockDescriptor("Funky Identifier", "[a-z_A-Z]([^\\\\+\\\\-\\\\*/.,;:\\s]*)'", "(?=[\\\\+\\\\-\\\\*/.,;:\\s])", true, false,
+		schemes.add(new BlockDescriptor("Funky Identifier", "[a-z_A-Z]([^+\\-\\*/,;:\\s]*)'", "(?=[+\\-\\*/,;:\\s])", true, false,
 				(char) 0, idColor, Font.ITALIC));
 		schemes.add(new BlockDescriptor("String", "'", "'", true, true, '\\',
 				new Color(0, 0, 255), 0));
@@ -51,6 +54,6 @@ public class URBANhighlighter extends GenericHighlighter implements Highlighter 
 
 		default_kws = new KeywordSet("Label", idColor,
 				Font.ITALIC);
-		identifier_pattern = Pattern.compile("[a-z_A-Z]([^\\\\+\\\\-\\\\*/.,;:\\s']*)");
+		identifier_pattern = Pattern.compile("[a-z_A-Z]([^+\\-\\*/,;:\\s']*)");
 	}
 }

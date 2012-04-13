@@ -1,7 +1,5 @@
 package guinator;
 
-import guinator.GUIMain.FileTab.ProblemMarker;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
