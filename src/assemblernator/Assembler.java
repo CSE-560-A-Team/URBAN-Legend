@@ -179,11 +179,11 @@ public class Assembler {
 	 * @author Noah
 	 * @date Apr 5, 2012; 7:33:45 PM
 	 * @modified Apr 7, 2012; 9:28:15 AM: added line to add instructions w/ labels
-	 *           to symbol table. <br>
-	 *           
-	 *           Apr 9, 2012; 12:22:16 AM: Assigned lc above newLC
-	 *           
-	 *           Apr 11, 2012; 2:54:53 PM: (Josh) Added error handler instance.
+	 *           to symbol table. -Noah<br>
+	 *           Apr 9, 2012; 12:22:16 AM: Assigned lc above newLC - Noah<br>
+	 *           Apr 11, 2012; 2:54:53 PM: Added error handler instance. - Josh <br>
+	 *           Apr 12, 2012; 8:14:30 PM: Assign lc to instr below newLC so KICKO and NEWLC get <br>
+	 *           	their own operand's lc values. - Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -227,8 +227,8 @@ public class Assembler {
 				instr.lineNum = lineNum;
 
 				// Get new lc for next instruction.
-				instr.lc = lc;
 				lc = instr.getNewLC(lc, module);
+				instr.lc = lc;
 
 
 				/* if start of module, record startAddr of module.
