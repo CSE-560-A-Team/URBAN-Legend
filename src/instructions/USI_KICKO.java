@@ -27,7 +27,9 @@ public class USI_KICKO extends Instruction {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return mod.evaluate(getOperand("FC"));
+		int ownLC = mod.evaluate(getOperand("FC"));
+		this.lc = ownLC;
+		return ownLC;
 	}
 
 	/** @see assemblernator.Instruction#check() */

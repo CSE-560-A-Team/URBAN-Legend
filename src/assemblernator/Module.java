@@ -303,18 +303,19 @@ public class Module {
 		exp = exp.trim(); //trim off leading and trailing white-space.
 		if (IOFormat.isValidLabel(exp)) { //FC expressions are not valid labels.
 			Instruction i = symbolTable.getEntry(exp);  
-			String opKey = i.getOpId();
-			if(opKey == null) {
-				throw new NullPointerException("No correct operand to EQU at line " + i.lineNum + "!");
-			} else if(opKey.equalsIgnoreCase("FM")) {
+			if(i.hasOperand("FC")) {
+				value = evaluate(i.getOperand("FC"));
+			} else if(i.hasOperand("FM")) {
 				value = i.lc;
-			} else {
-				evaluate(opKey);
+			} else if(i.hasOperand("LR")){
+				value = evaluate(i.getOperand("LR"));
+			} else { //no valid operand
+				throw new NullPointerException("No correct operand to EQU at line " + i.lineNum + "!");
 			}
 		} else { //exp is a FC expression.
 			value = Integer.parseInt(exp);
 		}
-		
+
 		return value;
 	}
 
