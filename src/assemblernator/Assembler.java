@@ -182,8 +182,6 @@ public class Assembler {
 	 *           to symbol table. -Noah<br>
 	 *           Apr 9, 2012; 12:22:16 AM: Assigned lc above newLC - Noah<br>
 	 *           Apr 11, 2012; 2:54:53 PM: Added error handler instance. - Josh <br>
-	 *           Apr 12, 2012; 8:14:30 PM: Assign lc to instr below newLC so KICKO and NEWLC get <br>
-	 *           	their own operand's lc values. - Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -227,8 +225,9 @@ public class Assembler {
 				instr.lineNum = lineNum;
 
 				// Get new lc for next instruction.
-				lc = instr.getNewLC(lc, module);
 				instr.lc = lc;
+				lc = instr.getNewLC(lc, module);
+
 
 
 				/* if start of module, record startAddr of module.

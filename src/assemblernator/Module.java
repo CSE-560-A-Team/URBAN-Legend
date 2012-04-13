@@ -98,6 +98,7 @@ public class Module {
 		/**
 		 * Returns a reference to the Instruction w/ the label given
 		 * from the symbol table.
+		 * Assumes label is in symbol table.
 		 * @author Noah
 		 * @date Apr 7, 2012; 10:22:52 PM
 		 * @modified UNMODIFIED
@@ -204,7 +205,7 @@ public class Module {
 
 				String label = entry.getKey();
 				Instruction instr = entry.getValue();
-				int addr = instr.lc;
+				String addr = IOFormat.formatHexInteger(instr.lc, 4);
 				Usage usage = instr.usage;
 
 				String oneLine = label + "\t " + addr + "\t" + usage;
@@ -287,6 +288,7 @@ public class Module {
 	 * @date Apr 8, 2012; 1:34:17 AM
 	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible
 	 *           operands to EQU.
+	 *           Apr 12, 2012; 8:50:02 PM: modified for readability.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -297,20 +299,23 @@ public class Module {
 	 * @specRef N/A
 	 */
 	public int evaluate(String exp) {
-		exp = exp.trim();
-		if (IOFormat.isValidLabel(exp)) {
-			Instruction i = symbolTable.getEntry(exp);
-			String wdwh = i.getOperand("FC");
-			if (wdwh == null)
-				wdwh = i.getOperand("LR");
-			if (wdwh != null)
-				return evaluate(wdwh);
-			wdwh = i.getOperand("FM");
-			if (wdwh != null)
-				return i.lc;
-			throw new NullPointerException("No correct operand to EQU at line " + i.lineNum + "!");
+		int value = 0;
+		exp = exp.trim(); //trim off leading and trailing white-space.
+		if (IOFormat.isValidLabel(exp)) { //FC expressions are not valid labels.
+			Instruction i = symbolTable.getEntry(exp);  
+			String opKey = i.getOpId();
+			if(opKey == null) {
+				throw new NullPointerException("No correct operand to EQU at line " + i.lineNum + "!");
+			} else if(opKey.equalsIgnoreCase("FM")) {
+				value = i.lc;
+			} else {
+				evaluate(opKey);
+			}
+		} else { //exp is a FC expression.
+			value = Integer.parseInt(exp);
 		}
-		return Integer.parseInt(exp);
+		
+		return value;
 	}
 
 	/**
