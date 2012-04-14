@@ -290,6 +290,8 @@ public class Module {
 	 *           operands to EQU.
 	 *           Apr 12, 2012; 8:50:02 PM: modified for readability. - Noah
 	 *           Apr 13, 2012; 11:23:33 PM: modified for correctness - Noah
+	 *           Apr 13, 2012; 9:34:50 PM: symbolTable.getEntry(exp) can return null 
+	 *           	so added i == null check -Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -304,7 +306,9 @@ public class Module {
 		exp = exp.trim(); //trim off leading and trailing white-space.
 		if (IOFormat.isValidLabel(exp)) { //FC expressions are not valid labels.
 			Instruction i = symbolTable.getEntry(exp);  
-			if(i.hasOperand("FC")) {
+			if(i == null) {//can't call i.hasOperand(op);
+				throw new NullPointerException("No correct operand to EQU at line " + i.lineNum + "!");
+			} else if(i.hasOperand("FC")) {
 				value = evaluate(i.getOperand("FC"));
 			} else if(i.hasOperand("FM")) {
 				value = i.lc;
