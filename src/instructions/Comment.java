@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -35,9 +36,9 @@ public class Comment extends Instruction {
 		return lc;
 	}
 
-	/** @see assemblernator.Instruction#check() */
+	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override
-	public boolean check() {
+	public boolean check(ErrorHandler hErr) {
 		return true;
 	}
 

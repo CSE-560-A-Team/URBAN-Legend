@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -10,7 +11,7 @@ import assemblernator.Module;
  * @date Apr 08, 2012; 08:26:19
  * @specRef IO0
  */
-public class USI_IWSR extends Instruction {
+public class USI_IWSR extends UIG_IO {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -26,22 +27,26 @@ public class USI_IWSR extends Instruction {
 	static USI_IWSR staticInstance = new USI_IWSR(true);
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
-	@Override public int getNewLC(int lc, Module mod) {
+	@Override 
+	public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check() */
-	@Override public boolean check() {
+	/** @see assemblernator.Instruction#check(ErrorHandler) */
+	@Override 
+	public boolean check(ErrorHandler hErr) {
 		return false; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
+	@Override 
+	public int[] assemble() {
 		return null; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
+	@Override 
+	public void execute(int instruction) {
 		// TODO: IMPLEMENT
 	}
 
@@ -62,17 +67,20 @@ public class USI_IWSR extends Instruction {
 	}
 
 	/** @see assemblernator.Instruction#getOpId() */
-	@Override public String getOpId() {
+	@Override 
+	public String getOpId() {
 		return opId;
 	}
 
 	/** @see assemblernator.Instruction#getOpcode() */
-	@Override public int getOpcode() {
+	@Override 
+	public int getOpcode() {
 		return opCode;
 	}
 
 	/** @see assemblernator.Instruction#getNewInstance() */
-	@Override public Instruction getNewInstance() {
+	@Override 
+	public Instruction getNewInstance() {
 		return new USI_IWSR();
 	}
 

@@ -1,12 +1,12 @@
 package assemblernator;
 
 import instructions.Comment;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import assemblernator.ErrorReporting.URBANSyntaxException;
+import assemblernator.ErrorReporting.ErrorHandler;
 
 /**
  * The Instruction class is the do-all, see-all, have-all class for instruction
@@ -485,10 +485,11 @@ public abstract class Instruction {
 	 * correct number of operands and the correct kinds of operands.
 	 * 
 	 * @author Josh Ventura
+	 * @param hErr TODO
 	 * @return Returns whether the instruction is semantically correct.
 	 * @date Apr 4, 2012; 01:40:29AM
 	 */
-	public abstract boolean check();
+	public abstract boolean check(ErrorHandler hErr);
 
 	/**
 	 * Assemble this instruction to byte code after it has been checked.

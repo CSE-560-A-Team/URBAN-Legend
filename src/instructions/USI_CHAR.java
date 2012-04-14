@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -30,8 +31,8 @@ public class USI_CHAR extends Instruction {
 		return lc+Math.max(4,getOperand("ST").length()+2)/4;
 	}
 
-	/** @see assemblernator.Instruction#check() */
-	@Override public boolean check() {
+	/** @see assemblernator.Instruction#check(ErrorHandler) */
+	@Override public boolean check(ErrorHandler hErr) {
 		return false; // TODO: IMPLEMENT
 	}
 

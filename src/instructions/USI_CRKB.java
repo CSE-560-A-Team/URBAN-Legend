@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -10,7 +11,7 @@ import assemblernator.Module;
  * @date Apr 08, 2012; 08:26:19
  * @specRef IO3
  */
-public class USI_CRKB extends Instruction {
+public class USI_CRKB extends UIG_IO {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -30,8 +31,8 @@ public class USI_CRKB extends Instruction {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check() */
-	@Override public boolean check() {
+	/** @see assemblernator.Instruction#check(ErrorHandler) */
+	@Override public boolean check(ErrorHandler hErr) {
 		return false; // TODO: IMPLEMENT
 	}
 
