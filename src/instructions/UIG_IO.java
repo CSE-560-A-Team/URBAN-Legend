@@ -3,11 +3,22 @@ package instructions;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.OperandChecker;
 
 
+/**
+ * 
+ * @author Noah
+ * @date Apr 14, 2012; 5:47:13 PM
+ */
 public abstract class UIG_IO extends Instruction{
 	OperandType operandType;
-	
+
+	/**
+	 * 
+	 * @author Noah
+	 * @date Apr 14, 2012; 5:24:01 PM
+	 */
 	public enum OperandType {
 		DM(true, false, false),
 		DMDX(true, true, false),
@@ -20,6 +31,12 @@ public abstract class UIG_IO extends Instruction{
 		private boolean index;
 		private boolean literal;
 		
+		/**
+		 * Constructs.
+		 * @param input is the instruction being used as input or output?
+		 * @param index is there an index register being used?
+		 * @param literal is there a literal being used?
+		 */
 		OperandType(boolean input, boolean index, boolean literal) {
 			this.input = input;
 			this.index = index;
@@ -27,70 +44,12 @@ public abstract class UIG_IO extends Instruction{
 		}
 	}
 
-	/**
-	 * Checks if expression following "DX" or "FX" is a valid expression.
-	 * @author Noah
-	 * @date Apr 14, 2012; 2:33:20 PM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
-	 * @param exp value of index register.
-	 * @return <pre>
-	 * {@code if exp is not an integer, or if exp is an integer > 7 or < 1, then return false,
-	 * else return true.}
-	 * </pre>
-	 * @specRef N/A
-	 */
-	private boolean checkIndex(String exp) {
-		boolean valid = true;
-		try {
-			int indexReg = Integer.parseInt(exp);
-			
-			if(indexReg > 7 || indexReg < 1) {
-				valid = false;
-			} 
-		} catch (NumberFormatException e) {
-			valid = false;
-		}
-		
-		return valid;
-	}
-	
-	private boolean checkNumWords(String exp) {
-		boolean valid = true;
-		
-		try{
-			int nw = Integer.parseInt(exp);
-			
-			if(nw > 15 || nw < 0) {
-				valid = false;
-			}
-		} catch (NumberFormatException e) {
-			valid = false;
-		}
-		
-		return valid;
-	}
-	
-	private boolean checkLiteral(String lit) {
-		return true;
-	}
-	
-	private boolean checkMem(String addr) {
-		return true;
-	}
-	
-	private boolean checkMem(int addr) {
-		return true;
-	}
 	
 	/**
 	 * @see assemblernator.Instruction#check(ErrorHandler)
 	 */
 	@Override
-	public boolean check(ErrorHandler hErr) {
+	public final boolean check(ErrorHandler hErr) {
 		boolean isValid = true;
 		
 		if(!this.hasOperand("NW")) {
@@ -128,59 +87,55 @@ public abstract class UIG_IO extends Instruction{
 	 * @see assemblernator.Instruction#assemble()
 	 */
 	@Override
-	public int[] assemble() {
-		String nybbles = IOFormat.formatBinInteger(this.getOpcode(), 6); //opcode
-		String binIndex = "000";
-		int mem;
+	public final int[] assemble() {
+		//all instructions start w/ 6 bit opcode.
+		String nybbles = IOFormat.formatBinInteger(this.getOpcode(), 6); 
+		String index = "000"; //default value of index bits if index registers are not used.
+		int mem; 
 		int[] assembled = new int[1];
 		
-		nybbles = nybbles + "0000";
+		nybbles = nybbles + "0000"; //i/o instructions have a unused 4 bits following opcode.
 		
-		if(operandType.input) {
-			checkMem(this.getOperand("DM"));
-			mem = Integer.parseInt(this.getOperand("DM"));
-			if(operandType.index) {
-				binIndex = this.getOperand("DX");
-				checkIndex(binIndex);
-				mem += Integer.parseInt(binIndex);
-				checkMem(mem);
-				nybbles = nybbles + binIndex;
+		if(operandType.input) { //operands = {DM, NW} or {DM, NW, DX} 
+			OperandChecker.isValidMem(this.getOperand("DM"));
+			mem = Integer.parseInt(this.getOperand("DM")); //parse into decimal integer.
+			if(operandType.index) { //operand = {DM, NW, DX}
+				index = this.getOperand("DX"); //get index register decimal.
+				OperandChecker.isValidIndex(index); 
+				nybbles = nybbles + IOFormat.formatBinInteger(Integer.parseInt(index), 3); //add index register bits.
 			}
 		} else {
-			if(operandType.literal) {
-				checkLiteral(this.getOperand("FL"));
+			if(operandType.literal) { //operands = {FL, NW}
+				OperandChecker.isValidLiteral(this.getOperand("FL"));
 				mem = Integer.parseInt(this.getOperand("FL"));
 			} else {
-				checkMem(this.getOperand("FM"));
+				OperandChecker.isValidMem(this.getOperand("FM"));
 				mem = Integer.parseInt(this.getOperand("FM"));
 				if(operandType.index) {
-					binIndex = this.getOperand("FX");
-					checkIndex(binIndex);
-					mem += Integer.parseInt(binIndex);
-					checkMem(mem);
-					nybbles = nybbles + binIndex;
+					index = this.getOperand("FX"); //get index register decimal.
+					OperandChecker.isValidIndex(index);
+					nybbles = nybbles + IOFormat.formatBinInteger(Integer.parseInt(index), 3); //add index register bits.
 				}
 			}
 		}
 		
-		checkNumWords(this.getOperand("NW"));
-		nybbles = nybbles + IOFormat.formatBinInteger(Integer.parseInt(this.getOperand("NW")), 3);
+		OperandChecker.isValidNumWords(this.getOperand("NW"));
+		nybbles = nybbles + IOFormat.formatBinInteger(Integer.parseInt(this.getOperand("NW")), 3); //add number of word bits.
 		
-		if(operandType.input) {
-			nybbles = nybbles + "00";
+		if(operandType.input) { 
+			nybbles = nybbles + "00"; //unused two bits for input instruction format.
 		} else {
-			nybbles = nybbles + "0";
+			nybbles = nybbles + "0"; //1 unused bit for output instruction format.
+			//followed by literal bit.
 			if(operandType.literal) {
-				nybbles = nybbles + "1";
+				nybbles = nybbles + "1"; 
 			} else {
 				nybbles = nybbles + "0";
 			}
 		}
 		
-		
-		nybbles = nybbles + IOFormat.formatBinInteger(mem, 13);
-		assembled[0] = Integer.parseInt(nybbles);
-		
+		nybbles = nybbles + IOFormat.formatBinInteger(mem, 13); //concat mem bits.
+		assembled[0] = Integer.parseInt(nybbles, 2); //parse as a binary integer.
 		return assembled;
 	}
 	

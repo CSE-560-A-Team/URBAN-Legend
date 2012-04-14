@@ -27,22 +27,14 @@ public class USI_CRKB extends UIG_IO {
 	static USI_CRKB staticInstance = new USI_CRKB(true);
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
-	@Override public int getNewLC(int lc, Module mod) {
+	@Override 
+	public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
-
 	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
+	@Override 
+	public void execute(int instruction) {
 		// TODO: IMPLEMENT
 	}
 
