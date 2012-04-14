@@ -4,6 +4,8 @@ import instructions.Comment;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import assemblernator.ErrorReporting.URBANSyntaxException;
 
 /**
@@ -245,6 +247,49 @@ public abstract class Instruction {
 	}
 
 	/**
+	 * @author Josh Ventura
+	 * @date Apr 13, 2012; 8:20:18 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param expectedOperands All expected operands.
+	 * @return True if our operands match the expected operands precisely
+	 *         (except for order), false otherwise.
+	 */
+	boolean matchOperands(String ... expectedOperands) {
+		HashMap<String,Integer> expOps = new HashMap<String,Integer>();
+		// Populate our hash map with all expected operands, by the number
+		// of operands we expect to see.
+		for (String opr : expectedOperands) {
+			Integer ov = expOps.put(opr,new Integer(1));
+			if (ov != null)
+				expOps.put(opr,ov + 1);
+		}
+		// Remove operands from that map as they are matched in this.
+		for (int i = 0; i < operands.size(); i++) {
+			Integer remaining = expOps.get(operands.get(i).operand);
+			// If this operand was not in our map, we don't have a match.
+			if (remaining == null)
+				return false;
+			
+			// Otherwise, remove it (or one of it).
+			if (remaining == 1)
+				expOps.remove(operands.get(i));
+			else
+				expOps.put(operands.get(i).operand, remaining - 1);
+		}
+		
+		// If there is anything left in expOps, we have missing operands.
+		if (expOps.size() > 0)
+			return false;
+		
+		// Seems we have a match.
+		return true;
+	}
+
+	/**
 	 * Parse a string containing the operands of an instruction, storing the
 	 * operands locally.
 	 * 
@@ -329,14 +374,16 @@ public abstract class Instruction {
 
 			// Skip the label we read earlier
 			i += label.length();
-			
+
 			if (i >= line.length())
 				throw new IOException("RAL");
-			
-			if (!Character.isWhitespace(line.charAt(i)))
-				throw new URBANSyntaxException("Unexpected symbol `" + line.charAt(i) + "' following label", i);
 
-			while (++i < line.length() && Character.isWhitespace(line.charAt(i)));
+			if (!Character.isWhitespace(line.charAt(i)))
+				throw new URBANSyntaxException("Unexpected symbol `"
+						+ line.charAt(i) + "' following label", i);
+
+			while (++i < line.length()
+					&& Character.isWhitespace(line.charAt(i)));
 
 			if (i >= line.length())
 				throw new IOException("RAL");
