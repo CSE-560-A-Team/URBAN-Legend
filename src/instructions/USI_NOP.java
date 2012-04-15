@@ -48,7 +48,7 @@ public class USI_NOP extends Instruction {
 	@Override public int[] assemble() {
 		int[] assembled = new int[1];
 		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //"111101"
-		code = code + "00100010000000000000000"; //
+		code = code + "00100010000000000000000"; //111101 00 1 000 000 1 0 000000000000000
 		
 		assembled[0] = Integer.parseInt(code);
 		
