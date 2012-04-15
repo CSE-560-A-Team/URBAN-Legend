@@ -1,6 +1,7 @@
 package instructions;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -41,7 +42,7 @@ public class USI_HLT extends Instruction {
 			hErr.reportError(this.getOpId() + " should have exactly one operand: \"FC\"", this.lineNum, -1);
 			isValid = false;
 		} else if(!OperandChecker.isValidConstant(this.getOperand("FC"))) {
-			hErr.reportError(this.getOpId() + " \"FC\" is out of range", this.lineNum, -1);
+			hErr.reportError(makeError("OOR13tc", "FC", this.getOpId()), this.lineNum, -1);
 			isValid = false;
 		}
 		

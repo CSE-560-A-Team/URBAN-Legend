@@ -1,10 +1,10 @@
 package instructions;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
-import assemblernator.OperandChecker;
 
 /**
  * The NOP instruction.
@@ -37,7 +37,7 @@ public class USI_NOP extends Instruction {
 	@Override 
 	public boolean check(ErrorHandler hErr) {
 		if(this.operands.size() > 0) {
-			hErr.reportError(this.getOpId() + " must have no operands.", this.lineNum, -1);
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			return false;
 		} else {
 			return true;

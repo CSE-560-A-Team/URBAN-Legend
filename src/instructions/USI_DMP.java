@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
@@ -43,7 +44,7 @@ public class USI_DMP extends Instruction {
 			hErr.reportError(this.getOpId() + " should have exactly one operand: \"FC\"", this.lineNum, -1);
 			isValid = false;
 		} else if(!OperandChecker.isValidConstant(this.getOperand("FC"))) {
-			hErr.reportError(this.getOpId() + " \"FC\" is out of range", this.lineNum, -1);
+			hErr.reportError(makeError("OOR13tc", "FC", this.getOpId()), this.lineNum, -1);
 			isValid = false;
 		}
 		

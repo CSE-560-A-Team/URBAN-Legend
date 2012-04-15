@@ -112,19 +112,19 @@ public abstract class UIG_IO extends Instruction{
 		if(isValid) {
 			if(this.operandType.input) {
 				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
-				if(!isValid) hErr.reportError(makeError("MEMoutRange", "DM"), this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 				if(this.operandType.index) {
 					isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
-					if(!isValid) hErr.reportError(makeError("INDEXoutRange", "DX"), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				}
 			} else if(this.operandType.literal){
 				isValid = OperandChecker.isValidMem(this.getOperand("FL"));
-				if(!isValid) hErr.reportError(makeError("FLoutRange"), this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 			} else {
 				isValid = OperandChecker.isValidMem(this.getOperand("FM"));
 				if(this.operandType.index) {
 					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
-					if(!isValid) hErr.reportError(makeError("INDEXoutRange", "FX"), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 				}
 			}
 		}
