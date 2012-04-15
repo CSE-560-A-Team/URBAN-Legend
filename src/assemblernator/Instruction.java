@@ -484,6 +484,7 @@ public abstract class Instruction {
 	/**
 	 * Check if the token is semantically correct. This means that it has the
 	 * correct number of operands and the correct kinds of operands.
+	 * Also, checks whether operand values are within range.
 	 * 
 	 * @author Josh Ventura
 	 * @modified Apr 14, 2012; 12:00 PM: Added error handler to parameters.

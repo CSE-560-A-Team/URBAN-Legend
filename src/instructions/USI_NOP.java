@@ -1,8 +1,10 @@
 package instructions;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The NOP instruction.
@@ -32,13 +34,26 @@ public class USI_NOP extends Instruction {
 	}
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+	@Override 
+	public boolean check(ErrorHandler hErr) {
+		if(this.operands.size() > 0) {
+			hErr.reportError(this.getOpId() + " must have no operands.", this.lineNum, -1);
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		int[] assembled = new int[1];
+		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //"111101"
+		code = code + "00100010000000000000000"; //
+		
+		assembled[0] = Integer.parseInt(code);
+		
+		return assembled;
+
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
