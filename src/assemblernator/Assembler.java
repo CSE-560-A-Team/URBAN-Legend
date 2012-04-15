@@ -182,6 +182,8 @@ public class Assembler {
 	 *           to symbol table. -Noah<br>
 	 *           Apr 9, 2012; 12:22:16 AM: Assigned lc above newLC - Noah<br>
 	 *           Apr 11, 2012; 2:54:53 PM: Added error handler instance. - Josh <br>
+	 *           Apr 15, 2012; 1:23:08 PM: Moved try-catch block inside loop and added continues,
+	 *           so the loop continues even when an exception is caught. - Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
