@@ -22,7 +22,7 @@ public abstract class UIG_TransferCond extends Instruction {
 	public final boolean check(ErrorHandler hErr) {
 		boolean isValid = true;
 		//not enough operands
-		if(this.operands.size() > 2){
+		if(this.operands.size() < 2){
 			isValid=false;
 			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
 			//checks combos for 2 operands
