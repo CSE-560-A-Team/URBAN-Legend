@@ -12,23 +12,33 @@ import assemblernator.OperandChecker;
  * @date Apr 14, 2012; 5:47:13 PM
  */
 public abstract class UIG_IO extends Instruction{
+	/** keeps track of the type of operand is in this instruction.*/
 	OperandType operandType;
 
 	/**
-	 * 
+	 * Operand types.
+	 * for I/O instructions, valid combinations of operands = 
+	 * {{NW, DM}, {NW, DM, DX}, {NW, FM}, {NW, FM, FX}, {NW, FL}} 
 	 * @author Noah
 	 * @date Apr 14, 2012; 5:24:01 PM
 	 */
 	public enum OperandType {
+		/** operands = {NW, DM} */
 		DM(true, false, false),
+		/** operands = {NW, DM, DX} */
 		DMDX(true, true, false),
+		/** operands = {NW, FM} */
 		FM(false, false, false),
+		/** operands = {NW, FM, FX} */
 		FMFX(false, true, false),
+		/** operands = {NW, FL}*/
 		FL(false, false, true);
 		
-		
+		/** is the instruction input or output instruction */
 		private boolean input;
+		/** is the instruction using an index register */
 		private boolean index;
+		/** is the instruction using a literal.*/
 		private boolean literal;
 		
 		/**
@@ -52,9 +62,10 @@ public abstract class UIG_IO extends Instruction{
 	public final boolean check(ErrorHandler hErr) {
 		boolean isValid = true;
 		
+		//checks for operand combos and assigns OperandType.
 		if(!this.hasOperand("NW")) {
 			isValid = false;
-			//error
+			hErr.reportError(this.getOpId() + " is missing operand \"NW\"", this.lineNum, 0);
 		} else if(this.operands.size() == 2) {
 			if(this.hasOperand("DM")) {
 				this.operandType = OperandType.DM;
@@ -64,7 +75,7 @@ public abstract class UIG_IO extends Instruction{
 				this.operandType = OperandType.FL;
 			} else {
 				isValid = false;
-				//error
+				hErr.reportError(this.getOpId() + " must have MREF operands in addition to \"NW\"", this.lineNum , 0);
 			}
 		} else if(this.operands.size() == 3) {
 			if(this.hasOperand("DM") && this.hasOperand("DX")) {
@@ -73,11 +84,26 @@ public abstract class UIG_IO extends Instruction{
 				this.operandType = OperandType.FMFX;
 			} else {
 				isValid = false;
-				//error
+				hErr.reportError(this.getOpId() + " must have MREF operands in addition to \"NW\"", this.lineNum , 0);
 			}
 		} else {
 			isValid = false;
-			//error
+			hErr.reportError(this.getOpId() + " has too many operands.", this.lineNum, 0);
+		}
+		
+		//checks for invalid combo's between operands and opid's.
+		//only checks if is valid so far.
+		if(isValid) {
+			if(this.hasOperand("DM") && (this.getOpId().equals("IWSR") || this.getOpId().equals("CWSR"))) {
+				isValid = false;
+				hErr.reportError(this.getOpId() + " cannot use \"DM\" as operand.", this.lineNum, 0);
+			} else if (this.hasOperand("FM") && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
+				isValid = false;
+				hErr.reportError(this.getOpId() + " cannot use \"FM\" as operand.", this.lineNum, 0);
+			} else if (this.hasOperand("FL") && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
+				isValid = false;
+				hErr.reportError(this.getOpId() + " cannot use \"FL\" as operand.", this.lineNum, 0);
+			}	
 		}
 		
 		return isValid;
@@ -89,20 +115,21 @@ public abstract class UIG_IO extends Instruction{
 	@Override
 	public final int[] assemble() {
 		//all instructions start w/ 6 bit opcode.
-		String nybbles = IOFormat.formatBinInteger(this.getOpcode(), 6); 
-		String index = "000"; //default value of index bits if index registers are not used.
+		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //011000
+		String index = "000"; //default value of index bits if index registers are not used. 
 		int mem; 
 		int[] assembled = new int[1];
+		boolean valid = true;
 		
-		nybbles = nybbles + "0000"; //i/o instructions have a unused 4 bits following opcode.
+		code = code + "0000"; //i/o instructions have a unused 4 bits following opcode. //011000 0000
 		
 		if(operandType.input) { //operands = {DM, NW} or {DM, NW, DX} 
-			OperandChecker.isValidMem(this.getOperand("DM"));
+			valid = OperandChecker.isValidMem(this.getOperand("DM"));
 			mem = Integer.parseInt(this.getOperand("DM")); //parse into decimal integer.
 			if(operandType.index) { //operand = {DM, NW, DX}
 				index = this.getOperand("DX"); //get index register decimal.
-				OperandChecker.isValidIndex(index); 
-				nybbles = nybbles + IOFormat.formatBinInteger(Integer.parseInt(index), 3); //add index register bits.
+				valid = OperandChecker.isValidIndex(index); 
+				index = IOFormat.formatBinInteger(Integer.parseInt(index), 3); //convert base-10 to binary.
 			}
 		} else {
 			if(operandType.literal) { //operands = {FL, NW}
@@ -114,28 +141,29 @@ public abstract class UIG_IO extends Instruction{
 				if(operandType.index) {
 					index = this.getOperand("FX"); //get index register decimal.
 					OperandChecker.isValidIndex(index);
-					nybbles = nybbles + IOFormat.formatBinInteger(Integer.parseInt(index), 3); //add index register bits.
+					index = IOFormat.formatBinInteger(Integer.parseInt(index), 3); //convert base-10 to binary.
 				}
 			}
 		}
 		
+		code = code + index;//add index register bits.
 		OperandChecker.isValidNumWords(this.getOperand("NW"));
-		nybbles = nybbles + IOFormat.formatBinInteger(Integer.parseInt(this.getOperand("NW")), 3); //add number of word bits.
+		code = code + IOFormat.formatBinInteger(Integer.parseInt(this.getOperand("NW")), 3); //add number of word bits.
 		
 		if(operandType.input) { 
-			nybbles = nybbles + "00"; //unused two bits for input instruction format.
+			code = code + "00"; //unused two bits for input instruction format.
 		} else {
-			nybbles = nybbles + "0"; //1 unused bit for output instruction format.
+			code = code + "0"; //1 unused bit for output instruction format.
 			//followed by literal bit.
 			if(operandType.literal) {
-				nybbles = nybbles + "1"; 
+				code = code + "1"; 
 			} else {
-				nybbles = nybbles + "0";
+				code = code + "0";
 			}
 		}
 		
-		nybbles = nybbles + IOFormat.formatBinInteger(mem, 13); //concat mem bits.
-		assembled[0] = Integer.parseInt(nybbles, 2); //parse as a binary integer.
+		code = code + IOFormat.formatBinInteger(mem, 13); //concat mem bits.
+		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
 		return assembled;
 	}
 	
