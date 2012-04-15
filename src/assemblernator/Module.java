@@ -42,6 +42,17 @@ public class Module {
 	 */
 	public static class SymbolTable implements
 			Iterable<Map.Entry<String, Instruction>> {
+		/**
+		 * Compares two Map.Entry's.
+		 * @author Noah
+		 * @date Apr 9, 2012; 3:38:54 AM
+		 */
+		private final class MapEntryComparator implements Comparator <Map.Entry<String, Instruction>> {
+			@Override 
+			public int compare(Map.Entry<String, Instruction> o1, Map.Entry<String, Instruction> o2) {
+				return String.CASE_INSENSITIVE_ORDER.compare(o1.getKey(), o2.getKey()); //same ordering as values.
+			}
+		}
 
 		/**
 		 * let (label, Instruction) = p.
@@ -145,7 +156,70 @@ public class Module {
 			return combinedSymbols.iterator();
 		}
 
+		/**
+		 * Returns a String table representation of the symbol table.
+		 * @author Noah
+		 * @date Apr 15, 2012; 1:19:32 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @return as table of symbol table entries, where each entry is represented as a string.
+		 * The first row of the table = ["Label", "LC", "Usage", "Equate".
+		 * @specRef N/A
+		 */
+		public String[][] toStringTable() {
+			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
+			combinedSymbols.addAll(symbols.entrySet()); //combine
+			combinedSymbols.addAll(extEntSymbols.entrySet()); //combine
+			
+			Collections.sort(combinedSymbols, new MapEntryComparator()); //sort
+					
+			// way of storing each line of the symbol table
+			List<String> completeTable = new ArrayList<String>();
+			
+			// iterator over elements of set of label, Instruction pairs.
+			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols.iterator();
+			
+			String[][] stringTable = new String[4][completeTable.size() + 1]; //all entries + 1 header entry.
+			int x = 0;
+			stringTable[0][0] = "Label";
+			stringTable[1][0] = "LC";
+			stringTable[2][0] = "Usage";
+			stringTable[3][0] = "Equate";
+			
+			while (tableIt.hasNext()) {
+				// gets the set values <K,V> stored into a map entry which can
+				// be used to get the values/key of K and V
+				Map.Entry<String, Instruction> entry = tableIt.next();
 
+				String label = entry.getKey();
+				Instruction instr = entry.getValue();
+				String addr = IOFormat.formatHexInteger(instr.lc, 4);
+				Usage usage = instr.usage;
+
+				stringTable[x][0] = label;
+				stringTable[x][1] = addr;
+				stringTable[x][2] = usage.toString();
+
+				// since equate are the only one with a string in the symbol
+				// table i use this to get the value of that string
+				if (usage == Usage.EQUATE) {
+					// gets iterator over set of operands.
+					Iterator<Operand> operandsIt = instr.operands.iterator();
+
+					if (operandsIt.hasNext()) {
+						stringTable[x][3] = operandsIt.next().expression;
+					}
+				}
+				
+				x++;
+
+			}
+			
+			return stringTable;
+		}
 		/**
 		 * String representation of the symbol table.
 		 * 
@@ -173,16 +247,6 @@ public class Module {
 		 */
 		@Override 
 		public String toString() {
-			/**
-			 * Compares two Map.Entry's.
-			 * @author Noah
-			 * @date Apr 9, 2012; 3:38:54 AM
-			 */
-			final class MapEntryComparator implements Comparator <Map.Entry<String, Instruction>> {
-				@Override public int compare(Map.Entry<String, Instruction> o1, Map.Entry<String, Instruction> o2) {
-					return String.CASE_INSENSITIVE_ORDER.compare(o1.getKey(), o2.getKey()); //same ordering as values.
-				}
-			}
 			
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
 			combinedSymbols.addAll(symbols.entrySet()); //combine

@@ -1,8 +1,12 @@
 package instructions;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
+
+import static assemblernator.ErrorReporting.makeError;
 
 /**
  * The CHAR instruction.
@@ -25,25 +29,67 @@ public class USI_CHAR extends Instruction {
 
 	/** The static instance for this instruction. */
 	static USI_CHAR staticInstance = new USI_CHAR(true);
+	
+
+	/**
+	 * @author Josh Ventura
+	 * @date Apr 15, 2012; 11:42:58 AM
+	 * @modified UNMODIFIED
+	 * @tested Apr 15, 2012; 11:43:13 AM: Used to calculate new FC correctly for
+	 *         strings of various sizes.
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param byteCount The number of bytes to pad to words.
+	 * @return The number of words needed to hold byteCount bytes.
+	 * @specRef N/A
+	 */
+	int padWord(int byteCount) {
+		return Math.max(1, (byteCount + 3) / 4);
+	}
+	
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+Math.max(4,getOperand("ST").length()+2)/4;
+		String st = getOperand("ST");
+		if (st == null)
+			return lc;
+		int stringWordSize = padWord(IOFormat.escapeString(st, 0, 0, null).getBytes().length);
+		return lc + Math.max(1, stringWordSize);
 	}
+
+	/** The string given to us in the ST: operand. */
+	private String content;
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		Operand st = getOperandData("ST");
+		if (st == null)
+			hErr.reportError(makeError("directiveMissingOp", "CHAR", "ST"),
+					lineNum, -1);
+		else if (OperandChecker.isValidString(st.operand))
+			hErr.reportError(makeError("STstringCount"), lineNum, -1);
+		else {
+			content = IOFormat.escapeString(st.operand, lineNum, st.valueStartPosition, hErr);
+			return true;
+		}
+		return false;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		byte[] resb = content.getBytes();
+		int[] res = new int[padWord(resb.length)];
+		for (int i = 0; i < res.length; i++)
+			res[i] = resb[i] | (resb[i + 1] << 8) | (resb[i + 2] << 16)
+					| (resb[i + 3] << 24);
+		return res;
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
 	@Override public void execute(int instruction) {
-		// TODO: IMPLEMENT
+		throw new NullPointerException(
+				"The CHAR instruction should not be invoked for execute!");
 	}
 
 	// =========================================================
@@ -91,4 +137,3 @@ public class USI_CHAR extends Instruction {
 	/** Default constructor; does nothing. */
 	private USI_CHAR() {}
 }
-

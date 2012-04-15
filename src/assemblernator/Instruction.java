@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.ErrorReporting.ErrorHandler;
+import static assemblernator.ErrorReporting.makeError;
+
 
 /**
  * The Instruction class is the do-all, see-all, have-all class for instruction
@@ -47,16 +49,34 @@ public abstract class Instruction {
 		public String operand;
 		/** The expression given to the operand */
 		public String expression;
+		/**
+		 * The position in the line at which the keyword for this operand
+		 * started
+		 */
+		public int keywordStartPosition;
+		/**
+		 * The position in the line at which the value for this operand
+		 * started
+		 */
+		public int valueStartPosition;
 
 		/**
-		 * @param o
+		 * @param op
 		 *            The operand keyword.
-		 * @param e
+		 * @param exp
 		 *            The expression.
+		 * @param key_sp
+		 *            The index of the first character of this keyword's name in
+		 *            the line from which it was parsed.
+		 * @param val_sp
+		 *            The index of the first character of this keyword's value
+		 *            in the line from which it was parsed.
 		 */
-		public Operand(String o, String e) {
-			operand = o;
-			expression = e;
+		public Operand(String op, String exp, int key_sp, int val_sp) {
+			operand = op;
+			expression = exp;
+			keywordStartPosition = key_sp;
+			valueStartPosition = val_sp;
 		}
 	}
 
@@ -227,6 +247,22 @@ public abstract class Instruction {
 	}
 
 	/**
+	 * Trivial utility method to get an Operand by its name.
+	 * 
+	 * @author Josh Ventura
+	 * @param op
+	 *            The operand to check for.
+	 * @return The complete operand.
+	 * @date Apr 15, 2012; 11:59:07 AM
+	 */
+	public Operand getOperandData(String op) {
+		for (int i = 0; i < operands.size(); i++)
+			if (operands.get(i).operand.equals(op))
+				return operands.get(i);
+		return null;
+	}
+
+	/**
 	 * Trivial utility method to get the expression of the Nth occurrence a
 	 * given operand.
 	 * 
@@ -247,6 +283,26 @@ public abstract class Instruction {
 	}
 
 	/**
+	 * Trivial utility method to get the Nth occurrence an Operand with a
+	 * given name.
+	 * 
+	 * @author Josh Ventura
+	 * @param op
+	 *            The operand to check for.
+	 * @param indx
+	 *            The number of matching operands to skip.
+	 * @return The complete Operand.
+	 * @date Apr 8, 2012; 1:35:52 AM
+	 */
+	public Operand getOperandData(String op, int indx) {
+		for (int i = 0; i < operands.size(); i++)
+			if (operands.get(i).operand.equals(op))
+				if (--indx <= 0)
+					return operands.get(i);
+		return null;
+	}
+
+	/**
 	 * @author Josh Ventura
 	 * @date Apr 13, 2012; 8:20:18 PM
 	 * @modified UNMODIFIED
@@ -254,18 +310,19 @@ public abstract class Instruction {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param expectedOperands All expected operands.
+	 * @param expectedOperands
+	 *            All expected operands.
 	 * @return True if our operands match the expected operands precisely
 	 *         (except for order), false otherwise.
 	 */
-	boolean matchOperands(String ... expectedOperands) {
-		HashMap<String,Integer> expOps = new HashMap<String,Integer>();
+	boolean matchOperands(String... expectedOperands) {
+		HashMap<String, Integer> expOps = new HashMap<String, Integer>();
 		// Populate our hash map with all expected operands, by the number
 		// of operands we expect to see.
 		for (String opr : expectedOperands) {
-			Integer ov = expOps.put(opr,new Integer(1));
+			Integer ov = expOps.put(opr, new Integer(1));
 			if (ov != null)
-				expOps.put(opr,ov + 1);
+				expOps.put(opr, ov + 1);
 		}
 		// Remove operands from that map as they are matched in this.
 		for (int i = 0; i < operands.size(); i++) {
@@ -273,18 +330,18 @@ public abstract class Instruction {
 			// If this operand was not in our map, we don't have a match.
 			if (remaining == null)
 				return false;
-			
+
 			// Otherwise, remove it (or one of it).
 			if (remaining == 1)
 				expOps.remove(operands.get(i));
 			else
 				expOps.put(operands.get(i).operand, remaining - 1);
 		}
-		
+
 		// If there is anything left in expOps, we have missing operands.
 		if (expOps.size() > 0)
 			return false;
-		
+
 		// Seems we have a match.
 		return true;
 	}
@@ -315,6 +372,14 @@ public abstract class Instruction {
 	 * 
 	 *           Apr 8, 2012; 12:11:32 AM: Added usage information to output
 	 *           Instructions.
+	 * 
+	 *           Apr 15, 2012; 10:29:03 AM: Changed to allow spaces before
+	 *           colons as well as after them. Fixes bug in which quotes in
+	 *           labels are parsed as strings when in operand values.
+	 * 
+	 *           Apr 15, 2012; 12:14:28 PM: Added tracking of operand locations
+	 *           relative to the line on which they are used. Refactored operand
+	 *           loop.
 	 * @tested Apr 7, 2012; 12:52:43 AM: Tested with basic MOVD codes, given
 	 *         various kinds of expressions. While more instructions are
 	 *         necessary to get a full idea of whether or not this code is
@@ -367,10 +432,9 @@ public abstract class Instruction {
 			label = null;
 		}
 		else {
-			if (i != 0)// @formatter:off
-				throw new URBANSyntaxException("URBAN specification says labels must start at column 0 ("
-						+ label + " is " + (IOFormat.isAlpha(label) ? "not an" : "an invalid")
-						+ " instruction)", i); // @formatter:on
+			if (i != 0)
+				throw new URBANSyntaxException(makeError("labelNotCol0", label,
+						(IOFormat.isAlpha(label) ? "known" : "valid")), i);
 
 			// Skip the label we read earlier
 			i += label.length();
@@ -379,8 +443,8 @@ public abstract class Instruction {
 				throw new IOException("RAL");
 
 			if (!Character.isWhitespace(line.charAt(i)))
-				throw new URBANSyntaxException("Unexpected symbol `"
-						+ line.charAt(i) + "' following label", i);
+				throw new URBANSyntaxException(makeError("unexSymFollow", ""
+						+ line.charAt(i), "label"), i);
 
 			while (++i < line.length()
 					&& Character.isWhitespace(line.charAt(i)));
@@ -391,10 +455,10 @@ public abstract class Instruction {
 			instruction = IOFormat.readLabel(line, i); // Read instruction now
 			if (!Assembler.instructions.containsKey(instruction.toUpperCase())) {
 				if (IOFormat.isAlpha(instruction))
-					throw new URBANSyntaxException("`" + instruction
-							+ "' is not a known instruction", i);
-				throw new URBANSyntaxException("`" + instruction
-						+ "' is not a valid instruction", i);
+					throw new URBANSyntaxException(makeError("instrUnknown",
+							instruction), i);
+				throw new URBANSyntaxException(makeError("instrInvalid",
+						instruction), i);
 			}
 			i += instruction.length();
 		}
@@ -418,26 +482,42 @@ public abstract class Instruction {
 		while (line.charAt(i) != ';') {
 			// All operand keywords contain only letters.
 			if (!Character.isLetter(line.charAt(i)))
-				throw new URBANSyntaxException(
-						"Expected operand keyword before '" + line.charAt(i)
-								+ "'", i);
+				throw new URBANSyntaxException(makeError("expectOpBefore", ""
+						+ line.charAt(i)), i);
 
 			// Isolate the keyword
-			final int sp = i;
+			final int key_sp = i;
 			while (Character.isLetter(line.charAt(++i)));
-			String operand = line.substring(sp, i);
+			String operand = line.substring(key_sp, i);
 			if (!Assembler.keyWords.contains(operand.toUpperCase()))
-				throw new URBANSyntaxException("Unrecognized operand keyword `"
-						+ operand + "'", i);
+				throw new URBANSyntaxException(
+						makeError("notOperand", operand), i);
+
+			if (Character.isWhitespace(line.charAt(i)))
+				do
+					if (++i >= line.length())
+						throw new IOException("RAL4");
+				while (Character.isWhitespace(line.charAt(i)));
 
 			if (line.charAt(i) != ':')
-				throw new URBANSyntaxException("Expected colon following `"
-						+ operand + "' keyword", i);
+				throw new URBANSyntaxException(makeError("expectOpColon",
+						operand), i);
 
-			final int exsp = i + 1;
-			do { // Now we're reading in the value of this expression
-				if (++i >= line.length()) // If we overrun this line looking,
-					throw new IOException("RAL4"); // Request another line.
+			if (++i >= line.length())
+				throw new IOException("RAL5");
+			while (Character.isWhitespace(line.charAt(i)))
+				if (++i >= line.length())
+					throw new IOException("RAL6");
+
+
+			final int val_sp = i;
+			while (line.charAt(i) != ';' && line.charAt(i) != ',') // Search.
+			{
+				// Don't get bitten by oddly formatted labels.
+				if (Character.isLetter(line.charAt(i))) {
+					i += IOFormat.readLabel(line, i).length();
+					continue;
+				}
 
 				/* Don't get tripped up by string literals.
 				 * Specification says that the single quote is the delimiter.
@@ -461,17 +541,25 @@ public abstract class Instruction {
 							++i;
 					// Make sure we didn't just run out of line
 					if (++i >= line.length())
-						throw new IOException("RAL5");
+						throw new IOException("RAL8");
+					continue;
 				}
-			} while (line.charAt(i) != ';' && line.charAt(i) != ',');
 
-			String exp = line.substring(exsp, i);
-			res.operands.add(new Operand(operand.toUpperCase(), exp));
+				// Whatever we're at isn't our problem.
+				if (++i >= line.length()) // If we overrun this line looking,
+					throw new IOException("RAL7"); // Request another line.
+			}
 
-			//
-			if (line.charAt(i) == ',')//@formatter:off
-				do if (++i >= line.length()) throw new IOException("RAL6");
-			while (Character.isWhitespace(line.charAt(i))); //@formatter:on
+			String exp = line.substring(val_sp, i);
+			res.operands.add(new Operand(operand.toUpperCase(), exp, key_sp,
+					val_sp));
+
+			// Check if we have more work to do.
+			if (line.charAt(i) == ',')
+				do
+					if (++i >= line.length())
+						throw new IOException("RAL9");
+				while (Character.isWhitespace(line.charAt(i)));
 		}
 
 		res.usage = resp.usage;
@@ -483,9 +571,16 @@ public abstract class Instruction {
 	/**
 	 * Check if the token is semantically correct. This means that it has the
 	 * correct number of operands and the correct kinds of operands.
+	 * Also, checks whether operand values are within range.
 	 * 
 	 * @author Josh Ventura
-	 * @param hErr TODO
+	 * @modified Apr 14, 2012; 12:00 PM: Added error handler to parameters.
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards This method is abstract.
+	 * @testingStandards This method is abstract.
+	 * @param hErr
+	 *            An error handler which will receive any error or warning
+	 *            messages.
 	 * @return Returns whether the instruction is semantically correct.
 	 * @date Apr 4, 2012; 01:40:29AM
 	 */
@@ -497,10 +592,10 @@ public abstract class Instruction {
 	 * @author Josh Ventura
 	 * @date Apr 4, 2012; 1:40:52 AM
 	 * @modified UNMODIFIED
-	 * @tested UNTESTED
+	 * @tested This method is abstract.
 	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
+	 * @codingStandards This method is abstract.
+	 * @testingStandards This method is abstract.
 	 * @return Returns an array of getWordCount() integers representing this
 	 *         instruction's byte code.
 	 */
@@ -510,10 +605,10 @@ public abstract class Instruction {
 	 * @author Josh Ventura
 	 * @date Apr 4, 2012; 9:11:51 AM
 	 * @modified UNMODIFIED
-	 * @tested UNTESTED
+	 * @tested This method is abstract.
 	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
+	 * @codingStandards This method is abstract.
+	 * @testingStandards This method is abstract.
 	 * @param instruction
 	 *            The byte code of the instruction to be executed.
 	 */

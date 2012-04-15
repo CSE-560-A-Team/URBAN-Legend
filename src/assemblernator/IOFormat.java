@@ -3,6 +3,8 @@ package assemblernator;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
 
 /**
@@ -106,16 +108,18 @@ public class IOFormat {
 	 *             thrown with information on the violation.
 	 * @specRef S2.1
 	 */
-	public static String readLabel(String from, int pos) throws URBANSyntaxException {
+	public static String readLabel(String from, int pos)
+			throws URBANSyntaxException {
 		final int spos = pos;
 		if (!Character.isLetter(from.charAt(pos)))
-			throw new URBANSyntaxException("Labels must start with a letter.", pos);
+			throw new URBANSyntaxException("Labels must start with a letter.",
+					pos);
 		// Skip to the first invalid label character.
 		while (++pos < from.length() && isValidLabelChar(from.charAt(pos)));
 		if (pos - spos > 32)
 			throw new URBANSyntaxException(
 					"Labels must be at most 32 characters in length; given label is "
-							+ (pos - spos) + " characters.", spos+32);
+							+ (pos - spos) + " characters.", spos + 32);
 		return from.substring(spos, pos);
 	}
 
@@ -294,5 +298,130 @@ public class IOFormat {
 		for (int i = 0; i < 2; ++i)
 			res[appat++] = append[i];
 		return res;
+	}
+
+	/**
+	 * @author Josh Ventura
+	 * @date Apr 14, 2012; 6:59:43 PM
+	 * @modified This method will never need modified.
+	 * @tested This method can not go wrong.
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param c
+	 *            The character to check.
+	 * @return Returns whether the given character is a hex nybble.
+	 * @specRef N/A
+	 */
+	static boolean isHexNybble(char c) {
+		switch (c) {// @formatter:off
+		case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
+		case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
+		case '0': case '1': case '2': case '3': case '4': case '5':
+		case '6': case '7': case '8': case '9':
+			return true; // @formatter:on
+		}
+		return false;
+	}
+
+	/**
+	 * Takes a string, such as "'Hello, world! I\'m a string!'" and returns
+	 * the escaped version; here, "Hello, world! I'm a string!".
+	 * 
+	 * This method assumes that any strings have already been read in by a
+	 * competent parser, and therefore, if a string is contained in the given
+	 * parameter, it will begin and end with a quote.
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 14, 2012; 6:43:28 PM
+	 * @modified UNMODIFIED
+	 * @tested Apr 14, 2012; 8:11:10 PM: Tested with a large string containing
+	 *         many escape sequences.
+	 * @errors Generates invalid string syntax errors. TODO-More info.
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param str
+	 *            The string to escape.
+	 * @param line
+	 *            A line number for error reporting purposes.
+	 * @param pos
+	 *            The position of this string in the line of code, for error
+	 *            reporting purposes.
+	 * @param hErr
+	 *            An error handler to which any issues will be reported.
+	 * @return The escaped version of the given string.
+	 * @specRef N/A
+	 */
+	public static String escapeString(String str, int line, int pos,
+			ErrorHandler hErr) {
+		// @formatter:off
+		StringBuilder sb = new StringBuilder(str.length());
+		if (str.length() == 0) {
+			if (hErr != null)
+				hErr.reportError("Invalid string given: string parameter is empty", line, pos);
+			return "";
+		}
+		if (str.charAt(0) != '\'') {
+			if (hErr != null)
+				hErr.reportError("Invalid string parameter: strings are denoted by single quotes", line, pos);
+			return "";
+		}
+			
+		for (int p = 1; p < str.length(); ++p) {
+			if (str.charAt(p) == '\\') {
+				switch (str.charAt(++p)) {
+				case 'n': sb.append('\n'); continue;
+				case 'r': sb.append('\r'); continue;
+				case 't': sb.append('\t'); continue;
+				case 'x':
+					if (isHexNybble(str.charAt(++p)))
+						if (isHexNybble(str.charAt(++p)))
+							sb.append((char) Integer.parseInt(str.substring(p - 1, p + 1), 16));
+						else {
+							sb.append((char) Integer.parseInt(str.substring(p - 1, p), 16));
+							--p;
+						}
+					else {
+						if (hErr != null)
+							hErr.reportWarning("String escape sequence must contain at least one hex digit (not '" + str.charAt(p) + "'): escape omitted.",line,pos+p);
+					}
+					continue;
+				case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7':
+					if (isHexNybble(str.charAt(p)))
+						if (isHexNybble(str.charAt(++p)))
+							if (isHexNybble(str.charAt(++p)) && Integer.parseInt(str.substring(p - 1, p + 1)) < 256)
+								sb.append((char) Integer.parseInt(str.substring(p - 2, p + 1), 8));
+							else {
+								sb.append((char) Integer.parseInt(str.substring(p - 1, p), 8));
+								--p;
+							}
+						else {
+							sb.append((char) Integer.parseInt(str.substring(p - 1, p), 8));
+							--p;
+						}
+					else {
+						if (hErr != null)
+							hErr.reportWarning("String escape sequence must contain at least one octal digit.",line,pos+p);
+					}
+					continue;
+				case '\\': sb.append('\\'); continue;
+				case '\'': sb.append('\''); continue;
+				case '\"': sb.append('\"'); continue;
+				case '\n': case '\r':
+					if (hErr != null)
+						hErr.reportWarning("URBAN does not require escaping newlines in strings.", line, pos+p);
+					pos--; continue;
+				}
+				hErr.reportWarning("Unknown escape sequence '\\" + str.charAt(p) + "': omitted.", line, pos+p);
+			}
+			if (str.charAt(p) == '\'') {
+				if (hErr != null && p + 1 < str.length())
+				  hErr.reportWarning("Unexpected end of string.", line, pos+p);
+				return sb.toString();
+			}
+			sb.append(str.charAt(p));
+		}
+		// @formatter:on
+		return sb.toString();
 	}
 }
