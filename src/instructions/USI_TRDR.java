@@ -51,12 +51,12 @@ public class USI_TRDR extends Instruction {
 				if(this.hasOperand("FR")){
 					src="FR";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FR"));
+					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
 				}else if(this.hasOperand("FX")){
 					src="FX";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FX"));
+					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 				}else{
 					isValid=false;
@@ -71,19 +71,19 @@ public class USI_TRDR extends Instruction {
 			if(this.hasOperand("DX") && this.hasOperand("DM")){
 				dest="DMDX";
 				//range check
-				isValid = OperandChecker.isValidMem(this.getOperand("DX"));
+				isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 				if(this.hasOperand("FR")){
 					src="FR";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FR"));
+					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
 				}else if(this.hasOperand("FX")){
 					src="FX";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FX"));
+					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 				}else{
 					isValid=false;

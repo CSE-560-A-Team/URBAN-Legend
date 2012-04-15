@@ -31,7 +31,7 @@ public abstract class UIG_TransferCond extends Instruction {
 			if(this.hasOperand("FR")){
 				src="FR";
 				//range checking
-				isValid = OperandChecker.isValidMem(this.getOperand("FR"));
+				isValid = OperandChecker.isValidReg(this.getOperand("FR"));
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
 				if(this.hasOperand("DM")){
 					dest="DM";
@@ -53,12 +53,12 @@ public abstract class UIG_TransferCond extends Instruction {
 			if(this.hasOperand("FR")){
 			src="FR";
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("FR"));
+			isValid = OperandChecker.isValidReg(this.getOperand("FR"));
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("DM") && this.hasOperand("DX")) {
 				dest = "DMDX";
 				//range checking
-				isValid = OperandChecker.isValidMem(this.getOperand("DX"));
+				isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);

@@ -56,7 +56,7 @@ public class USI_TR extends Instruction {
 			if(this.hasOperand("DM") && this.hasOperand("DX")){
 				dest="DMDX";
 				//range check
-				isValid = OperandChecker.isValidMem(this.getOperand("DX"));
+				isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
