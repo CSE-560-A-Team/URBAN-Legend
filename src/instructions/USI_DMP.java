@@ -27,13 +27,20 @@ public class USI_DMP extends Instruction {
 	static USI_DMP staticInstance = new USI_DMP(true);
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
-	@Override public int getNewLC(int lc, Module mod) {
+	@Override 
+	public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+	@Override 
+	public boolean check(ErrorHandler hErr) {
+		if(!this.hasOperand("FC") || this.operands.size() > 1) {
+			hErr.reportError(this.opId + " should have exactly one operand: \"FC\"", this.lineNum, -1);
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
