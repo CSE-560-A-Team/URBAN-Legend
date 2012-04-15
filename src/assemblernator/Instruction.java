@@ -254,18 +254,19 @@ public abstract class Instruction {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param expectedOperands All expected operands.
+	 * @param expectedOperands
+	 *            All expected operands.
 	 * @return True if our operands match the expected operands precisely
 	 *         (except for order), false otherwise.
 	 */
-	boolean matchOperands(String ... expectedOperands) {
-		HashMap<String,Integer> expOps = new HashMap<String,Integer>();
+	boolean matchOperands(String... expectedOperands) {
+		HashMap<String, Integer> expOps = new HashMap<String, Integer>();
 		// Populate our hash map with all expected operands, by the number
 		// of operands we expect to see.
 		for (String opr : expectedOperands) {
-			Integer ov = expOps.put(opr,new Integer(1));
+			Integer ov = expOps.put(opr, new Integer(1));
 			if (ov != null)
-				expOps.put(opr,ov + 1);
+				expOps.put(opr, ov + 1);
 		}
 		// Remove operands from that map as they are matched in this.
 		for (int i = 0; i < operands.size(); i++) {
@@ -273,18 +274,18 @@ public abstract class Instruction {
 			// If this operand was not in our map, we don't have a match.
 			if (remaining == null)
 				return false;
-			
+
 			// Otherwise, remove it (or one of it).
 			if (remaining == 1)
 				expOps.remove(operands.get(i));
 			else
 				expOps.put(operands.get(i).operand, remaining - 1);
 		}
-		
+
 		// If there is anything left in expOps, we have missing operands.
 		if (expOps.size() > 0)
 			return false;
-		
+
 		// Seems we have a match.
 		return true;
 	}
@@ -485,7 +486,13 @@ public abstract class Instruction {
 	 * correct number of operands and the correct kinds of operands.
 	 * 
 	 * @author Josh Ventura
-	 * @param hErr TODO
+	 * @modified Apr 14, 2012; 12:00 PM: Added error handler to parameters.
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards This method is abstract.
+	 * @testingStandards This method is abstract.
+	 * @param hErr
+	 *            An error handler which will receive any error or warning
+	 *            messages.
 	 * @return Returns whether the instruction is semantically correct.
 	 * @date Apr 4, 2012; 01:40:29AM
 	 */
@@ -497,10 +504,10 @@ public abstract class Instruction {
 	 * @author Josh Ventura
 	 * @date Apr 4, 2012; 1:40:52 AM
 	 * @modified UNMODIFIED
-	 * @tested UNTESTED
+	 * @tested This method is abstract.
 	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
+	 * @codingStandards This method is abstract.
+	 * @testingStandards This method is abstract.
 	 * @return Returns an array of getWordCount() integers representing this
 	 *         instruction's byte code.
 	 */
@@ -510,10 +517,10 @@ public abstract class Instruction {
 	 * @author Josh Ventura
 	 * @date Apr 4, 2012; 9:11:51 AM
 	 * @modified UNMODIFIED
-	 * @tested UNTESTED
+	 * @tested This method is abstract.
 	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
+	 * @codingStandards This method is abstract.
+	 * @testingStandards This method is abstract.
 	 * @param instruction
 	 *            The byte code of the instruction to be executed.
 	 */
