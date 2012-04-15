@@ -1,8 +1,10 @@
 package instructions;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The DMP instruction.
@@ -27,18 +29,38 @@ public class USI_DMP extends Instruction {
 	static USI_DMP staticInstance = new USI_DMP(true);
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
-	@Override public int getNewLC(int lc, Module mod) {
+	@Override 
+	public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+	@Override 
+	public boolean check(ErrorHandler hErr) {
+		boolean isValid = true;
+		
+		if(!this.hasOperand("FC") || this.operands.size() > 1) {
+			hErr.reportError(this.getOpId() + " should have exactly one operand: \"FC\"", this.lineNum, -1);
+			isValid = false;
+		} else if(!OperandChecker.isValidConstant(this.getOperand("FC"))) {
+			hErr.reportError(this.getOpId() + " \"FC\" is out of range", this.lineNum, -1);
+			isValid = false;
+		}
+		
+		return isValid;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		int[] assembled = new int[1];
+		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //"111111"
+		code = code + "0000000000000"; //13 unused bits.  "111111 0000000000000"
+		//13 bits of constant in memory.  "111111 000000000000 0000000011111"
+		code = code + IOFormat.formatBinInteger(Integer.parseInt(this.getOperand("FC")), 13); 
+		
+		assembled[0] = Integer.parseInt(code);
+		
+		return assembled;
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */

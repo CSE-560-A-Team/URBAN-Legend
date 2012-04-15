@@ -122,8 +122,20 @@ public class OperandChecker {
 	 * @return
 	 * @specRef N/A
 	 */
-	public static boolean isValidMem(String addr) {
-		return true;
+	public static boolean isValidMem(String exp) {
+		boolean valid = true;
+		
+		try{
+			int addr  = Integer.parseInt(exp);
+			
+			if(addr > 4095 || addr < 0) {
+				valid = false;
+			}
+		} catch (NumberFormatException e) {
+			valid = false;
+		}
+		
+		return valid;
 	}
 
 	/**
