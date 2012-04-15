@@ -66,7 +66,7 @@ public abstract class UIG_IO extends Instruction{
 		//checks for operand combos and assigns OperandType.
 		if(!this.hasOperand("NW")) {
 			isValid = false;
-			hErr.reportError(makeError("instructionMissingOp", "NW", this.getOpId()), this.lineNum, -1);
+			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "NW"), this.lineNum, -1);
 		} else if(this.operands.size() == 2) {
 			if(this.hasOperand("DM")) {
 				this.operandType = OperandType.DM;
@@ -76,7 +76,7 @@ public abstract class UIG_IO extends Instruction{
 				this.operandType = OperandType.FL;
 			} else {
 				isValid = false;
-				hErr.reportError(makeError("operandInsAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
 			}
 		} else if(this.operands.size() == 3) {
 			if(this.hasOperand("DM") && this.hasOperand("DX")) {
@@ -85,7 +85,7 @@ public abstract class UIG_IO extends Instruction{
 				this.operandType = OperandType.FMFX;
 			} else {
 				isValid = false;
-				hErr.reportError(makeError("operandInsAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
 			}
 		} else {
 			isValid = false;
