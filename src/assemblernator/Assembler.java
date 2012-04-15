@@ -210,7 +210,6 @@ public class Assembler {
 	public static final Module parseFile(Scanner source, ErrorHandler hErr) {
 		int lineNum = 0;
 		Module module = new Module();
-		
 		int startAddr = 0;
 		int lc = 0;
 
@@ -227,12 +226,14 @@ public class Assembler {
 				instr.origSrcLine = line; // Gives instruction source line.
 				instr.lineNum = lineNum;
 	
+				//checks for operand errors in instruction.
+				instr.check(hErr);
+				
 				// Get new lc for next instruction.
 				instr.lc = lc;
 				lc = instr.getNewLC(lc, module);
 	
-	
-	
+
 				/* if start of module, record startAddr of module.
 				 * execStart of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
