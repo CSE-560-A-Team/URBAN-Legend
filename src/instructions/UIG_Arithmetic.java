@@ -156,6 +156,10 @@ public abstract class UIG_Arithmetic extends Instruction {
 
 	}
 
+	/**
+	 * @author Eric
+	 * @date Apr 14, 2012; 5:52:36 PM
+	 */
 	@Override
 	public final int[] assemble() {
 		String code = IOFormat.formatBinInteger(this.getOpcode(), 6);
