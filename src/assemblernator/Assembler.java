@@ -208,55 +208,59 @@ public class Assembler {
 	public static final Module parseFile(Scanner source, ErrorHandler hErr) {
 		int lineNum = 0;
 		Module module = new Module();
-		try {
-			int startAddr = 0;
-			int lc = 0;
+		
+		int startAddr = 0;
+		int lc = 0;
 
-			while (source.hasNextLine()) {
+		while (source.hasNextLine()) {
+			try{
 				lineNum++;
-
+	
 				String line = source.nextLine();
-
+	
 				Instruction instr = Instruction.parse(line);
 				if (instr == null)
 					continue;
-
+	
 				instr.origSrcLine = line; // Gives instruction source line.
 				instr.lineNum = lineNum;
-
+	
 				// Get new lc for next instruction.
 				instr.lc = lc;
 				lc = instr.getNewLC(lc, module);
-
-
-
+	
+	
+	
 				/* if start of module, record startAddr of module.
 				 * execStart of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
 					module.startAddr = startAddr;
 				}
-
+	
 				//if instr can be used in symbol table.
 				if (instr.usage != Usage.NONE) {
 					module.getSymbolTable().addEntry(instr);
 				}
-
+	
 				module.assembly.add(instr);
-
+	
 				module.startAddr += lc;
+			} catch (URBANSyntaxException e) {
+				hErr.reportError(e.getMessage(), lineNum, e.index);
+				if (e.getMessage() == null || e.getMessage().length() <= 5)
+					e.printStackTrace();
+				
+				continue;
+				
+			} catch (IOException e) {
+				if (!e.getMessage().startsWith("RAL"))
+					e.printStackTrace();
+				else
+					System.err.println("Line " + lineNum + " is not terminated by a semicolon.");
+				
+				continue;
 			}
-		} catch (URBANSyntaxException e) {
-			hErr.reportError(e.getMessage(), lineNum, e.index);
-			if (e.getMessage() == null || e.getMessage().length() <= 5)
-				e.printStackTrace();
-		} catch (IOException e) {
-			if (!e.getMessage().startsWith("RAL"))
-				e.printStackTrace();
-			else
-				System.err.println("Line " + lineNum
-						+ " is not terminated by a semicolon.");
 		}
-
 
 		return module;
 	}
