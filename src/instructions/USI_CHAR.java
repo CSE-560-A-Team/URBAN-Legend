@@ -1,8 +1,10 @@
 package instructions;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The CHAR instruction.
@@ -21,29 +23,56 @@ public class USI_CHAR extends Instruction {
 	private static final String opId = "CHAR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0xFFFFFFFF; // This instruction doesn't have an opcode.
+	private static final int opCode = 0xFFFFFFFF; // This instruction doesn't
+													// have an opcode.
 
 	/** The static instance for this instruction. */
 	static USI_CHAR staticInstance = new USI_CHAR(true);
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+Math.max(4,getOperand("ST").length()+2)/4;
+		String st = getOperand("ST");
+		if (st == null)
+			return lc;
+		int stringWordSize = IOFormat.escapeString(st, 0, 0, null).length() / 4;
+		return lc + Math.max(1, stringWordSize);
 	}
+
+	private String content;
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		String st = getOperand("ST");
+		if (st == null)
+			hErr.reportError("Missing `ST' operand to `CHAR' directive",
+					lineNum, -1);
+		else if (OperandChecker.isValidString(st))
+			hErr.reportError(
+					"Operand `ST' must contain precisely one string in this context",
+					lineNum, -1);
+		else if (operands.size() != 1)
+			hErr.reportError(
+					"Operand `ST' must contain precisely one string in this context",
+					lineNum, -1);
+		else {
+			content = IOFormat.escapeString(content, lineNum, 0, hErr);
+			return true;
+		}
+		return false;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		byte[] resb = content.getBytes();
+		int[] res = new int[Math.max(1, (resb.length+3)/4)];
+		for (int i = 0; i < res.length; i++)
+			res[i] = resb[i] | (resb[i+1] << 8) | (resb[i+2] << 16) | (resb[i+3] << 24);
+		return res;
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
 	@Override public void execute(int instruction) {
-		// TODO: IMPLEMENT
+		throw new NullPointerException("The CHAR instruction should not be invoked for execute!");
 	}
 
 	// =========================================================
@@ -91,4 +120,3 @@ public class USI_CHAR extends Instruction {
 	/** Default constructor; does nothing. */
 	private USI_CHAR() {}
 }
-
