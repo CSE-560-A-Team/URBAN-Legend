@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.ErrorReporting.ErrorHandler;
+import static assemblernator.ErrorReporting.makeError;
+
 
 /**
  * The Instruction class is the do-all, see-all, have-all class for instruction
@@ -368,10 +370,9 @@ public abstract class Instruction {
 			label = null;
 		}
 		else {
-			if (i != 0)// @formatter:off
-				throw new URBANSyntaxException("URBAN specification says labels must start at column 0 ("
-						+ label + " is " + (IOFormat.isAlpha(label) ? "not an" : "an invalid")
-						+ " instruction)", i); // @formatter:on
+			if (i != 0)
+				throw new URBANSyntaxException(makeError("labelNotCol0", label,
+						(IOFormat.isAlpha(label) ? "known" : "valid")), i);
 
 			// Skip the label we read earlier
 			i += label.length();
@@ -380,8 +381,8 @@ public abstract class Instruction {
 				throw new IOException("RAL");
 
 			if (!Character.isWhitespace(line.charAt(i)))
-				throw new URBANSyntaxException("Unexpected symbol `"
-						+ line.charAt(i) + "' following label", i);
+				throw new URBANSyntaxException(makeError("unexSymFollow", ""
+						+ line.charAt(i), "label"), i);
 
 			while (++i < line.length()
 					&& Character.isWhitespace(line.charAt(i)));
@@ -392,10 +393,10 @@ public abstract class Instruction {
 			instruction = IOFormat.readLabel(line, i); // Read instruction now
 			if (!Assembler.instructions.containsKey(instruction.toUpperCase())) {
 				if (IOFormat.isAlpha(instruction))
-					throw new URBANSyntaxException("`" + instruction
-							+ "' is not a known instruction", i);
-				throw new URBANSyntaxException("`" + instruction
-						+ "' is not a valid instruction", i);
+					throw new URBANSyntaxException(makeError("instrUnknown",
+							instruction), i);
+				throw new URBANSyntaxException(makeError("instrInvalid",
+						instruction), i);
 			}
 			i += instruction.length();
 		}
@@ -419,21 +420,20 @@ public abstract class Instruction {
 		while (line.charAt(i) != ';') {
 			// All operand keywords contain only letters.
 			if (!Character.isLetter(line.charAt(i)))
-				throw new URBANSyntaxException(
-						"Expected operand keyword before '" + line.charAt(i)
-								+ "'", i);
+				throw new URBANSyntaxException(makeError("expectOpBefore", ""
+						+ line.charAt(i)), i);
 
 			// Isolate the keyword
 			final int sp = i;
 			while (Character.isLetter(line.charAt(++i)));
 			String operand = line.substring(sp, i);
 			if (!Assembler.keyWords.contains(operand.toUpperCase()))
-				throw new URBANSyntaxException("Unrecognized operand keyword `"
-						+ operand + "'", i);
+				throw new URBANSyntaxException(
+						makeError("notOperand", operand), i);
 
 			if (line.charAt(i) != ':')
-				throw new URBANSyntaxException("Expected colon following `"
-						+ operand + "' keyword", i);
+				throw new URBANSyntaxException(makeError("expectOpColon",
+						operand), i);
 
 			final int exsp = i + 1;
 			do { // Now we're reading in the value of this expression

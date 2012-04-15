@@ -6,6 +6,8 @@ import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
 
+import static assemblernator.ErrorReporting.makeError;
+
 /**
  * The CHAR instruction.
  * 
@@ -38,21 +40,22 @@ public class USI_CHAR extends Instruction {
 		return lc + Math.max(1, stringWordSize);
 	}
 
+	/** The string given to us in the ST: operand. */
 	private String content;
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
 		String st = getOperand("ST");
 		if (st == null)
-			hErr.reportError("Missing `ST' operand to `CHAR' directive",
+			hErr.reportError(makeError("directiveMissingOp", "CHAR", "ST"),
 					lineNum, -1);
 		else if (OperandChecker.isValidString(st))
 			hErr.reportError(
-					"Operand `ST' must contain precisely one string in this context",
+					makeError("STstringCount"),
 					lineNum, -1);
 		else if (operands.size() != 1)
 			hErr.reportError(
-					"Operand `ST' must contain precisely one string in this context",
+					makeError("extraOperandsDir", "CHAR"),
 					lineNum, -1);
 		else {
 			content = IOFormat.escapeString(content, lineNum, 0, hErr);
