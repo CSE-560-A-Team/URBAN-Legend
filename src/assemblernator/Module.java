@@ -175,21 +175,20 @@ public class Module {
 			combinedSymbols.addAll(extEntSymbols.entrySet()); //combine
 			
 			Collections.sort(combinedSymbols, new MapEntryComparator()); //sort
-					
-			// way of storing each line of the symbol table
-			List<String> completeTable = new ArrayList<String>();
 			
 			// iterator over elements of set of label, Instruction pairs.
 			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols.iterator();
 			
-			String[][] stringTable = new String[4][completeTable.size() + 1]; //all entries + 1 header entry.
+			String[][] stringTable = new String[combinedSymbols.size() + 1][4]; //all entries + 1 header entry.
 			int x = 0;
-			stringTable[0][0] = "Label";
-			stringTable[1][0] = "LC";
-			stringTable[2][0] = "Usage";
-			stringTable[3][0] = "Equate";
+			stringTable[x][0] = "Label";
+			stringTable[x][1] = "LC";
+			stringTable[x][2] = "Usage";
+			stringTable[x][3] = "Equate";
 			
 			while (tableIt.hasNext()) {
+				x++;
+				
 				// gets the set values <K,V> stored into a map entry which can
 				// be used to get the values/key of K and V
 				Map.Entry<String, Instruction> entry = tableIt.next();
@@ -213,9 +212,6 @@ public class Module {
 						stringTable[x][3] = operandsIt.next().expression;
 					}
 				}
-				
-				x++;
-
 			}
 			
 			return stringTable;
