@@ -4,6 +4,7 @@ import guinator.GUIMain;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import assemblernator.ErrorReporting.DefaultErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
@@ -28,6 +29,8 @@ public class Main {
 		System.out.println(fmtme);
 		System.out.println(IOFormat.escapeString(
 				fmtme,0,0,new DefaultErrorHandler()));
+		
+		System.out.println(ErrorReporting.makeError("testError", new Date().toString(), "Main.java"));
 
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);

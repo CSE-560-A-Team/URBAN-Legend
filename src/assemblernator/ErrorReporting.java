@@ -2,6 +2,7 @@ package assemblernator;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -144,8 +145,13 @@ public class ErrorReporting {
 	public static final String makeError(String errId, String... idents) {
 		if (errPropFile == null) {
 			try {
-				errPropFile.load(new FileInputStream("errors.properties"));
-
+				InputStream eis = ClassLoader
+						.getSystemResourceAsStream("assemblernator/errors.properties");
+				if (eis == null)
+					throw new IOException("No resource.");
+				Properties np = new Properties();
+				np.load(eis);
+				errPropFile = np;
 			} catch (IOException ex) {
 				return "Error[" + errId
 						+ "] occurred, but errors file does not exist.";
@@ -164,6 +170,6 @@ public class ErrorReporting {
 				outputStr += "[EUUP:" + i + "]";
 			}
 		}
-		return null;
+		return outputStr;
 	}
 }
