@@ -79,6 +79,7 @@ public class GUIMain {
 
 		JFrame mainWindow = new JFrame();
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainWindow.setTitle("URBAN Legend");
 
 		tabPane = new JTabbedPane();
 
@@ -119,7 +120,7 @@ public class GUIMain {
 		JTextArea userReport;
 		/** Our user report */
 		JTable errorTable;
-		
+
 		/** The tab containing our build messages. */
 		JComponent buildMessageTab;
 		/** The tab containing our user report. */
@@ -158,8 +159,10 @@ public class GUIMain {
 			errorTable.setFillsViewportHeight(true);
 
 			dispTabs = new JTabbedPane();
-			dispTabs.add("Build Messages", buildMessageTab = new JScrollPane(errorTable));
-			dispTabs.add("User Report", userReportTab = new JScrollPane(userReport));
+			dispTabs.add("Build Messages", buildMessageTab = new JScrollPane(
+					errorTable));
+			dispTabs.add("User Report", userReportTab = new JScrollPane(
+					userReport));
 
 			// Major hack to compensate for Swing's ABYSMAL table sizing API!
 			sTable = new JTable(new DefaultTableModel(new String[0][],
@@ -172,7 +175,7 @@ public class GUIMain {
 				}
 			};
 
-			
+
 			sTable.getColumnModel().getColumn(0).setMinWidth(64);
 			sTable.getColumnModel().getColumn(1).setPreferredWidth(42);
 			sTable.getColumnModel().getColumn(1).setMinWidth(42);
