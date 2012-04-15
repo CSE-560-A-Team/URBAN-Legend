@@ -43,6 +43,34 @@ public class OperandChecker {
 	}
 
 	/**
+	 * Checks if the FC in Shift/Manipulate functions is within the range [0-31] or not.
+	 * 
+	 * @author Ratul Khosla
+	 * @date Apr 15, 2012; 6:08:32 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param exp 
+	 * 			value of the FC register
+	 * @return check
+	 * @specRef N/A
+	 */
+	public static boolean isValidShiftConstant(String exp){
+		boolean check = true;
+		try {
+			int fcreg = Integer.parseInt(exp);
+
+			if ( fcreg < 0  || fcreg > 31 ) {
+				check = false;
+			}
+		} catch (NumberFormatException e) {
+			check = false;
+		}
+		return check;
+	}
+	/**
 	 * 
 	 * @author Noah
 	 * @date Apr 14, 2012; 5:10:21 PM
@@ -108,6 +136,7 @@ public class OperandChecker {
 	public static boolean isValidExpression(String exp) {
 		return true;
 	}
+
 
 	/**
 	 * 
