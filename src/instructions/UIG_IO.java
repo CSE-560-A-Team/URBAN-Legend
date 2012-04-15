@@ -3,6 +3,7 @@ package instructions;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.OperandChecker;
 
 
@@ -65,7 +66,7 @@ public abstract class UIG_IO extends Instruction{
 		//checks for operand combos and assigns OperandType.
 		if(!this.hasOperand("NW")) {
 			isValid = false;
-			hErr.reportError(this.getOpId() + " is missing operand \"NW\"", this.lineNum, -1);
+			hErr.reportError(makeError("instructionMissingOp", "NW", this.getOpId()), this.lineNum, -1);
 		} else if(this.operands.size() == 2) {
 			if(this.hasOperand("DM")) {
 				this.operandType = OperandType.DM;
@@ -75,7 +76,7 @@ public abstract class UIG_IO extends Instruction{
 				this.operandType = OperandType.FL;
 			} else {
 				isValid = false;
-				hErr.reportError(this.getOpId() + " must have MREF operands in addition to \"NW\"", this.lineNum , -1);
+				hErr.reportError(makeError("operandInsAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
 			}
 		} else if(this.operands.size() == 3) {
 			if(this.hasOperand("DM") && this.hasOperand("DX")) {
@@ -84,11 +85,11 @@ public abstract class UIG_IO extends Instruction{
 				this.operandType = OperandType.FMFX;
 			} else {
 				isValid = false;
-				hErr.reportError(this.getOpId() + " must have MREF operands in addition to \"NW\"", this.lineNum , -1);
+				hErr.reportError(makeError("operandInsAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
 			}
 		} else {
 			isValid = false;
-			hErr.reportError(this.getOpId() + " has too many operands.", this.lineNum, -1);
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 		}
 		
 		//checks for invalid combo's between operands and opid's.
@@ -96,13 +97,14 @@ public abstract class UIG_IO extends Instruction{
 		if(isValid) {
 			if(this.hasOperand("DM") && (this.getOpId().equals("IWSR") || this.getOpId().equals("CWSR"))) {
 				isValid = false;
-				hErr.reportError(this.getOpId() + " cannot use \"DM\" as operand.", this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);
+				
 			} else if (this.hasOperand("FM") && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
 				isValid = false;
-				hErr.reportError(this.getOpId() + " cannot use \"FM\" as operand.", this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
 			} else if (this.hasOperand("FL") && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
 				isValid = false;
-				hErr.reportError(this.getOpId() + " cannot use \"FL\" as operand.", this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", "FL", this.getOpId()), this.lineNum, -1);
 			}	
 		}
 		
@@ -110,20 +112,19 @@ public abstract class UIG_IO extends Instruction{
 		if(isValid) {
 			if(this.operandType.input) {
 				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
-				if(!isValid) hErr.reportError(this.getOpId() + "Mem value of \"DM\" out of range.", this.lineNum, -1);
-				
+				if(!isValid) hErr.reportError(makeError("MEMoutRange", "DM"), this.lineNum, -1);
 				if(this.operandType.index) {
 					isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
-					if(!isValid) hErr.reportError(this.getOpId() + "Index Register \"DX\", out of range.", this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("INDEXoutRange", "DX"), this.lineNum, -1);
 				}
 			} else if(this.operandType.literal){
 				isValid = OperandChecker.isValidMem(this.getOperand("FL"));
-				if(!isValid) hErr.reportError(this.getOpId() + "Literal value of \"FL\" out of range.", this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("FLoutRange"), this.lineNum, -1);
 			} else {
 				isValid = OperandChecker.isValidMem(this.getOperand("FM"));
 				if(this.operandType.index) {
 					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
-					if(!isValid) hErr.reportError(this.getOpId() + "Index Register \"FX\", out of range.", this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("INDEXoutRange", "FX"), this.lineNum, -1);
 				}
 			}
 		}
