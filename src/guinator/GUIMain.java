@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -20,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.lateralgm.joshedit.JoshText;
 import org.lateralgm.joshedit.JoshText.CodeMetrics;
@@ -116,6 +119,11 @@ public class GUIMain {
 		JTextArea userReport;
 		/** Our user report */
 		JTable errorTable;
+		
+		/** The tab containing our build messages. */
+		JComponent buildMessageTab;
+		/** The tab containing our user report. */
+		JComponent userReportTab;
 
 		/** Column names for our error table. */
 		String errTableColNames[] = { "T", "Line", "Pos", "Message" };
@@ -147,17 +155,43 @@ public class GUIMain {
 			errorTable.getColumnModel().getColumn(0).setMaxWidth(16);
 			errorTable.getColumnModel().getColumn(1).setMaxWidth(48);
 			errorTable.getColumnModel().getColumn(2).setMaxWidth(48);
-			dispTabs = new JTabbedPane();
-			dispTabs.add("Build Messages", new JScrollPane(errorTable));
-			dispTabs.add("User Report", new JScrollPane(userReport));
+			errorTable.setFillsViewportHeight(true);
 
-			sTable = new JTable();
+			dispTabs = new JTabbedPane();
+			dispTabs.add("Build Messages", buildMessageTab = new JScrollPane(errorTable));
+			dispTabs.add("User Report", userReportTab = new JScrollPane(userReport));
+
+			// Major hack to compensate for Swing's ABYSMAL table sizing API!
+			sTable = new JTable(new DefaultTableModel(new String[0][],
+					new Module.SymbolTable().toStringTable()[0])) {
+				/** Shut up, ECJ. */
+				private static final long serialVersionUID = 1L;
+
+				@Override public boolean getScrollableTracksViewportWidth() {
+					return getPreferredSize().width < getParent().getWidth();
+				}
+			};
+
+			
+			sTable.getColumnModel().getColumn(0).setMinWidth(64);
+			sTable.getColumnModel().getColumn(1).setPreferredWidth(42);
+			sTable.getColumnModel().getColumn(1).setMinWidth(42);
+			sTable.getColumnModel().getColumn(1).setMaxWidth(64);
+			sTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+			sTable.getColumnModel().getColumn(2).setMaxWidth(96);
+			sTable.getColumnModel().getColumn(2).setMinWidth(80);
+			sTable.getColumnModel().getColumn(3).setMinWidth(48);
+			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
+					sTable.getModel());
+			sTable.setRowSorter(sorter);
 
 			JSplitPane sjsp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, jp,
 					dispTabs);
 			this.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
 			this.setLeftComponent(sjsp);
 			this.setRightComponent(new JScrollPane(sTable));
+			sTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			sTable.setFillsViewportHeight(true);
 
 			this.setOneTouchExpandable(true);
 			sjsp.setOneTouchExpandable(true);
@@ -184,26 +218,24 @@ public class GUIMain {
 			String str = jt.getText();
 			Module mod = Assembler.parseString(str, new GUIErrorHandler());
 			userReport.setText(mod.toString());
-			String rawTable = mod.getSymbolTable().toString();
-			String[] allData = rawTable.trim().split("(\r\n|\n|\r)");
-			if (allData != null && allData.length > 0) {
-				String[] columnNames = allData[0].split("\\:\t");
-				String[][] data = new String[allData.length - 1][columnNames.length];
-				for (int i = 1; i < allData.length; i++) {
-					String dc[] = allData[i].split("\t");
-					int iw;
-					for (iw = 0; iw < dc.length && iw < data[i - 1].length; iw++)
-						data[i - 1][iw] = dc[iw];
-					while (iw < data[i - 1].length)
-						data[i - 1][iw++] = "";
-				}
-				sTable.setModel(new DefaultTableModel(data, columnNames));
+			String[][] rawTable = mod.getSymbolTable().toStringTable();
+			((DefaultTableModel) sTable.getModel())
+					.setRowCount(rawTable.length - 1);
+			for (int i = 1; i < rawTable.length; i++) {
+				for (int j = 0; j < rawTable[i].length; j++)
+					sTable.setValueAt(rawTable[i][j], i - 1, j);
 				sTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 			}
-			else
-				sTable.setModel(null);
 			problemMarker.update();
 			genErrorTable();
+			if (problems.isEmpty())
+				dispTabs.setSelectedComponent(userReportTab);
+			else
+				for (int i = 0; i < problems.size(); i++)
+					if (problems.get(i).isError) {
+						dispTabs.setSelectedComponent(buildMessageTab);
+						break;
+					}
 		}
 
 		/** The list of all problems to highlight and report. */
