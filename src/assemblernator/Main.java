@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import assemblernator.ErrorReporting.DefaultErrorHandler;
+import assemblernator.ErrorReporting.URBANSyntaxException;
 
 /**
  * @author Ratul Khosla, Eric Smith, Noah Torrance, Josh Ventura
@@ -23,7 +24,11 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
-		String a[] = { System.getProperty("user.home") + "/Desktop/test.s" };
+		String fmtme = "'test\\'s test \\\\tests\\\\ test\\'s test\\r\\n\\tnonsense\\100\\x41\\x42\\x43123 and such.'";
+		System.out.println(fmtme);
+		System.out.println(IOFormat.escapeString(
+				fmtme,0,0,new DefaultErrorHandler()));
+
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
 			System.out.println("Usage: java -jar urban.jar file1 file2 file3... -o executablename");
