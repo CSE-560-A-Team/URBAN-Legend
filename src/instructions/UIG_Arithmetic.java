@@ -33,10 +33,10 @@ public abstract class UIG_Arithmetic extends Instruction {
 			if(this.hasOperand("FR")){
 				src="FR";
 			}
-			if(	this.hasOperand("FM")){
+			else if(	this.hasOperand("FM")){
 				src="FM";
 			}
-			if(	this.hasOperand("FL")){
+			else if(	this.hasOperand("FL")){
 				src="FL";
 			}
 				else{
