@@ -545,6 +545,20 @@ public abstract class Instruction {
 					continue;
 				}
 
+				if (!Character.isWhitespace(line.charAt(i))
+						&& !Character.isDigit(line.charAt(i)))
+					switch (line.charAt(i)) // Figure out what we have
+					{
+					case '+':
+					case '-':
+					case '*':
+					case '/':
+						break;
+					default:
+						throw new URBANSyntaxException(makeError("unexpSymOp",
+								"" + line.charAt(i), operand), i);
+					}
+
 				// Whatever we're at isn't our problem.
 				if (++i >= line.length()) // If we overrun this line looking,
 					throw new IOException("RAL7"); // Request another line.
