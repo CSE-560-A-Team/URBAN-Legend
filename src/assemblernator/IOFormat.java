@@ -415,7 +415,7 @@ public class IOFormat {
 				hErr.reportWarning("Unknown escape sequence '\\" + str.charAt(p) + "': omitted.", line, pos+p);
 			}
 			if (str.charAt(p) == '\'') {
-				if (p + 1 < str.length())
+				if (hErr != null && p + 1 < str.length())
 				  hErr.reportWarning("Unexpected end of string.", line, pos+p);
 				return sb.toString();
 			}
