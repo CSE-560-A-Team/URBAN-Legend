@@ -162,7 +162,7 @@ public class GUIMain {
 			this.setOneTouchExpandable(true);
 			sjsp.setOneTouchExpandable(true);
 			this.setDividerLocation(540);
-			sjsp.setDividerLocation(360);
+			sjsp.setDividerLocation(336);
 			this.setResizeWeight(.7);
 			sjsp.setResizeWeight(.8);
 		}
