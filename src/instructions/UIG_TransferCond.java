@@ -25,7 +25,7 @@ public abstract class UIG_TransferCond extends Instruction {
 		if(this.operands.size() > 2){
 			isValid=false;
 			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
-			//just right amount of operands
+			//checks combos for 2 operands
 		}else if(this.operands.size() == 2){
 			//combo check
 			if(this.hasOperand("FR")){
@@ -48,7 +48,7 @@ public abstract class UIG_TransferCond extends Instruction {
 				hErr.reportError(makeError("instructionMissingOp","FR", this.getOpId()), this.lineNum, -1);
 				
 			}
-			//to many operands
+			//checks combos for 3 operands
 		}else if (this.operands.size() == 3){
 			if(this.hasOperand("FR")){
 			src="FR";
@@ -71,6 +71,7 @@ public abstract class UIG_TransferCond extends Instruction {
 				isValid = false;
 				hErr.reportError(makeError("instructionMissingOp","FR", this.getOpId()), this.lineNum, -1);
 			}
+			//to many operands
 		}else{
 			isValid =false;
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
