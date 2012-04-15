@@ -1,8 +1,10 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The TRLK instruction.
@@ -34,6 +36,60 @@ public class USI_TRLK extends Instruction {
 	String src = "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
+		boolean isValid = true;
+		//operands less than two error
+		if (this.operands.size() < 2){
+			isValid=false;
+			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+			//checks combos for 2 operands
+		}else if(this.operands.size() == 2){
+			if(this.hasOperand("DR")){
+				dest="DR";
+				//range check
+				isValid = OperandChecker.isValidReg(this.getOperand("DR"));
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+				if(this.hasOperand("FM")){
+					src="FM";
+					//range check
+					isValid = OperandChecker.isValidMem(this.getOperand("FM"));
+					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+					//dont know if this is need but can be cut out
+				}else if (this.hasOperand("FL")){
+					src="FL";
+					//range check
+					isValid = OperandChecker.isValidLiteral(this.getOperand("FL"));
+					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
+				}else{
+					isValid=false;
+					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FM or FL"), this.lineNum, -1);
+				}
+			}else{
+				
+			}
+			//checks combos for 3 operands
+		}else if(this.operands.size() == 3){
+			if(this.hasOperand("DR")){
+				dest="DR";
+				//range check
+				isValid = OperandChecker.isValidReg(this.getOperand("DR"));
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+				if(this.hasOperand("FM") && this.hasOperand("FX")){
+					src="FMFX";
+					//range check
+					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+					isValid = OperandChecker.isValidMem(this.getOperand("FM"));
+					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+				}else{
+					isValid=false;
+					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FM and FX", "DR"), this.lineNum, -1);
+				}
+			}
+		}else{
+			isValid =false;
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+		}
+		
 		
 		return false; // TODO: IMPLEMENT
 	}
