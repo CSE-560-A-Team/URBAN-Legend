@@ -67,10 +67,10 @@ public class USI_CHAR extends Instruction {
 		if (st == null)
 			hErr.reportError(makeError("directiveMissingOp", "CHAR", "ST"),
 					lineNum, -1);
-		else if (OperandChecker.isValidString(st.operand))
+		else if (!OperandChecker.isValidString(st.expression))
 			hErr.reportError(makeError("STstringCount"), lineNum, -1);
 		else {
-			content = IOFormat.escapeString(st.operand, lineNum, st.valueStartPosition, hErr);
+			content = IOFormat.escapeString(st.expression, lineNum, st.valueStartPosition, hErr);
 			return true;
 		}
 		return false;

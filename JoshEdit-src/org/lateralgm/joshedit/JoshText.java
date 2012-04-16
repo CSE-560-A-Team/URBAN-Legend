@@ -8,8 +8,6 @@
 
 package org.lateralgm.joshedit;
 
-import guinator.URBANhighlighter;
-
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Container;
@@ -61,7 +59,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import org.lateralgm.joshedit.FindDialog.FindNavigator;
-import org.lateralgm.joshedit.Highlighter.HighlighterInfo;
+import org.lateralgm.joshedit.TokenMarker.TokenMarkerInfo;
 import org.lateralgm.joshedit.Selection.ST;
 
 /**
@@ -100,10 +98,10 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 	/** The listener that will handle text drag-and-drop. */
 	DragListener dragger;
 	
-	/** The Highlighter that will be polled for character formatting. */
-	public Highlighter highlighter = new URBANhighlighter();
-	/** All Markers which will be called to mark their lines or characters. */
-	public ArrayList<Marker> markers = new ArrayList<Marker>();
+	/** The TokenMarker that will be polled for character formatting. */
+	private TokenMarker marker;
+	/** All Highlighters which will be called to highlight their lines or characters. */
+	public ArrayList<Highlighter> highlighters = new ArrayList<Highlighter>();
 
 	// Dimensions
 	/** The width of the largest UTF-8 character our font contains. */
@@ -126,14 +124,13 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 	public FindNavigator finder;
 
 	/**
-	 * A Marker is a class that can highlight the background of a particular line or
-	 * character at its own discretion. These get painted before the text so as to appear
-	 * in the background of the characters.
+	 * A Highlighter is a class that gets painted before the text
+	 * so as to appear in the background of the characters.
 	 */
-	public static interface Marker
+	public static interface Highlighter
 	{
 		/**
-		 * Called when it is time to render any and all backgrounds for this Marker.
+		 * Called when it is time to render any and all backgrounds for this Highlighter.
 		 * @param g The graphics object to paint to.
 		 * @param i The insets of the canvas.
 		 * @param gm The string and glyph metrics for this code.
@@ -298,7 +295,7 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 		myLang = new SyntaxDesc();
 		myLang.set_language("Shitbag");
 
-		if (Settings.highlight_line) markers.add(new Marker()
+		if (Settings.highlight_line) highlighters.add(new Highlighter()
 		{
 			@Override public void paint(Graphics g, Insets i, CodeMetrics gm, int line_start, int line_end)
 			{
@@ -312,10 +309,10 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 				}
 			}
 		});
-		markers.add(sel);
+		highlighters.add(sel);
 
-		BracketMarker bm = new BracketMarker();
-		markers.add(bm);
+		BracketHighlighter bm = new BracketHighlighter();
+		highlighters.add(bm);
 		caret.addCaretListener(bm);
 		caret.addCaretListener(new CaretListener()
 		{
@@ -324,9 +321,6 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 				if (!mas.isRunning()) doShowCaret();
 			}
 		});
-
-		addLineChangeListener(highlighter);
-		fireLineChange(0,code.size());
 
 		doCodeSize(true);
 	}
@@ -380,6 +374,18 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 		return res.toString();
 	}
 
+	/**
+	 * Applies a TokenMarker that will be polled for character formatting
+	 * @param tm the TokenMarker to apply
+	 */
+	public void setTokenMarker(TokenMarker tm)
+	{
+		if (marker != null) removeLineChangeListener(marker);
+		marker = tm;
+		addLineChangeListener(marker);
+		fireLineChange(0,code.size());
+	}
+	
 	// ==========================================================
 	// == Map action names to their implementations =============
 	// ==========================================================
@@ -1132,39 +1138,39 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 		char[] a = line.toString().toCharArray();
 		Color c = g.getColor();
 
-		if (highlighter == null)
+		if (marker == null)
 		{
 			drawChars(g,a,0,a.length,xx,ty);
 		}
 		else
 		{
-			ArrayList<HighlighterInfo> hlall = highlighter.getStyles(code.get(lineNum));
+			ArrayList<TokenMarkerInfo> tmall = marker.getStyles(code.get(lineNum));
 			/*DEBUG SHIT: This is annoying to write, so I'm going to commit it once.
 			if (lineNum == 10)
 			{
 				System.out.print("[ ");
-				for (HighlighterInfoEx hl : hlall)
-					System.out.print(hl.startPos + "-" + hl.endPos + " ");
+				for (TokenMarkerInfoEx tm : tmall)
+					System.out.print(tm.startPos + "-" + tm.endPos + " ");
 				System.out.println("]");
 			}*/
 			int pos = 0;
-			for (HighlighterInfo hl : hlall)
+			for (TokenMarkerInfo tm : tmall)
 			{
 				// Start by printing normal characters until we reach styleBlock.startPos
-				xx = drawChars(g,a,pos,hl.startPos,xx,ty);
+				xx = drawChars(g,a,pos,tm.startPos,xx,ty);
 				// Print the remaining characters in the styleBlock range
-				if (hl.color != null)
-					g.setColor(hl.color);
+				if (tm.color != null)
+					g.setColor(tm.color);
 				else
 					g.setColor(c);
-				if (hl.fontStyle != fontFlags)
+				if (tm.fontStyle != fontFlags)
 				{
-					fontFlags = hl.fontStyle;
+					fontFlags = tm.fontStyle;
 					drawingFont = getFont().deriveFont(fontFlags);
 					g.setFont(drawingFont);
 				}
-				xx = drawChars(g,a,hl.startPos,hl.endPos,xx,ty);
-				pos = hl.endPos;
+				xx = drawChars(g,a,tm.startPos,tm.endPos,xx,ty);
+				pos = tm.endPos;
 				g.setFont(getFont());
 				g.setColor(c);
 			}
@@ -1183,7 +1189,7 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 		g.setColor(getBackground());
 		g.fillRect(clip.x,clip.y,clip.width,clip.height);
 
-		for (Marker a : markers)
+		for (Highlighter a : highlighters)
 			a.paint(g,getInsets(),metrics,0,code.size());
 
 		// Draw each line
@@ -2083,7 +2089,7 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 		NOT_MATCHING,NO_MATCH,MATCHING
 	}
 
-	class BracketMarker implements Marker,CaretListener
+	class BracketHighlighter implements Highlighter,CaretListener
 	{
 		MatchState matching;
 		int matchLine, matchPos;
@@ -2137,52 +2143,52 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 			StringBuilder sb = code.getsb(y);
 
 			// Figure out what kind of block we're in, if any.
-			ArrayList<HighlighterInfo> hlall = highlighter.getStyles(code.get(y));
+			ArrayList<TokenMarkerInfo> tmall = marker.getStyles(code.get(y));
 
 			int offset;
-			for (offset = 0; offset < hlall.size(); offset++)
+			for (offset = 0; offset < tmall.size(); offset++)
 			{
-				HighlighterInfo hl = hlall.get(offset);
-				if (col < hl.startPos) break; // The blocks have skipped us.
-				if (col >= hl.startPos && col < hl.endPos)
+				TokenMarkerInfo tm = tmall.get(offset);
+				if (col < tm.startPos) break; // The blocks have skipped us.
+				if (col >= tm.startPos && col < tm.endPos)
 				{
-					blockType = hl.blockHash;
+					blockType = tm.blockHash;
 					break;
 				}
 			}
-			if (subFindMatchForward(match,sb,hlall,offset,col,blockType,y)) return;
+			if (subFindMatchForward(match,sb,tmall,offset,col,blockType,y)) return;
 
 			for (y++; y < code.size(); y++)
 			{
-				hlall = highlighter.getStyles(code.get(y));
-				if (subFindMatchForward(match,code.getsb(y),hlall,0,0,blockType,y)) return;
+				tmall = marker.getStyles(code.get(y));
+				if (subFindMatchForward(match,code.getsb(y),tmall,0,0,blockType,y)) return;
 			}
 		}
 
 		private boolean subFindMatchForward(BracketMatch match, StringBuilder sb,
-				ArrayList<HighlighterInfo> hlall, int offset, int spos, int blockType, int y)
+				ArrayList<TokenMarkerInfo> tmall, int offset, int spos, int blockType, int y)
 		{
 			int pos = spos;
-			for (int i = offset; i < hlall.size(); i++)
+			for (int i = offset; i < tmall.size(); i++)
 			{
-				HighlighterInfo hl = hlall.get(i);
+				TokenMarkerInfo tm = tmall.get(i);
 				if (blockType == 0) // If our start wasn't in a block
-					for (; pos < hl.startPos; pos++)
+					for (; pos < tm.startPos; pos++)
 						// Check outside this block's range
 						if (sb.charAt(pos) == match.match)
 						{
 							if (matchFound(match,pos,y)) return true;
 						}
 						else if (sb.charAt(pos) == match.opposite) match.count++;
-				if (blockType == hlall.get(i).blockHash) // If the block has the same type
-					for (pos = Math.max(spos,hl.startPos); pos < hl.endPos; pos++)
+				if (blockType == tmall.get(i).blockHash) // If the block has the same type
+					for (pos = Math.max(spos,tm.startPos); pos < tm.endPos; pos++)
 						// Check inside it
 						if (sb.charAt(pos) == match.match)
 						{
 							if (matchFound(match,pos,y)) return true;
 						}
 						else if (sb.charAt(pos) == match.opposite) match.count++;
-				pos = hl.endPos;
+				pos = tm.endPos;
 			}
 			return false;
 		}
@@ -2194,39 +2200,39 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 			StringBuilder sb = code.getsb(y);
 
 			// Figure out what kind of block we're in, if any.
-			ArrayList<HighlighterInfo> hlall = highlighter.getStyles(code.get(y));
+			ArrayList<TokenMarkerInfo> tmall = marker.getStyles(code.get(y));
 
 			int offset;
-			for (offset = 0; offset < hlall.size(); offset++)
+			for (offset = 0; offset < tmall.size(); offset++)
 			{
-				HighlighterInfo hl = hlall.get(offset);
-				if (col < hl.startPos) break; // The blocks have skipped us.
-				if (col >= hl.startPos && col < hl.endPos)
+				TokenMarkerInfo tm = tmall.get(offset);
+				if (col < tm.startPos) break; // The blocks have skipped us.
+				if (col >= tm.startPos && col < tm.endPos)
 				{
-					blockType = hl.blockHash;
+					blockType = tm.blockHash;
 					break;
 				}
 			}
-			if (subFindMatchBackward(match,sb,hlall,offset,caret.col,blockType,y)) return;
+			if (subFindMatchBackward(match,sb,tmall,offset,caret.col,blockType,y)) return;
 
 			for (y--; y >= 0; y--)
 			{
-				hlall = highlighter.getStyles(code.get(y));
-				if (subFindMatchBackward(match,code.getsb(y),hlall,hlall.size() - 1,code.getsb(y).length(),
+				tmall = marker.getStyles(code.get(y));
+				if (subFindMatchBackward(match,code.getsb(y),tmall,tmall.size() - 1,code.getsb(y).length(),
 						blockType,y)) return;
 			}
 		}
 
 		private boolean subFindMatchBackward(BracketMatch match, StringBuilder sb,
-				ArrayList<HighlighterInfo> hlall, int offset, int spos, int blockType, int y)
+				ArrayList<TokenMarkerInfo> tmall, int offset, int spos, int blockType, int y)
 		{
 			int pos = spos;
 			int i = offset;
-			HighlighterInfo hl = hlall.get(i);
+			TokenMarkerInfo tm = tmall.get(i);
 			for (;;)
 			{
-				if (blockType == hlall.get(i).blockHash) // If the block has the same type
-					for (pos = Math.min(spos,hl.endPos - 1); pos >= hl.startPos; pos--)
+				if (blockType == tmall.get(i).blockHash) // If the block has the same type
+					for (pos = Math.min(spos,tm.endPos - 1); pos >= tm.startPos; pos--)
 						// Check inside it
 						if (sb.charAt(pos) == match.match)
 						{
@@ -2235,9 +2241,9 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 						else if (sb.charAt(pos) == match.opposite) match.count++;
 				if (i > 0)
 				{
-					hl = hlall.get(--i);
+					tm = tmall.get(--i);
 					if (blockType == 0) // If our start wasn't in a block
-						for (pos = hl.startPos - 1; pos >= hl.endPos; pos--)
+						for (pos = tm.startPos - 1; pos >= tm.endPos; pos--)
 							// Check outside this block's range
 							if (sb.charAt(pos) == match.match)
 							{
@@ -2248,7 +2254,7 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 				else
 				{
 					if (blockType == 0) // If our start wasn't in a block
-						for (pos = hl.startPos - 1; pos >= 0; pos--)
+						for (pos = tm.startPos - 1; pos >= 0; pos--)
 							// Check outside this block's range
 							if (sb.charAt(pos) == match.match)
 							{

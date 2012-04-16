@@ -41,7 +41,7 @@ public class OperandChecker {
 
 		return valid;
 	}
-	
+
 	/**
 	 * Checks if expression of registers
 	 * 
@@ -76,7 +76,8 @@ public class OperandChecker {
 	}
 
 	/**
-	 * Checks if the FC in Shift/Manipulate functions is within the range [0-31] or not.
+	 * Checks if the FC in Shift/Manipulate functions is within the range [0-31]
+	 * or not.
 	 * 
 	 * @author Ratul Khosla
 	 * @date Apr 15, 2012; 6:08:32 PM
@@ -85,17 +86,17 @@ public class OperandChecker {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param exp 
-	 * 			value of the FC register
+	 * @param exp
+	 *            value of the FC register
 	 * @return check
 	 * @specRef N/A
 	 */
-	public static boolean isValidShiftConstant(String exp){
+	public static boolean isValidShiftConstant(String exp) {
 		boolean check = true;
 		try {
 			int fcreg = Integer.parseInt(exp);
 
-			if ( fcreg < 0  || fcreg > 31 ) {
+			if (fcreg < 0 || fcreg > 31) {
 				check = false;
 			}
 		} catch (NumberFormatException e) {
@@ -103,6 +104,7 @@ public class OperandChecker {
 		}
 		return check;
 	}
+
 	/**
 	 * 
 	 * @author Noah
@@ -190,17 +192,17 @@ public class OperandChecker {
 	 */
 	public static boolean isValidMem(String exp) {
 		boolean valid = true;
-		
-		try{
-			int addr  = Integer.parseInt(exp);
-			
-			if(addr > 4095 || addr < 0) {
+
+		try {
+			int addr = Integer.parseInt(exp);
+
+			if (addr > 4095 || addr < 0) {
 				valid = false;
 			}
 		} catch (NumberFormatException e) {
 			valid = false;
 		}
-		
+
 		return valid;
 	}
 
@@ -238,15 +240,19 @@ public class OperandChecker {
 	 */
 	public static boolean isValidString(String str) {
 		str = str.trim();
-		if (str.length() <= 0)
+		if (str.length() < 1)
 			return false;
 		if (str.charAt(0) != '\'')
 			return false;
 		for (int p = 1; p < str.length(); ++p)
 			if (str.charAt(p) == '\\')
 				++p;
-			else if (str.charAt(p) == '\'')
+			else if (str.charAt(p) == '\'') {
+				System.out.println("(" + p + " + 1) >= '" + str
+						+ "'.length() = " + (p + 1) + " >= " + str.length()
+						+ " = " + (p + 1 >= str.length()));
 				return p + 1 >= str.length();
+			}
 		return false;
 	}
 }
