@@ -39,7 +39,7 @@ public class USI_END extends Instruction {
 		//less than 1 operand error
 		if(this.operands.size() < 1){
 			isValid=false;
-			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "LR"), this.lineNum, -1);
 			//checks for LR
 		}else if (this.operands.size() == 1){
 			if(this.hasOperand("LR")){

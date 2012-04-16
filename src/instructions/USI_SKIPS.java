@@ -1,8 +1,10 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The SKIPS instruction.
@@ -30,10 +32,31 @@ public class USI_SKIPS extends Instruction {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc+mod.evaluate(getOperand("FC"));
 	}
-
+	String src = "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		boolean isValid = true;
+		//less than 1 operand error
+		if(this.operands.size() < 1){
+			isValid=false;
+			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+			//checks for FC
+		}else if (this.operands.size() == 1){
+			if(this.hasOperand("FC")){
+				src = "FC";
+				//range check THIS MAY HAVE TO BE CHANGED
+				isValid = OperandChecker.isValidMem(this.getOperand("FC"));
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FC", this.getOpId()), this.lineNum, -1);
+			}else{
+				isValid=false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+			}
+			//more than 1 operand error
+		}else{
+			isValid =false;
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+		}
+		return isValid; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
