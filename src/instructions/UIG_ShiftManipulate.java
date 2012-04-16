@@ -57,7 +57,7 @@ public abstract class UIG_ShiftManipulate extends Instruction {
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;
-			hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
+			hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);
 		}
 		
 		//checks for invalid combo's between operands and opid's.

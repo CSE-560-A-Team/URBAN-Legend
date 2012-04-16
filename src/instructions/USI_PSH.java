@@ -1,8 +1,10 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The PSH instruction.
@@ -33,7 +35,26 @@ public class USI_PSH extends Instruction {
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		boolean isValid = true;
+		if(this.operands.size() > 1 || this.operands.size() == 0) {
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+			isValid =  false;
+		}else if(this.hasOperand("FM")) {
+			//range checking
+			isValid = OperandChecker.isValidMem(this.getOperand("FM"));
+			hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
+		} else if(this.hasOperand("FC")) {
+			//range checking
+			isValid = OperandChecker.isValidMem(this.getOperand("FC"));
+		} else if(this.hasOperand("FL")){
+			//range checking
+			isValid = OperandChecker.isValidMem(this.getOperand("FL"));
+			if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
+		} else{
+			isValid = false;
+			hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);
+		}
+			return isValid;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */

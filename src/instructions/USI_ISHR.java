@@ -1,6 +1,5 @@
 package instructions;
 
-import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -11,7 +10,7 @@ import assemblernator.Module;
  * @date Apr 08, 2012; 08:26:19
  * @specRef IM0
  */
-public class USI_ISHR extends Instruction {
+public class USI_ISHR extends UIG_ShiftManipulate {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -31,15 +30,6 @@ public class USI_ISHR extends Instruction {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
 
 	/** @see assemblernator.Instruction#execute(int) */
 	@Override public void execute(int instruction) {

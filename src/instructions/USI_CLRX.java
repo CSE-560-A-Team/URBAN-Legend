@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -33,7 +34,12 @@ public class USI_CLRX extends Instruction {
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		if(this.operands.size() > 0) {
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
