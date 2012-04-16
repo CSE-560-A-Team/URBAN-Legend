@@ -39,7 +39,7 @@ public class USI_NUM extends Instruction {
 		//less than 1 operand error
 		if(this.operands.size() < 1){
 			isValid=false;
-			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+			hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
 			//checks for FC
 		}else if (this.operands.size() == 1){
 			if(this.hasOperand("FC")){
@@ -49,12 +49,12 @@ public class USI_NUM extends Instruction {
 				if(!isValid) hErr.reportError(makeError("OOR13tc", "FC", this.getOpId()), this.lineNum, -1);
 			}else{
 				isValid=false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+				hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
 			}
 			//more than 1 operand error
 		}else{
 			isValid =false;
-			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
 		}
 		return isValid; // TODO: IMPLEMENT
 	}

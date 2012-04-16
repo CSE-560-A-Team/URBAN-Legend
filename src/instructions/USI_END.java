@@ -39,22 +39,22 @@ public class USI_END extends Instruction {
 		//less than 1 operand error
 		if(this.operands.size() < 1){
 			isValid=false;
-			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "LR"), this.lineNum, -1);
+			hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "LR"), this.lineNum, -1);
 			//checks for LR
 		}else if (this.operands.size() == 1){
 			if(this.hasOperand("LR")){
 				src = "LR";
 				//range check THIS MAY HAVE TO BE CHANGED
-				isValid = OperandChecker.isValidExpression(this.getOperand("LR"));
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR"));
 				if(!isValid) hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
 			}else{
 				isValid=false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "LR"), this.lineNum, -1);
+				hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "any operand other than LR"), this.lineNum, -1);
 			}
 			//more than 1 operand error
 		}else{
 			isValid =false;
-			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
 		}
 		return isValid; // TODO: IMPLEMENT
 	}
