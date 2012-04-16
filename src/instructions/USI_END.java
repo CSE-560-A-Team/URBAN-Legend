@@ -1,8 +1,10 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The END instruction.
@@ -30,10 +32,31 @@ public class USI_END extends Instruction {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc;
 	}
-
+	String src = "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		boolean isValid = true;
+		//less than 1 operand error
+		if(this.operands.size() < 1){
+			isValid=false;
+			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+			//checks for LR
+		}else if (this.operands.size() == 1){
+			if(this.hasOperand("LR")){
+				src = "LR";
+				//range check THIS MAY HAVE TO BE CHANGED
+				isValid = OperandChecker.isValidExpression(this.getOperand("LR"));
+				if(!isValid) hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+			}else{
+				isValid=false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "LR"), this.lineNum, -1);
+			}
+			//more than 1 operand error
+		}else{
+			isValid =false;
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+		}
+		return isValid; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
