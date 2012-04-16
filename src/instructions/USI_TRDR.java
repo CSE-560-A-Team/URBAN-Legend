@@ -98,7 +98,7 @@ public class USI_TRDR extends Instruction {
 			isValid =false;
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 		}
-		return false; // TODO: IMPLEMENT
+		return isValid; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */

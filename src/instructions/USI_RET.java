@@ -30,7 +30,8 @@ public class USI_RET extends Instruction {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
-
+	String dest = "";
+	String src = "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
 		return false; // TODO: IMPLEMENT

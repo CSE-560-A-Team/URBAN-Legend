@@ -91,7 +91,7 @@ public class USI_TRLK extends Instruction {
 		}
 		
 		
-		return false; // TODO: IMPLEMENT
+		return isValid; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
