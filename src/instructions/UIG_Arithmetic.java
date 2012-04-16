@@ -176,4 +176,18 @@ public abstract class UIG_Arithmetic extends Instruction {
 		return null;
 
 	}
+	
+	/**
+	 * Invokes parent's constructor.
+	 * @param opid
+	 * @param opcode
+	 */
+	UIG_Arithmetic(String opid, int opcode) {
+		super(opid, opcode);
+	}
+	
+	/**
+	 * default constructor does nothing.
+	 */
+	UIG_Arithmetic() {}
 }

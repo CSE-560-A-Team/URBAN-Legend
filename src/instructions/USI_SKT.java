@@ -1,8 +1,10 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The SKT instruction.
@@ -30,10 +32,31 @@ public class USI_SKT extends Instruction {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
-
+	String dest= "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		boolean isValid = true;
+		//less than 1 operand error
+				if(this.operands.size() < 1){
+					isValid=false;
+					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+					//checks for DR
+				}else if (this.operands.size() == 1){
+					if(this.hasOperand("DR")){
+						dest = "DR";
+						//range check
+						isValid = OperandChecker.isValidMem(this.getOperand("DR"));
+						if(!isValid) hErr.reportError(makeError("OORmemAddr", "DR", this.getOpId()), this.lineNum, -1);
+					}else{
+						isValid=false;
+						hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM"), this.lineNum, -1);
+					}
+					//more than 1 operand error
+				}else{
+					isValid =false;
+					hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+				}
+		return isValid; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */

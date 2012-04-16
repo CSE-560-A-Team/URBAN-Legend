@@ -1,8 +1,10 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The RET instruction.
@@ -34,7 +36,28 @@ public class USI_RET extends Instruction {
 	String src = "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		boolean isValid = true;
+		//less than 1 operand error
+		if(this.operands.size() < 1){
+			isValid=false;
+			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+			//checks for DM
+		}else if (this.operands.size() == 1){
+			if(this.hasOperand("DM")){
+				dest = "DM";
+				//range check
+				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			}else{
+				isValid=false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM"), this.lineNum, -1);
+			}
+			//more than 1 operand error
+		}else{
+			isValid =false;
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+		}
+		return isValid; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */

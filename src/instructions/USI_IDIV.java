@@ -11,7 +11,7 @@ import assemblernator.Module;
  * @date Apr 08, 2012; 08:26:19
  * @specRef IA6
  */
-public class USI_IDIV extends Instruction {
+public class USI_IDIV extends UIG_Arithmetic {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -31,15 +31,15 @@ public class USI_IDIV extends Instruction {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
+//	/** @see assemblernator.Instruction#check(ErrorHandler) */
+//	@Override public boolean check(ErrorHandler hErr) {
+//		return false; // TODO: IMPLEMENT
+//	}
+//
+//	/** @see assemblernator.Instruction#assemble() */
+//	@Override public int[] assemble() {
+//		return null; // TODO: IMPLEMENT
+//	}
 
 	/** @see assemblernator.Instruction#execute(int) */
 	@Override public void execute(int instruction) {

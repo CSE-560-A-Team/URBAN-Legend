@@ -81,5 +81,28 @@ public abstract class UIG_TransferCond extends Instruction {
 		return isValid;
 	
 }
+	/**
+	 * @author Eric
+	 * @date Apr 14, 2012; 5:52:36 PM
+	 */
+	@Override
+	public final int[] assemble() {
+		return null;
+	}
+	
+	
+	/**
+	 * Invokes parent's constructor.
+	 * @param opid
+	 * @param opcode
+	 */
+	UIG_TransferCond(String opid, int opcode) {
+		super(opid, opcode);
+	}
+	
+	/**
+	 * default constructor does nothing.
+	 */
+	UIG_TransferCond() {}
 	
 }
