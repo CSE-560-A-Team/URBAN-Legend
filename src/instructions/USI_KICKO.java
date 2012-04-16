@@ -35,11 +35,14 @@ public class USI_KICKO extends Instruction {
 		return ownLC;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	
+	/** @see assemblernator.Instruction#check(ErrorHandler) 
+	 *  @modified 12:43:13 changed lineNum check to != 1. first line = 1.*/
+	@Override 
+	public boolean check(ErrorHandler hErr) {
 		boolean isValid = true;
 		
-		if (this.lineNum != 0) { //KICKO's should only be found at beginning of source.
+		if (this.lineNum != 1) { //KICKO's should only be found at beginning of source.
 			isValid = false;
 			hErr.reportError(makeError("KICKOlineNum"), this.lineNum, -1);
 		} else if (!this.hasOperand("FC")) { //KICKO must have FC operand.
