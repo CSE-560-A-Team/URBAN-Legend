@@ -10,8 +10,15 @@ import assemblernator.ErrorReporting.DefaultErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
 
 /**
+ * @file Main.java
  * @author Ratul Khosla, Eric Smith, Noah Torrance, Josh Ventura
- * 
+ */
+
+/** 
+ * @mainpage
+ *   <img src="custom/logo.svg" style="clear:both" /><br/>
+ *   <center><h1>An assembler for the URBAN Architecture</h1></center>
+ * \addindex TEXT HERE
  */
 
 /**
