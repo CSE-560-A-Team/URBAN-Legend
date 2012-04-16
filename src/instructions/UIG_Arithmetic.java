@@ -38,7 +38,7 @@ public abstract class UIG_Arithmetic extends Instruction {
 				if (this.hasOperand("FR")) {
 					src = "FR";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FR"));
+					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
 				} else if (this.hasOperand("FM")) {
 					src = "FM";
@@ -48,7 +48,7 @@ public abstract class UIG_Arithmetic extends Instruction {
 				} else if (this.hasOperand("FL")) {
 					src = "FL";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FL"));
+					isValid = OperandChecker.isValidLiteral(this.getOperand("FL"));
 					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 				} else {
 					isValid = false;
@@ -58,12 +58,12 @@ public abstract class UIG_Arithmetic extends Instruction {
 			} else if (this.hasOperand("DR")) {
 				dest = "DR";
 				//range checking
-				isValid = OperandChecker.isValidMem(this.getOperand("DR"));
+				isValid = OperandChecker.isValidReg(this.getOperand("DR"));
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("FR")) {
 					src = "FR";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FR"));
+					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
 				} else if (this.hasOperand("FM")) {
 					src = "FM";
@@ -72,12 +72,12 @@ public abstract class UIG_Arithmetic extends Instruction {
 					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 				} else if (this.hasOperand("FL")) {
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FL"));
+					isValid = OperandChecker.isValidLiteral(this.getOperand("FL"));
 					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 					src = "FL";
 				} else if (this.hasOperand("FX")) {
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FX"));
+					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 					src = "FX";
 				} else {
@@ -90,12 +90,12 @@ public abstract class UIG_Arithmetic extends Instruction {
 				if (this.hasOperand("FL")) {
 					src = "FL";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FL"));
+					isValid = OperandChecker.isValidLiteral(this.getOperand("FL"));
 					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 				} else if (this.hasOperand("FX")) {
 					src = "FX";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FX"));
+					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 				} else {
 					isValid = false;
@@ -112,12 +112,12 @@ public abstract class UIG_Arithmetic extends Instruction {
 			if (this.hasOperand("FR")) {
 				src = "FR";
 				//range checking
-				isValid = OperandChecker.isValidMem(this.getOperand("FR"));
+				isValid = OperandChecker.isValidReg(this.getOperand("FR"));
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("DM") && this.hasOperand("DX")) {
 					dest = "DMDX";
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("DX"));
+					isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 					isValid = OperandChecker.isValidMem(this.getOperand("DM"));
 					if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
@@ -129,11 +129,11 @@ public abstract class UIG_Arithmetic extends Instruction {
 			} else if (this.hasOperand("DR")) {
 				dest = "DR";
 				//range checking
-				isValid = OperandChecker.isValidMem(this.getOperand("DR"));
+				isValid = OperandChecker.isValidReg(this.getOperand("DR"));
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("FX") && this.hasOperand("FM")) {
 					//range checking
-					isValid = OperandChecker.isValidMem(this.getOperand("FX"));
+					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 					isValid = OperandChecker.isValidMem(this.getOperand("FM"));
 					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);

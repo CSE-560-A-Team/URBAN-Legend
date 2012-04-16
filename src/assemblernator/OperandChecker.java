@@ -41,6 +41,39 @@ public class OperandChecker {
 
 		return valid;
 	}
+	
+	/**
+	 * Checks if expression of registers
+	 * 
+	 * @author ERIC
+	 * @date Apr 14, 2012; 6:33:20 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param exp
+	 *            value of register.
+	 * @return <pre>
+	 * {@code if exp is not an integer, or if exp is an integer > 7 or < 0, then return false,
+	 * else return true.}
+	 * </pre>
+	 * @specRef N/A
+	 */
+	public static boolean isValidReg(String exp) {
+		boolean valid = true;
+		try {
+			int indexReg = Integer.parseInt(exp);
+
+			if (indexReg > 7 || indexReg < 0) {
+				valid = false;
+			}
+		} catch (NumberFormatException e) {
+			valid = false;
+		}
+
+		return valid;
+	}
 
 	/**
 	 * Checks if the FC in Shift/Manipulate functions is within the range [0-31] or not.
