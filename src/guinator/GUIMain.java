@@ -26,7 +26,7 @@ import javax.swing.table.TableRowSorter;
 
 import org.lateralgm.joshedit.JoshText;
 import org.lateralgm.joshedit.JoshText.CodeMetrics;
-import org.lateralgm.joshedit.JoshText.Marker;
+import org.lateralgm.joshedit.JoshText.Highlighter;
 import org.lateralgm.joshedit.QuickFind;
 
 import assemblernator.Assembler;
@@ -137,12 +137,13 @@ public class GUIMain {
 		 */
 		FileTab() {
 			jt = new JoshText();
+			jt.setTokenMarker(new URBANhighlighter());
 			JScrollPane sp = new JScrollPane(jt);
 			QuickFind qf = new QuickFind(jt);
 			JPanel jp = new JPanel();
 
 			jt.finder = qf;
-			jt.markers.add(0, problemMarker = new ProblemMarker());
+			jt.highlighters.add(0, problemMarker = new ProblemMarker());
 
 
 			jp.setLayout(new BoxLayout(jp, BoxLayout.PAGE_AXIS));
@@ -250,7 +251,7 @@ public class GUIMain {
 		 * @author Josh Ventura
 		 * @date Apr 11, 2012; 5:39:53 PM
 		 */
-		class ProblemMarker implements Marker {
+		class ProblemMarker implements Highlighter {
 			/** The size of the code last time compile ran, in lines. */
 			int codeSizeAtCompile = -1;
 
@@ -273,7 +274,7 @@ public class GUIMain {
 			/**
 			 * Draw our backgrounds.
 			 * 
-			 * @see org.lateralgm.joshedit.JoshText.Marker#paint(java.awt.Graphics,
+			 * @see org.lateralgm.joshedit.JoshText.Highlighter#paint(java.awt.Graphics,
 			 *      java.awt.Insets,
 			 *      org.lateralgm.joshedit.JoshText.CodeMetrics, int, int)
 			 */

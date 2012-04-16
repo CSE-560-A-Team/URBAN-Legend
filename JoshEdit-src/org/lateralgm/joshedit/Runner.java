@@ -176,9 +176,9 @@ public class Runner
 			JoshText.Settings.indentSizeInSpaces = spaces;
 		}
 
-		public void setTokenMarker(Highlighter hl)
+		public void setTokenMarker(TokenMarker tm)
 		{
-			text.highlighter = hl;
+			text.setTokenMarker(tm);
 		}
 	}
 
@@ -186,6 +186,7 @@ public class Runner
 		{
 		JFrame f = new JFrame("Title");
 		JoshTextPanel p = new JoshTextPanel(getDefaultCode());
+		p.setTokenMarker(new GMLTokenMarker());
 		f.setContentPane(p);
 		f.pack();
 		f.setLocationRelativeTo(null);

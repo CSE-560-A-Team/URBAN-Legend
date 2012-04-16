@@ -5,8 +5,8 @@ import java.awt.Font;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.lateralgm.joshedit.GenericHighlighter;
-import org.lateralgm.joshedit.Highlighter;
+import org.lateralgm.joshedit.DefaultTokenMarker;
+import org.lateralgm.joshedit.TokenMarker;
 
 import assemblernator.Assembler;
 import assemblernator.Instruction;
@@ -15,7 +15,7 @@ import assemblernator.Instruction;
  * @author Josh Ventura
  * @date Apr 8, 2012; 7:35:51 PM
  */
-public class URBANhighlighter extends GenericHighlighter implements Highlighter {
+public class URBANhighlighter extends DefaultTokenMarker implements TokenMarker {
 	/**
 	 * Construct and add syntax rules.
 	 */
@@ -34,20 +34,21 @@ public class URBANhighlighter extends GenericHighlighter implements Highlighter 
 		for (Entry<String, Instruction> i : Assembler.instructions.entrySet()) {
 			kws.words.add(i.getKey().toLowerCase());
 		}
-		hlKeywords.add(kws);
+		
+		tmKeywords.add(kws);
 
 		kws = new KeywordSet("OperandKeywords", new Color(0, 0, 255), 0, false);
 		for (String i : Assembler.keyWords) {
 			kws.words.add(i.toLowerCase());
 		}
-		hlKeywords.add(kws);
+		tmKeywords.add(kws);
 
 		CharSymbolSet css = new CharSymbolSet("Operators and Separators",
 				new Color(255, 0, 0), 0);
 		char[] ca = "{[()]}!%^&*-/+=?:~<>.,;".toCharArray();
 		for (int i = 0; i < ca.length; i++)
 			css.chars.add(ca[i]);
-		hlChars.add(css);
+		tmChars.add(css);
 
 		otherTokens.add(new SimpleToken("Numeric literal", "[0-9]+[FfUuLlDd]*",
 				0, new Color(0, 225, 175)));
