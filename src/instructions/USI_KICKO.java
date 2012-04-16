@@ -1,8 +1,10 @@
 package instructions;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The KICKO instruction.
@@ -35,7 +37,23 @@ public class USI_KICKO extends Instruction {
 
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+		boolean isValid = true;
+		
+		if (this.lineNum != 0) { //KICKO's should only be found at beginning of source.
+			isValid = false;
+			hErr.reportError(makeError("KICKOlineNum"), this.lineNum, -1);
+		} else if (!this.hasOperand("FC")) { //KICKO must have FC operand.
+			isValid = false;
+			hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+		} else if (this.operands.size() > 1) { //KICKO can only have FC operand.
+			isValid = false;
+			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
+		} else if (!OperandChecker.isValidMem(this.getOperand("FC"))){
+			isValid = false;
+			hErr.reportError(makeError("OORmemAddr", "FC", this.getOpId()), this.lineNum, -1);
+		}
+
+		return isValid;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */

@@ -18,7 +18,6 @@ import assemblernator.ErrorReporting.URBANSyntaxException;
  * @mainpage
  *   <img src="custom/logo.svg" style="clear:both" /><br/>
  *   <center><h1>An assembler for the URBAN Architecture</h1></center>
- * \addindex TEXT HERE
  */
 
 /**
