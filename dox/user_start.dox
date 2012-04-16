@@ -1,0 +1,33 @@
+/*!
+\page stepByStep Step-by-Step Guide
+
+<center><h1>How to run URBAN Legend</h1></center>
+<br>
+<b><center>Command line not yet supported.</center></b>
+<ol>
+  <li>
+    If you are running on Windows, simply double click the jar file to run it.<br/>
+    If you are running Linux, right click the jar and click "Open With OpenJDK Java 6 Runtime",
+    or with the runtime of your choice.
+    <center><img src="custom/Screenshots/Step0.png" alt="Step 1"  /></center>
+  </li>
+  <li>
+    The screen above should pop up if you completed step one correctly.
+    If this window does not appear go back to step one.
+    <center><img src="custom/Screenshots/Step1.png" alt="Step 2" /></center>
+  </li>
+  <li>
+    Type a valid program into the upper left box of the window.
+    <center><img src="custom/Screenshots/Step2.png" alt="Step 3" /></center>
+  </li>
+  <li>
+    Click file than click compile if you want your program to be compiled or click exit if you want to exit out of the program.
+    <center><img src="custom/Screenshots/Step3.png" alt="Step 4" /></center>
+  </li>
+  <li>
+    The symbol table will be produced in the right most text box. And the user report will be produced at the bottom most text box.
+    <center><img src="custom/Screenshots/Step4.png" alt="Step 5" /></center>
+  </li>
+</ol>
+<p>Congratulations! You now know how to run URBAN.</p>
+*/

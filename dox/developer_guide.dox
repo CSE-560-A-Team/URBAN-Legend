@@ -1,0 +1,130 @@
+/*!
+\page devguide Developer Guide
+
+<center><h1>Logbook</h1></center>
+<table>
+  <tr>
+    <th>Date/Time</th>
+    <th>Members Present</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>March 30, 2012/4:30PM to 7:00PM</td>
+    <td>Eric, Josh, Noah, Ratul</td>
+    <td>Met to set up roles, confirm method of documentation, and set up Git for version control.</td>
+  </tr>
+  <tr>
+    <td>April 3, 2012/3:30PM to 6:15PM</td>
+    <td>Eric, Josh, Noah, Ratul</td>
+    <td>Weekly meet with our grader Chau.  Went over sp0 and specs.  Recieved recommendations on how to procede.</td>
+  </tr>
+  <tr>
+    <td>April 4, 2012/~7:00PM to 7:20</td>
+    <td>Eric, Josh, Noah, Ratul</td>
+    <td>Met after class.  Discuss communication methods.</td>
+  </tr>
+  <tr>
+    <td>April 5, 2012/12:40PM to ?</td>
+    <td>Eric, Josh, Noah</td>
+    <td>IRC conversation.  Setting up communication.</td>
+  </tr>
+  <tr>
+    <td>April 6, 2012/10:27PM to on and off all day</td>
+    <td>Eric, Josh, Noah</td>
+    <td>IRC conversation.  Developed overall structure of Assembler.  Layed out framework for classes. Began implementing.</td>
+  </tr>
+  <tr>
+    <td>April 7, 2012/9:40PM to on and off all day</td>
+    <td>Josh, Noah</td>
+    <td>IRC conversation.  Coordinating coding.</td>
+  </tr>
+  <tr>
+    <td>April 8, 2012/12:40PM to on and off all day</td>
+    <td>Eric, Josh, Noah, Ratul</td>
+    <td>IRC conversation.  Coordinating coding and documentation.</td>
+  </tr>
+  <tr>
+    <td>April 9, 2012/10:30AM to 10:50 AM, 12:30 PM to 1:10 PM</td>
+    <td>Josh, Noah</td>
+    <td>IRC conversation.  Coordinating symbol table components, discussed documentation.</td>
+  </tr>
+  <tr>
+    <td>April 9, 2012/1:50 PM to 5:10 PM</td>
+    <td>Josh, Noah, Eric</td>
+    <td>IRC conversation.  Completed documentation, built jar, submitted.</td>
+  </tr>
+  <tr>
+    <td>April 10, 2012/11:30 AM to 12:04 PM</td>
+    <td>Josh, Noah, Ratul</td>
+    <td>Weekly meeting with grader. Discussed results of SP0 and planned for SP1.</td>
+  </tr>
+  <tr>
+    <td>April 12, 2012/11:30 AM to 12:04 PM</td>
+    <td>Josh, Noah</td>
+    <td>IRC conversation.  Discussed error reporting briefly.</td>
+  </tr>
+  <tr>
+    <td>April 12, 2012/7:00 PM to 8:20 PM</td>
+    <td>Eric, Josh</td>
+    <td>IRC conversation.  Discussed quirks in URBAN and which to count as errors.</td>
+  </tr>
+  <tr>
+    <td>April 12, 2012/8:20 PM to 10:12 PM</td>
+    <td>Eric, Josh, Noah</td>
+    <td>Continuing IRC conversation.  Decided on error reporting mechanisms and devided work.</td>
+  </tr>
+  <tr>
+    <td>April 12, 2012/10:12 PM to 10:41 PM</td>
+    <td>Eric, Josh, Noah, Ratul</td>
+    <td>Continuing IRC conversation.  Brought Ratul up to speed.</td>
+  </tr>
+  <tr>
+    <td>April 12, 2012/10:41 PM to 1:30 AM</td>
+    <td>Eric, Josh, Noah</td>
+    <td>Continuing IRC conversation.  Discussed externalization and did away with the Instruction subclass generator.</td>
+  </tr>
+  <tr>
+    <td>April 13, 2012/11:00 AM to 1:20 PM</td>
+    <td>Josh, Noah</td>
+    <td>IRC conversation.  Discussed problems with the specification and how future work would be divided.</td>
+  </tr>
+  <tr>
+    <td>April 14, 2012/11:00 AM to 1:30 PM</td>
+    <td>Josh, Noah</td>
+    <td>IRC conversation.  Isolated major issues with the specification and emailed the maintainer (Professor Stutz).</td>
+  </tr>
+  <tr>
+    <td>April 14, 2012/1:30 PM to 8:00 PM</td>
+    <td>Eric, Josh, Noah, Ratul</td>
+    <td>Continuing IRC conversation.  Discussed implications of specification issues and divided up individual instruction classes as tasks to each group member. Fixed an issue with Ratul's version control. Discussed instruction grouping mechanism.</td>
+  </tr>
+  <tr>
+    <td>April 14, 2012/8:00 PM to 12:30 AM</td>
+    <td>Eric, Josh, Noah</td>
+    <td>Continuing IRC conversation.  Solidified error reporting schemes and implemented them for the parser and many instruction classes.</td>
+  </tr>
+  <tr>
+    <td>April 15, 2012/12:00 PM to 2:12 PM</td>
+    <td>Josh, Noah</td>
+    <td>IRC conversation.  Discussed change to Doxygen and commenced. Discussed final stages of integrating proper error reporting.</td>
+  </tr>
+  <tr>
+    <td>April 15, 2012/2:12 PM to 2:00 AM</td>
+    <td>Josh, Noah, Eric, Ratul</td>
+    <td>Continuing IRC conversation.  Collaborative work day; each member completed his work and asked for help or further work as needed (Breaks were taken by each individual at a different time).</td>
+  </tr>
+</table>
+
+<center><h1>Errata Report</h1></center>
+<table>
+  <tr>
+    <th>Classes Concerned</th>
+    <th>Error Description</th>
+  </tr>
+  <tr>
+    <td>UIG_Arithmetic</th>
+    <td>Eric wrote it. TROLOLOLOL</td>
+  </tr>
+</table>
+  
+*/

@@ -1,0 +1,1421 @@
+/*!
+\page userguide User Guide
+
+<p>
+This is a user guide that describe the specifications for the URBAN - Universal Robust Binary Assembler-Nator.
+There are 4096 words (32 bits each) of location counter relative addressable memory that is available to a user.
+We used Java as the language for constructing this while using Eclipse as an IDE.
+The exact specifications of this language can be seen below.
+</p>
+
+
+
+
+<h2><a name="MENU">Menu: </a></h2>
+<p>
+1.<a href="#SH">Specification Hardware</a><br />
+2.<a href="#IS">Instruction Specifications</a><br />
+3.<a href="#SS">Syntax Specifications</a><br />
+4.<a href="#DS">Directive Specifications</a><br />
+5.<a href="#D">Directives</a><br />
+6.<a href="#I">Instructions</a><br />
+7.<a href="#IO">URBAN Legend Input and Output Description and Format:</a><br />
+ </p>
+
+
+
+
+<h3><a name="SH">Specifications Hardware: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<p>
+The table below illustrates the Hardware specifications of the URBAN machine and lists the description of each item in the machine.
+</p>
+
+
+<table>
+<tr>
+<th>Ref.</th>
+<th>Item</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>H1</td>
+<td>Processor</td>
+<td>Meyer 1.0  10.2 GHz</td>
+</tr> 
+ 
+<tr>
+<td>H2</td>
+<td>Word Size</td>
+<td>32 bits</td>
+</tr>
+
+
+<tr>
+<td>H2</td>
+<td>Memory</td>
+<td>4096 words. The memory is word addressable MEM(0:4095).</td>
+</tr>
+
+
+<tr>
+<td>H3</td>
+<td>Registers</td>
+<td>15 Registers</td>
+</tr>
+
+
+<tr>
+<td>H3.1</td>
+<td>Arithmetic Registers</td>
+<td>8 for mathematics REG(0:7)</td>
+</tr>
+
+
+<tr>
+<td>H3.2</td>
+<td>Indexed Registers</td>
+<td>7 for addressing and indexing through memory XREG(8:14)</td>
+</tr>
+ 
+<tr>
+<td>H4</td>
+<td>Arithmetic Unit</td>
+<td>Two’s compliment arithmetic</td>
+</tr>
+
+
+<tr>
+<td>H5</td>
+<td>Internal Representations</td>
+<td>32 binary digits. For numbers the left most bit is a sign 
+bit. Character strings use all 32 bits for a total of four
+characters.</td>
+</tr>
+
+
+<tr>
+<td>H5.1</td>
+<td>Numbers</td>
+<td>Each 32-bit word, when interpreted as an integer 
+decimal number is in the range -2^31 to 2^31^-1.</td>
+</tr>
+
+
+<tr>
+<td>H5.2</td>
+<td>Characters</td>
+<td>The ASCII (8 bit) codes are used for character 
+information.</td>
+</tr>
+
+
+<tr>
+<td>H6</td>
+<td>addressing</td>
+<td>Word addressable.</td>
+</tr>
+</table>
+<p>
+<h3><a name="IS">Instruction Specifications: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+</p>
+<p>
+	The following 7 tables give the different formats that are possible in the URBAN language.
+</p>
+<h5>Format 1: </h5>
+<table>
+<tr>
+	<th>Opcode</th>
+	<th>Order</th>
+	<th>r</th>
+	<th>x</th>
+	<th>No. of words</th>
+	<th>Stack</th>
+	<th>Lit.</th>
+	<th>Memory</th>
+	<th>Total</th>
+</tr>
+<tr>
+	<th>6 bits</th>
+	<th>1b</th>
+	<th>3b</th>
+	<th>3b</th>
+	<th>4 bits</th>
+	<th>1</th>
+	<th>1</th>
+	<th>13 bits</th>
+	<th>32 bits</th>
+</tr>
+</table>
+
+<h5>Format 2: Literal use </h5>
+<table>
+<tr>
+	<th>Opcode</th>
+	<th>Order</th>
+	<th>r</th>
+	<th>x</th>
+	<th>No. of words</th>
+	<th>Stack</th>
+	<th>Lit.</th>
+	<th>Memory</th>
+	<th>Total</th>
+</tr>
+<tr>
+	<th>default values</th>
+	<th></th>
+	<th></th>
+	<th></th>
+	<th>0000</th>
+	<th>0</th>
+	<th>1</th>
+	<th>Sign + 12 bits</th>
+	<th></th>
+</tr>
+<tr>
+	<th>6 bits</th>
+	<th>1b</th>
+	<th>3b</th>
+	<th>3b</th>
+	<th>4 bits</th>
+	<th>1</th>
+	<th>1</th>
+	<th>13 bits</th>
+	<th>32 bits</th>
+</tr>
+</table>
+
+<h5>Format 3: HALT and DUMP </h5>
+<table>
+<tr>
+	<th>Opcode</th>
+	<th>Unused</th>
+	<th>Constant</th>
+	<th>Total</th>
+</tr>
+<tr>
+	<th>default values</th>
+	<th>0000 0000 0000 0</th>
+	<th>Sign + 12 bits</th>
+	<th></th>
+</tr>
+<tr>
+	<th>6 bits</th>
+	<th>13 bits</th>
+	<th>13 bits</th>
+	<th>32 bits</th>
+</tr>
+</table>
+
+<h5>Format 4: CLRA and CLRX </h5>
+<table>
+<tr>
+	<th>Opcode</th>
+	<th>Unused</th>
+	<th>Total</th>
+</tr>
+<tr>
+	<th>default values</th>
+	<th>00 0000 0000 0000 0000 0000 0000</th>
+	<th></th>
+</tr>
+<tr>
+	<th>6 bits</th>
+	<th>26 bits</th>
+	<th>32 bits</th>
+</tr>
+</table>
+
+<h5>Format 5: Input </h5>
+<table>
+<tr>
+	<th>Opcode</th>
+	<th>Unused</th>
+	<th>x</th>
+	<th>No. of words</th>
+	<th>Unused</th>
+	<th>Memory</th>
+	<th>Total</th>
+</tr>
+<tr>
+	<th>default values</th>
+	<th>0000</th>
+	<th></th>
+	<th></th>
+	<th>00</th>
+	<th>Sign + 12 bits</th>
+	<th></th>
+</tr>
+<tr>
+	<th>6 bits</th>
+	<th>4b</th>
+	<th>3b</th>
+	<th>4 bits</th>
+	<th>2b</th>
+	<th>13 bits</th>
+	<th>32 bits</th>
+</tr>
+</table>
+
+<h5>Format 6: Output </h5>
+<table>
+<tr>
+	<th>Opcode</th>
+	<th>Unused</th>
+	<th>x</th>
+	<th>No. of words</th>
+	<th>Unused</th>
+	<th>Lit.</th>
+	<th>Memory</th>
+	<th>Total</th>
+</tr>
+<tr>
+	<th>default values</th>
+	<th>0000</th>
+	<th></th>
+	<th></th>
+	<th>0</th>
+	<th></th>
+	<th>Sign + 12 bits</th>
+	<th></th>
+</tr>
+<tr>
+	<th>6 bits</th>
+	<th>4b</th>
+	<th>3b</th>
+	<th>4 bits</th>
+	<th>1b</th>
+	<th>1b</th>
+	<th>13 bits</th>
+	<th>32 bits</th>
+</tr>
+</table>
+
+<h3></center></td><a name="DS">Directive Specifications: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<p>
+The following table gives the syntax for each directive and their format along with it.
+</p>
+
+
+<table>
+<tr>
+<th>Ref.</th>
+<th>Directive Syntax</th>
+<th>Format</th>
+</tr>
+<tr>
+<td>DS1</td>
+<td>Label</td>
+<td>A variety of options are supported</td>
+</tr>
+<tr>
+<td>DS1.1</td>
+<td>rqlabel</td>
+<td>Required label for this directive.</td>
+</tr>
+<tr>
+<td>DS1.2</td>
+<td>none</td>
+<td>No label is to appear</td>
+</tr>
+<tr>
+<td>DS1.3</td>
+<td>nlabel</td>
+<td>label, numbered 0 to 4095, or external reference, or elabel</td>
+</tr>
+<tr>
+<td>DS2</td>
+<td>Directive name</td>
+<td>Alpha string. Upper/lower or mixed case</td>
+</tr>
+<tr>
+<td>DS3</td>
+<td>Operands</td>
+<td>Alpha or numeric. The operand field is keyword driven the 
+keywords. Commas separate their values followed by zero or 
+more blanks. A semicolon terminates the operand field.</td>
+</tr>
+<tr>
+<td>DS3.1</td>
+<td>number</td>
+<td>Range 0-4095</td>
+</tr>
+<tr>
+<td>DS3.2</td>
+<td>rlabel</td>
+<td>Relative label, ie a label defined in this program.</td>
+</tr>
+<tr>
+<td>DS3.3</td>
+<td>eqlabel</td>
+<td>Label equated to a value in the appropriate range.</td>
+</tr>
+<tr>
+<td>DS3.4</td>
+<td>olabel</td>
+<td>Optional label</td>
+</tr>
+<tr>
+<td>DS3.5</td>
+<td>exlabel</td>
+<td>string of 1 to 32 characters and numbers meeting syntax rules 
+for a label. Representing a reference to a label in a totally 
+different module</td>
+</tr>
+<tr>
+<td>DS3.6</td>
+<td>memr</td>
+<td>Directive range numeric 0 - 4095</td>
+</tr>
+<tr>
+<td>DS3.7</td>
+<td>none</td>
+<td></td>
+</tr>
+<tr>
+<td>DS3.8</td>
+<td>Expression</td>
+<td>begins with a * and is followed by a single + or – with the next operand 
+being a constant or previously equated symbol. The result of the 
+computation must be in the range 0 to 4095. (can not use in conjunction with 
+external references)  e.g. 
+IADD DR:1,EX:*+1</td>
+</tr>
+<tr>
+<td>DS3.9</td>
+<td>Star</td>
+<td>* or *+number or *-number (number ranges 0 to 4095)</td>
+</tr>
+</table>
+
+<h3><a name="SS">Syntax Specifications:  </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<p>
+The basic syntax for URBAN is:
+	label opc DR:___,FM:_____,FX:__; comments
+</p>
+
+<table>
+<tr>
+<th>Ref.</th>
+<th>Feature</th>
+<th>Requirements</th>
+</tr>
+
+<tr>
+<td>S1</td>
+<td>Instructions</td>
+<td>All the instructions are alphabetical characters.An instruction can be a mixed case.</td>
+</tr>
+
+<tr>
+<td>S2</td>
+<td>Instruction Syntax</td>
+<td>The assembler must verify that the input it receives is valid.
+The input itself must obey all the syntax rules.</td>
+</tr>
+
+<tr>
+<td>S2.1</td>
+<td>Labels</td>
+<td>Labels in URBAN are 1 to 32 columns in length. They
+can be upper or lower case or a combination of the 2.
+Labels are case dependent.They MUST START in First column 
+of a line.Labels must start with a letter.Columns 2 to 32 
+can be any character you can enter from the keyboard with 
+or without the shift key.Labels can also be unicode characters.
+However the characters ; : , + - * / cannot be used.
+Labels cannot have instruction names such as MOVD,mOVD,etc.</td>
+</tr>
+
+<tr>
+<td>S2.2</td>
+<td>Numbers</td>
+<td>The numbers in instructions are integers in the range 0-4095</td>
+</tr>
+
+<tr>
+<td>S2.3</td>
+<td>Characters</td>
+<td>Items that can be enter directly through the keyboard with in
+a single stroke or while holding down the shift key are characters.</td>
+</tr>
+
+<tr>
+<td>S2.4</td>
+<td>Instructions</td>
+<td>All the instructions are alphabetical characters.An instruction can be a mixed case.</td>
+</tr>
+
+<tr>
+<td>S2.5</td>
+<td>Operands</td>
+<td>Operands are alphabetical or numeric. The operand field 
+is keyword driven. Commas separate their values followed by zero or
+more blanks. A semicolon terminates the operand fieldThe list of
+operand kwywords is given <a href="#OPK">below</a>.</td>
+</tr>
+
+<tr>
+<td>S2.5.1</td>
+<td>Arithmetic Register Specification</td>
+<td>The Arithmetic Register field references the arithmetic registers 0 to 7. The field can also contain a previously equated label in the same range.</td>
+</tr>
+
+<tr>
+<td>S2.5.2</td>
+<td>Memory Reference</td>
+<td>The Assembler supports a variety of memory references.</td>
+</tr>
+
+<tr>
+<td>S2.5.2.1</td>
+<td>rlabel</td>
+<td>Symbolic Relative memory reference within the program</td>
+</tr>
+
+<tr>
+<td>S2.5.2.2</td>
+<td>exlabel</td>
+<td>Symbolic memory reference outside the program</td>
+</tr>
+
+<tr>
+<td>S2.5.2.3</td>
+<td>nlabel</td>
+<td>Numeric Relative memory reference within the program</td>
+</tr>
+
+<tr>
+<td>S2.5.2.4</td>
+<td>indirect</td>
+<td>The operand name or numeric reference starts with a %</td>
+</tr>
+
+<tr>
+<td>S2.5.2.5</td>
+<td>direct</td>
+<td>The operand name or numeric reference starts with a #</td>
+</tr>
+
+<tr>
+<td>S2.5.2.6</td>
+<td>eqlabel</td>
+<td>This label is an equated symbol equated to a number</td>
+</tr>
+
+<tr>
+<td>S2.5.2.7</td>
+<td>Literal/Immediate</td>
+<td>Instructions that normally reference memory address locations may reference numeric literals instead. Literals values are imbedded in the instruction itself</td>
+</tr>
+
+<tr>
+<td>S2.5.2.8</td>
+<td>Constants</td>
+<td>Constants are used in the Shift, Rotate, and Halt instructions and can range from 0 to 4095. Some instructions limit it to 32. Constants can also be a previously EQUated symbol. </td>
+</tr>
+
+<tr>
+<td>S2.5.2.9</td>
+<td>Star (*)</td>
+<td>* or *+number or *-number (number ranges from 0 - 4095). * is used as the current instruction address during assembly e.g.
+ISUB DR:1,EX:* would mean to place the current location counter in the last 12 bits of the instruction.
+MOVD DR:1,EX:*+ll
+MOVD DR:1,EX:*-ll</td>
+</tr>
+
+<tr>
+<td>S3.0</td>
+<td>End of Instruction</td>
+<td>represented by a Semicolon ";"</td>
+</tr>
+
+<tr>
+<td>S4.0</td>
+<td>Comments</td>
+<td>Must appear after the End of instruction indicator, i.e. a semicolon.It is an alpha numeric string.</td>
+</tr>
+
+<tr>
+<td>S4.1</td>
+<td>Full Line of Comments</td>
+<td>A line of comment begins with a semicolon(;) in column 1. This line is MUST be printed on the assembly user report</td>
+</tr>
+
+<tr>
+<td>S5.0</td>
+<td>Field separators</td>
+<td>One or more blanks or tabs that is between label and opcode seperator. Also between keywords the separator is a single comma</td>
+</tr>
+
+</table>
+
+
+<h3><a name="D"> Directives: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<p>
+There are 12 directives in the URBAN language.They are given in the following table along with their format and descriptions.
+</p>
+
+
+<table>
+<tr>
+<th>Ref.</th>
+<th>Directive</th>
+<th>Format</th>
+<th>Description</th>
+<th>Impacts LC</th>
+</tr>
+
+
+<tr>
+<td>D1</td>
+<td>KICKO</td>
+<td>rqlabel  kicko  FC:memr</td>
+<td>kickoff Directive sets the assembler LC to 
+the relocatable address specified. The 
+rqlabel on the directive serves as the module 
+name. Must appear first in the program input 
+file. The kicko can only have a numbers in 
+the operand field</td>
+<td>No</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>newlc</td>
+<td>rqlabel newlc FC:nnn
+or LR:label
+nnn can not exceed memr</td>
+<td>newlc Directive sets the assembler LC to the 
+relocatable address specified. There can be 
+more than one per assembly. Generates a 
+Linking record in the object file. Changes LC 
+value. Does not generate lines of code.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>EQU</td>
+<td>rqlabel  equ  FC:memr
+                  or  LR:eqlabel
+                  or  FM: *</td>
+<td>equate rlabel to the operand. If the operand 
+is a label, then that label must have been 
+previously equated. Expressions are allowed. 
+Star notation is allowed.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>EQUe</td>
+<td>rqlabel eque ex:expression</td>
+<td>The operands can be constants or previously equated symbols. The 
+operators are + and -The result of the computation must be in the range 0 to 
+4095. (can not use in conjunction with external references)
+X1  EQU.e EX:5+2-1 or X2  EQU.e EX:AB+CD+EF  (can use local 
+references, previously equated labels, star or constants)  If there is a star in 
+the expression it must appear first and there can only be one star per 
+expression. Up to three operators</td>
+<td>No</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>ENT</td>
+<td>none ENT LR:rlabel
+Note: up to 4 operands</td>
+<td>ENTry variable (entry) name - declares the 
+symbol to be an entry name that must appear 
+as a label somewhere in this program. This 
+symbol may be used as an operand by other 
+programs.  Each entry generates a Linking 
+record in the object file.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>EXT</td>
+<td>none EXT LR:exlabel
+                
+Note: up to 4 operands</td>
+<td>EXTernal variable name - declares the 
+symbol to be an external name.  rlabel must 
+not appear as a label in this program. rlabel 
+may be used as an operand by this program. 
+The symbol must be defined in some other 
+program by an entry</td>
+<td>No</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>end</td>
+<td>none    end      LR:rlabel</td>
+<td>end of source program.  This directive is 
+used to tell the assembler that all the input 
+has been processed. Any lines after this 
+Directive should generate a warning 
+message. rlabel must match pgm_name</td>
+<td>No</td>
+</tr>
+
+
+<tr>
+<td>D8</td>
+<td>AEXS</td>
+<td>olabel  AEXS   LR:rlabel
+or    FC:memr</td>
+<td>Alternative Execution Start</td>
+<td></td>
+</tr>
+<tr>
+<td>D9</td>
+<td>SKIPS</td>
+<td>Olabel  SKIPS   FC:memr</td>
+<td>SKIP Storage</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>char</td>
+<td>Olabel  CHAR ST:’cccc’</td>
+<td>CHARacter Constant</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>num</td>
+<td>olabel  num     FC:itr</td>
+<td>Base 10 number in the range -2
+31
+ to 2
+31
+-1</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>adrc</td>
+<td>olabel  adrc LR:rlabel 
+             or    LR:exlabel
+             or    EX:expression</td>
+<td>address constant. The address of the 
+operand is placed in the last 12 bits of the 
+memory word. Note: this directive is always 
+relocatable or external.</td>
+<td>Yes</td>
+</tr>
+</table>
+<p>
+The syntax of the operands for this language requires the use of keywords. The keywords
+indicate how the operands are to be interpreted.  The operands specify the ”from” location or the 
+“destination” location or in some cases constants or index registers. In the example below the 
+instruction MOVD (movedata) causes data movement between a register and memory. The 
+destination (DR) for the data value is the register. The data is coming from memory (FM).
+Label MOVD  DR:1,FM:Tree;
+But if the data is coming from the register going to memory it would have the following format.
+Label MOVD  DM:Tree,FR:1;
+The order of the operands does not matter since the operand elements are keyword 
+driven. A semicolon indicates the end of the operand field.
+Tree is a label representing a local or external address.
+</p>
+
+
+<h3><a name="OPK">Operand Keywords: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<p>
+The operands can have many different keywords. The table below identifies each key word and their corresponding function. 
+The same character combinations can be used as a label.
+</p>
+
+
+<table>
+<tr>
+<th>Keyword</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>DM</td>
+<td>Destination Memory</td>
+</tr> 
+<tr>
+<td>DR</td>
+<td>Destination Register</td>
+</tr>
+<tr>
+<td>DX</td>
+<td>Destination indeX Register</td>
+</tr>
+<tr>
+<td>EX</td>
+<td>EXpression</td>
+</tr>
+<tr>
+<td>FC</td>
+<td>From Constant</td>
+</tr>
+<tr>
+<td>FL</td>
+<td>From Literal</td>
+</tr>
+<tr>
+<td>FM</td>
+<td>From Memory</td>
+</tr>
+<tr>
+<td>FR</td>
+<td>From Register</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>From Stack</td>
+</tr>
+<tr>
+<td>FX</td>
+<td>From indeX Register</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>Label reference</td>
+</tr>
+<tr>
+<td>NW</td>
+<td>Number of Words</td>
+</tr>
+<tr>
+<td>ST</td>
+<td>STring of characters in single quotes</td>
+</tr>
+</table>
+
+
+<h3><a name="I"> Instructions: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<p>
+The following tables describe the various instructions with their formats and their binary equivalent opcodes.
+</p>
+
+
+<h4>Instructions: Data Movement</h4>
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>MV0</td>
+<td>000000</td>
+<td>MOVD</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>MOVe Data elements</td>
+<td>c(R)=c(MREF) or
+c(MREF)= c(R)</td>
+</tr>
+<tr>
+<td>MV1</td>
+<td>000001</td>
+<td>MOVDN</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>MOVe Data elements
+Negative</td>
+<td>c(R)=c(MREF)*-1 or
+c(MREF)= c(R)*-1</td>
+</tr>
+</table>
+
+
+<h4>Instructions: Arithmetic</h4>
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>IA0</td>
+<td>001000</td>
+<td>IADD</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>Integer ADD</td>
+<td>c(R)=c(R)+c(MREF) or
+c(MREF)=c(MREF)+c(R)</td>
+</tr>
+<tr>
+<td>IA1</td>
+<td>001001</td>
+<td>IMAD</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>Integer Multiply and ADd</td>
+<td>c(R)=c(R)*c(MREF)+ c(MREF) or
+c(MREF)=c(MREF)*c(R)+c(R)</td>
+</tr>
+<tr>
+<td>IA2</td>
+<td>001010</td>
+<td>IAA</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>Integer Add Absolute</td>
+<td>c(R)=c(R)+ABS(c(MREF)) or
+c(MREF)=c(MREF)+ABS(c(R))</td>
+</tr>
+<tr>
+<td>IA3</td>
+<td>001011</td>
+<td>ISRG</td>
+<td>REG,MREF,NW 
+ or
+MREF,REG,NW</td>
+<td>Integer Sum Range
+Can only be used when 
+the destintation is a
+register</td>
+<td>c(R)=c(R)+ All words from
+MREF to MREF+NW</td>
+</tr>
+<tr>
+<td>IA4</td>
+<td>001100</td>
+<td>ISUB</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>Integer SUBtract</td>
+<td>c(R)=c(R)-c(MREF) or
+c(MREF)=c(MREF)-c(R)</td>
+</tr>
+<tr>
+<td>IA5</td>
+<td>001101</td>
+<td>Imul</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>Integer MULtiply</td>
+<td>c(R)=c(R)*c(MREF) or
+c(MREF)=c(MREF)*c(R)</td>
+</tr>
+<tr>
+<td>IA6</td>
+<td>001110</td>
+<td>IDIV</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>Integer DIVide</td>
+<td>c(R)=c(R)/c(MREF) or
+c(MREF)=c(MREF)/c(R)</td>
+</tr>
+<tr>
+<td>IA7</td>
+<td>001111</td>
+<td>PWR</td>
+<td>REG,constant</td>
+<td>t PoWeR
+Can only be used when 
+DM is a register</td>
+<td>c(R)=c(R)**FC
+MREF is invalid</td>
+</tr>
+</table>
+
+
+<h4>Instruction: Register Tools: &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>IS0</td>
+<td>010000</td>
+<td>CLR</td>
+<td>DR:     or
+DX:</td>
+<td>CLear Register
+Arith. or index</td>
+<td>c(R) = 0; can not be used to clear
+arithmetic register 0
+Only one operand</td>
+</tr>
+
+
+<tr>
+<td>IS1</td>
+<td>010001</td>
+<td>CLRA</td>
+<td>none</td>
+<td>CLeaR all 
+Arithmetic 
+registers</td>
+<td>R0-7 set to zero
+No operands</td>
+</tr>
+
+
+<tr>
+<td>IS2</td>
+<td>010010</td>
+<td>CLRX</td>
+<td>none</td>
+<td>CLeaR all 
+Index 
+registers</td>
+<td>X1-7 set to zero
+No operands</td>
+</tr>
+</table>
+<p>
+<a href="#MENU">Back to Menu</a>
+</p>
+
+
+<h4>Instruction: Shift/manipulate</h4>
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+
+
+<tr>
+<td>IM0</td>
+<td>011000</td>
+<td>ISHR</td>
+<td>REG,FC:SRG
+or
+FC:SRG,REG</td>
+<td>Integer Shift 
+Right Logical</td>
+<td>Shift right constant
+Places fill with 
+zeros</td>
+</tr>
+<tr>
+<td>IM1</td>
+<td>011001</td>
+<td>ISHL</td>
+<td>REG,FC:SRG
+or
+FC:SRG,REG</td>
+<td>Integer Shift 
+Left Logical</td>
+<td>Shift left constant
+Places fill with 
+zeros</td>
+</tr>
+<tr>
+<td>IM2</td>
+<td>011010</td>
+<td>ISHRA</td>
+<td>REG,FC:SRG
+or
+FC:SRG,REG</td>
+<td>Integer Shift 
+Right Arithmetic</td>
+<td>Shift right constant
+places, fill with 
+sign bit</td>
+</tr>
+<tr>
+<td>IM3</td>
+<td>011011</td>
+<td>ISHLA</td>
+<td>REG,FC:SRG
+or
+FC:SRG,REG</td>
+<td>Integer Shift 
+Left Arithmetic</td>
+<td>Shift left constant
+places, fill with 
+sign bit</td>
+</tr>
+<tr>
+<td>IM4</td>
+<td>011100</td>
+<td>ROL</td>
+<td>REG,FC:SRG
+or
+FC:SRG,REG</td>
+<td>ROtate Left</td>
+<td>Rotate left
+Including sign bit</td>
+</tr>
+<tr>
+<td>IM5</td>
+<td>011101</td>
+<td>ROR</td>
+<td>REG,FC:SRG
+or
+FC:SRG,REG</td>
+<td>ROtate Right</td>
+<td>Rotate right
+Including sign bit</td>
+</tr>
+</table>
+
+
+<h4>Instruction: Logical  &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+
+
+<tr>
+<td>IM6</td>
+<td>011110</td>
+<td>AND</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>AND</td>
+<td>c(R)=c(R) AND c(MREF) or
+c(MREF)=c(MREF) AND c(R)</td>
+</tr>
+<tr>
+<td>IM7</td>
+<td>011111</td>
+<td>OR</td>
+<td>REG,MREF   or
+MREF,REG</td>
+<td>OR</td>
+<td>c(R)=c(R) OR c(MREF) or
+c(MREF)=c(MREF) OR c(R)</td>
+</tr>
+</table>
+
+
+<h4>Instruction: Jump &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+
+
+<tr>
+<td>JT0</td>
+<td>100000</td>
+<td>TREQ</td>
+<td>FR:n,DM:MREF</td>
+<td>TRansfer on equal to </td>
+<td>if c(R) =0 then 
+LC= DM+DF</td>
+</tr>
+<tr>
+<td>JT1</td>
+<td>100001</td>
+<td>TRLT</td>
+<td>FR:n,DM:MREF</td>
+<td>TRansfer on 
+Less than zero</td>
+<td>if c(R) < 0 then 
+LC= DM+DF</td>
+</tr>
+<tr>
+<td>JT2</td>
+<td>100010</td>
+<td>TRGT</td>
+<td>FR:n,DM:MREF</td>
+<td>TRansfer on 
+Greater Than Zero</td>
+<td>if c(R) > 0 then 
+LC= DM+DF</td>
+</tr>
+<tr>
+<td>JT3</td>
+<td>100011</td>
+<td>TR</td>
+<td>DM:MREF</td>
+<td>TRansfer
+Unconditionally</td>
+<td>LC=MREF</td>
+</tr>
+<tr>
+<td>JT4</td>
+<td>100100</td>
+<td>TRDR</td>
+<td>FX:n,DM</td>
+<td>Jump or 
+Decrement Register</td>
+<td>c(R)=c(R)-1,
+if FR or FX=0 then LC=DM+DX</td>
+</tr>
+<tr>
+<td>JT5</td>
+<td>100101</td>
+<td>TRLK</td>
+<td>DR:n,MREF</td>
+<td>Transfer and LinK</td>
+<td>c(R)=LC+1
+LC=DM+DX</td>
+</tr>
+<tr>
+<td>JT6</td>
+<td>100110</td>
+<td>RET</td>
+<td>DM:MREF</td>
+<td>RETurn to calling
+program</td>
+<td>LC=MREF</td>
+</tr>
+<tr>
+<td>JT7</td>
+<td>100111</td>
+<td>SKT</td>
+<td>DR:n</td>
+<td>StacK Test</td>
+<td>Load register with number of stack elements in 
+use.</td>
+</tr>
+</table>
+
+
+<h4>Instruction: Input/Output:  &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+
+
+<tr>
+<td>IO0</td>
+<td>101000</td>
+<td>IWSR</td>
+<td>MREF,NW</td>
+<td>Signed Integer Write to ScReen
+NW words from memory</td>
+</tr>
+<tr>
+<td>IO1</td>
+<td>101001</td>
+<td>IRKB</td>
+<td>MREF,NW</td>
+<td>Signed Integer Read from KeyBoard
+NWwords into memory </td>
+</tr>
+<tr>
+<td>IO2</td>
+<td>101010</td>
+<td>CWSR</td>
+<td>MREF,NW</td>
+<td>Character Write to ScReen
+NW words from memory as </td>
+</tr>
+<tr>
+<td>IO3</td>
+<td>101011</td>
+<td>CRKB</td>
+<td>MREF,NW</td>
+<td>Character Read from KeyBoard
+NW words into memory</td>
+</tr>
+</table>
+
+
+<p>
+<h5>Note: </h5>
+Anything following a semicolon that ends an instruction is a comment.
+Each line can only have one instruction,and a line with just a semi-colon is valid, and can be followed by a comment on that line. 
+</p>
+
+
+<h4>Instruction: Stack Management &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+
+
+<tr>
+<td>S0</td>
+<td>110000</td>
+<td>PSH</td>
+<td>FM:MREF   or
+Literal or
+FC</td>
+<td>PUSH memory element onto top of stack</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>110001</td>
+<td>POP</td>
+<td>DM:MREF or DR</td>
+<td>POP top stack element to memory</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>110010</td>
+<td>PST</td>
+<td>MREF
+DR:
+or
+Literal</td>
+<td>pop and TEST (compare) with MREF or Literal
+If =  load DR with 0
+If ^= load DR with 1
+If <  load DR with 2
+If >  load DR with 3</td>
+</tr>
+</table>
+
+
+<h4>Instruction: Control &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<table>
+<tr>
+<th>Ref.</th>
+<th>Binary rep.</th>
+<th>Label</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+
+
+<tr>
+<td>C0</td>
+<td>111101</td>
+<td>NOP</td>
+<td>none</td>
+<td>No operation </td>
+<td>Works like
+IADD DR:0,LT:0</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>111110</td>
+<td>DMP</td>
+<td>FC</td>
+<td>DuMP Memory, LC, 
+MEM(LC), and registers </td>
+<td>if=1 then Level 1 Dump
+if=2 then Level 2 Dump
+if=3 then Level 3 Dump</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>111111</td>
+<td>HLT</td>
+<td>FC</td>
+<td>HaLT program execution</td>
+<td>Halt execution
+Display constant to scrn</td>
+</tr>
+</table>
+
+<p>
+<h3><a name = "IO">URBAN Legend Input and Output Description and Format: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+</p>
+<p>
+<h5>URBAN Legend Input:</h5>
+        Enter program in GUI as described in the <a href="user_start.html" target="screen">How to run Urban</a>
+</p>
+ 
+<h5>URBAN Legend output format:</h5>
+"URBAN Legend" followed by version number.
+e.g. URBAN Legend v1
+
+"Usage: java -jar urban.jar file1 file2 file3... -o executablename" <br>
+
+"Assembling " followed by file paths of files to assemble. <br>
+e.g. Assembling C:\Users\User/Desktop/test.s <br>
+<p> 
+"Symbol Table:" followed by the symbol table. <br>
+each line of symbol table displays: label address usage equString <br>
+label is the label of the instruction in the symbol table. <br>
+address is the instruction's address. <br>
+usage is one of the following: <br>
+	<pre>
+        LABEL, PROGNAME, EXTERNAL, EQUATE, or ENTRY.
+		 LABEL is when the label is used as a label.
+		 PROGNAME is when the label is used as a module name.
+		 EXTERNAL is when the label is used as an external label.
+		 EQUATE is when the label is being equated to the equString.
+		 ENTRY is when the label is used as an entry label.
+	</pre>
+equString is only used by instructions with the EQUATE usage. <br>
+       <dd> It is what the label is being equated to. <br> </dd>
+e.g. <br> <pre>
+        Symbol Table:
+        ALT1 0 LABEL
+        blah 18 LABEL
+        C1 26 LABEL
+        C4 27 LABEL
+        DONE 17 LABEL
+        ER 21 LABEL
+        M1 31 LABEL
+        M2 36 LABEL
+        ME 29 LABEL
+        P1 1 LABEL
+        P2 4 LABEL
+        Q1 1 LABEL
+        QQ 4 LABEL
+        TP 2 LABEL
+        XX 4 LABEL
+        YY 4 LABEL
+</pre>
+<p> 
+"Instruction breakdowns:" followed by a list of the breakdowns of each instruction in the module. <br>
+each instruction breakdown is as follows: <br>
+		<pre>
+        "original source line: " origSrcLine.
+        "Line number:" lineNum " LC: " addr " Label: " label ","
+        "instruction/Directive: " inst/dir " Binary Equivalent: " binInst/dir
+        "Operand 1: " operKey ":" operVal
+        "Operand 2: " operKey ":" operVal
+        "Operand 3: " operKey ":" operVal
+        "Operand 4: " operKey ":" operVal
+		</pre>
+</p>
+<p>       
+        origSrcLine is the original source line that the assembler parsed. <br>
+        lineNum is the line number in the source file that the source line appeared. <br>
+        addr is the address of the instruction i.e. lc. <br>
+        label is the label of the instruction if there is one. <br>
+        inst/dir is the type of instruction/directive e.g. MOVD or KICKO <br>
+        binInst/dir is the opcode for the instruction. if the instruction is a directive, then "------" is displayed in place of opcode. <br>
+        operKey is the keyword for the operand. <br>
+        operVal is the value of the operand. <br>
+        if there are less than 4 operands, however many operands there are in the instruction are displayed. <br>
+</p>
+e.g. <br><pre>
+        original source line: IWSR FM:Q1,NW:1;
+        Line number: 22 LC: 0013 Label: ,
+        instruction/Directive: IWSR Binary Equivalent: 101000
+        Operand 1: FM:Q1
+        Operand 2: NW:1
+	</pre>
+</p> 
+<p>
+<a href="#MENU">Back to Menu</a>
+</p> 
+
+*/

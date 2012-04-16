@@ -1,0 +1,24 @@
+/*!
+\page testingPhilosophy Testing Philosophy
+
+<p>
+	We will test from bottom-top, making sure the lowest-level components that are a part of the larger components
+work correctly before testing higher-level components.  For example, we have a utility class IOFormat that is used to simply
+format integers into hex or binary and read labels, so we will test that first.  We want to make sure the lowest-level classes
+work before testing higher-level one's becuase the higher-level classes usually delegate all the work to the lower ones, so the lower-
+level classes are where most of the errors will likely be present, and where the most testing will take place.  It is better to make
+sure the complex lower-level components are working correctly before trying to use them all in a higher-level component.
+</p>
+<p>	
+	We will use Black box testing because the functionality is most important for these labs as opposed to the internal workings
+of the methods.  Also, aside from very shallow testing to see if our own work is somewhat accurate, team members will test each others
+methods because testing is more effective that way since our own bias won't get in the way.
+</p>
+<p>
+	We will use JUnit test cases to exhaustively test each method under as many possible distinct situations we can think of.
+JUnit test cases will allow us to test each method independently of another, to maintain the purity of each situation.
+There will be one JUnit test case class for each class we're testing, and every test case will have its own method.  Each method will be grouped
+with comments to show which method/function the test methods are testing.
+</p>
+
+*/
