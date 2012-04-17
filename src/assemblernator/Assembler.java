@@ -185,6 +185,8 @@ public class Assembler {
 	 *           Apr 15, 2012; 1:23:08 PM: Moved try-catch block inside loop and added continues,
 	 *           so the loop continues even when an exception is caught. - Noah
 	 *           Apr 16, 2012; 10:22:15 PM: Added assignment of program name to module.
+	 *           Apr 17, 2012; 1:43:24 AM: Prevent invalid instruction from being added to symbol table.
+	 *          	and moved lc assignment above check.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -213,7 +215,7 @@ public class Assembler {
 		Module module = new Module();
 		int startAddr = 0;
 		int lc = 0;
-		boolean firstKICKO = false;
+		boolean firstKICKO = false, valid = true;
 		
 		while (source.hasNextLine()) {
 			try{
@@ -243,15 +245,14 @@ public class Assembler {
 					break;
 				}
 				
-				//checks for operand errors in instruction.
-				instr.immediateCheck(hErr, module);
-				
-				// Get new lc for next instruction.
 				instr.lc = lc;
+				//checks for operand errors in instruction.
+				valid = instr.immediateCheck(hErr, module);
+				// Get new lc for next instruction.
 				lc = instr.getNewLC(lc, module);
 	
 				//if instr can be used in symbol table.
-				if (instr.usage != Usage.NONE) {
+				if (instr.usage != Usage.NONE && valid) {
 					module.getSymbolTable().addEntry(instr);
 				}
 	

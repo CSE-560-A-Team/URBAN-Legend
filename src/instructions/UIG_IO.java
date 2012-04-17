@@ -9,7 +9,7 @@ import assemblernator.OperandChecker;
 
 
 /**
- * 
+ * Parent class of input/output leaf instruction classes.
  * @author Noah
  * @date Apr 14, 2012; 5:47:13 PM
  */

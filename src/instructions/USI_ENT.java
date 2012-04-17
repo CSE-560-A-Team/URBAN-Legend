@@ -39,6 +39,18 @@ public class USI_ENT extends AbstractDirective {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override
 	public boolean check(ErrorHandler hErr, Module module) {
+		//check for ent LR label is correct
+		return true;
+	}
+
+	/** @see assemblernator.Instruction#assemble() */
+	@Override
+	public int[] assemble() {
+		return null; // TODO: IMPLEMENT
+	}
+
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		if (this.operands.size() < 1) {
 			isValid = false;
@@ -48,11 +60,7 @@ public class USI_ENT extends AbstractDirective {
 		} else if (this.operands.size() == 1) {
 			if (this.hasOperand("LR")) {
 				src = "LR";
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR"));
-				if (!isValid)
-					hErr.reportError(
-							makeError("OORlabel", "LR", this.getOpId()),
-							this.lineNum, -1);
+				
 			} else {
 				isValid = false;
 				hErr.reportError(
@@ -62,10 +70,6 @@ public class USI_ENT extends AbstractDirective {
 		} else if (this.operands.size() == 2) {
 			if (this.countOperand("LR") == 2) {
 				src = "LRLR";
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 0));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 1));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
 
 			}else{
 				isValid = false;
@@ -76,12 +80,6 @@ public class USI_ENT extends AbstractDirective {
 		} else if (this.operands.size() == 3) {
 			if (this.countOperand("LR") == 3) {
 				src = "LRLRLR";
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 0));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 1));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 2));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
 
 			}else{
 				isValid = false;
@@ -92,14 +90,6 @@ public class USI_ENT extends AbstractDirective {
 		} else if (this.operands.size() == 4) {
 			if (this.countOperand("LR") == 4) {
 				src = "LRLRLRLR";
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 0));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 1));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 2));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 3));
-				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
 
 			}else{
 				isValid = false;
@@ -113,18 +103,6 @@ public class USI_ENT extends AbstractDirective {
 					this.lineNum, -1);
 		}
 		return isValid; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override
-	public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
-	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	// =========================================================

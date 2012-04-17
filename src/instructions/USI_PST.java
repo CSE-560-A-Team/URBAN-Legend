@@ -1,14 +1,16 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The PST instruction.
  * 
- * @author Generate.java
+ * @author Ratul Khosla
  * @date Apr 08, 2012; 08:26:19
  * @specRef S2
  */
@@ -32,9 +34,42 @@ public class USI_PST extends AbstractInstruction {
 		return lc+1;
 	}
 
+
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
-		return false; // TODO: IMPLEMENT
+	
+		boolean isValid = true;
+		if(this.operands.size() > 1 || this.operands.size() == 0) {
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+			isValid =  false;
+		} else if(this.hasOperand("DR")) {
+			//range checking
+			isValid = OperandChecker.isValidReg(this.getOperand("DR"));
+			isValid = OperandChecker.isValidMem(this.getOperand("DR"));
+			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+		}  else if(this.hasOperand("FM")) {
+			//range checking
+			isValid = OperandChecker.isValidMem(this.getOperand("FM"));
+			hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
+			if(this.hasOperand("FX")) {
+				//range checking - FX only possible if FM appears before it.
+				isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
+				isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+			}
+		}  else if(this.hasOperand("FC")) {
+			//range checking
+			isValid = OperandChecker.isValidMem(this.getOperand("FC"));
+		}  else if(this.hasOperand("FL")){
+			//range checking
+			isValid = OperandChecker.isValidMem(this.getOperand("FL"));
+			if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
+		} else{
+			isValid = false;
+			hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);
+		}
+			return isValid;
+
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
@@ -91,5 +126,7 @@ public class USI_PST extends AbstractInstruction {
 
 	/** Default constructor; does nothing. */
 	private USI_PST() {}
+
+
 }
 
