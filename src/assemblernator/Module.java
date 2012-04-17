@@ -366,7 +366,7 @@ public class Module {
 		exp = exp.trim(); //trim off leading and trailing white-space.
 		if (IOFormat.isValidLabel(exp)) { //FC expressions are not valid labels.
 			Instruction i = symbolTable.getEntry(exp);  
-			if(i != null) {
+			if (i != null) {
 				if(i.hasOperand("FC")) {
 					value = evaluate(i.getOperand("FC"));
 				} else if(i.hasOperand("FM")) {
@@ -380,7 +380,7 @@ public class Module {
 		} else { //exp is a FC expression.
 			value = Integer.parseInt(exp);
 		}
-
+		
 		return value;
 	}
 

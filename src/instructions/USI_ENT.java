@@ -1,9 +1,11 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The ENT instruction.
@@ -20,22 +22,100 @@ public class USI_ENT extends AbstractDirective {
 	 * instruction ID.
 	 */
 	private static final String opId = "ENT";
-
+	
 	/** The static instance for this instruction. */
 	static USI_ENT staticInstance = new USI_ENT(true);
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
-	@Override public int getNewLC(int lc, Module mod) {
+	@Override
+	public int getNewLC(int lc, Module mod) {
 		return lc;
 	}
 
+	String src = "";
+
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
+	@Override
+	public boolean check(ErrorHandler hErr) {
+		boolean isValid = true;
+		if (this.operands.size() < 1) {
+			isValid = false;
+			hErr.reportError(
+					makeError("directiveMissingOp", this.getOpId(), "LR"),
+					this.lineNum, -1);
+		} else if (this.operands.size() == 1) {
+			if (this.hasOperand("LR")) {
+				src = "LR";
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR"));
+				if (!isValid)
+					hErr.reportError(
+							makeError("OORlabel", "LR", this.getOpId()),
+							this.lineNum, -1);
+			} else {
+				isValid = false;
+				hErr.reportError(
+						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
+						this.lineNum, -1);
+			}
+		} else if (this.operands.size() == 2) {
+			if (this.countOperand("LR") == 2) {
+				src = "LRLR";
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 0));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 1));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+
+			}else{
+				isValid = false;
+				hErr.reportError(
+						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
+						this.lineNum, -1);
+			}
+		} else if (this.operands.size() == 3) {
+			if (this.countOperand("LR") == 3) {
+				src = "LRLRLR";
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 0));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 1));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 2));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+
+			}else{
+				isValid = false;
+				hErr.reportError(
+						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
+						this.lineNum, -1);
+			}
+		} else if (this.operands.size() == 4) {
+			if (this.countOperand("LR") == 4) {
+				src = "LRLRLRLR";
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 0));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 1));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 2));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+				isValid = OperandChecker.isValidLabel(this.getOperand("LR", 3));
+				if (!isValid)hErr.reportError(makeError("OORlabel", "LR", this.getOpId()),this.lineNum, -1);
+
+			}else{
+				isValid = false;
+				hErr.reportError(
+						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
+						this.lineNum, -1);
+			}
+		} else {
+			isValid = false;
+			hErr.reportError(makeError("extraOperandsDir", this.getOpId()),
+					this.lineNum, -1);
+		}
+		return isValid; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
+	@Override
+	public int[] assemble() {
 		return null; // TODO: IMPLEMENT
 	}
 
@@ -62,12 +142,14 @@ public class USI_ENT extends AbstractDirective {
 	}
 
 	/** @see assemblernator.Instruction#getOpId() */
-	@Override public String getOpId() {
+	@Override
+	public String getOpId() {
 		return opId;
 	}
-
+	
 	/** @see assemblernator.Instruction#getNewInstance() */
-	@Override public Instruction getNewInstance() {
+	@Override
+	public Instruction getNewInstance() {
 		return new USI_ENT();
 	}
 
@@ -84,6 +166,6 @@ public class USI_ENT extends AbstractDirective {
 	}
 
 	/** Default constructor; does nothing. */
-	private USI_ENT() {}
+	private USI_ENT() {
+	}
 }
-

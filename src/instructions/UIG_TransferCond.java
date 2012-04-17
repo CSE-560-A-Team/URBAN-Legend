@@ -33,7 +33,7 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 				src="FR";
 				//range checking
 				isValid = OperandChecker.isValidReg(this.getOperand("FR"));
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				if(this.hasOperand("DM")){
 					dest="DM";
 					//range checking
@@ -55,7 +55,7 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 			src="FR";
 			//range checking
 			isValid = OperandChecker.isValidReg(this.getOperand("FR"));
-			if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
+			if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("DM") && this.hasOperand("DX")) {
 				dest = "DMDX";
 				//range checking

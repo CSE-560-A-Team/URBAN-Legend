@@ -58,6 +58,7 @@ public abstract class UIG_IO extends AbstractInstruction{
 	
 	/**
 	 * @see assemblernator.Instruction#check(ErrorHandler)
+	 * @modified: 9:15:34PM; Added additional error message in case FL is found together with FX.
 	 */
 	@Override
 	public final boolean check(ErrorHandler hErr) {
@@ -85,7 +86,11 @@ public abstract class UIG_IO extends AbstractInstruction{
 				this.operandType = OperandType.FMFX;
 			} else {
 				isValid = false;
-				hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
+				if (this.hasOperand("FL")) { 
+					hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+				} else {
+					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
+				}
 			}
 		} else {
 			isValid = false;

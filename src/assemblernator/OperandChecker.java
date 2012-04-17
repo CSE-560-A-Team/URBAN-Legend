@@ -171,6 +171,10 @@ public class OperandChecker {
 	public static boolean isValidExpression(String exp) {
 		return true;
 	}
+	
+	public static boolean isValidLabel(String exp) {
+		return true;
+	}
 
 
 	/**

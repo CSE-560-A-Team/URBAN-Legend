@@ -48,7 +48,7 @@ public class USI_TRLK extends AbstractInstruction {
 				dest="DR";
 				//range check
 				isValid = OperandChecker.isValidReg(this.getOperand("DR"));
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 				if(this.hasOperand("FM")){
 					src="FM";
 					//range check
@@ -73,7 +73,7 @@ public class USI_TRLK extends AbstractInstruction {
 				dest="DR";
 				//range check
 				isValid = OperandChecker.isValidReg(this.getOperand("DR"));
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 				if(this.hasOperand("FM") && this.hasOperand("FX")){
 					src="FMFX";
 					//range check
