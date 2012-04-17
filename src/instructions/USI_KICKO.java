@@ -47,7 +47,8 @@ public class USI_KICKO extends AbstractDirective {
 		return null; // TODO: IMPLEMENT
 	}
 
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) 
+	 * @modified 11:02:09PM;  moved check to immediateCheck - Noah*/
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		
