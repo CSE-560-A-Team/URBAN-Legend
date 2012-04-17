@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -25,6 +26,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.SortOrder;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -173,6 +175,9 @@ public class GUIMain {
 			errorTable.getColumnModel().getColumn(2).setMaxWidth(48);
 			errorTable.setFillsViewportHeight(true);
 
+			errorTable.setRowSorter(new TableRowSorter<TableModel>(errorTable
+					.getModel()));
+
 			dispTabs = new JTabbedPane();
 			dispTabs.add("Build Messages", buildMessageTab = new JScrollPane(
 					errorTable));
@@ -199,9 +204,8 @@ public class GUIMain {
 			sTable.getColumnModel().getColumn(2).setMaxWidth(96);
 			sTable.getColumnModel().getColumn(2).setMinWidth(80);
 			sTable.getColumnModel().getColumn(3).setMinWidth(48);
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
-					sTable.getModel());
-			sTable.setRowSorter(sorter);
+			sTable.setRowSorter(new TableRowSorter<TableModel>(sTable
+					.getModel()));
 
 			JSplitPane sjsp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, jp,
 					dispTabs);
@@ -338,6 +342,14 @@ public class GUIMain {
 				dtm.setValueAt(Integer.toString(p.pos), i, 2);
 				dtm.setValueAt(p.message, i, 3);
 			}
+			if (errorTable.getRowSorter() instanceof TableRowSorter) {
+				TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) errorTable
+						.getRowSorter();
+				List<TableRowSorter.SortKey> sortKeys = new ArrayList<TableRowSorter.SortKey>();
+				sortKeys.add(new TableRowSorter.SortKey(1, SortOrder.ASCENDING));
+				sorter.setSortKeys(sortKeys);
+			}
+
 			System.out.println(errorTable.getModel().getClass().getName());
 		}
 
@@ -408,8 +420,8 @@ public class GUIMain {
 				if (jfc.showSaveDialog(mainWindow) == JFileChooser.APPROVE_OPTION) {
 					File f = jfc.getSelectedFile();
 					if (!f.exists()
-							|| JOptionPane
-									.showConfirmDialog(mainWindow,"Overwrite existing file?") == JOptionPane.YES_OPTION) {
+							|| JOptionPane.showConfirmDialog(mainWindow,
+									"Overwrite existing file?") == JOptionPane.YES_OPTION) {
 						try {
 							FileWriter fw = new FileWriter(f);
 							FileTab ft = (FileTab) tabPane
