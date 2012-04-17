@@ -12,7 +12,14 @@ import assemblernator.OperandChecker;
  * @date Apr 14, 2012; 5:52:36 PM
  */
 public abstract class UIG_TransferCond extends AbstractInstruction {
+	/**
+	 * The type of operand specifying the destination for this operation.
+	 */
 	String dest = "";
+	
+	/**
+	 *The type of operand specifying the source for this operation.
+	 */
 	String src = "";
 	
 	/**

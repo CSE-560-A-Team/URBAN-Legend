@@ -31,7 +31,9 @@ public class USI_END extends AbstractDirective {
 		return lc;
 	}
 	
-	
+	/**
+	 * The type of operand specifying the source for this operation.
+	 */
 	String src = "";
 	
 	/** @see assemblernator.Instruction#check(ErrorHandler) */

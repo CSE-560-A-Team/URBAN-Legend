@@ -30,7 +30,9 @@ public class USI_SKIPS extends AbstractDirective {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc+mod.evaluate(getOperand("FC"));
 	}
-	
+	/**
+	 * The type of operand specifying the source for this operation.
+	 */
 	String src = "";
 	
 	/** @see assemblernator.Instruction#check(ErrorHandler) */

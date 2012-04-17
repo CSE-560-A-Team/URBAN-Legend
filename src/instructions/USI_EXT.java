@@ -30,6 +30,9 @@ public class USI_EXT extends AbstractDirective {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc;
 	}
+	/**
+	 * The type of operand specifying the source for this operation.
+	 */
 	String src = "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {

@@ -31,7 +31,9 @@ public class USI_NUM extends AbstractDirective {
 		return lc+1;
 	}
 	
-	
+	/**
+	 * The type of operand specifying the source for this operation.
+	 */
 	String src = "";
 	
 	/** @see assemblernator.Instruction#check(ErrorHandler) */

@@ -33,6 +33,9 @@ public class USI_TR extends AbstractInstruction {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
+	/**
+	 * The type of operand specifying the destination for this operation.
+	 */
 	String dest="";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
