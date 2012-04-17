@@ -122,8 +122,8 @@
     <th>Error Description</th>
   </tr>
   <tr>
-    <td>UIG_Arithmetic</th>
-    <td>Eric wrote it. TROLOLOLOL</td>
+    <td>USI_*</th>
+    <td>Some instructions are limited to hard-coded values because they call the string() version of OperandChecker.isValid*. Replacing the string operand with an integer could fix this.</td>
   </tr>
 </table>
   

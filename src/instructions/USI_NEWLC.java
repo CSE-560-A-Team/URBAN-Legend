@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -23,24 +24,14 @@ public class USI_NEWLC extends AbstractDirective {
 
 	/** The static instance for this instruction. */
 	static USI_NEWLC staticInstance = new USI_NEWLC(true);
+	
+	/** The LC the user specified. */
+	int ownLC;
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		int ownLC;
-		
-		if(this.hasOperand("FC")) {
-			ownLC = mod.evaluate(this.getOperand("FC"));
-		} else {
-			ownLC = mod.evaluate(this.getOperand("LR"));
-		} 
-		
 		this.lc = ownLC;
 		return ownLC;
-	}
-
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
@@ -50,8 +41,25 @@ public class USI_NEWLC extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean isValid = true;
+		Operand o = this.getOperandData("FC");
+		if (o != null) {
+			ownLC = module.evaluate(o.expression, false, hErr, this, o.valueStartPosition);
+		} else {
+			o = this.getOperandData("LR");
+			if (o != null) {
+				ownLC = module.evaluate(o.expression, false, hErr, this, o.valueStartPosition);
+			}
+			else {
+				hErr.reportError(makeError("directiveMissingOp2",this.getOpId(),"FC","LR"), lineNum, -1);
+				isValid = false;
+			}
+		}
+		if (isValid && ownLC < lc) {
+			hErr.reportError(makeError("lcBackward"), lineNum, -1);
+			isValid = false;
+		}
+		return isValid;
 	}
 
 	// =========================================================

@@ -147,6 +147,29 @@ public class IOFormat {
 	}
 
 	/**
+	 * Check if a string contains all numerals.
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 5, 2012; 11:05:33 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param str
+	 *            The string to check as numeric.
+	 * @return True if the string is composed entirely of numbers, false
+	 *         otherwise.
+	 * @specRef N/A
+	 */
+	public static boolean isNumeric(String str) {
+		for (int i = 0; i < str.length(); i++)
+			if (!Character.isDigit(str.charAt(i)))
+				return false;
+		return true;
+	}
+
+	/**
 	 * Format an integer to a zero-padded decimal representation.
 	 * 
 	 * @date Apr 3, 2012; 3:09:00 PM

@@ -34,9 +34,9 @@ public class USI_NOP extends AbstractInstruction {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override 
-	public boolean check(ErrorHandler hErr) {
+	public boolean check(ErrorHandler hErr, Module module) {
 		if(this.operands.size() > 0) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			return false;

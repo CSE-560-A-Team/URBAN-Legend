@@ -4,6 +4,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Module;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.OperandChecker;
 
@@ -27,7 +28,7 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 	 * @date Apr 14, 2012; 5:52:36 PM
 	 */
 	@Override
-	public final boolean check(ErrorHandler hErr) {
+	public final boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		//not enough operands
 		if(this.operands.size() < 2){

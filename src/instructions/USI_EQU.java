@@ -24,7 +24,7 @@ public class USI_EQU extends UIG_Equated {
 
 	/** The static instance for this instruction. */
 	static USI_EQU staticInstance = new USI_EQU(true);
-
+	
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		if (operands.size() > 1) {

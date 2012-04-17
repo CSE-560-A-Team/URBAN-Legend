@@ -35,8 +35,8 @@ public class USI_HLT extends AbstractInstruction {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		
 		if(!this.hasOperand("FC") || this.operands.size() > 1) {

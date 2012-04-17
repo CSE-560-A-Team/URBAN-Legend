@@ -1,7 +1,7 @@
 package assemblernator;
 
+import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
-import instructions.USI_EQU;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,9 +14,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.Instruction.Operand;
 import assemblernator.Instruction.Usage;
-import static assemblernator.ErrorReporting.makeError;
 
 /**
  * A class representing an assembled urban module.
@@ -55,6 +55,7 @@ public class Module {
 		 */
 		private final class MapEntryComparator implements
 				Comparator<Map.Entry<String, Instruction>> {
+			/** @see java.util.Comparator#compare(Object, Object) */
 			@Override public int compare(Map.Entry<String, Instruction> o1,
 					Map.Entry<String, Instruction> o2) {
 				return String.CASE_INSENSITIVE_ORDER.compare(o1.getKey(),
@@ -198,12 +199,9 @@ public class Module {
 			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols
 					.iterator();
 
-			String[][] stringTable = new String[combinedSymbols.size() + 1][4]; // all
-																				// entries
-																				// +
-																				// 1
-																				// header
-																				// entry.
+			// all entries + 1 header entry.
+			String[][] stringTable = new String[combinedSymbols.size() + 1][4];
+
 			int x = 0;
 			stringTable[x][0] = "Label";
 			stringTable[x][1] = "LC";
@@ -247,13 +245,10 @@ public class Module {
 		 * @author Eric
 		 * @date Apr 6, 2012; 8:58:56 AM
 		 * @modified Apr 9, 11:23:41 AM; combined separate maps into one symbol
-		 *           table, <br>
-		 *           and made a comparator to sort. <br>
-		 *           -Noah
+		 *           table, and made a comparator to sort. -Noah <br>
 		 *           Apr 7, 1:26:50 PM; added opcode to lines. - Noah <br>
 		 *           Apr 6, 11:02:08 AM; removed remove() call to prevent
-		 *           destruction of symbol table, <br>
-		 *           also, cleaned code up. -Noah<br>
+		 *           destruction of symbol table, also, cleaned code up. -Noah<br>
 		 * @tested UNTESTED
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
@@ -375,7 +370,7 @@ public class Module {
 	/**
 	 * Evaluates an expression in terms of constants and EQU directives.
 	 * 
-	 * @author Noah
+	 * @author Josh, Noah
 	 * @date Apr 8, 2012; 1:34:17 AM
 	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible -
 	 *           Josh
@@ -383,8 +378,9 @@ public class Module {
 	 *           Apr 12, 2012; 8:50:02 PM: modified for readability. - Noah
 	 *           Apr 13, 2012; 11:23:33 PM: modified for correctness - Noah
 	 *           Apr 13, 2012; 9:34:50 PM: symbolTable.getEntry(exp) can return
-	 *           null
-	 *           so added i == null check - Noah
+	 *           null, so added i == null check - Noah
+	 *           Apr 17, 2012; 1:59:37 AM: Recoded to support compound
+	 *           expressions. -Josh
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -397,37 +393,80 @@ public class Module {
 	 *            address referencing of regular labels.
 	 * @param hErr
 	 *            The error handler which will receive problems in evaluation.
-	 * @param line
-	 *            The line number for which errors will be reported; passed to
-	 *            hErr.report*.
-	 * @param pos The position in the given line at which this expression starts.
+	 * @param caller
+	 *            The instruction requesting this expression.
+	 * @param pos
+	 *            The position in the given line at which this expression
+	 *            starts.
 	 * @return The value of the expression.
 	 * @specRef N/A
 	 */
-	public int evaluate(String exp, boolean MREF, ErrorHandler hErr, int line,
-			int pos) {
+	public int evaluate(String exp, boolean MREF, ErrorHandler hErr,
+			Instruction caller, int pos) {
 		exp = exp.trim(); // trim off leading and trailing white-space.
 		// First, check if we have a standard label
 		if (IOFormat.isValidLabel(exp)) {
 			Instruction i = symbolTable.getEntry(exp);
 			if (i == null) {
-				hErr.reportError(makeError("undefEqLabel", exp), line, pos);
+				hErr.reportError(makeError("undefEqLabel", exp),
+						caller.lineNum, pos);
 				return 0;
 			}
 			if (i.usage == Usage.EQUATE)
 				return ((UIG_Equated) i).value;
 			if (MREF)
 				return i.lc;
-			hErr.reportError(makeError("illegalRefAmp", exp), line, pos);
+			hErr.reportError(makeError("illegalRefAmp", exp), caller.lineNum,
+					pos);
 			return 0;
 		}
-		// Turns out, we don't. Maybe
-		try {
-			return Integer.parseInt(exp);
-		} catch (NumberFormatException nfe) {
 
+		// Turns out, we don't. Maybe we have a number?
+		if (IOFormat.isNumeric(exp)) {
+			try {
+				return Integer.parseInt(exp);
+			} catch (NumberFormatException nfe) {}
+			return 0;
 		}
 
+		// Guess we're a compound expression.
+
+		int lhs = 0, i = 0;
+		if (Character.isLetter(exp.charAt(0))) {
+			String lbl;
+			try {
+				lbl = IOFormat.readLabel(exp, 0);
+			} catch (URBANSyntaxException e) {
+				hErr.reportError(
+						makeError("compilerError",
+								"Invalid label should have been reported earlier"),
+						caller.lineNum, pos);
+				return 0;
+			}
+			lhs = evaluate(lbl, MREF, hErr, caller, pos);
+			i += lbl.length();
+		}
+		else if (Character.isDigit(exp.charAt(0))) {
+			// We won't hit end of char doing this, or parseInt would have
+			// succeeded.
+			while (Character.isDigit(exp.charAt(++i)));
+			lhs = evaluate(exp.substring(0, i), MREF, hErr, caller, pos);
+		}
+		else if (exp.charAt(i) == '*') {
+			lhs = caller.lc;
+			++i;
+		}
+
+		// This will not overflow, because our string is trimmed.
+
+
+		if (exp.charAt(i) == '+')
+			return lhs + evaluate(exp.substring(i+1), MREF, hErr, caller, pos+i+1);
+		else if (exp.charAt(i) == '-') 
+			return lhs - evaluate(exp.substring(i+1), MREF, hErr, caller, pos+i+1);
+
+		hErr.reportError(makeError("unexpSymExp", "" + exp.charAt(i)),
+				caller.lineNum, pos + i);
 		return 0;
 	}
 

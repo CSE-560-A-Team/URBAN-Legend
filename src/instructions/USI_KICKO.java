@@ -6,7 +6,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Instruction.Usage;
 import assemblernator.Module;
-import assemblernator.OperandChecker;
+import static assemblernator.OperandChecker.isValidMem;
 
 /**
  * The KICKO instruction.
@@ -27,18 +27,25 @@ public class USI_KICKO extends AbstractDirective {
 	/** The static instance for this instruction. */
 	static USI_KICKO staticInstance = new USI_KICKO(true);
 
+	/** User defined program start address */
+	int ownLC;
+	
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		int ownLC = mod.evaluate(getOperand("FC"));
 		this.lc = ownLC;
 		return ownLC;
 	}
 
-	
-	/** @see assemblernator.Instruction#check(ErrorHandler) 
-	 *  @modified 12:43:13 changed lineNum check to != 1. first line = 1.*/
-	@Override 
-	public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#assemble() */
+	@Override public int[] assemble() {
+		return null; // TODO: IMPLEMENT
+	}
+
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) 
+	 * @modified 12:43:13 changed lineNum check to != 1. first line = 1.
+	 * @modified 11:02:09PM;  moved check to immediateCheck - Noah
+	 */
+	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		
 		if (this.lineNum != 1) { //KICKO's should only be found at beginning of source.
@@ -50,23 +57,16 @@ public class USI_KICKO extends AbstractDirective {
 		} else if (this.operands.size() > 1) { //KICKO can only have FC operand.
 			isValid = false;
 			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
-		} else if (!OperandChecker.isValidMem(this.getOperand("FC"))){
-			isValid = false;
-			hErr.reportError(makeError("OORmemAddr", "FC", this.getOpId()), this.lineNum, -1);
+		} else {
+			// We know at this point that operands.get(0) is our one and only operand, FC.
+			ownLC = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
+			if (!isValidMem(ownLC)) {
+				isValid = false;
+				hErr.reportError(makeError("OORmemAddr", "FC", this.getOpId()), this.lineNum, -1);
+			}
 		}
 
 		return isValid;
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
-	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	// =========================================================

@@ -41,8 +41,8 @@ public class USI_TRLK extends AbstractInstruction {
 	 * The type of operand specifying the source for this operation.
 	 */
 	String src = "";
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		//operands less than two error
 		if (this.operands.size() < 2){

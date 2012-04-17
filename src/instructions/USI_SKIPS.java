@@ -10,7 +10,7 @@ import assemblernator.OperandChecker;
 /**
  * The SKIPS instruction.
  * 
- * @author Generate.java
+ * @author Eric, Josh, Generate.java
  * @date Apr 08, 2012; 08:26:19
  * @specRef D9
  */
@@ -28,50 +28,66 @@ public class USI_SKIPS extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+mod.evaluate(getOperand("FC"));
+		return lc + skipSize;
 	}
+
 	/**
 	 * The type of operand specifying the source for this operation.
 	 */
 	String src = "";
-	
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		boolean isValid = true;
-		//less than 1 operand error
-		if(this.operands.size() < 1){
-			isValid=false;
-			hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
-			//checks for FC
-		}else if (this.operands.size() == 1){
-			if(this.hasOperand("FC")){
-				src = "FC";
-				//range check THIS MAY HAVE TO BE CHANGED
-				isValid = OperandChecker.isValidMem(this.getOperand("FC"));
-				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FC", this.getOpId()), this.lineNum, -1);
-			}else{
-				isValid = false;
-				hErr.reportError(
-						makeError("operandDirWrong", this.getOpId(), "any operand other than FC"),
-						this.lineNum, -1);
-			}
-			//more than 1 operand error
-		}else{
-			isValid =false;
-			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
-		}
-		return isValid; // TODO: IMPLEMENT
-	}
+
+	/** The number of words encompassed by this skip */
+	int skipSize = 0;
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
 		return null; // TODO: IMPLEMENT
 	}
 
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	/**
+	 * @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler,
+	 *      Module)
+	 */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
+
+		boolean isValid = true;
+		// less than 1 operand error
+		if (this.operands.size() < 1) {
+			isValid = false;
+			hErr.reportError(
+					makeError("directiveMissingOp", this.getOpId(), "FC"),
+					this.lineNum, -1);
+			// checks for FC
+		}
+		else if (this.operands.size() == 1) {
+			Operand o = getOperandData("FC");
+			if (o != null) {
+				src = "FC";
+
+				skipSize = module.evaluate(o.expression, false, hErr, this,
+						o.valueStartPosition);
+				isValid = OperandChecker.isValidMem(skipSize);
+
+
+				if (!isValid)
+					hErr.reportError(
+							makeError("OORmemAddr", "FC", this.getOpId()),
+							this.lineNum, -1);
+			}
+			else {
+				isValid = false;
+				hErr.reportError(
+						makeError("operandDirWrong", this.getOpId(),
+								"any operand other than FC"), this.lineNum, -1);
+			}
+			// more than 1 operand error
+		}
+		else {
+			isValid = false;
+			hErr.reportError(makeError("extraOperandsDir", this.getOpId()),
+					this.lineNum, -1);
+		}
+		return isValid;
 	}
 
 	// =========================================================
@@ -114,4 +130,3 @@ public class USI_SKIPS extends AbstractDirective {
 	/** Default constructor; does nothing. */
 	private USI_SKIPS() {}
 }
-

@@ -3,6 +3,7 @@ package instructions;
 import assemblernator.AbstractInstruction;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
+import assemblernator.Module;
 import assemblernator.OperandChecker;
 import assemblernator.ErrorReporting.ErrorHandler;
 import static assemblernator.ErrorReporting.makeError;
@@ -34,7 +35,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 	 * @specRef N/A
 	 */
 	@Override
-	public final boolean check(ErrorHandler hErr){
+	public final boolean check(ErrorHandler hErr, Module module){
 		boolean isValid = true;
 		
 		//The only possible combination has 2 operands

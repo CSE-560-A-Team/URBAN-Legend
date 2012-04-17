@@ -23,15 +23,12 @@ public class USI_EQUE extends UIG_Equated {
 	/** The static instance for this instruction. */
 	static USI_EQUE staticInstance = new USI_EQUE(true);
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		return false; // TODO: IMPLEMENT
 	}
 
-	/**
-	 * @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler,
-	 *      Module)
-	 */
+	/** @see assemblernator.Instruction#immediateCheck(ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		// TODO Auto-generated method stub
 		return false;
