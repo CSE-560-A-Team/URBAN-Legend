@@ -33,8 +33,8 @@ public class Comment extends AbstractDirective {
 		return lc;
 	}
 
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler) */
-	@Override public boolean immediateCheck(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		return true;
 	}
 

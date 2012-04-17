@@ -611,10 +611,11 @@ public abstract class Instruction {
 	 * @param hErr
 	 *            An error handler which will receive any error or warning
 	 *            messages.
+	 * @param module TODO
 	 * @return Returns whether the instruction is semantically correct.
 	 * @date Apr 4, 2012; 01:40:29AM
 	 */
-	public abstract boolean immediateCheck(ErrorHandler hErr);
+	public abstract boolean immediateCheck(ErrorHandler hErr, Module module);
 	
 	/**
 	 * Used to check if this Instruction is actually a directive.

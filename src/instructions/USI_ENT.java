@@ -119,8 +119,8 @@ public class USI_ENT extends AbstractDirective {
 		return null; // TODO: IMPLEMENT
 	}
 
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler) */
-	@Override public boolean immediateCheck(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		// TODO Auto-generated method stub
 		return false;
 	}

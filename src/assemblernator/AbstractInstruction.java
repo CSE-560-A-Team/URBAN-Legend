@@ -26,9 +26,9 @@ public abstract class AbstractInstruction extends Instruction {
 	/**
 	 * Most instructions should be checked for validity during the second pass.
 	 * 
-	 * @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler)
+	 * @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module)
 	 */
-	@Override public boolean immediateCheck(ErrorHandler hErr) {
+	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		return true;
 	}
 
