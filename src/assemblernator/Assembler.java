@@ -184,6 +184,7 @@ public class Assembler {
 	 *           Apr 11, 2012; 2:54:53 PM: Added error handler instance. - Josh <br>
 	 *           Apr 15, 2012; 1:23:08 PM: Moved try-catch block inside loop and added continues,
 	 *           so the loop continues even when an exception is caught. - Noah
+	 *           Apr 16, 2012; 10:22:15 PM: Added assignment of program name to module.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -222,23 +223,25 @@ public class Assembler {
 				Instruction instr = Instruction.parse(line);
 				if (instr == null)
 					continue;
-	
+				
 				instr.origSrcLine = line; // Gives instruction source line.
 				instr.lineNum = lineNum;
 	
+				/* if start of module, record startAddr of module.
+				 * execStart of module. */
+				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
+					module.startAddr = startAddr;
+					instr.immediateCheck(hErr, module);
+					module.programName = instr.label;
+				} else if (instr.isDirective()) {
+					instr.immediateCheck(hErr, module);
+				}
 				//checks for operand errors in instruction.
 				instr.check(hErr);
 				
 				// Get new lc for next instruction.
 				instr.lc = lc;
 				lc = instr.getNewLC(lc, module);
-	
-
-				/* if start of module, record startAddr of module.
-				 * execStart of module. */
-				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
-					module.startAddr = startAddr;
-				}
 	
 				//if instr can be used in symbol table.
 				if (instr.usage != Usage.NONE) {

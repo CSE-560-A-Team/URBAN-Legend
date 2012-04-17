@@ -317,6 +317,10 @@ public class Module {
 	int startAddr;
 
 	/**
+	 * The name of the module = label of KICKO directive.
+	 */
+	String programName;
+	/**
 	 * The length of this module, in instructions, between 0 and 1023, according
 	 * to specification.
 	 * 
