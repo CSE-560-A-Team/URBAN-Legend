@@ -52,7 +52,7 @@ public class USI_TRDR extends Instruction {
 					src="FR";
 					//range checking
 					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
-					if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				}else if(this.hasOperand("FX")){
 					src="FX";
 					//range checking
@@ -79,7 +79,7 @@ public class USI_TRDR extends Instruction {
 					src="FR";
 					//range checking
 					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
-					if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				}else if(this.hasOperand("FX")){
 					src="FX";
 					//range checking

@@ -33,7 +33,6 @@ public class USI_RET extends Instruction {
 		return lc+1;
 	}
 	String dest = "";
-	String src = "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
 		boolean isValid = true;
