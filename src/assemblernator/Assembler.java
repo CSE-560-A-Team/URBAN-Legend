@@ -213,7 +213,7 @@ public class Assembler {
 		Module module = new Module();
 		int startAddr = 0;
 		int lc = 0;
-
+		
 		while (source.hasNextLine()) {
 			try{
 				lineNum++;

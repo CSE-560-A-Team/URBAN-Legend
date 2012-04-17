@@ -319,7 +319,7 @@ public class Module {
 	/**
 	 * The name of the module = label of KICKO directive.
 	 */
-	String programName;
+	public String programName;
 	/**
 	 * The length of this module, in instructions, between 0 and 1023, according
 	 * to specification.
