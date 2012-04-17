@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -40,7 +41,7 @@ public class USI_ENT extends AbstractDirective {
 	@Override
 	public boolean check(ErrorHandler hErr, Module module) {
 		//check for ent LR label is correct
-		for(int i=0; i == this.countOperand("LR"); i++ ){
+		for(int i = 0;this.countOperand("LR") != i;i++){
 		if (!module.getSymbolTable().hasLocalEntry(this.getOperand("LR", i))){
 			hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
 			return false;
@@ -71,7 +72,10 @@ public class USI_ENT extends AbstractDirective {
 		} else if (this.operands.size() == 1) {
 			if (this.hasOperand("LR")) {
 				src = "LR";
-				
+				if (!IOFormat.isValidLabel(this.getOperand("LR"))){
+					hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+					isValid = false;
+				}
 			} else {
 				isValid = false;
 				hErr.reportError(
@@ -81,6 +85,10 @@ public class USI_ENT extends AbstractDirective {
 		} else if (this.operands.size() == 2) {
 			if (this.countOperand("LR") == 2) {
 				src = "LRLR";
+				if (!IOFormat.isValidLabel(this.getOperand("LR", 0)) || !IOFormat.isValidLabel(this.getOperand("LR", 1))){
+					hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+					isValid = false;
+				}
 
 			}else{
 				isValid = false;
@@ -91,6 +99,11 @@ public class USI_ENT extends AbstractDirective {
 		} else if (this.operands.size() == 3) {
 			if (this.countOperand("LR") == 3) {
 				src = "LRLRLR";
+				if (!IOFormat.isValidLabel(this.getOperand("LR", 0)) || !IOFormat.isValidLabel(this.getOperand("LR", 1))
+						|| !IOFormat.isValidLabel(this.getOperand("LR", 2))){
+					hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+					isValid = false;
+				}
 
 			}else{
 				isValid = false;
@@ -101,7 +114,11 @@ public class USI_ENT extends AbstractDirective {
 		} else if (this.operands.size() == 4) {
 			if (this.countOperand("LR") == 4) {
 				src = "LRLRLRLR";
-
+				if (!IOFormat.isValidLabel(this.getOperand("LR", 0)) || !IOFormat.isValidLabel(this.getOperand("LR", 1))
+						|| !IOFormat.isValidLabel(this.getOperand("LR", 2)) || !IOFormat.isValidLabel(this.getOperand("LR", 3))){
+					hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+					isValid = false;
+				}
 			}else{
 				isValid = false;
 				hErr.reportError(
