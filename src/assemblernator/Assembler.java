@@ -231,7 +231,7 @@ public class Assembler {
 				
 				/* if start of module, record startAddr of module.
 				 * execStart of module. */
-				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
+				if (instr.getOpId().equalsIgnoreCase("KICKO") && !firstKICKO) {
 					module.startAddr = startAddr;
 					instr.immediateCheck(hErr, module);
 					module.programName = instr.label;
