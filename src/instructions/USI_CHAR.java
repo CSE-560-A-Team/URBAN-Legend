@@ -60,17 +60,7 @@ public class USI_CHAR extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
-		Operand st = getOperandData("ST");
-		if (st == null)
-			hErr.reportError(makeError("directiveMissingOp", "CHAR", "ST"),
-					lineNum, -1);
-		else if (!OperandChecker.isValidString(st.expression))
-			hErr.reportError(makeError("STstringCount"), lineNum, -1);
-		else {
-			content = IOFormat.escapeString(st.expression, lineNum, st.valueStartPosition, hErr);
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
@@ -85,7 +75,16 @@ public class USI_CHAR extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
+		Operand st = getOperandData("ST");
+		if (st == null)
+			hErr.reportError(makeError("directiveMissingOp", "CHAR", "ST"),
+					lineNum, -1);
+		else if (!OperandChecker.isValidString(st.expression))
+			hErr.reportError(makeError("STstringCount"), lineNum, -1);
+		else {
+			content = IOFormat.escapeString(st.expression, lineNum, st.valueStartPosition, hErr);
+			return true;
+		}
 		return false;
 	}
 	

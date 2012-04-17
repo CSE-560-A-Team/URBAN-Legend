@@ -26,6 +26,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -33,6 +34,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.lateralgm.joshedit.JoshText;
+import org.lateralgm.joshedit.Runner.JoshTextPanel;
 import org.lateralgm.joshedit.JoshText.CodeMetrics;
 import org.lateralgm.joshedit.JoshText.Highlighter;
 import org.lateralgm.joshedit.QuickFind;
@@ -152,19 +154,11 @@ public class GUIMain {
 		 * Default constructor; build tab UI
 		 */
 		FileTab() {
-			jt = new JoshText();
+			JoshTextPanel jtp = new JoshTextPanel();
+			
+			jt = jtp.text;
 			jt.setTokenMarker(new URBANhighlighter());
-			JScrollPane sp = new JScrollPane(jt);
-			QuickFind qf = new QuickFind(jt);
-			JPanel jp = new JPanel();
-
-			jt.finder = qf;
 			jt.highlighters.add(0, problemMarker = new ProblemMarker());
-
-
-			jp.setLayout(new BoxLayout(jp, BoxLayout.PAGE_AXIS));
-			jp.add(sp);
-			jp.add(qf);
 
 			userReport = new JTextArea();
 			userReport.setEditable(false);
@@ -207,7 +201,7 @@ public class GUIMain {
 			sTable.setRowSorter(new TableRowSorter<TableModel>(sTable
 					.getModel()));
 
-			JSplitPane sjsp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, jp,
+			JSplitPane sjsp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, jtp,
 					dispTabs);
 			this.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
 			this.setLeftComponent(sjsp);
@@ -342,13 +336,11 @@ public class GUIMain {
 				dtm.setValueAt(Integer.toString(p.pos), i, 2);
 				dtm.setValueAt(p.message, i, 3);
 			}
-			if (errorTable.getRowSorter() instanceof TableRowSorter) {
-				TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) errorTable
-						.getRowSorter();
-				List<TableRowSorter.SortKey> sortKeys = new ArrayList<TableRowSorter.SortKey>();
-				sortKeys.add(new TableRowSorter.SortKey(1, SortOrder.ASCENDING));
-				sorter.setSortKeys(sortKeys);
-			}
+			
+			RowSorter<? extends TableModel> sorter = errorTable.getRowSorter();
+	        List<TableRowSorter.SortKey> sortKeys = new ArrayList<TableRowSorter.SortKey>();
+            sortKeys.add(new TableRowSorter.SortKey(1, SortOrder.ASCENDING));
+	        sorter.setSortKeys(sortKeys);
 
 			System.out.println(errorTable.getModel().getClass().getName());
 		}

@@ -164,6 +164,7 @@ public class OperandChecker {
 	 * @return
 	 * @specRef N/A
 	 */
+	//needs to check for 2^16-1 to -(2^16)
 	public static boolean isValidConstant(String cnst) {
 		return true;
 	}
