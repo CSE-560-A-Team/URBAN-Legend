@@ -38,6 +38,16 @@ public class USI_END extends AbstractDirective {
 	
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
+		return true;
+	}
+
+	/** @see assemblernator.Instruction#assemble() */
+	@Override public int[] assemble() {
+		return null; // TODO: IMPLEMENT
+	}
+
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		//less than 1 operand error
 		if(this.operands.size() < 1){
@@ -47,9 +57,15 @@ public class USI_END extends AbstractDirective {
 		}else if (this.operands.size() == 1){
 			if(this.hasOperand("LR")){
 				src = "LR";
-				//range check THIS MAY HAVE TO BE CHANGED
-				isValid = OperandChecker.isValidLabel(this.getOperand("LR"));
-				if(!isValid) hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+				//range check
+				if(this.getOperand("LR") != module.programName){
+					hErr.reportError(makeError("noLabel"), this.lineNum, -1);
+					isValid=false;
+				}
+				if(this.label != null){
+					hErr.reportError(makeError("noLabel",this.getOpId()), this.lineNum, -1);
+					isValid=false;
+				}
 			}else{
 				isValid=false;
 				hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "any operand other than LR"), this.lineNum, -1);
@@ -60,17 +76,6 @@ public class USI_END extends AbstractDirective {
 			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
 		}
 		return isValid; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
-	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	// =========================================================
