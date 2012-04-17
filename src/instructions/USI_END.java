@@ -59,7 +59,7 @@ public class USI_END extends AbstractDirective {
 				src = "LR";
 				//range check
 				if(this.getOperand("LR") != module.programName){
-					hErr.reportError(makeError("noLabel"), this.lineNum, -1);
+					hErr.reportError(makeError("matchLabel"), this.lineNum, -1);
 					isValid=false;
 				}
 				if(this.label != null){
