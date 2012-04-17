@@ -1,6 +1,5 @@
 package instructions;
 
-import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -12,7 +11,7 @@ import assemblernator.Module;
  * @date Apr 08, 2012; 08:26:19
  * @specRef D4
  */
-public class USI_EQUE extends AbstractDirective {
+public class USI_EQUE extends UIG_Equated {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -24,22 +23,15 @@ public class USI_EQUE extends AbstractDirective {
 	/** The static instance for this instruction. */
 	static USI_EQUE staticInstance = new USI_EQUE(true);
 
-	/** @see assemblernator.Instruction#getNewLC(int, Module) */
-	@Override public int getNewLC(int lc, Module mod) {
-		return lc;
-	}
-
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {
 		return false; // TODO: IMPLEMENT
 	}
 
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	/**
+	 * @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler,
+	 *      Module)
+	 */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		// TODO Auto-generated method stub
 		return false;
@@ -86,4 +78,3 @@ public class USI_EQUE extends AbstractDirective {
 	/** Default constructor; does nothing. */
 	private USI_EQUE() {}
 }
-

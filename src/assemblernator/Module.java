@@ -1,5 +1,8 @@
 package assemblernator;
 
+import instructions.UIG_Equated;
+import instructions.USI_EQU;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,8 +13,10 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction.Operand;
 import assemblernator.Instruction.Usage;
+import static assemblernator.ErrorReporting.makeError;
 
 /**
  * A class representing an assembled urban module.
@@ -44,13 +49,16 @@ public class Module {
 			Iterable<Map.Entry<String, Instruction>> {
 		/**
 		 * Compares two Map.Entry's.
+		 * 
 		 * @author Noah
 		 * @date Apr 9, 2012; 3:38:54 AM
 		 */
-		private final class MapEntryComparator implements Comparator <Map.Entry<String, Instruction>> {
-			@Override 
-			public int compare(Map.Entry<String, Instruction> o1, Map.Entry<String, Instruction> o2) {
-				return String.CASE_INSENSITIVE_ORDER.compare(o1.getKey(), o2.getKey()); //same ordering as values.
+		private final class MapEntryComparator implements
+				Comparator<Map.Entry<String, Instruction>> {
+			@Override public int compare(Map.Entry<String, Instruction> o1,
+					Map.Entry<String, Instruction> o2) {
+				return String.CASE_INSENSITIVE_ORDER.compare(o1.getKey(),
+						o2.getKey()); // same ordering as values.
 			}
 		}
 
@@ -63,7 +71,8 @@ public class Module {
 		 * usage = Instruction.usage,
 		 * and string = the value of the operand in Instruction.
 		 * 
-		 * does not include Instructions extEntInstr, where instr.opID = "EXT" or "ENT".
+		 * does not include Instructions extEntInstr, where instr.opID = "EXT"
+		 * or "ENT".
 		 */
 		private SortedMap<String, Instruction> symbols = new TreeMap<String, Instruction>(
 				String.CASE_INSENSITIVE_ORDER);
@@ -77,12 +86,14 @@ public class Module {
 		 * usage = Instruction.usage,
 		 * and string = the value of the operand in Instruction.
 		 * 
-		 * only includes Instructions extEntInstr, where instr.opID = "EXT" or "ENT".
+		 * only includes Instructions extEntInstr, where instr.opID = "EXT" or
+		 * "ENT".
 		 */
 		private Map<String, Instruction> extEntSymbols = new TreeMap<String, Instruction>();
-		
+
 		/**
 		 * adds an entry into the symbol table.
+		 * 
 		 * @author Noah
 		 * @date Apr 6, 2012; 1:56:43 PM
 		 * @modified UNMODIFIED
@@ -90,17 +101,20 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @param instr instruction to add.
+		 * @param instr
+		 *            instruction to add.
 		 * @specRef N/A
 		 */
 		public void addEntry(Instruction instr) {
-			//keep track of instructions w/ opID "ENT" and "EXT" separately.
-			if (instr.getOpId().equalsIgnoreCase("ENT") || instr.getOpId().equalsIgnoreCase("EXT")) {
-				//put each operand as a separate entry into the symbol table.
-				for (int i = 1; i < instr.countOperand("LR") + 1; i++) { 
+			// keep track of instructions w/ opID "ENT" and "EXT" separately.
+			if (instr.getOpId().equalsIgnoreCase("ENT")
+					|| instr.getOpId().equalsIgnoreCase("EXT")) {
+				// put each operand as a separate entry into the symbol table.
+				for (int i = 1; i < instr.countOperand("LR") + 1; i++) {
 					extEntSymbols.put(instr.getOperand("LR", i), instr);
 				}
-			} else {
+			}
+			else {
 				symbols.put(instr.label, instr);
 			}
 
@@ -110,6 +124,7 @@ public class Module {
 		 * Returns a reference to the Instruction w/ the label given
 		 * from the symbol table.
 		 * Assumes label is in symbol table.
+		 * 
 		 * @author Noah
 		 * @date Apr 7, 2012; 10:22:52 PM
 		 * @modified UNMODIFIED
@@ -125,10 +140,11 @@ public class Module {
 		 */
 		public Instruction getEntry(String label) {
 			Instruction entry;
-			
-			if(symbols.containsKey(label)) {
+
+			if (symbols.containsKey(label)) {
 				entry = symbols.get(label);
-			} else { 
+			}
+			else {
 				entry = extEntSymbols.get(label);
 			}
 			return entry;
@@ -147,17 +163,17 @@ public class Module {
 		 * @return an Iterator over elements of symbol table.
 		 * @specRef N/A
 		 */
-		@Override 
-		public Iterator<Map.Entry<String, Instruction>> iterator() {
+		@Override public Iterator<Map.Entry<String, Instruction>> iterator() {
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
-			combinedSymbols.addAll(symbols.entrySet()); //combine
-			combinedSymbols.addAll(extEntSymbols.entrySet()); //combine
-			
+			combinedSymbols.addAll(symbols.entrySet()); // combine
+			combinedSymbols.addAll(extEntSymbols.entrySet()); // combine
+
 			return combinedSymbols.iterator();
 		}
 
 		/**
 		 * Returns a String table representation of the symbol table.
+		 * 
 		 * @author Noah
 		 * @date Apr 15, 2012; 1:19:32 PM
 		 * @modified UNMODIFIED
@@ -165,30 +181,38 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @return as table of symbol table entries, where each entry is represented as a string.
-		 * The first row of the table = ["Label", "LC", "Usage", "Equate".
+		 * @return as table of symbol table entries, where each entry is
+		 *         represented as a string.
+		 *         The first row of the table = ["Label", "LC", "Usage",
+		 *         "Equate".
 		 * @specRef N/A
 		 */
 		public String[][] toStringTable() {
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
-			combinedSymbols.addAll(symbols.entrySet()); //combine
-			combinedSymbols.addAll(extEntSymbols.entrySet()); //combine
-			
-			Collections.sort(combinedSymbols, new MapEntryComparator()); //sort
-			
+			combinedSymbols.addAll(symbols.entrySet()); // combine
+			combinedSymbols.addAll(extEntSymbols.entrySet()); // combine
+
+			Collections.sort(combinedSymbols, new MapEntryComparator()); // sort
+
 			// iterator over elements of set of label, Instruction pairs.
-			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols.iterator();
-			
-			String[][] stringTable = new String[combinedSymbols.size() + 1][4]; //all entries + 1 header entry.
+			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols
+					.iterator();
+
+			String[][] stringTable = new String[combinedSymbols.size() + 1][4]; // all
+																				// entries
+																				// +
+																				// 1
+																				// header
+																				// entry.
 			int x = 0;
 			stringTable[x][0] = "Label";
 			stringTable[x][1] = "LC";
 			stringTable[x][2] = "Usage";
 			stringTable[x][3] = "Equate";
-			
+
 			while (tableIt.hasNext()) {
 				x++;
-				
+
 				// gets the set values <K,V> stored into a map entry which can
 				// be used to get the values/key of K and V
 				Map.Entry<String, Instruction> entry = tableIt.next();
@@ -213,17 +237,20 @@ public class Module {
 					}
 				}
 			}
-			
+
 			return stringTable;
 		}
+
 		/**
 		 * String representation of the symbol table.
 		 * 
 		 * @author Eric
 		 * @date Apr 6, 2012; 8:58:56 AM
-		 * @modified Apr 9, 11:23:41 AM; combined separate maps into one symbol table, <br>
-		 * 				and made a comparator to sort. <br> -Noah
-		 * 			 Apr 7, 1:26:50 PM; added opcode to lines. - Noah <br>
+		 * @modified Apr 9, 11:23:41 AM; combined separate maps into one symbol
+		 *           table, <br>
+		 *           and made a comparator to sort. <br>
+		 *           -Noah
+		 *           Apr 7, 1:26:50 PM; added opcode to lines. - Noah <br>
 		 *           Apr 6, 11:02:08 AM; removed remove() call to prevent
 		 *           destruction of symbol table, <br>
 		 *           also, cleaned code up. -Noah<br>
@@ -241,20 +268,20 @@ public class Module {
 		 * </pre>
 		 * @specRef N/A
 		 */
-		@Override 
-		public String toString() {
-			
+		@Override public String toString() {
+
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
-			combinedSymbols.addAll(symbols.entrySet()); //combine
-			combinedSymbols.addAll(extEntSymbols.entrySet()); //combine
-			
-			Collections.sort(combinedSymbols, new MapEntryComparator()); //sort
-					
+			combinedSymbols.addAll(symbols.entrySet()); // combine
+			combinedSymbols.addAll(extEntSymbols.entrySet()); // combine
+
+			Collections.sort(combinedSymbols, new MapEntryComparator()); // sort
+
 			// way of storing each line of the symbol table
 			List<String> completeTable = new ArrayList<String>();
 
 			// iterator over elements of set of label, Instruction pairs.
-			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols.iterator();
+			Iterator<Entry<String, Instruction>> tableIt = combinedSymbols
+					.iterator();
 
 			String megaTable = "Label:\tLC:\tUsage:\tEquString:\n";
 			// loop runs through the whole symbol table
@@ -350,44 +377,59 @@ public class Module {
 	 * 
 	 * @author Noah
 	 * @date Apr 8, 2012; 1:34:17 AM
-	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible - Josh
+	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible -
+	 *           Josh
 	 *           operands to EQU.
 	 *           Apr 12, 2012; 8:50:02 PM: modified for readability. - Noah
 	 *           Apr 13, 2012; 11:23:33 PM: modified for correctness - Noah
-	 *           Apr 13, 2012; 9:34:50 PM: symbolTable.getEntry(exp) can return null 
-	 *           	so added i == null check - Noah
+	 *           Apr 13, 2012; 9:34:50 PM: symbolTable.getEntry(exp) can return
+	 *           null
+	 *           so added i == null check - Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param exp
 	 *            The expression to be evaluated.
+	 * @param MREF
+	 *            True if this expression is a memory reference. Enabling this
+	 *            parameter enables forward-referencing of EQ Labels as well as
+	 *            address referencing of regular labels.
+	 * @param hErr
+	 *            The error handler which will receive problems in evaluation.
+	 * @param line
+	 *            The line number for which errors will be reported; passed to
+	 *            hErr.report*.
+	 * @param pos The position in the given line at which this expression starts.
 	 * @return The value of the expression.
 	 * @specRef N/A
 	 */
-	public int evaluate(String exp) {
-		int value = 0;
-		exp = exp.trim(); //trim off leading and trailing white-space.
-		if (IOFormat.isValidLabel(exp)) { //FC expressions are not valid labels.
-			Instruction i = symbolTable.getEntry(exp);  
-			if (i != null) {
-				if(i.hasOperand("FC")) {
-					value = evaluate(i.getOperand("FC"));
-				} else if(i.hasOperand("FM")) {
-					value = i.lc;
-				} else if(i.hasOperand("LR")){
-					value = evaluate(i.getOperand("LR"));
-				} else { //no valid operand
-					throw new NullPointerException("No correct operand to EQU at line " + i.lineNum + "!");
-				}
+	public int evaluate(String exp, boolean MREF, ErrorHandler hErr, int line,
+			int pos) {
+		exp = exp.trim(); // trim off leading and trailing white-space.
+		// First, check if we have a standard label
+		if (IOFormat.isValidLabel(exp)) {
+			Instruction i = symbolTable.getEntry(exp);
+			if (i == null) {
+				hErr.reportError(makeError("undefEqLabel", exp), line, pos);
+				return 0;
 			}
-		} else { //exp is a FC expression.
-			value = Integer.parseInt(exp);
+			if (i.usage == Usage.EQUATE)
+				return ((UIG_Equated) i).value;
+			if (MREF)
+				return i.lc;
+			hErr.reportError(makeError("illegalRefAmp", exp), line, pos);
+			return 0;
 		}
-		
-		return value;
-	}
+		// Turns out, we don't. Maybe
+		try {
+			return Integer.parseInt(exp);
+		} catch (NumberFormatException nfe) {
 
+		}
+
+		return 0;
+	}
 
 	/**
 	 * Returns a string representation of Module.
@@ -432,8 +474,8 @@ public class Module {
 
 			rep = rep + "original source line: " + instr.origSrcLine + "\n";
 
-			//opcode.
-			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6); 
+			// opcode.
+			String binEquiv = IOFormat.formatBinInteger(instr.getOpcode(), 6);
 			String label = instr.label;
 			String lc = IOFormat.formatHexInteger(instr.lc, 4);
 

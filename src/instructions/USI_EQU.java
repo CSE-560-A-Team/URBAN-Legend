@@ -1,9 +1,10 @@
 package instructions;
 
-import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+
+import static assemblernator.ErrorReporting.makeError;
 
 /**
  * The EQU instruction.
@@ -12,7 +13,7 @@ import assemblernator.Module;
  * @date Apr 08, 2012; 08:26:19
  * @specRef D3
  */
-public class USI_EQU extends AbstractDirective {
+public class USI_EQU extends UIG_Equated {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -24,25 +25,18 @@ public class USI_EQU extends AbstractDirective {
 	/** The static instance for this instruction. */
 	static USI_EQU staticInstance = new USI_EQU(true);
 
-	/** @see assemblernator.Instruction#getNewLC(int, Module) */
-	@Override public int getNewLC(int lc, Module mod) {
-		return lc;
-	}
-
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
-		return false; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
-
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
+		if (operands.size() > 1) {
+			hErr.reportError(makeError("extraOperandsDir", opId), lineNum, -1);
+			return false;
+		}
+		if (operands.size() < 1) {
+			hErr.reportError(makeError("directiveMissingOp3", "FC", "FL", "LR", "EQU"), lineNum, -1);
+			return false;
+		}
+		
+		return true;
 	}
 
 	// =========================================================
