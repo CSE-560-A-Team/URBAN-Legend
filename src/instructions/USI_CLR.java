@@ -34,8 +34,8 @@ public class USI_CLR extends AbstractInstruction {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		if(this.operands.size() > 1 || this.operands.size() == 0) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);

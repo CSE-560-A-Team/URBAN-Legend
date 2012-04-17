@@ -38,8 +38,8 @@ public class USI_NEWLC extends AbstractDirective {
 		return ownLC;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		return false; // TODO: IMPLEMENT
 	}
 

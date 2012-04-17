@@ -58,8 +58,8 @@ public class USI_CHAR extends AbstractDirective {
 	/** The string given to us in the ST: operand. */
 	private String content;
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		Operand st = getOperandData("ST");
 		if (st == null)
 			hErr.reportError(makeError("directiveMissingOp", "CHAR", "ST"),

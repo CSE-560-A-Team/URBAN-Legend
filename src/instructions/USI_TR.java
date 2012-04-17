@@ -37,8 +37,8 @@ public class USI_TR extends AbstractInstruction {
 	 * The type of operand specifying the destination for this operation.
 	 */
 	String dest="";
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		//size check
 		if(this.operands.size() < 1){

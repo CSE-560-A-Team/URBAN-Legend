@@ -4,6 +4,7 @@ import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
+import assemblernator.Module;
 import assemblernator.OperandChecker;
 
 
@@ -57,11 +58,11 @@ public abstract class UIG_IO extends AbstractInstruction{
 
 	
 	/**
-	 * @see assemblernator.Instruction#check(ErrorHandler)
+	 * @see assemblernator.Instruction#check(ErrorHandler, Module)
 	 * @modified: 9:15:34PM; Added additional error message in case FL is found together with FX.
 	 */
 	@Override
-	public final boolean check(ErrorHandler hErr) {
+	public final boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		
 		//checks for operand combos and assigns OperandType.

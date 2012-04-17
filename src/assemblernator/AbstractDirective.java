@@ -34,9 +34,9 @@ public abstract class AbstractDirective extends Instruction {
 	/**
 	 * Most directives have their checking out of the way in pass one.
 	 * 
-	 * @see assemblernator.Instruction#check(assemblernator.ErrorReporting.ErrorHandler)
+	 * @see assemblernator.Instruction#check(assemblernator.ErrorReporting.ErrorHandler, Module)
 	 */
-	@Override public boolean check(ErrorHandler hErr) {
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		return true;
 	}
 

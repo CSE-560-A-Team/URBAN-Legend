@@ -37,8 +37,8 @@ public class USI_RET extends AbstractInstruction {
 	 * The type of operand specifying the destination for this operation.
 	 */
 	String dest = "";
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		//less than 1 operand error
 		if(this.operands.size() < 1){

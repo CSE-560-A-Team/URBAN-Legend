@@ -36,9 +36,9 @@ public class USI_DMP extends AbstractInstruction {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override 
-	public boolean check(ErrorHandler hErr) {
+	public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		
 		if(!this.hasOperand("FC") || this.operands.size() > 1) {

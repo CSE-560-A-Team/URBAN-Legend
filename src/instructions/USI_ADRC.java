@@ -29,8 +29,8 @@ public class USI_ADRC extends AbstractDirective {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		return false; // TODO: IMPLEMENT
 	}
 

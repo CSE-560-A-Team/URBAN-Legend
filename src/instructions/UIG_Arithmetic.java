@@ -4,6 +4,7 @@ import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
+import assemblernator.Module;
 import assemblernator.OperandChecker;
 
 /**
@@ -27,7 +28,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 	 * @date Apr 14, 2012; 5:52:36 PM
 	 */
 	@Override
-	public final boolean check(ErrorHandler hErr) {
+	public final boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		// any size under two is invalid
 		if (this.operands.size() < 2) {

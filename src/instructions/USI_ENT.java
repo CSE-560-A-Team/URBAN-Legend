@@ -36,9 +36,9 @@ public class USI_ENT extends AbstractDirective {
 	 */
 	String src = "";
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override
-	public boolean check(ErrorHandler hErr) {
+	public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		if (this.operands.size() < 1) {
 			isValid = false;

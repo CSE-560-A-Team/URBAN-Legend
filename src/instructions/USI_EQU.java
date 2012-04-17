@@ -29,8 +29,8 @@ public class USI_EQU extends AbstractDirective {
 		return lc;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	@Override public boolean check(ErrorHandler hErr, Module module) {
 		return false; // TODO: IMPLEMENT
 	}
 

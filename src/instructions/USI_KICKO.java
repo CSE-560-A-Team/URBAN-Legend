@@ -35,10 +35,10 @@ public class USI_KICKO extends AbstractDirective {
 	}
 
 	
-	/** @see assemblernator.Instruction#check(ErrorHandler) 
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) 
 	 *  @modified 12:43:13 changed lineNum check to != 1. first line = 1.*/
 	@Override 
-	public boolean check(ErrorHandler hErr) {
+	public boolean check(ErrorHandler hErr, Module module) {
 		return true;
 	}
 
