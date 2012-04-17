@@ -4,6 +4,7 @@ import instructions.Comment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.ErrorReporting.ErrorHandler;
@@ -43,12 +44,15 @@ public abstract class Instruction {
 	/**
 	 * @author Josh Ventura
 	 * @date Apr 8, 2012; 1:51:01 AM
+	 * @modified Apr 17, 2012; 6:43:11 PM: added value field and toString() function. - Noah
 	 */
 	public static class Operand {
 		/** The operand keyword */
 		public String operand;
 		/** The expression given to the operand */
 		public String expression;
+		/** The value of the operand. */
+		public int value;
 		/**
 		 * The position in the line at which the keyword for this operand
 		 * started
@@ -59,6 +63,7 @@ public abstract class Instruction {
 		 * started
 		 */
 		public int valueStartPosition;
+
 
 		/**
 		 * @param op
@@ -77,6 +82,23 @@ public abstract class Instruction {
 			expression = exp;
 			keywordStartPosition = key_sp;
 			valueStartPosition = val_sp;
+		}
+		
+		/**
+		 * 
+		 * @author Noah
+		 * @date Apr 17, 2012; 5:52:59 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @param module
+		 * @return
+		 * @specRef N/A
+		 */
+		public String toString() {
+			return Integer.toBinaryString(value);
 		}
 	}
 
@@ -661,28 +683,76 @@ public abstract class Instruction {
 	public abstract void execute(int instruction);
 
 	/**
-	 * Constructs a string representation of the instruction, as close to the
-	 * original code as reasonably possible.
-	 * 
+	 * Returns a string representation of Instruction:
+	 * origSourceLine + "Line number: " + instr.LineNum + " " + LC: " + lc + " " + "Label: " + label + ",\n"
+	 * 		+ "instruction/Directive: " + instr.getOpID() + " " + Binary Equivalent: " + binEquiv + "\n" 
+	 * 		+ "operand " + i + operandKeyWord + ":" + operandValue + "Binary Equivalent: " + operBinEquiv;
+	 * 			where if instr does not have a label, then label = "", 
+	 * 				else label = instr.label, and
+	 * 			if instr is a directive and thus has no opcode, then binEquiv = "------", 
+	 * 				else binEquiv = instr.opcode in binary format, and
+	 * 			i represents the ith operand of instr, and
+	 * 				operandKeyword = the key word for the ith operand;
+	 * 				operandValue = the value associated w the operand with operandKeyword keyword for the ith operand, and
+	 * 			origSourceLine = instr.origSrcLine,
+	 * 			operBinEquiv = string representation of Operand.
+	 * 			and lc = instr.lc displayed in hexadecimal w/ 4 bits.
 	 * @author Josh Ventura
 	 * @date Apr 5, 2012; 9:37:34 PM
 	 * @modified Apr 7 2012; 12:39:44 AM: Corrected formatting for printing
-	 *           multiple operands (added a comma between them).
+	 *           multiple operands (added a comma between them). -Josh
+	 *           Apr 17, 2012; 6:39:41 PM: changed definition of toString to breakdown of Instruction. -Noah.
 	 * @tested Apr 7 2012; 12:38:06 AM: Tested with basic MOVD instructions.
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @return Returns a semantic match to the original instruction code string.
+	 * @return Returns a string representation of Instruction.
 	 * @specRef N/A
 	 */
-	@Override public String toString() {
-		String res = (label.length() > 0 ? label + "\t" : "") + getOpId();
-		boolean prent = false;
-		for (Operand op : operands) {
-			res += (prent ? ",\t" : "\t") + op.operand + ":" + op.expression;
-			prent = true;
+	@Override 
+	public String toString() {
+		String rep = "";
+		rep = rep + "original source line: " + this.origSrcLine + "\n";
+
+		// opcode.
+		String binEquiv = IOFormat.formatBinInteger(this.getOpcode(), 6);
+		String lc = IOFormat.formatHexInteger(this.lc, 4);
+		String label = this.label;
+
+		// instr is a directive and thus has no opcode.
+		if (this.getOpcode() == 0xFFFFFFFF) {
+			binEquiv = "------"; // so binary equivalent is non-existant.
 		}
-		return res + ';';
+
+		// if the instruction has no label
+		if (this.label == null) {
+			label = ""; // no label to print.
+			// also, can't print "------" b/c label may be "------".
+		}
+
+
+		String instrBreak = "Line number: " + this.lineNum + " " + "LC: "
+				+ lc + " " + "Label: " + label + ",\n"
+				+ "instruction/Directive: " + this.getOpId() + " "
+				+ "Binary Equivalent: " + binEquiv + "\n";
+
+		Iterator<Operand> operandIt = operands.iterator();
+
+		int i = 1;
+		while (operandIt.hasNext()) {
+			Operand oprnd = operandIt.next();
+
+			instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand
+					+ ":" + oprnd.expression + "\tBinary Equivalent: " + oprnd.toString() + "\n";
+
+			i++;
+		}
+
+		instrBreak = instrBreak + "\n";
+
+		rep = rep + instrBreak;
+		
+		return rep;
 	}
 
 	/**
