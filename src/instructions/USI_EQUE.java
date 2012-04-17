@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -23,15 +24,23 @@ public class USI_EQUE extends UIG_Equated {
 	/** The static instance for this instruction. */
 	static USI_EQUE staticInstance = new USI_EQUE(true);
 
-	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
-	@Override public boolean check(ErrorHandler hErr, Module module) {
-		return false; // TODO: IMPLEMENT
-	}
-
 	/** @see assemblernator.Instruction#immediateCheck(ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
+		if (operands.size() > 1) {
+			hErr.reportError(makeError("extraOperandsDir", opId), lineNum, -1);
+			return false;
+		}
+		if (operands.size() < 1) {
+			hErr.reportError(makeError("directiveMissingOp", opId, "EX"), lineNum, -1);
+			return false;
+		}
+		if (!operands.get(0).operand.equals("EX")) {
+			hErr.reportError(makeError("operandDirWrong", opId, operands.get(0).operand), lineNum, -1);
+			hErr.reportError(makeError("directiveMissingOp", opId, "EX"), lineNum, -1);
+			return false;
+		}
+		value = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
+		return true;
 	}
 
 	// =========================================================

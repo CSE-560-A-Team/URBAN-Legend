@@ -153,6 +153,7 @@ public class Module {
 
 		/**
 		 * Get an ext or ent label.
+		 * 
 		 * @author Noah
 		 * @date Apr 17, 2012; 12:48:36 AM
 		 * @modified UNMODIFIED
@@ -160,16 +161,18 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @param label label of entry to get.
+		 * @param label
+		 *            label of entry to get.
 		 * @return for entry: (label, Instruction), return Instruction.
 		 * @specRef N/A
 		 */
 		public Instruction getEntExtEntry(String label) {
 			return extEntSymbols.get(label);
 		}
-		
+
 		/**
 		 * Checks whether an entry with the label given exists locally.
+		 * 
 		 * @author Noah
 		 * @date Apr 17, 2012; 1:22:33 AM
 		 * @modified UNMODIFIED
@@ -177,14 +180,17 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @param label label of entry to look up.
-		 * @return if entry with label label exists in symbols, return true, else 
-		 * return false.
+		 * @param label
+		 *            label of entry to look up.
+		 * @return if entry with label label exists in symbols, return true,
+		 *         else
+		 *         return false.
 		 * @specRef N/A
 		 */
 		public boolean hasLocalEntry(String label) {
 			return symbols.containsKey(label);
 		}
+
 		/**
 		 * provides an Iterator over the elements of the symbol table.
 		 * 
@@ -415,7 +421,8 @@ public class Module {
 	 *           null, so added i == null check - Noah
 	 *           Apr 17, 2012; 1:59:37 AM: Recoded to support compound
 	 *           expressions. -Josh
-	 * @tested UNTESTED
+	 * @tested Apr 17, 2012; 2:33:20 AM: Field tested with five term sums in
+	 *         nested EQUs. Worked provided expression did not contain spaces.
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
@@ -492,12 +499,17 @@ public class Module {
 		}
 
 		// This will not overflow, because our string is trimmed.
-
+		while (Character.isWhitespace(exp.charAt(i)))
+			++i;
 
 		if (exp.charAt(i) == '+')
-			return lhs + evaluate(exp.substring(i+1), MREF, hErr, caller, pos+i+1);
-		else if (exp.charAt(i) == '-') 
-			return lhs - evaluate(exp.substring(i+1), MREF, hErr, caller, pos+i+1);
+			return lhs
+					+ evaluate(exp.substring(i + 1), MREF, hErr, caller, pos
+							+ i + 1);
+		else if (exp.charAt(i) == '-')
+			return lhs
+					- evaluate(exp.substring(i + 1), MREF, hErr, caller, pos
+							+ i + 1);
 
 		hErr.reportError(makeError("unexpSymExp", "" + exp.charAt(i)),
 				caller.lineNum, pos + i);

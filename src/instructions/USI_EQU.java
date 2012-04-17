@@ -32,10 +32,15 @@ public class USI_EQU extends UIG_Equated {
 			return false;
 		}
 		if (operands.size() < 1) {
-			hErr.reportError(makeError("directiveMissingOp3", "FC", "FL", "LR", "EQU"), lineNum, -1);
+			hErr.reportError(makeError("directiveMissingOp3", opId, "FC", "FL", "LR"), lineNum, -1);
 			return false;
 		}
-		
+		if (!"FC,FL,LR".contains(operands.get(0).operand)) {
+			hErr.reportError(makeError("operandDirWrong", opId, operands.get(0).operand), lineNum, -1);
+			hErr.reportError(makeError("directiveMissingOp3", opId, "FC", "FL", "LR"), lineNum, -1);
+			return false;
+		}
+		value = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
 		return true;
 	}
 
