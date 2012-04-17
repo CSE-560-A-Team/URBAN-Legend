@@ -40,6 +40,12 @@ public class USI_ENT extends AbstractDirective {
 	@Override
 	public boolean check(ErrorHandler hErr, Module module) {
 		//check for ent LR label is correct
+		for(int i=0; i == this.countOperand("LR"); i++ ){
+		if (!module.getSymbolTable().hasLocalEntry(this.getOperand("LR", i))){
+			hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+			return false;
+		}
+		}
 		return true;
 	}
 
@@ -52,6 +58,11 @@ public class USI_ENT extends AbstractDirective {
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
+		//checks to make sure ENT does not have a label
+		if(this.label != null){
+			hErr.reportError(makeError("noLabel", this.getOpId()), this.lineNum, -1);
+			isValid = false;
+		}
 		if (this.operands.size() < 1) {
 			isValid = false;
 			hErr.reportError(
