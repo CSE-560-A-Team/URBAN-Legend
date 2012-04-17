@@ -379,6 +379,7 @@ public class IOFormat {
 			ErrorHandler hErr) {
 		// @formatter:off
 		StringBuilder sb = new StringBuilder(str.length());
+		str = str.trim();
 		if (str.length() == 0) {
 			if (hErr != null)
 				hErr.reportError("Invalid string given: string parameter is empty", line, pos);
