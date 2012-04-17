@@ -5,14 +5,20 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -44,12 +50,16 @@ public class GUIMain {
 	// ===============================================================
 	/** Our compile menu item */
 	static JMenuItem compile;
+	/** A menu item to export the file as an HTML document */
+	static JMenuItem writeHTML;
 	/** Our exit menu item */
 	static JMenuItem exit;
 
 	// ===============================================================
 	// == COMPONENTS =================================================
 	// ===============================================================
+	/** Our main window. */
+	JFrame mainWindow;
 	/** Our main tab pane. */
 	JTabbedPane tabPane;
 
@@ -77,7 +87,7 @@ public class GUIMain {
 		UIManager.put("swing.boldMetal", false);
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 
-		JFrame mainWindow = new JFrame();
+		mainWindow = new JFrame();
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setTitle("URBAN Legend");
 
@@ -88,11 +98,15 @@ public class GUIMain {
 
 		JMenuBar mb = new JMenuBar();
 		JMenu filemenu = new JMenu("File");
+		MenuListener ml = new MenuListener();
 		filemenu.add(compile = new JMenuItem("Compile"));
-		compile.addActionListener(new MenuListener());
+		compile.addActionListener(ml);
+		filemenu.addSeparator();
+		filemenu.add(writeHTML = new JMenuItem("Export as HTML"));
+		writeHTML.addActionListener(ml);
 		filemenu.addSeparator();
 		filemenu.add(exit = new JMenuItem("Exit"));
-		exit.addActionListener(new MenuListener());
+		exit.addActionListener(ml);
 		mb.add(filemenu);
 		mainWindow.setJMenuBar(mb);
 
@@ -387,6 +401,34 @@ public class GUIMain {
 			if (e.getSource() == compile) {
 				compileActive();
 				return;
+			}
+			if (e.getSource() == writeHTML) {
+				JFileChooser jfc = new JFileChooser();
+				jfc.setMultiSelectionEnabled(false);
+				if (jfc.showSaveDialog(mainWindow) == JFileChooser.APPROVE_OPTION) {
+					File f = jfc.getSelectedFile();
+					if (!f.exists()
+							|| JOptionPane
+									.showConfirmDialog(mainWindow,"Overwrite existing file?") == JOptionPane.YES_OPTION) {
+						try {
+							FileWriter fw = new FileWriter(f);
+							FileTab ft = (FileTab) tabPane
+									.getSelectedComponent();
+							if (ft != null) {
+								fw.write("<html>\n<body>\n<pre>");
+								fw.write(ft.jt.getHTML());
+								fw.write("</pre>\n</body>\n</html>\n");
+							}
+							fw.close();
+						} catch (FileNotFoundException e1) {
+							JOptionPane.showMessageDialog(mainWindow,
+									"Failed to open file.");
+						} catch (IOException e1) {
+							JOptionPane.showMessageDialog(mainWindow,
+									"Failed to write to file.");
+						}
+					}
+				}
 			}
 			if (e.getSource() == exit) {
 				System.exit(0);

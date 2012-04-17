@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.AbstractInstruction;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.ErrorReporting.ErrorHandler;
@@ -10,7 +11,7 @@ import assemblernator.OperandChecker;
  * @author Eric
  * @date Apr 14, 2012; 5:52:36 PM
  */
-public abstract class UIG_TransferCond extends Instruction {
+public abstract class UIG_TransferCond extends AbstractInstruction {
 	String dest = "";
 	String src = "";
 	

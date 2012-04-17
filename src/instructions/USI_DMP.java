@@ -1,6 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
@@ -14,7 +15,7 @@ import assemblernator.OperandChecker;
  * @date Apr 08, 2012; 08:26:19
  * @specRef C1
  */
-public class USI_DMP extends Instruction {
+public class USI_DMP extends AbstractInstruction {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in

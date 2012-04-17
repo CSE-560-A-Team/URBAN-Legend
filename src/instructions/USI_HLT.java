@@ -1,7 +1,8 @@
 package instructions;
 
-import assemblernator.ErrorReporting.ErrorHandler;
 import static assemblernator.ErrorReporting.makeError;
+import assemblernator.AbstractInstruction;
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -14,7 +15,7 @@ import assemblernator.OperandChecker;
  * @date Apr 08, 2012; 08:26:19
  * @specRef C2
  */
-public class USI_HLT extends Instruction {
+public class USI_HLT extends AbstractInstruction {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in

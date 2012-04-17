@@ -353,6 +353,7 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 		return res;
 	}
 	
+	
 	/** 
 	 * Get the number of lines in the current code..
 	 * @return The number of lines in the current code.
@@ -371,6 +372,41 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 		StringBuilder res = new StringBuilder();
 		for (int i = 0; i < code.size(); i++)
 			res.append(code.get(i).sbuild.toString() + "\n");
+		return res.toString();
+	}
+	
+	/**
+	 * Export the current code as HTML.
+	 * @return The contents of the editor, with tokens marked up in HTML.
+	 */
+	public String getHTML() {
+		StringBuilder res = new StringBuilder(code.size() * 100);
+		
+		for (int i = 0; i < code.size(); i++) {
+			Line l = code.get(i);
+			StringBuilder lsb = l.sbuild;
+			int from = 0;
+			ArrayList<TokenMarkerInfo> tmall = marker.getStyles(l);
+			for (TokenMarkerInfo ti: tmall) {
+				if (ti.startPos > from)
+					res.append(lsb.substring(from, ti.startPos));
+				if (ti.startPos < ti.endPos) {
+					res.append("<span style=\"");
+					if ((ti.fontStyle & Font.BOLD) != 0)
+						res.append("font-weight:bold;");
+					if ((ti.fontStyle & Font.ITALIC) != 0)
+						res.append("font-style:italic;");
+					if (ti.color != null)
+						res.append("color:#" + Integer.toHexString(ti.color.getRGB()).substring(2) + ";");
+					res.append("\">");
+					res.append(lsb.substring(ti.startPos, ti.endPos));
+					res.append("</span>");
+				}
+				from = ti.endPos;
+			}
+			res.append("\n");
+		}
+		
 		return res.toString();
 	}
 
@@ -1171,7 +1207,7 @@ public class JoshText extends JComponent implements Scrollable,ComponentListener
 				}
 				xx = drawChars(g,a,tm.startPos,tm.endPos,xx,ty);
 				pos = tm.endPos;
-				g.setFont(getFont());
+				//g.setFont(getFont());
 				g.setColor(c);
 			}
 		}

@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -11,7 +12,7 @@ import assemblernator.Module;
  * @date Apr 08, 2012; 08:26:19
  * @specRef IA3
  */
-public class USI_ISRG extends Instruction {
+public class USI_ISRG extends AbstractInstruction {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in

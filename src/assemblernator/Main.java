@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import assemblernator.ErrorReporting.DefaultErrorHandler;
-import assemblernator.ErrorReporting.URBANSyntaxException;
 
 /**
  * @file Main.java

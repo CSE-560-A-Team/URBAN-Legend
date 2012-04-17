@@ -1,16 +1,16 @@
 package instructions;
 
-import assemblernator.IOFormat;
-import assemblernator.Instruction;
-import assemblernator.ErrorReporting.ErrorHandler;
 import static assemblernator.ErrorReporting.makeError;
+import assemblernator.AbstractInstruction;
+import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.OperandChecker;
 
 /**
  * @author Eric
  * @date Apr 14, 2012; 5:22:20 PM
  */
-public abstract class UIG_Arithmetic extends Instruction {
+public abstract class UIG_Arithmetic extends AbstractInstruction {
 
 	String dest = "";
 	String src = "";

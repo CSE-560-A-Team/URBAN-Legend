@@ -601,6 +601,36 @@ public abstract class Instruction {
 	public abstract boolean check(ErrorHandler hErr);
 
 	/**
+	 * Checks for lexical correctness; called immediately after construction.
+	 * 
+	 * @author Josh Ventura
+	 * @modified Apr 14, 2012; 12:00 PM: Added error handler to parameters.
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards This method is abstract.
+	 * @testingStandards This method is abstract.
+	 * @param hErr
+	 *            An error handler which will receive any error or warning
+	 *            messages.
+	 * @return Returns whether the instruction is semantically correct.
+	 * @date Apr 4, 2012; 01:40:29AM
+	 */
+	public abstract boolean immediateCheck(ErrorHandler hErr);
+	
+	/**
+	 * Used to check if this Instruction is actually a directive.
+	 * @author Josh Ventura
+	 * @date Apr 16, 2012; 8:24:58 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @return Returns whether this Instruction is actually a directive
+	 * @specRef N/A
+	 */
+	public abstract boolean isDirective();
+	
+	/**
 	 * Assemble this instruction to byte code after it has been checked.
 	 * 
 	 * @author Josh Ventura

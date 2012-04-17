@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -11,7 +12,7 @@ import assemblernator.Module;
  * @date Apr 08, 2012; 08:26:19
  * @specRef D12
  */
-public class USI_ADRC extends Instruction {
+public class USI_ADRC extends AbstractDirective {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -19,9 +20,6 @@ public class USI_ADRC extends Instruction {
 	 * instruction ID.
 	 */
 	private static final String opId = "ADRC";
-
-	/** This instruction's identifying opcode. */
-	private static final int opCode = 0xFFFFFFFF; // This instruction doesn't have an opcode.
 
 	/** The static instance for this instruction. */
 	static USI_ADRC staticInstance = new USI_ADRC(true);
@@ -41,9 +39,9 @@ public class USI_ADRC extends Instruction {
 		return null; // TODO: IMPLEMENT
 	}
 
-	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
-		// TODO: IMPLEMENT
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler) */
+	@Override public boolean immediateCheck(ErrorHandler hErr) {
+		return true;
 	}
 
 	// =========================================================
@@ -67,11 +65,6 @@ public class USI_ADRC extends Instruction {
 		return opId;
 	}
 
-	/** @see assemblernator.Instruction#getOpcode() */
-	@Override public int getOpcode() {
-		return opCode;
-	}
-
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override public Instruction getNewInstance() {
 		return new USI_ADRC();
@@ -85,7 +78,7 @@ public class USI_ADRC extends Instruction {
 	 *            static instance.
 	 */
 	private USI_ADRC(boolean ignored) {
-		super(opId, opCode);
+		super(opId);
 	}
 
 	/** Default constructor; does nothing. */

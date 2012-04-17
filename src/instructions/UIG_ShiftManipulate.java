@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.AbstractInstruction;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.OperandChecker;
@@ -10,7 +11,7 @@ import static assemblernator.ErrorReporting.makeError;
  * @author Ratul Khosla
  * @date Apr 14, 2012; 5:25:24 PM
  */
-public abstract class UIG_ShiftManipulate extends Instruction {
+public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 	
 	/**
 	 * A variable representing the from part of the instruction.

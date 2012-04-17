@@ -1,9 +1,9 @@
 package instructions;
 
-import assemblernator.IOFormat;
-import assemblernator.Instruction;
-import assemblernator.ErrorReporting.ErrorHandler;
 import static assemblernator.ErrorReporting.makeError;
+import assemblernator.AbstractInstruction;
+import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.OperandChecker;
 
 
@@ -12,7 +12,7 @@ import assemblernator.OperandChecker;
  * @author Noah
  * @date Apr 14, 2012; 5:47:13 PM
  */
-public abstract class UIG_IO extends Instruction{
+public abstract class UIG_IO extends AbstractInstruction{
 	/** keeps track of the type of operand is in this instruction.*/
 	OperandType operandType;
 

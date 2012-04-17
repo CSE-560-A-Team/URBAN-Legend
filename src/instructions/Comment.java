@@ -1,6 +1,7 @@
 package instructions;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.AbstractDirective;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -12,7 +13,7 @@ import assemblernator.Module;
  * @date Apr 6, 2012; 11:36:23 AM
  * @specRef S4.1
  */
-public class Comment extends Instruction {
+public class Comment extends AbstractDirective {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -21,9 +22,6 @@ public class Comment extends Instruction {
 	 */
 	private static final String opId = ";";
 
-	/** This instruction's identifying opcode. */
-	private static final int opCode = -1; // Comments do not have an opcode
-
 	/** The static instance for this instruction. */
 	static Comment staticInstance = new Comment(true);
 
@@ -31,31 +29,22 @@ public class Comment extends Instruction {
 	private String comment_text = "";
 
 	/** @see assemblernator.Instruction#getNewLC(int,Module) */
-	@Override
-	public int getNewLC(int lc, Module mod) {
+	@Override public int getNewLC(int lc, Module mod) {
 		return lc;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler) */
-	@Override
-	public boolean check(ErrorHandler hErr) {
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler) */
+	@Override public boolean immediateCheck(ErrorHandler hErr) {
 		return true;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
-	@Override
-	public int[] assemble() {
+	@Override public int[] assemble() {
 		return new int[0];
 	}
 
-	/** @see assemblernator.Instruction#execute(int) */
-	@Override
-	public void execute(int instruction) {
-	}
-
 	/** @see assemblernator.Instruction#getNewInstance() */
-	@Override
-	public Instruction getNewInstance() {
+	@Override public Instruction getNewInstance() {
 		return new Comment();
 	}
 
@@ -70,8 +59,7 @@ public class Comment extends Instruction {
 	}
 
 	/** Return the text of this comment, preceded by a semicolon. */
-	@Override
-	public String toString() {
+	@Override public String toString() {
 		return "; " + comment_text;
 	}
 
@@ -92,15 +80,8 @@ public class Comment extends Instruction {
 	}
 
 	/** @see assemblernator.Instruction#getOpId() */
-	@Override
-	public String getOpId() {
+	@Override public String getOpId() {
 		return opId;
-	}
-
-	/** @see assemblernator.Instruction#getOpcode() */
-	@Override
-	public int getOpcode() {
-		return opCode;
 	}
 
 	/**
@@ -111,10 +92,9 @@ public class Comment extends Instruction {
 	 *            static instance.
 	 */
 	private Comment(boolean ignored) {
-		super(opId, opCode);
+		super(opId);
 	}
 
 	/** Default constructor; does nothing. */
-	private Comment() {
-	}
+	private Comment() {}
 }

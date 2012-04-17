@@ -1,12 +1,12 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
+import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
-
-import static assemblernator.ErrorReporting.makeError;
 
 /**
  * The CHAR instruction.
@@ -15,7 +15,7 @@ import static assemblernator.ErrorReporting.makeError;
  * @date Apr 08, 2012; 08:26:19
  * @specRef D10
  */
-public class USI_CHAR extends Instruction {
+public class USI_CHAR extends AbstractDirective {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
@@ -23,10 +23,7 @@ public class USI_CHAR extends Instruction {
 	 * instruction ID.
 	 */
 	private static final String opId = "CHAR";
-
-	/** This instruction's identifying opcode. */
-	private static final int opCode = 0xFFFFFFFF; // This instruction doesn't have an opcode.
-
+	
 	/** The static instance for this instruction. */
 	static USI_CHAR staticInstance = new USI_CHAR(true);
 	
@@ -86,12 +83,12 @@ public class USI_CHAR extends Instruction {
 		return res;
 	}
 
-	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
-		throw new NullPointerException(
-				"The CHAR instruction should not be invoked for execute!");
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler) */
+	@Override public boolean immediateCheck(ErrorHandler hErr) {
+		// TODO Auto-generated method stub
+		return false;
 	}
-
+	
 	// =========================================================
 	// === Redundant code ======================================
 	// =========================================================
@@ -113,11 +110,6 @@ public class USI_CHAR extends Instruction {
 		return opId;
 	}
 
-	/** @see assemblernator.Instruction#getOpcode() */
-	@Override public int getOpcode() {
-		return opCode;
-	}
-
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override public Instruction getNewInstance() {
 		return new USI_CHAR();
@@ -131,7 +123,7 @@ public class USI_CHAR extends Instruction {
 	 *            static instance.
 	 */
 	private USI_CHAR(boolean ignored) {
-		super(opId, opCode);
+		super(opId);
 	}
 
 	/** Default constructor; does nothing. */
