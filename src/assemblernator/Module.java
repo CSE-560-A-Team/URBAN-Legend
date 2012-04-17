@@ -135,6 +135,40 @@ public class Module {
 		}
 
 		/**
+		 * Get an ext or ent label.
+		 * @author Noah
+		 * @date Apr 17, 2012; 12:48:36 AM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @param label label of entry to get.
+		 * @return for entry: (label, Instruction), return Instruction.
+		 * @specRef N/A
+		 */
+		public Instruction getEntExtEntry(String label) {
+			return extEntSymbols.get(label);
+		}
+		
+		/**
+		 * Checks whether an entry with the label given exists locally.
+		 * @author Noah
+		 * @date Apr 17, 2012; 1:22:33 AM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @param label label of entry to look up.
+		 * @return if entry with label label exists in symbols, return true, else 
+		 * return false.
+		 * @specRef N/A
+		 */
+		public boolean hasLocalEntry(String label) {
+			return symbols.containsKey(label);
+		}
+		/**
 		 * provides an Iterator over the elements of the symbol table.
 		 * 
 		 * @author Noah

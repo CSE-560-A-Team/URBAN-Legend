@@ -213,7 +213,7 @@ public class Assembler {
 		Module module = new Module();
 		int startAddr = 0;
 		int lc = 0;
-		boolean firstKICKO = false;
+		boolean firstKICKO = false, valid = true;
 		
 		while (source.hasNextLine()) {
 			try{
@@ -244,14 +244,14 @@ public class Assembler {
 				}
 				
 				//checks for operand errors in instruction.
-				instr.immediateCheck(hErr, module);
+				valid = instr.immediateCheck(hErr, module);
 				
 				// Get new lc for next instruction.
 				instr.lc = lc;
 				lc = instr.getNewLC(lc, module);
 	
 				//if instr can be used in symbol table.
-				if (instr.usage != Usage.NONE) {
+				if (instr.usage != Usage.NONE && valid) {
 					module.getSymbolTable().addEntry(instr);
 				}
 	
