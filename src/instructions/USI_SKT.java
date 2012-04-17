@@ -46,10 +46,10 @@ public class USI_SKT extends Instruction {
 						dest = "DR";
 						//range check
 						isValid = OperandChecker.isValidMem(this.getOperand("DR"));
-						if(!isValid) hErr.reportError(makeError("OORmemAddr", "DR", this.getOpId()), this.lineNum, -1);
+						if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 					}else{
 						isValid=false;
-						hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM"), this.lineNum, -1);
+						hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DR"), this.lineNum, -1);
 					}
 					//more than 1 operand error
 				}else{

@@ -39,7 +39,7 @@ public abstract class UIG_Arithmetic extends Instruction {
 					src = "FR";
 					//range checking
 					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
-					if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				} else if (this.hasOperand("FM")) {
 					src = "FM";
 					//range checking
@@ -59,12 +59,12 @@ public abstract class UIG_Arithmetic extends Instruction {
 				dest = "DR";
 				//range checking
 				isValid = OperandChecker.isValidReg(this.getOperand("DR"));
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("FR")) {
 					src = "FR";
 					//range checking
 					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
-					if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				} else if (this.hasOperand("FM")) {
 					src = "FM";
 					//range checking
@@ -87,6 +87,8 @@ public abstract class UIG_Arithmetic extends Instruction {
 				// checks combos associated with DX
 			} else if (this.hasOperand("DX")) {
 				dest = "DX";
+				isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("FL")) {
 					src = "FL";
 					//range checking
@@ -113,7 +115,7 @@ public abstract class UIG_Arithmetic extends Instruction {
 				src = "FR";
 				//range checking
 				isValid = OperandChecker.isValidReg(this.getOperand("FR"));
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "FR", this.getOpId()), this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("DM") && this.hasOperand("DX")) {
 					dest = "DMDX";
 					//range checking
@@ -130,7 +132,7 @@ public abstract class UIG_Arithmetic extends Instruction {
 				dest = "DR";
 				//range checking
 				isValid = OperandChecker.isValidReg(this.getOperand("DR"));
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 				if (this.hasOperand("FX") && this.hasOperand("FM")) {
 					//range checking
 					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
