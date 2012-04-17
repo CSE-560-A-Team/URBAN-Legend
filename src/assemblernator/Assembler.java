@@ -213,6 +213,7 @@ public class Assembler {
 		Module module = new Module();
 		int startAddr = 0;
 		int lc = 0;
+		boolean firstKICKO = false;
 		
 		while (source.hasNextLine()) {
 			try{
@@ -227,17 +228,23 @@ public class Assembler {
 				instr.origSrcLine = line; // Gives instruction source line.
 				instr.lineNum = lineNum;
 	
+				
 				/* if start of module, record startAddr of module.
 				 * execStart of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
 					module.startAddr = startAddr;
 					instr.immediateCheck(hErr, module);
 					module.programName = instr.label;
-				} else if (instr.isDirective()) {
-					instr.immediateCheck(hErr, module);
+					firstKICKO = true;
 				}
+				
+				if(!firstKICKO) {
+					hErr.reportError("MODULE must begin with a KICKO statement.", lineNum, -1);
+					break;
+				}
+				
 				//checks for operand errors in instruction.
-				instr.check(hErr);
+				instr.immediateCheck(hErr, module);
 				
 				// Get new lc for next instruction.
 				instr.lc = lc;

@@ -6,7 +6,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Instruction.Usage;
 import assemblernator.Module;
-import assemblernator.OperandChecker;
+import static assemblernator.OperandChecker.isValidMem;
 
 /**
  * The KICKO instruction.
@@ -39,6 +39,16 @@ public class USI_KICKO extends AbstractDirective {
 	 *  @modified 12:43:13 changed lineNum check to != 1. first line = 1.*/
 	@Override 
 	public boolean check(ErrorHandler hErr) {
+		return true;
+	}
+
+	/** @see assemblernator.Instruction#assemble() */
+	@Override public int[] assemble() {
+		return null; // TODO: IMPLEMENT
+	}
+
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		
 		if (this.lineNum != 1) { //KICKO's should only be found at beginning of source.
@@ -50,23 +60,12 @@ public class USI_KICKO extends AbstractDirective {
 		} else if (this.operands.size() > 1) { //KICKO can only have FC operand.
 			isValid = false;
 			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
-		} else if (!OperandChecker.isValidMem(this.getOperand("FC"))){
+		} else if (!isValidMem(this.getOperand("FC"))){
 			isValid = false;
 			hErr.reportError(makeError("OORmemAddr", "FC", this.getOpId()), this.lineNum, -1);
 		}
 
 		return isValid;
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
-	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	// =========================================================
