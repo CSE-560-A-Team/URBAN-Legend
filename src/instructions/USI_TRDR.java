@@ -33,7 +33,13 @@ public class USI_TRDR extends AbstractInstruction {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
+	/**
+	 * The type of operand specifying the destination for this operation.
+	 */
 	String dest = "";
+	/**
+	 * The type of operand specifying the source for this operation.
+	 */
 	String src = "";
 	/** @see assemblernator.Instruction#check(ErrorHandler) */
 	@Override public boolean check(ErrorHandler hErr) {

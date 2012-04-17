@@ -12,7 +12,14 @@ import assemblernator.OperandChecker;
  */
 public abstract class UIG_Arithmetic extends AbstractInstruction {
 
+	/**
+	 * The type of operand specifying the destination for this operation.
+	 */
 	String dest = "";
+	
+	/**
+	 *The type of operand specifying the source for this operation.
+	 */
 	String src = "";
 
 	/**
