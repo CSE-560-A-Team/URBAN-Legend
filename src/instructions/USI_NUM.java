@@ -38,6 +38,16 @@ public class USI_NUM extends AbstractDirective {
 	
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
+	return true;
+	}
+
+	/** @see assemblernator.Instruction#assemble() */
+	@Override public int[] assemble() {
+		return null; // TODO: IMPLEMENT
+	}
+
+	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		//less than 1 operand error
 		if(this.operands.size() < 1){
@@ -60,17 +70,6 @@ public class USI_NUM extends AbstractDirective {
 			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
 		}
 		return isValid; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
-	}
-
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
-	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	// =========================================================
