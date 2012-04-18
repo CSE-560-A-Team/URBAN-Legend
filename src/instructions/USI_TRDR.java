@@ -75,7 +75,7 @@ public class USI_TRDR extends AbstractInstruction {
 					Operand o1 = getOperandData("FX");
 					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 							o1.valueStartPosition);
-					this.getOperandData("FR").value = constantSize1;
+					this.getOperandData("FX").value = constantSize1;
 					isValid = OperandChecker.isValidIndex(constantSize1);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 				}else{
