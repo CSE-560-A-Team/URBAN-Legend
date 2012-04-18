@@ -1,8 +1,7 @@
-Purpose:
-To make sure that Shift/manipulate instructions can be used in the correct format/combinations.
 /*!
 
-/page test_case_17 Correct Shift/Manipulate Tests
+\page testcase17 Correct Shift/Manipulate Tests
+
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">shiftCOR</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
 		<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">x</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">place x in register 1 </span>
