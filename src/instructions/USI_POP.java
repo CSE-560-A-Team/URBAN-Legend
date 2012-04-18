@@ -37,41 +37,92 @@ public class USI_POP extends AbstractInstruction {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		int value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-		if(this.operands.size() > 1 || this.operands.size() == 0) {
+		int value;
+		if(this.operands.size() > 2) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
+		} else if(this.operands.size() < 1) {
+			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("DR")) {
+			value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
 			//range checking
 			isValid = OperandChecker.isValidReg(value);
-			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
-		} else if(this.hasOperand("DM")){
+			if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+		} else if(this.hasOperand("DM") && this.hasOperand("DX")){
 			//range checking
+			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			
 			value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
 			isValid = OperandChecker.isValidIndex(value);
-			if(!isValid) hErr.reportError(makeError("OORidxReg", "DM", this.getOpId()), this.lineNum, -1);
-		} else{
+			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+		} else if(this.hasOperand("DM") && this.hasOperand("DM")){
+			//range checking
+			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			
+			hErr.reportError(makeError("operandInsBeWith", "DM", "DX",this.getOpId()), this.lineNum, -1);	
+			
+		} else if(this.hasOperand("DM") && this.operands.size() == 1) {
+			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+		} else if(this.hasOperand("DM")){
+			//range checking
+			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			
+			if(this.hasOperand("FR")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong",  this.getOpId(), "FR"), this.lineNum, -1);
+			}  else if(this.hasOperand("FC")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FC"), this.lineNum, -1);				
+			}  else if(this.hasOperand("FL")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FL"), this.lineNum, -1);				
+			} else if(this.hasOperand("FS")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FS"), this.lineNum, -1);				
+			} else if(this.hasOperand("LR")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "LR"), this.lineNum, -1);				
+			} else if(this.hasOperand("FM")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong",  this.getOpId(),"FM"), this.lineNum, -1);				
+			} else if(this.hasOperand("EX")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong",  this.getOpId(),"EX"), this.lineNum, -1);				
+			} else if(this.hasOperand("NW")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "NW"), this.lineNum, -1);				
+			} else if(this.hasOperand("ST")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "ST"), this.lineNum, -1);				
+			}
+		}else {
 			isValid = false;
 			if(this.hasOperand("FR")){
-				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
-			}  else if(this.hasOperand("DM")){
-				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong",  this.getOpId(), "FR"), this.lineNum, -1);
 			}  else if(this.hasOperand("FC")){
-				hErr.reportError(makeError("operandInsWrong", "FC", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FC"), this.lineNum, -1);				
 			}  else if(this.hasOperand("FL")){
-				hErr.reportError(makeError("operandInsWrong", "FL", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FL"), this.lineNum, -1);				
 			} else if(this.hasOperand("FS")){
-				hErr.reportError(makeError("operandInsWrong", "FS", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FS"), this.lineNum, -1);				
 			} else if(this.hasOperand("LR")){
-				hErr.reportError(makeError("operandInsWrong", "LR", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "LR"), this.lineNum, -1);				
 			} else if(this.hasOperand("FM")){
-				hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong",  this.getOpId(),"FM"), this.lineNum, -1);				
 			} else if(this.hasOperand("EX")){
-				hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong",  this.getOpId(),"EX"), this.lineNum, -1);				
 			} else if(this.hasOperand("NW")){
-				hErr.reportError(makeError("operandInsWrong", "NW", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "NW"), this.lineNum, -1);				
 			} else if(this.hasOperand("ST")){
-				hErr.reportError(makeError("operandInsWrong", "ST", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "ST"), this.lineNum, -1);				
 			}
 		}
 			return isValid;

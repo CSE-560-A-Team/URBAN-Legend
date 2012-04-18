@@ -91,6 +91,10 @@ public abstract class UIG_IO extends AbstractInstruction{
 				isValid = false;
 				if (this.hasOperand("FL")) { 
 					hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+				} else if (this.hasOperand("DM")) {
+					hErr.reportError(makeError("operandWrongWith", "DM", "NW"), this.lineNum, -1);
+				} else if (this.hasOperand("FM")) {
+					hErr.reportError(makeError("operandWrongWith", "FM", "NW"), this.lineNum, -1);
 				} else {
 					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
 				}

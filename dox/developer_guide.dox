@@ -129,6 +129,10 @@
     <td>ErrorHandler</th>
     <td>Errors are divided into two severities, warning and error. There is no fatal error, which likely violates specification.</td>
   </tr>
+  <tr>
+  	<td>Arithmetic Instructions</th>
+  	<td>Arithmetic doesn't support FC operands.</td>
+  </tr>
 </table>
   
 */
