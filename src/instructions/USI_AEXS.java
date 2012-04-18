@@ -3,7 +3,6 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Instruction.ConstantRange;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -63,6 +62,8 @@ public class USI_AEXS extends AbstractDirective {
 		} else if(this.hasOperand("FC")){
 			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); 
 			isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_ADDR); //check if value of FC is valid.
+			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
+					this.getOpId(), Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 		} else {
 			isValid = false;
 		}
