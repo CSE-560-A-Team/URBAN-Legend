@@ -414,7 +414,7 @@ public class JoshText extends JComponent implements Scrollable,
 	 * @param x The not HTML-ready string.
 	 * @return The HTML-ready string.
 	 */
-	String htmlSpecialChars(String x) {
+	public static String htmlSpecialChars(String x) {
 		x = x.replace("/", "&#47;").replace("\\", "&#92;");
 		x = x.replace("&", "&amp;").replace("\"", "&quot;");
 		x = x.replace("<", "&lt;").replace(">", "&gt;");

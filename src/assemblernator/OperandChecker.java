@@ -1,6 +1,5 @@
 package assemblernator;
 
-import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction.ConstantRange;
 
 /**

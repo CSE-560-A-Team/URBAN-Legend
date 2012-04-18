@@ -435,7 +435,7 @@ public class GUIMain {
 			for (int i = 1; i < table.length; i++) {
 				res += "  <tr>\n";
 				for (int j = 0; j < table[i].length; j++)
-					res += "    <td>" + table[i][j] + "</td>\n";
+					res += "    <td>" + JoshText.htmlSpecialChars(table[i][j]) + "</td>\n";
 				res += "  </tr>\n";
 			}
 			res += "</table>\n<br />\n";

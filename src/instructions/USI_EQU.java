@@ -1,10 +1,9 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
-
-import static assemblernator.ErrorReporting.makeError;
 
 /**
  * The EQU instruction.

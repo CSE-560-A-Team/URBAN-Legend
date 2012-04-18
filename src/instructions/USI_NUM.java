@@ -3,7 +3,6 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Instruction.Operand;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;

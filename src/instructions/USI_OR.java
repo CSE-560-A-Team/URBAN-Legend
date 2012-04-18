@@ -1,7 +1,5 @@
 package instructions;
 
-import assemblernator.AbstractInstruction;
-import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 

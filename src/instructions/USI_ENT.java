@@ -6,7 +6,6 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
-import assemblernator.OperandChecker;
 
 /**
  * The ENT instruction.
