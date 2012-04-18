@@ -58,4 +58,13 @@ public abstract class AbstractDirective extends Instruction {
 		System.err.println("Attempt to invoke directive `" + getOpId()
 				+ "' for execute!");
 	}
+	
+	/**
+	 * Overridable method; returns an empty array.
+	 * 
+	 * @see assemblernator.Instruction#assemble()
+	 */
+	@Override public int[] assemble() {
+		return new int[0];
+	}
 }

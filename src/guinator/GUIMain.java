@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -20,7 +19,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -34,10 +32,9 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.lateralgm.joshedit.JoshText;
-import org.lateralgm.joshedit.Runner.JoshTextPanel;
 import org.lateralgm.joshedit.JoshText.CodeMetrics;
 import org.lateralgm.joshedit.JoshText.Highlighter;
-import org.lateralgm.joshedit.QuickFind;
+import org.lateralgm.joshedit.Runner.JoshTextPanel;
 
 import assemblernator.Assembler;
 import assemblernator.ErrorReporting.ErrorHandler;
