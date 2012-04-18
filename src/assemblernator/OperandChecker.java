@@ -101,14 +101,6 @@ public class OperandChecker {
 		return (cnst <= range.max && cnst >= range.min);
 	}
 
-	public static boolean isValidExpression(int exp) {
-		return true;
-	}
-	public static boolean isValidLabel(int exp) {
-		return true;
-	}
-
-
 	/**
 	 * Checks whether a given address is a valid address.
 	 * @author Noah
