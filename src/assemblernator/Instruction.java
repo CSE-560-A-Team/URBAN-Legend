@@ -334,7 +334,7 @@ public abstract class Instruction {
 	public String getOperand(String op, int indx) {
 		for (int i = 0; i < operands.size(); i++)
 			if (operands.get(i).operand.equals(op))
-				if (--indx <= 0)
+				if (indx-- <= 0)
 					return operands.get(i).expression;
 		return null;
 	}
@@ -354,7 +354,7 @@ public abstract class Instruction {
 	public Operand getOperandData(String op, int indx) {
 		for (int i = 0; i < operands.size(); i++)
 			if (operands.get(i).operand.equals(op))
-				if (--indx <= 0)
+				if (indx-- <= 0)
 					return operands.get(i);
 		return null;
 	}

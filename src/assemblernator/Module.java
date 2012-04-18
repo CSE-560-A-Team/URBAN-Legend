@@ -113,7 +113,7 @@ public class Module {
 			if (instr.getOpId().equalsIgnoreCase("ENT")
 					|| instr.getOpId().equalsIgnoreCase("EXT")) {
 				// put each operand as a separate entry into the symbol table.
-				for (int i = 1; i < instr.countOperand("LR") + 1; i++) {
+				for (int i = 1; i < instr.countOperand("LR"); i++) {
 					String lbl = instr.getOperand("LR", i);
 					if (instr.usage == Usage.EXTERNAL
 							&& symbols.containsKey(lbl)) { // EXT label and is

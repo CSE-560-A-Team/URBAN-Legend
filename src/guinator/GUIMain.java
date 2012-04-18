@@ -429,7 +429,7 @@ public class GUIMain {
 			res += "<table>\n";
 			res += "  <tr>\n";
 			for (int i = 0; i < table[0].length; i++)
-				res += "    <th>" + table[0][0] + "</th>\n";
+				res += "    <th>" + table[0][i] + "</th>\n";
 			res += "  </tr>";
 
 			for (int i = 1; i < table.length; i++) {
