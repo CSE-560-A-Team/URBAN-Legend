@@ -127,16 +127,20 @@ public class Assembler {
 	 * 
 	 * @author Noah
 	 * @date Apr 5, 2012; 7:33:45 PM
-	 * @modified Apr 7, 2012; 9:28:15 AM: added line to add instructions w/ labels
+	 * @modified Apr 7, 2012; 9:28:15 AM: added line to add instructions w/
+	 *           labels
 	 *           to symbol table. -Noah<br>
 	 *           Apr 9, 2012; 12:22:16 AM: Assigned lc above newLC - Noah<br>
 	 *           Apr 11, 2012; 2:54:53 PM: Added error handler instance. - Josh <br>
-	 *           Apr 15, 2012; 1:23:08 PM: Moved try-catch block inside loop and added continues,
+	 *           Apr 15, 2012; 1:23:08 PM: Moved try-catch block inside loop and
+	 *           added continues,
 	 *           so the loop continues even when an exception is caught. - Noah
-	 *           Apr 16, 2012; 10:22:15 PM: Added assignment of program name to module.
-	 *           Apr 17, 2012; 1:43:24 AM: Prevent invalid instruction from being added to symbol table.
-	 *          	and moved lc assignment above check. - Noah
-	 *          Apr 17, 2012; 2:00:32 PM: Added second pass for check(). - Josh
+	 *           Apr 16, 2012; 10:22:15 PM: Added assignment of program name to
+	 *           module.
+	 *           Apr 17, 2012; 1:43:24 AM: Prevent invalid instruction from
+	 *           being added to symbol table.
+	 *           and moved lc assignment above check. - Noah
+	 *           Apr 17, 2012; 2:00:32 PM: Added second pass for check(). - Josh
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -161,26 +165,40 @@ public class Assembler {
 	 * @specRef N/A
 	 */
 	public static final Module parseFile(Scanner source, ErrorHandler hErr) {
-		int lineNum = 0;
+		int lineNum = 0, skipls = 0;
 		Module module = new Module();
 		int startAddr = 0;
 		int lc = 0;
 		boolean firstKICKO = false, valid = true;
-		
-		while (source.hasNextLine()) {
-			try{
-				lineNum++;
-	
+
+		hasNextLineLoop: while (source.hasNextLine()) {
+			try {
+				lineNum += skipls + 1;
+				skipls = 0;
+
 				String line = source.nextLine();
-	
-				Instruction instr = Instruction.parse(line);
+
+				Instruction instr = null;
+				for (;;) {
+					try {
+						instr = Instruction.parse(line);
+						break;
+					} catch (IOException e) {
+						if (!source.hasNextLine()) {
+							hErr.reportError(makeError("expSemiEOF"), lineNum, 0);
+							break hasNextLineLoop;
+						}
+						line += "\n" + source.nextLine();
+						skipls++;
+					}
+				}
 				if (instr == null)
 					continue;
-				
+
 				instr.origSrcLine = line; // Gives instruction source line.
 				instr.lineNum = lineNum;
-	
-				
+
+
 				/* if start of module, record startAddr of module.
 				 * execStart of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO") && !firstKICKO) {
@@ -189,47 +207,40 @@ public class Assembler {
 					module.programName = instr.label;
 					firstKICKO = true;
 				}
-				
-				if(!firstKICKO) {
+
+				if (!firstKICKO) {
 					hErr.reportError(makeError("KICKOlineNum"), lineNum, -1);
 					break;
 				}
-				
+
 				instr.lc = lc;
-				//checks for operand errors in instruction.
+				// checks for operand errors in instruction.
 				valid = instr.immediateCheck(instr.getHErr(hErr), module);
 				// Get new lc for next instruction.
 				lc = instr.getNewLC(lc, module);
-	
-				if(lc > 4095) {
+
+				if (lc > 4095) {
 					hErr.reportError(makeError("OOM"), lineNum, -1);
 				}
-				
-				//if instr can be used in symbol table.
+
+				// if instr can be used in symbol table.
 				if (instr.usage != Usage.NONE && valid) {
 					module.getSymbolTable().addEntry(instr, hErr);
 				}
-	
+
 				module.assembly.add(instr);
-	
+
 				module.startAddr += lc;
 			} catch (URBANSyntaxException e) {
 				hErr.reportError(e.getMessage(), lineNum, e.index);
 				if (e.getMessage() == null || e.getMessage().length() <= 5)
 					e.printStackTrace();
-				
+
 				continue;
-				
-			} catch (IOException e) {
-				if (!e.getMessage().startsWith("RAL"))
-					e.printStackTrace();
-				else
-					System.err.println("Line " + lineNum + " is not terminated by a semicolon.");
-				
-				continue;
+
 			}
 		}
-		
+
 		// Pass two
 		for (Instruction i : module.assembly)
 			i.check(i.getHErr(hErr), module);
@@ -265,7 +276,8 @@ public class Assembler {
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
-			hErr.reportError("Failed to open file for parse: file not found.", -1, -1);
+			hErr.reportError("Failed to open file for parse: file not found.",
+					-1, -1);
 		}
 
 		return module;
