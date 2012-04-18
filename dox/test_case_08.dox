@@ -1,0 +1,88 @@
+/*!
+
+\page testcase8 Lines Past END Test
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">LinePastEnd</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">END</span>  		<span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">LinePastEnd</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">notEnd</span>		<span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">notEndYet</span>	<span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">nope</span>		<span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>LinePastEnd</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>nope</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>notEnd</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>notEndYet</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+LinePastEnd	 0000	PROGNAME
+nope	 0002	LABEL
+notEnd	 0000	LABEL
+notEndYet	 0001	LABEL
+
+Instruction breakdowns:
+original source line: LinePastEnd	KICKO FC:0;
+Line number: 1 LC: 0000 Label: LinePastEnd,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FC:0	Binary Equivalent: 0
+
+
+original source line: END  		LR:LinePastEnd;
+Line number: 2 LC: 0000 Label: ,
+instruction/Directive: END Binary Equivalent: ------
+Operand 1: LR:LinePastEnd	Binary Equivalent: 0
+
+
+original source line: notEnd		DMP FC:1;
+Line number: 3 LC: 0000 Label: notEnd,
+instruction/Directive: DMP Binary Equivalent: 111110
+Operand 1: FC:1	Binary Equivalent: 1
+152: Out of Memory.
+
+
+original source line: notEndYet	DMP FC:1;
+Line number: 4 LC: 0001 Label: notEndYet,
+instruction/Directive: DMP Binary Equivalent: 111110
+Operand 1: FC:1	Binary Equivalent: 1
+152: Out of Memory.
+
+
+original source line: nope		DMP FC:1;
+Line number: 5 LC: 0002 Label: nope,
+instruction/Directive: DMP Binary Equivalent: 111110
+Operand 1: FC:1	Binary Equivalent: 1
+152: Out of Memory.
+</pre>
+
+*/

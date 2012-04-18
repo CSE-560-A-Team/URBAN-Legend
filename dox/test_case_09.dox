@@ -1,0 +1,364 @@
+/*!
+
+\page testcase9 Incorrect STACK Tests
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">IncorrectSTACK</span> <span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">dmMinM1POP</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">dmMaxP1POP</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4096</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">dxMinM1POP</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">dxMaxP1POP</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">8</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">drMinM1POP</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">drMaxP1POP</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">8</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extraOper1</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extraOper2</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">noOper</span>	   <span style="font-weight:bold;color:#000080;">POP</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">wrongOper1</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">+</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">s</span>
+<span style="font-style:italic;color:#800080;">wrongOper2</span> <span style="font-weight:bold;color:#000080;">POP</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">fmMinM1PSH</span> <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">fmMaxP1PSH</span> <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4096</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">flMinM1PSH</span> <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">flMaxP1PSH</span> <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4096</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">fcMinM1PSH</span> <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">fcMaxP1PSH</span> <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4096</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extraOp</span>    <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">noOp</span>	   <span style="font-weight:bold;color:#000080;">PSH</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">wrongOp1</span>   <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">+</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">wrongOp2</span>   <span style="font-weight:bold;color:#000080;">PSH</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">END</span> <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">IncorrectSTACK</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">IncorrectEnd1</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>dmMaxP1POP</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>dmMinM1POP</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>drMaxP1POP</td>
+    <td>0005</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>drMinM1POP</td>
+    <td>0004</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>dxMaxP1POP</td>
+    <td>0003</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>dxMinM1POP</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>extraOp</td>
+    <td>0011</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>extraOper1</td>
+    <td>0006</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>extraOper2</td>
+    <td>0007</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>fcMaxP1PSH</td>
+    <td>0010</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>fcMinM1PSH</td>
+    <td>000F</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>flMaxP1PSH</td>
+    <td>000E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>flMinM1PSH</td>
+    <td>000D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>fmMaxP1PSH</td>
+    <td>000C</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>fmMinM1PSH</td>
+    <td>000B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>IncorrectSTACK</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>noOp</td>
+    <td>0012</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>noOper</td>
+    <td>0008</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>wrongOp1</td>
+    <td>0013</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>wrongOp2</td>
+    <td>0014</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>wrongOper1</td>
+    <td>0009</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>wrongOper2</td>
+    <td>000A</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+dmMaxP1POP	 0001	LABEL
+dmMinM1POP	 0000	LABEL
+drMaxP1POP	 0005	LABEL
+drMinM1POP	 0004	LABEL
+dxMaxP1POP	 0003	LABEL
+dxMinM1POP	 0002	LABEL
+extraOp	 0011	LABEL
+extraOper1	 0006	LABEL
+extraOper2	 0007	LABEL
+fcMaxP1PSH	 0010	LABEL
+fcMinM1PSH	 000F	LABEL
+flMaxP1PSH	 000E	LABEL
+flMinM1PSH	 000D	LABEL
+fmMaxP1PSH	 000C	LABEL
+fmMinM1PSH	 000B	LABEL
+IncorrectSTACK	 0000	PROGNAME
+noOp	 0012	LABEL
+noOper	 0008	LABEL
+wrongOp1	 0013	LABEL
+wrongOp2	 0014	LABEL
+wrongOper1	 0009	LABEL
+wrongOper2	 000A	LABEL
+
+Instruction breakdowns:
+original source line: IncorrectSTACK KICKO FC:0;
+Line number: 1 LC: 0000 Label: IncorrectSTACK,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FC:0	Binary Equivalent: 0
+
+
+original source line: dmMinM1POP POP DM:-1;
+Line number: 2 LC: 0000 Label: dmMinM1POP,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: DM:-1	Binary Equivalent: 11111111111111111111111111111111
+ERROR: 071: Operand `DM' for `POP' instruction/directive must be within range: [0, 4095]
+
+
+original source line: dmMaxP1POP POP DM:4096;
+Line number: 3 LC: 0001 Label: dmMaxP1POP,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: DM:4096	Binary Equivalent: 1000000000000
+ERROR: 071: Operand `DM' for `POP' instruction/directive must be within range: [0, 4095]
+
+
+original source line: dxMinM1POP POP DM:0, DX:0;
+Line number: 4 LC: 0002 Label: dxMinM1POP,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: DM:0	Binary Equivalent: 0
+Operand 2: DX:0	Binary Equivalent: 0
+ERROR: 072: Operand `DX' for `POP' instruction must be within range: [1,7]
+
+
+original source line: dxMaxP1POP POP DM:0, DX:8;
+Line number: 5 LC: 0003 Label: dxMaxP1POP,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: DM:0	Binary Equivalent: 0
+Operand 2: DX:8	Binary Equivalent: 1000
+ERROR: 072: Operand `DX' for `POP' instruction must be within range: [1,7]
+
+
+original source line: drMinM1POP POP DR:-1;
+Line number: 6 LC: 0004 Label: drMinM1POP,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: DR:-1	Binary Equivalent: 11111111111111111111111111111111
+ERROR: 074: Operand `DR' for `POP' instruction must be within range: [0,7]
+
+
+original source line: drMaxP1POP POP DR:8;
+Line number: 7 LC: 0005 Label: drMaxP1POP,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: DR:8	Binary Equivalent: 1000
+ERROR: 074: Operand `DR' for `POP' instruction must be within range: [0,7]
+
+
+original source line: extraOper1 POP DM:0, DX:1, DM:2;
+Line number: 8 LC: 0006 Label: extraOper1,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: DM:0	Binary Equivalent: 0
+Operand 2: DX:1	Binary Equivalent: 0
+Operand 3: DM:2	Binary Equivalent: 0
+ERROR: 049: Too many operands to `POP' instruction.
+
+
+original source line: extraOper2 POP DM:0, DM:1;
+Line number: 9 LC: 0007 Label: extraOper2,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: DM:0	Binary Equivalent: 0
+Operand 2: DM:1	Binary Equivalent: 0
+ERROR: 056: Operand `DM' must be paired with operand `DX' for instruction 'POP'.
+
+
+original source line: noOper	   POP;
+Line number: 10 LC: 0008 Label: noOper,
+instruction/Directive: POP Binary Equivalent: 110001
+ERROR: 052: Too few operands to `POP' instruction
+
+
+original source line: wrongOper1 POP EX:1+1;s
+Line number: 11 LC: 0009 Label: wrongOper1,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: EX:1+1	Binary Equivalent: 0
+ERROR: 046: Operand `EX' is inapplicable for `POP' instruction
+
+
+original source line: wrongOper2 POP FM:2;
+Line number: 12 LC: 000A Label: wrongOper2,
+instruction/Directive: POP Binary Equivalent: 110001
+Operand 1: FM:2	Binary Equivalent: 0
+ERROR: 046: Operand `FM' is inapplicable for `POP' instruction
+
+
+original source line: fmMinM1PSH PSH FM:-1;
+Line number: 13 LC: 000B Label: fmMinM1PSH,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: FM:-1	Binary Equivalent: 11111111111111111111111111111111
+ERROR: 071: Operand `FM' for `PSH' instruction/directive must be within range: [0, 4095]
+
+
+original source line: fmMaxP1PSH PSH FM:4096;
+Line number: 14 LC: 000C Label: fmMaxP1PSH,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: FM:4096	Binary Equivalent: 1000000000000
+ERROR: 071: Operand `FM' for `PSH' instruction/directive must be within range: [0, 4095]
+
+
+original source line: flMinM1PSH PSH FL:-1;
+Line number: 15 LC: 000D Label: flMinM1PSH,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: FL:-1	Binary Equivalent: 11111111111111111111111111111111
+ERROR: 075: Operand `FL' for `PSH' instruction must be within range: [0, 4095]
+
+
+original source line: flMaxP1PSH PSH FL:4096;
+Line number: 16 LC: 000E Label: flMaxP1PSH,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: FL:4096	Binary Equivalent: 1000000000000
+ERROR: 075: Operand `FL' for `PSH' instruction must be within range: [0, 4095]
+
+
+original source line: fcMinM1PSH PSH FC:-1;
+Line number: 17 LC: 000F Label: fcMinM1PSH,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: FC:-1	Binary Equivalent: 11111111111111111111111111111111
+ERROR: 075: Operand `FC' for `PSH' instruction must be within range: [0, 4095]
+
+
+original source line: fcMaxP1PSH PSH FC:4096;
+Line number: 18 LC: 0010 Label: fcMaxP1PSH,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: FC:4096	Binary Equivalent: 1000000000000
+ERROR: 075: Operand `FC' for `PSH' instruction must be within range: [0, 4095]
+
+
+original source line: extraOp    PSH FM:0, FM:0;
+Line number: 19 LC: 0011 Label: extraOp,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: FM:0	Binary Equivalent: 0
+Operand 2: FM:0	Binary Equivalent: 0
+ERROR: 049: Too many operands to `PSH' instruction.
+
+
+original source line: noOp	   PSH;
+Line number: 20 LC: 0012 Label: noOp,
+instruction/Directive: PSH Binary Equivalent: 110000
+ERROR: 054: Too few operands provided
+
+
+original source line: wrongOp1   PSH EX:1+1;
+Line number: 21 LC: 0013 Label: wrongOp1,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: EX:1+1	Binary Equivalent: 0
+ERROR: 046: Operand `EX' is inapplicable for `PSH' instruction
+
+
+original source line: wrongOp2   PSH DR:2;
+Line number: 22 LC: 0014 Label: wrongOp2,
+instruction/Directive: PSH Binary Equivalent: 110000
+Operand 1: DR:2	Binary Equivalent: 0
+ERROR: 046: Operand `DR' is inapplicable for `PSH' instruction
+
+
+original source line: END LR:IncorrectSTACK, EX:IncorrectEnd1; 
+Line number: 23 LC: 0015 Label: ,
+instruction/Directive: END Binary Equivalent: ------
+Operand 1: LR:IncorrectSTACK	Binary Equivalent: 0
+Operand 2: EX:IncorrectEnd1	Binary Equivalent: 0
+ERROR: 050: Too many operands to `END' directive
+</pre>
+
+*/

@@ -1,6 +1,6 @@
 /*!
 
-\page test_case_19 Invalid/Missing Shift/Manipulate Operand Tests
+\page testcase19 Invalid/Missing Shift/Manipulate Operand Tests
 
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">shiftROL</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>

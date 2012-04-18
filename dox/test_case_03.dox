@@ -1,0 +1,119 @@
+/*!
+
+\page testcase3 Correct DMP/HLT Test
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">CorrectDMPHLT</span> <span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">lvl1</span> <span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">lvl2</span> <span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">lvl3</span> <span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">max</span> <span style="font-weight:bold;color:#000080;">HLT</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4095</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">min</span> <span style="font-weight:bold;color:#000080;">HLT</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">4096</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">NOP</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">END</span> <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">CorrectDMPHLT</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>CorrectDMPHLT</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lvl1</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lvl2</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lvl3</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>max</td>
+    <td>0003</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>min</td>
+    <td>0004</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+CorrectDMPHLT	 0000	PROGNAME
+lvl1	 0000	LABEL
+lvl2	 0001	LABEL
+lvl3	 0002	LABEL
+max	 0003	LABEL
+min	 0004	LABEL
+
+Instruction breakdowns:
+original source line: CorrectDMPHLT KICKO FC:0;
+Line number: 1 LC: 0000 Label: CorrectDMPHLT,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FC:0	Binary Equivalent: 0
+
+
+original source line: lvl1 DMP FC:1;
+Line number: 2 LC: 0000 Label: lvl1,
+instruction/Directive: DMP Binary Equivalent: 111110
+Operand 1: FC:1	Binary Equivalent: 1
+
+
+original source line: lvl2 DMP FC:2;
+Line number: 3 LC: 0001 Label: lvl2,
+instruction/Directive: DMP Binary Equivalent: 111110
+Operand 1: FC:2	Binary Equivalent: 10
+
+
+original source line: lvl3 DMP FC:3;
+Line number: 4 LC: 0002 Label: lvl3,
+instruction/Directive: DMP Binary Equivalent: 111110
+Operand 1: FC:3	Binary Equivalent: 11
+
+
+original source line: max HLT FC:4095;
+Line number: 5 LC: 0003 Label: max,
+instruction/Directive: HLT Binary Equivalent: 111111
+Operand 1: FC:4095	Binary Equivalent: 111111111111
+
+
+original source line: min HLT FC:-4096;
+Line number: 6 LC: 0004 Label: min,
+instruction/Directive: HLT Binary Equivalent: 111111
+Operand 1: FC:-4096	Binary Equivalent: 11111111111111111111000000000000
+
+
+original source line: NOP;
+Line number: 7 LC: 0005 Label: ,
+instruction/Directive: NOP Binary Equivalent: 111101
+
+
+original source line: END LR:CorrectDMPHLT;
+Line number: 8 LC: 0006 Label: ,
+instruction/Directive: END Binary Equivalent: ------
+Operand 1: LR:CorrectDMPHLT	Binary Equivalent: 0
+</pre>
+
+*/

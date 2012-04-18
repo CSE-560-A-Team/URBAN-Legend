@@ -1,0 +1,197 @@
+/*!
+
+\page testcase5 Correct I/O Test
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">CorrectUIGIO</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">outInt1</span> 	<span style="font-weight:bold;color:#000080;">IWSR</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4095</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">outInt2</span> 	<span style="font-weight:bold;color:#000080;">IWSR</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span>     <span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">outInt3</span> 	<span style="font-weight:bold;color:#000080;">IWSR</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4095</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">inInt1</span>		<span style="font-weight:bold;color:#000080;">IRKB</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">inInt2</span>		<span style="font-weight:bold;color:#000080;">IRKB</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">32</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">outChar1</span>	<span style="font-weight:bold;color:#000080;">CWSR</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">64</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">outChar2</span>	<span style="font-weight:bold;color:#000080;">CWSR</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">6</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">128</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">outChar3</span>	<span style="font-weight:bold;color:#000080;">CWSR</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">inChar1</span>		<span style="font-weight:bold;color:#000080;">CRKB</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">8</span><span style="color:#ff0000;">,</span>    <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">512</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">inChar2</span>		<span style="font-weight:bold;color:#000080;">CRKB</span> <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">15</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4095</span><span style="color:#ff0000;">,</span> 	<span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">END</span>  		<span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">CorrectUIGIO</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>CorrectUIGIO</td>
+    <td>0004</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>inChar1</td>
+    <td>000C</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>inChar2</td>
+    <td>000D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>inInt1</td>
+    <td>0007</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>inInt2</td>
+    <td>0008</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>outChar1</td>
+    <td>0009</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>outChar2</td>
+    <td>000A</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>outChar3</td>
+    <td>000B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>outInt1</td>
+    <td>0004</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>outInt2</td>
+    <td>0005</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>outInt3</td>
+    <td>0006</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+CorrectUIGIO	 0004	PROGNAME
+inChar1	 000C	LABEL
+inChar2	 000D	LABEL
+inInt1	 0007	LABEL
+inInt2	 0008	LABEL
+outChar1	 0009	LABEL
+outChar2	 000A	LABEL
+outChar3	 000B	LABEL
+outInt1	 0004	LABEL
+outInt2	 0005	LABEL
+outInt3	 0006	LABEL
+
+Instruction breakdowns:
+original source line: CorrectUIGIO	KICKO FC:4;
+Line number: 1 LC: 0004 Label: CorrectUIGIO,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FC:4	Binary Equivalent: 0
+
+
+original source line: outInt1 	IWSR NW:0,    FM:4095;
+Line number: 2 LC: 0004 Label: outInt1,
+instruction/Directive: IWSR Binary Equivalent: 101000
+Operand 1: NW:0	Binary Equivalent: 0
+Operand 2: FM:4095	Binary Equivalent: 111111111111
+
+
+original source line: outInt2 	IWSR NW:1,    FM:0,     FX:1;
+Line number: 3 LC: 0005 Label: outInt2,
+instruction/Directive: IWSR Binary Equivalent: 101000
+Operand 1: NW:1	Binary Equivalent: 1
+Operand 2: FM:0	Binary Equivalent: 0
+Operand 3: FX:1	Binary Equivalent: 1
+
+
+original source line: outInt3 	IWSR NW:2,    FL:4095;
+Line number: 4 LC: 0006 Label: outInt3,
+instruction/Directive: IWSR Binary Equivalent: 101000
+Operand 1: NW:2	Binary Equivalent: 10
+Operand 2: FL:4095	Binary Equivalent: 111111111111
+
+
+original source line: inInt1		IRKB NW:3,    DM:0;
+Line number: 5 LC: 0007 Label: inInt1,
+instruction/Directive: IRKB Binary Equivalent: 101001
+Operand 1: NW:3	Binary Equivalent: 11
+Operand 2: DM:0	Binary Equivalent: 0
+
+
+original source line: inInt2		IRKB NW:4,    DM:32,	DX:2;
+Line number: 6 LC: 0008 Label: inInt2,
+instruction/Directive: IRKB Binary Equivalent: 101001
+Operand 1: NW:4	Binary Equivalent: 100
+Operand 2: DM:32	Binary Equivalent: 100000
+Operand 3: DX:2	Binary Equivalent: 10
+
+
+original source line: outChar1	CWSR NW:5,    FM:64;
+Line number: 7 LC: 0009 Label: outChar1,
+instruction/Directive: CWSR Binary Equivalent: 101010
+Operand 1: NW:5	Binary Equivalent: 101
+Operand 2: FM:64	Binary Equivalent: 1000000
+
+
+original source line: outChar2	CWSR NW:6,    FM:128,	FX:3;
+Line number: 8 LC: 000A Label: outChar2,
+instruction/Directive: CWSR Binary Equivalent: 101010
+Operand 1: NW:6	Binary Equivalent: 110
+Operand 2: FM:128	Binary Equivalent: 10000000
+Operand 3: FX:3	Binary Equivalent: 11
+
+
+original source line: outChar3	CWSR NW:7,    FL:0;
+Line number: 9 LC: 000B Label: outChar3,
+instruction/Directive: CWSR Binary Equivalent: 101010
+Operand 1: NW:7	Binary Equivalent: 111
+Operand 2: FL:0	Binary Equivalent: 0
+
+
+original source line: inChar1		CRKB NW:8,    DM:512;
+Line number: 10 LC: 000C Label: inChar1,
+instruction/Directive: CRKB Binary Equivalent: 101100
+Operand 1: NW:8	Binary Equivalent: 1000
+Operand 2: DM:512	Binary Equivalent: 1000000000
+
+
+original source line: inChar2		CRKB NW:15, DM:4095, 	DX:7;
+Line number: 11 LC: 000D Label: inChar2,
+instruction/Directive: CRKB Binary Equivalent: 101100
+Operand 1: NW:15	Binary Equivalent: 1111
+Operand 2: DM:4095	Binary Equivalent: 111111111111
+Operand 3: DX:7	Binary Equivalent: 111
+
+
+original source line: END  		LR:CorrectUIGIO;
+Line number: 12 LC: 000E Label: ,
+instruction/Directive: END Binary Equivalent: ------
+Operand 1: LR:CorrectUIGIO	Binary Equivalent: 0
+</pre>
+
+*/
