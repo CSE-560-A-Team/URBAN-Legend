@@ -69,25 +69,25 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 		} else {
 			isValid = false;
 			if(this.hasOperand("FR")){
-				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FR"), this.lineNum, -1);
 			}  else if(this.hasOperand("DM")){
-				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "DM"), this.lineNum, -1);				
 			}  else if(this.hasOperand("FL")){
-				hErr.reportError(makeError("operandInsWrong", "FL", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FL"), this.lineNum, -1);				
 			} else if(this.hasOperand("FX")){
-				hErr.reportError(makeError("operandInsWrong", "FX", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FX"), this.lineNum, -1);				
 			} else if(this.hasOperand("FS")){
-				hErr.reportError(makeError("operandInsWrong", "FS", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FS"), this.lineNum, -1);				
 			} else if(this.hasOperand("LR")){
-				hErr.reportError(makeError("operandInsWrong", "LR", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "LR"), this.lineNum, -1);				
 			} else if(this.hasOperand("FM")){
-				hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FM"), this.lineNum, -1);				
 			} else if(this.hasOperand("EX")){
-				hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "EX"), this.lineNum, -1);				
 			} else if(this.hasOperand("NW")){
-				hErr.reportError(makeError("operandInsWrong", "NW", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "NW"), this.lineNum, -1);				
 			} else if(this.hasOperand("ST")){
-				hErr.reportError(makeError("operandInsWrong", "ST", this.getOpId()), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "ST"), this.lineNum, -1);				
 			}
 		}
 		
@@ -98,43 +98,43 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "DM"), this.lineNum, -1);
 				
 			} else if (this.hasOperand("FM") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FM"), this.lineNum, -1);
 			} else if (this.hasOperand("FX") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "FX", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FX"), this.lineNum, -1);
 			} else if (this.hasOperand("FR") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FR"), this.lineNum, -1);
 			} else if (this.hasOperand("EX") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "EX"), this.lineNum, -1);
 			} else if (this.hasOperand("LR") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "LR", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "LR"), this.lineNum, -1);
 			} else if (this.hasOperand("ST") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "ST", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "ST"), this.lineNum, -1);
 			} else if (this.hasOperand("NW") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "NW", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "NW"), this.lineNum, -1);
 			}
 		}
 		
