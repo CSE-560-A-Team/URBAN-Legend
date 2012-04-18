@@ -185,7 +185,7 @@ public class Assembler {
 				 * execStart of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO") && !firstKICKO) {
 					module.startAddr = startAddr;
-					instr.immediateCheck(hErr, module);
+					instr.immediateCheck(instr.getHErr(hErr), module);
 					module.programName = instr.label;
 					firstKICKO = true;
 				}
@@ -197,7 +197,7 @@ public class Assembler {
 				
 				instr.lc = lc;
 				//checks for operand errors in instruction.
-				valid = instr.immediateCheck(hErr, module);
+				valid = instr.immediateCheck(instr.getHErr(hErr), module);
 				// Get new lc for next instruction.
 				lc = instr.getNewLC(lc, module);
 	
@@ -232,7 +232,7 @@ public class Assembler {
 		
 		// Pass two
 		for (Instruction i : module.assembly)
-			i.check(hErr, module);
+			i.check(i.getHErr(hErr), module);
 
 		return module;
 	}
