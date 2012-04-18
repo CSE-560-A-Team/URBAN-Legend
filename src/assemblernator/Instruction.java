@@ -771,7 +771,11 @@ public abstract class Instruction {
 
 			instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand
 					+ ":" + oprnd.expression + "\tBinary Equivalent: " + oprnd.toString() + "\n";
-
+			
+			for(String error : errors) {
+				instrBreak = instrBreak + error + "\n";
+			}
+			
 			i++;
 		}
 
