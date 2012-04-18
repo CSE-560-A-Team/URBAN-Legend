@@ -50,13 +50,13 @@ public class USI_CLR extends AbstractInstruction {
 			//range checking
 			isValid = OperandChecker.isValidReg(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
-			this.getOperandData("DM").value = value;
+			this.getOperandData("DR").value = value;
 		} else if(this.hasOperand("DX")){
 			//range checking
 			value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
 			isValid = OperandChecker.isValidIndex(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
-			this.getOperandData("DM").value = value;
+			this.getOperandData("DX").value = value;
 		} else{
 			isValid = false;
 			if(this.hasOperand("FR")){
