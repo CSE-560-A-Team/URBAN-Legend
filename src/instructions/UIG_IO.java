@@ -120,7 +120,7 @@ public abstract class UIG_IO extends AbstractInstruction{
 		if(isValid) {
 			int value = module.evaluate(this.getOperand("NW"), false, hErr, this, this.getOperandData("NW").keywordStartPosition);
 			isValid = isValidNumWords(value);
-			if(!isValid) hErr.reportError(makeError("OORmemAddr", "NW", this.getOpId()), this.lineNum, -1);
+			if(!isValid) hErr.reportError(makeError("OORnw", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("NW").value = value;
 			
 			if(this.operandType.input) {
