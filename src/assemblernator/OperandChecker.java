@@ -11,34 +11,20 @@ import assemblernator.Instruction.ConstantRange;
  */
 public class OperandChecker {
 	/**
-	 * Checks if expression following "DX" or "FX" is a valid expression.
-	 * 
+	 * Checks if value of index register valid.
 	 * @author Noah
 	 * @date Apr 14, 2012; 2:33:20 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 18, 2012; 12:30:21 AM removed try catch. -Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param exp
-	 *            value of index register.
-	 * @return <pre>
-	 * {@code if exp is not an integer, or if exp is an integer > 7 or < 1, then return false,
-	 * else return true.}
-	 * </pre>
+	 * @param idx value of index register.
+	 * @return 1 <= reg <= 7.
 	 * @specRef N/A
 	 */
-	public static boolean isValidIndex(int exp) {
-		boolean valid = true;
-		try {
-			if (exp > 7 || exp < 1) {
-				valid = false;
-			}
-		} catch (NumberFormatException e) {
-			valid = false;
-		}
-
-		return valid;
+	public static boolean isValidIndex(int idx) {
+		return (idx <= 7 && idx >= 1);
 	}
 
 	/**
@@ -46,65 +32,43 @@ public class OperandChecker {
 	 * 
 	 * @author ERIC
 	 * @date Apr 14, 2012; 6:33:20 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 18, 2012; 12:28:05 AM removed try catch. -Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param exp
+	 * @param reg
 	 *            value of register.
-	 * @return <pre>
-	 * {@code if exp is not an integer, or if exp is an integer > 7 or < 0, then return false,
-	 * else return true.}
-	 * </pre>
+	 * @return if reg > 7 || reg < 0 return false, else return true.
 	 * @specRef N/A
 	 */
-	public static boolean isValidReg(int exp) {
-		boolean valid = true;
-		try {
-			if (exp > 7 || exp < 0) {
-				valid = false;
-			}
-		} catch (NumberFormatException e) {
-			valid = false;
-		}
-
-		return valid;
+	public static boolean isValidReg(int reg) {
+		return (reg <= 7 && reg >= 0);
 	}
 
 
 	/**
-	 * 
+	 * Checks if value of operand NW, is valid.
 	 * @author Noah
 	 * @date Apr 14, 2012; 5:10:21 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 18, 2012; 12:34:55 AM removed try catch. -Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param exp
-	 * @return
+	 * @param nw number of words.
+	 * @return 0 <= nw <= 15
 	 * @specRef N/A
 	 */
-	public static boolean isValidNumWords(int exp) {
-		boolean valid = true;
-
-		try {
-			if (exp > 15 || exp < 0) {
-				valid = false;
-			}
-		} catch (NumberFormatException e) {
-			valid = false;
-		}
-
-		return valid;
+	public static boolean isValidNumWords(int nw) {
+		return (nw <= 15 && nw >= 0);
 	}
 
 	/**
 	 * Checks whether a literal value falls within range.
 	 * @author Noah
 	 * @date Apr 14, 2012; 5:10:38 PM
-	 * @modified Apr 18, 2012; 12:08 AM: added implementation and new arg.
+	 * @modified Apr 18, 2012; 12:08 AM: added implementation and new arg. -Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -146,30 +110,20 @@ public class OperandChecker {
 
 
 	/**
-	 * 
+	 * Checks whether a given address is a valid address.
 	 * @author Noah
 	 * @date Apr 14, 2012; 5:10:44 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 18, 2012; 12:34:55 AM removed try catch. -Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param addr
-	 * @return
+	 * @param addr address to check for validity.
+	 * @return 0 <= addr <= 4095.
 	 * @specRef N/A
 	 */
-	public static boolean isValidMem(int exp) {
-		boolean valid = true;
-
-		try {
-			if (exp > 4095 || exp < 0) {
-				valid = false;
-			}
-		} catch (NumberFormatException e) {
-			valid = false;
-		}
-
-		return valid;
+	public static boolean isValidMem(int addr) {
+		return (addr <= 4095 && addr >= 0);
 	}
 
 	/**

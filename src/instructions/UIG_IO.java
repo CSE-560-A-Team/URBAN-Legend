@@ -141,7 +141,7 @@ public abstract class UIG_IO extends AbstractInstruction{
 			} else if(this.operandType.literal){
 				//evaluate value of operand.
 				value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition); 
-				isValid = isValidMem(value);
+				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_13_TC.min), Integer.toString(ConstantRange.RANGE_13_TC.min)), this.lineNum, -1);
 				this.getOperandData("FL").value = value;
