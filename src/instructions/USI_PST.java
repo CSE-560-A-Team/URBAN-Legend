@@ -3,6 +3,8 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Instruction.ConstantRange;
+import assemblernator.Instruction.Operand;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -39,68 +41,87 @@ public class USI_PST extends AbstractInstruction {
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 	
 		boolean isValid = true;
-		int value ;
-		if(this.operands.size() < 1){
-			isValid = false;
-			hErr.reportError(makeError("tooFewOperands"), this.lineNum, -1);
-		} else if(this.operands.size() > 1 ) {
-			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
-			isValid =  false;
-		} else if(this.hasOperand("DR")) {
-			//range checking
-			value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-			isValid = OperandChecker.isValidReg(value);
-			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
-			this.getOperandData("DR").value = value;
-		}  else if(this.hasOperand("FM")) {
-			//range checking
-			value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition);
-			isValid = OperandChecker.isValidMem(value);
-			hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
-			this.getOperandData("FM").value = value;
-			if(this.hasOperand("FX")) {
-				//range checking - FX only possible if FM appears before it.
-				value = module.evaluate(this.getOperand("FX"), false, hErr, this, this.getOperandData("FX").keywordStartPosition);
-				isValid = OperandChecker.isValidIndex(value);
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
-				this.getOperandData("FX").value = value;
+		//anything less than 2 operands is an error
+			if(this.operands.size() < 2){
+				//error
+				isValid = false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+				//checks combo for 2 operands if no DR error if dr and no FL or FM error
+			}else if(this.operands.size() == 2){
+				if(this.hasOperand("DR")){
+					//error checking
+					Operand o = getOperandData("DR");
+					int constantSize = module.evaluate(o.expression, false, hErr, this,
+							o.valueStartPosition);
+					this.getOperandData("DR").value = constantSize;
+					isValid = OperandChecker.isValidReg(constantSize);
+					if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+					if(this.hasOperand("FL")){
+						//error checking
+						Operand o1 = getOperandData("FL");
+						int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+								o1.valueStartPosition);
+						this.getOperandData("FL").value = constantSize1;
+						isValid = OperandChecker.isValidLiteral(constantSize1,ConstantRange.RANGE_13_TC);
+						if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),"-2^12", "2^12 - 1"), this.lineNum, -1);
+					}else if (this.hasOperand("FM")){
+						//error checking
+						Operand o1 = getOperandData("FM");
+						int constantSize1 = module.evaluate(o1.expression, true, hErr, this,
+								o1.valueStartPosition);
+						this.getOperandData("FM").value = constantSize1;
+						isValid = OperandChecker.isValidMem(constantSize1);
+						if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+					}else{
+						isValid = false;
+						hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FM or FL", "DR"), this.lineNum, -1);
+					}
+				}else{
+					//error
+					isValid = false;
+					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DR"), this.lineNum, -1);
+				}
+				//checks combo of 3 operands no dr error if dr and no FX and FX error
+			}else if(this.operands.size() == 3){
+				if(this.hasOperand("DR")){
+					//error checking
+					Operand o = getOperandData("DR");
+					int constantSize = module.evaluate(o.expression, false, hErr, this,
+							o.valueStartPosition);
+					this.getOperandData("DR").value = constantSize;
+					isValid = OperandChecker.isValidReg(constantSize);
+					if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+					if (this.hasOperand("FM") && this.hasOperand("FX")){
+						//error checking
+						Operand o1 = getOperandData("FX");
+						int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+								o1.valueStartPosition);
+						this.getOperandData("FX").value = constantSize1;
+						isValid = OperandChecker.isValidIndex(constantSize1);
+						if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+						Operand o2 = getOperandData("FM");
+						int constantSize2 = module.evaluate(o2.expression, true, hErr, this,
+								o2.valueStartPosition);
+						this.getOperandData("FM").value = constantSize2;
+						isValid = OperandChecker.isValidMem(constantSize2);
+						if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+					}else{
+						//error
+						isValid = false;
+						hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FX and FM", "DR"), this.lineNum, -1);
+					}
+				}else{
+					//error
+					isValid = false;
+					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DR"), this.lineNum, -1);
+				}
+				//to many operands error
+			}else{
+				//error
+				isValid = false;
+				hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			}
-		}  else if(this.hasOperand("FC")) {
-			//range checking
-			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
-			isValid = OperandChecker.isValidConstant(value,ConstantRange.RANGE_SHIFT);
-			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(),
-					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
-			this.getOperandData("FC").value = value;
-		}  else if(this.hasOperand("FL")){
-			//range checking
-			value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
-			isValid = OperandChecker.isValidMem(value);
-			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),
-					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
-			this.getOperandData("FL").value = value;
-		} else{
-			isValid = false;
-			if(this.hasOperand("FR")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FR"), this.lineNum, -1);
-			}  else if(this.hasOperand("DM")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "DM"), this.lineNum, -1);				
-			} else if(this.hasOperand("FS")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FS"), this.lineNum, -1);				
-			} else if(this.hasOperand("LR")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "LR"), this.lineNum, -1);				
-			} else if(this.hasOperand("DX")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "DX"), this.lineNum, -1);				
-			} else if(this.hasOperand("EX")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "EX"), this.lineNum, -1);				
-			} else if(this.hasOperand("NW")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "NW"), this.lineNum, -1);				
-			} else if(this.hasOperand("ST")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "ST"), this.lineNum, -1);				
-			}
-		}
-			return isValid;
-
+				return isValid;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
