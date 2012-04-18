@@ -37,19 +37,22 @@ public class USI_PSH extends AbstractInstruction {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
+		int value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition);
 		if(this.operands.size() > 1 || this.operands.size() == 0) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
 		}else if(this.hasOperand("FM")) {
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("FM"));
+			isValid = OperandChecker.isValidMem(value);
 			hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("FC")) {
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("FC"));
+			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
+			isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_SHIFT);
 		} else if(this.hasOperand("FL")){
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("FL"));
+			value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
+			isValid = OperandChecker.isValidLiteral(value);
 			if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;

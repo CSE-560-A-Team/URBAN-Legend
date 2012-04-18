@@ -1,8 +1,6 @@
 package instructions;
 
 import assemblernator.AbstractInstruction;
-import assemblernator.IOFormat;
-import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
 import assemblernator.ErrorReporting.ErrorHandler;
@@ -37,7 +35,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 	@Override
 	public final boolean check(ErrorHandler hErr, Module module){
 		boolean isValid = true;
-		
+		int value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
 		//The only possible combination has 2 operands
 		if(!(this.operands.size() == 2)){
 			isValid = false;
@@ -45,17 +43,20 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 		}	
 		else if(!(this.hasOperand("FC"))){
 			isValid = false;
+			isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_SHIFT);
 			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);	
 			//now there are 2 operands, one of which is FC
 		} else if(this.hasOperand("DR")){
 			dest = "DR";
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("DR"));
+			value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("DX")){
 			dest = "DX";
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("DX"));
+			value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;
@@ -109,25 +110,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 	@Override
 	public final int[] assemble() {
 		
-		//all instructions start w/ 6 bit opcode.
-		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //011000
-		String index = "000"; //default value of index bits if index registers are not used. 
-		int reg; 
-		int[] assembled = new int[1];
-				
-		 
-		if(dest == "DR" || dest == "DX") { //operands = {DR, FC} or {FC, DR} 
-			reg = Integer.parseInt(this.getOperand("DM")); //parse into decimal integer.
-			if(dest == "DX") { //operand = {FC, DX} or {DX, FC}
-				index = this.getOperand("DX"); //get index register decimal.
-				index = IOFormat.formatBinInteger(Integer.parseInt(index), 3); //convert base-10 to binary.
-			}
-		} else if(origin == "FR" || origin == "FX" || origin == "FL"){
-			if(origin == "FL") { //operands = {FL, DR} or {FL,DX}
-				reg = Integer.parseInt(this.getOperand("FL"));
-			}
-		}
-		
+
 		return null;
 	}
 

@@ -39,30 +39,33 @@ public class USI_PST extends AbstractInstruction {
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 	
 		boolean isValid = true;
+		int value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
 		if(this.operands.size() > 1 || this.operands.size() == 0) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
 		} else if(this.hasOperand("DR")) {
 			//range checking
-			isValid = OperandChecker.isValidReg(this.getOperand("DR"));
-			isValid = OperandChecker.isValidMem(this.getOperand("DR"));
+			isValid = OperandChecker.isValidReg(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 		}  else if(this.hasOperand("FM")) {
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("FM"));
+			value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
 			hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
 			if(this.hasOperand("FX")) {
 				//range checking - FX only possible if FM appears before it.
-				isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
-				isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
+				value = module.evaluate(this.getOperand("FX"), false, hErr, this, this.getOperandData("FX").keywordStartPosition);
+				isValid = OperandChecker.isValidIndex(value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 			}
 		}  else if(this.hasOperand("FC")) {
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("FC"));
+			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
+			isValid = OperandChecker.isValidConstant(value,ConstantRange.RANGE_SHIFT);
 		}  else if(this.hasOperand("FL")){
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("FL"));
+			value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
 			if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;
