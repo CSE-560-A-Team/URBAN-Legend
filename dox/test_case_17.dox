@@ -1,0 +1,207 @@
+/*!
+
+\page test_case_17 InCorrect Shift/Manipulate Tests
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">shiftINCOR</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+		<span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">x</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">place x in register 1 </span>
+		<span style="font-weight:bold;color:#000080;">ISUB</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">y</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">add (x+y) </span>
+		<span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">z</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">store x+y into z 2 </span>
+		<span style="font-weight:bold;color:#000080;">ROL</span>   <span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> 	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">ISHR</span>  <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">ISHL</span>  <span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> 	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">ISRA</span>  <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">ISLA</span>  <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">ROR</span>   <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> 	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">ROL</span>   <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> 	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">ISHR</span>  <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> 	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">ISHR</span>  <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">IWSR</span>  <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">z</span><span style="color:#ff0000;">,</span>	<span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">output z 3 A0008007 R</span>
+		<span style="font-weight:bold;color:#000080;">HLT</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">halt program displax code </span>
+<span style="font-style:italic;color:#800080;">x</span>		<span style="font-weight:bold;color:#000080;">num</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">define data element </span>
+<span style="font-style:italic;color:#800080;">y</span> 		<span style="font-weight:bold;color:#000080;">num</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">111</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">define data element </span>
+<span style="font-style:italic;color:#800080;">z</span>	 	<span style="font-weight:bold;color:#000080;">num</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">define data element </span>
+		<span style="font-weight:bold;color:#000080;">END</span>   <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">shiftONCOR</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">end of program E</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>shiftINCOR</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>000E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>y</td>
+    <td>000F</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>z</td>
+    <td>0010</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+shiftINCOR	 0000	PROGNAME
+x	 000E	LABEL
+y	 000F	LABEL
+z	 0010	LABEL
+
+Instruction breakdowns:
+original source line: shiftINCOR	KICKO FC:0;
+Line number: 1 LC: 0000 Label: shiftINCOR,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FC:0	Binary Equivalent: 0
+
+
+original source line: 		MOVD  DR:7,	FM:x ;place x in register 1 
+Line number: 2 LC: 0000 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: DR:7	Binary Equivalent: 111
+Operand 2: FM:x	Binary Equivalent: 1110
+
+
+original source line: 		ISUB  DR:1,	FM:y ;add (x+y) 
+Line number: 3 LC: 0001 Label: ,
+instruction/Directive: ISUB Binary Equivalent: 001100
+Operand 1: DR:1	Binary Equivalent: 1
+Operand 2: FM:y	Binary Equivalent: 1111
+
+
+original source line: 		MOVD  FR:1,	DM:z ;store x+y into z 2 
+Line number: 4 LC: 0002 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FR:1	Binary Equivalent: 1
+Operand 2: DM:z	Binary Equivalent: 10000
+
+
+original source line: 		ROL   FX:1, 	FC:4; 
+Line number: 5 LC: 0003 Label: ,
+instruction/Directive: ROL Binary Equivalent: 011100
+Operand 1: FX:1	Binary Equivalent: 0
+Operand 2: FC:4	Binary Equivalent: 0
+ERROR: 046: Operand `FX' is inapplicable for `ROL' instruction
+
+
+original source line: 		ISHR  FL:1,	FC:4; 
+Line number: 6 LC: 0004 Label: ,
+instruction/Directive: ISHR Binary Equivalent: 011000
+Operand 1: FL:1	Binary Equivalent: 0
+Operand 2: FC:4	Binary Equivalent: 0
+ERROR: 046: Operand `FL' is inapplicable for `ISHR' instruction
+
+
+original source line: 		ISHL  NW:1, 	FC:4; 
+Line number: 7 LC: 0005 Label: ,
+instruction/Directive: ISHL Binary Equivalent: 011001
+Operand 1: NW:1	Binary Equivalent: 0
+Operand 2: FC:4	Binary Equivalent: 0
+ERROR: 046: Operand `NW' is inapplicable for `ISHL' instruction
+
+
+original source line: 		ISRA  LR:1,	FC:4; 
+Line number: 8 LC: 0006 Label: ,
+instruction/Directive: ISRA Binary Equivalent: 011010
+Operand 1: LR:1	Binary Equivalent: 0
+Operand 2: FC:4	Binary Equivalent: 0
+ERROR: 046: Operand `LR' is inapplicable for `ISRA' instruction
+
+
+original source line: 		ISLA  ST:1,	FC:4; 
+Line number: 9 LC: 0007 Label: ,
+instruction/Directive: ISLA Binary Equivalent: 011011
+Operand 1: ST:1	Binary Equivalent: 0
+Operand 2: FC:4	Binary Equivalent: 0
+ERROR: 046: Operand `ST' is inapplicable for `ISLA' instruction
+
+
+original source line: 		ROR   FM:1, 	FC:4; 
+Line number: 10 LC: 0008 Label: ,
+instruction/Directive: ROR Binary Equivalent: 011101
+Operand 1: FM:1	Binary Equivalent: 0
+Operand 2: FC:4	Binary Equivalent: 0
+ERROR: 046: Operand `FM' is inapplicable for `ROR' instruction
+
+
+original source line: 		ROL   EX:1, 	FC:4; 
+Line number: 11 LC: 0009 Label: ,
+instruction/Directive: ROL Binary Equivalent: 011100
+Operand 1: EX:1	Binary Equivalent: 0
+Operand 2: FC:4	Binary Equivalent: 0
+ERROR: 046: Operand `EX' is inapplicable for `ROL' instruction
+
+
+original source line: 		ISHR  DM:1, 	FC:4; 
+Line number: 12 LC: 000A Label: ,
+instruction/Directive: ISHR Binary Equivalent: 011000
+Operand 1: DM:1	Binary Equivalent: 0
+Operand 2: FC:4	Binary Equivalent: 0
+ERROR: 046: Operand `DM' is inapplicable for `ISHR' instruction
+
+
+original source line: 		ISHR  DM:1; 
+Line number: 13 LC: 000B Label: ,
+instruction/Directive: ISHR Binary Equivalent: 011000
+Operand 1: DM:1	Binary Equivalent: 0
+ERROR: 052: Too few operands to `ISHR' instruction
+
+
+original source line: 		IWSR  FM:z,	NW:1 ;output z 3 A0008007 R
+Line number: 14 LC: 000C Label: ,
+instruction/Directive: IWSR Binary Equivalent: 101000
+Operand 1: FM:z	Binary Equivalent: 10000
+Operand 2: NW:1	Binary Equivalent: 1
+
+
+original source line: 		HLT   FC:0 ;halt program displax code 
+Line number: 15 LC: 000D Label: ,
+instruction/Directive: HLT Binary Equivalent: 111111
+Operand 1: FC:0	Binary Equivalent: 0
+
+
+original source line: x		num   FC:10 ;define data element 
+Line number: 16 LC: 000E Label: x,
+instruction/Directive: NUM Binary Equivalent: ------
+Operand 1: FC:10	Binary Equivalent: 1010
+
+
+original source line: y 		num   FC:111 ;define data element 
+Line number: 17 LC: 000F Label: y,
+instruction/Directive: NUM Binary Equivalent: ------
+Operand 1: FC:111	Binary Equivalent: 1101111
+
+
+original source line: z	 	num   FC:0 ;define data element 
+Line number: 18 LC: 0010 Label: z,
+instruction/Directive: NUM Binary Equivalent: ------
+Operand 1: FC:0	Binary Equivalent: 0
+
+
+original source line: 		END   LR:shiftONCOR;end of program E
+Line number: 19 LC: 0011 Label: ,
+instruction/Directive: END Binary Equivalent: ------
+Operand 1: LR:shiftONCOR	Binary Equivalent: 0
+ERROR: 113: LR:label must match KICKO label
+
+
+</pre>
+
+!*/
