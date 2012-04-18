@@ -1,12 +1,12 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.OperandChecker.isValidConstant;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
-import static assemblernator.OperandChecker.isValidConstant;
 
 /**
  * The HLT instruction.

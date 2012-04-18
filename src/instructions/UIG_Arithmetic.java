@@ -3,8 +3,6 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Instruction.Operand;
-import assemblernator.IOFormat;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
 
@@ -255,7 +253,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 	 */
 	@Override
 	public final int[] assemble() {
-		String code = IOFormat.formatBinInteger(this.getOpcode(), 6);
+		//String code = IOFormat.formatBinInteger(this.getOpcode(), 6);
 		if (dest == "DR") {
 			if (src == "FM" || src == "FL" || src == "FXFM") {
 				// format 0
@@ -272,8 +270,8 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 	
 	/**
 	 * Invokes parent's constructor.
-	 * @param opid
-	 * @param opcode
+	 * @param opid The opId of child instructions.
+	 * @param opcode The distinguishing opcode of child instructions.
 	 */
 	UIG_Arithmetic(String opid, int opcode) {
 		super(opid, opcode);

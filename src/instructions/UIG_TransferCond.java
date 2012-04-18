@@ -1,12 +1,9 @@
 package instructions;
 
-import assemblernator.AbstractInstruction;
-import assemblernator.IOFormat;
-import assemblernator.Instruction;
-import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Instruction.Operand;
-import assemblernator.Module;
 import static assemblernator.ErrorReporting.makeError;
+import assemblernator.AbstractInstruction;
+import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Module;
 import assemblernator.OperandChecker;
 
 /**
@@ -123,8 +120,8 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 	
 	/**
 	 * Invokes parent's constructor.
-	 * @param opid
-	 * @param opcode
+	 * @param opid The opId of child instructions.
+	 * @param opcode The distinguishing opcode of child instructions.
 	 */
 	UIG_TransferCond(String opid, int opcode) {
 		super(opid, opcode);

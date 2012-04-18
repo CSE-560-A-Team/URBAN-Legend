@@ -91,5 +91,6 @@ public class Main {
 				System.exit(1);
 			}
 		}
+		System.out.println("Currently no binary generation for output to `" + outputFile + "'.");
 	}
 }

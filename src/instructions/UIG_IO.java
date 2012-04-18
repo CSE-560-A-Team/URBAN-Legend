@@ -1,14 +1,14 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.OperandChecker.isValidIndex;
+import static assemblernator.OperandChecker.isValidLiteral;
+import static assemblernator.OperandChecker.isValidMem;
+import static assemblernator.OperandChecker.isValidNumWords;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Module;
-import static assemblernator.OperandChecker.isValidIndex;
-import static assemblernator.OperandChecker.isValidMem;
-import static assemblernator.OperandChecker.isValidLiteral;
-import static assemblernator.OperandChecker.isValidNumWords;
 
 /**
  * Parent class of input/output leaf instruction classes.
@@ -222,8 +222,8 @@ public abstract class UIG_IO extends AbstractInstruction{
 	
 	/**
 	 * Invokes parent's constructor.
-	 * @param opid
-	 * @param opcode
+	 * @param opid The opId of child instructions.
+	 * @param opcode The distinguishing opcode of child instructions.
 	 */
 	UIG_IO(String opid, int opcode) {
 		super(opid, opcode);
