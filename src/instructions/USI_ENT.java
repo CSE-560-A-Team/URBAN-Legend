@@ -77,7 +77,7 @@ public class USI_ENT extends AbstractDirective {
 				//checks for valid label
 				for(int i=0; this.countOperand("LR") > i; i++){
 					if(!IOFormat.isValidLabel(this.getOperand("LR", i))){
-						hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+						hErr.reportError(makeError("OORlabel", "LR"+i, this.getOpId()), this.lineNum, getOperandData("LR",i).valueStartPosition);
 						isValid = false;
 					}
 				}
