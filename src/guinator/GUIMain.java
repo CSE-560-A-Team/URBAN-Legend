@@ -3,6 +3,8 @@ package guinator;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -53,6 +55,10 @@ public class GUIMain {
 	static JMenuItem compile;
 	/** A menu item to export the file as an HTML document */
 	static JMenuItem writeHTML;
+	/** A menu item to export a test case as an HTML document */
+	static JMenuItem writeHTMLTest;
+	/** A menu item to copy a test case to the clipboard as HTML */
+	static JMenuItem copyHTMLTest;
 	/** Our exit menu item */
 	static JMenuItem exit;
 
@@ -105,6 +111,10 @@ public class GUIMain {
 		filemenu.addSeparator();
 		filemenu.add(writeHTML = new JMenuItem("Export as HTML"));
 		writeHTML.addActionListener(ml);
+		filemenu.add(writeHTMLTest = new JMenuItem("Write HTML Test Case"));
+		writeHTML.addActionListener(ml);
+		filemenu.add(copyHTMLTest = new JMenuItem("Copy HTML Test Case"));
+		copyHTMLTest.addActionListener(ml);
 		filemenu.addSeparator();
 		filemenu.add(exit = new JMenuItem("Exit"));
 		exit.addActionListener(ml);
@@ -152,7 +162,7 @@ public class GUIMain {
 		 */
 		FileTab() {
 			JoshTextPanel jtp = new JoshTextPanel(null, false);
-			
+
 			jt = jtp.text;
 			jt.setTokenMarker(new URBANhighlighter());
 			jt.highlighters.add(0, problemMarker = new ProblemMarker());
@@ -219,14 +229,10 @@ public class GUIMain {
 		 * 
 		 * @author Josh Ventura
 		 * @date Apr 11, 2012; 11:38:15 PM
-		 * @modified UNMODIFIED
-		 * @tested UNTESTED
-		 * @errors NO ERRORS REPORTED
-		 * @codingStandards Awaiting signature
-		 * @testingStandards Awaiting signature
-		 * @specRef N/A
+		 * @modified Apr 18, 2012; 3:40:07 AM: Added return statement of module.
+		 * @return The module that was compiled. for reuse purposes.
 		 */
-		void compile() {
+		Module compile() {
 			problems.clear();
 			String str = jt.getText();
 			Module mod = Assembler.parseString(str, new GUIErrorHandler());
@@ -249,6 +255,7 @@ public class GUIMain {
 						dispTabs.setSelectedComponent(buildMessageTab);
 						break;
 					}
+			return mod;
 		}
 
 		/** The list of all problems to highlight and report. */
@@ -333,11 +340,11 @@ public class GUIMain {
 				dtm.setValueAt(Integer.toString(p.pos), i, 2);
 				dtm.setValueAt(p.message, i, 3);
 			}
-			
+
 			RowSorter<? extends TableModel> sorter = errorTable.getRowSorter();
-	        List<TableRowSorter.SortKey> sortKeys = new ArrayList<TableRowSorter.SortKey>();
-            sortKeys.add(new TableRowSorter.SortKey(1, SortOrder.ASCENDING));
-	        sorter.setSortKeys(sortKeys);
+			List<TableRowSorter.SortKey> sortKeys = new ArrayList<TableRowSorter.SortKey>();
+			sortKeys.add(new TableRowSorter.SortKey(1, SortOrder.ASCENDING));
+			sorter.setSortKeys(sortKeys);
 
 			System.out.println(errorTable.getModel().getClass().getName());
 		}
@@ -397,6 +404,50 @@ public class GUIMain {
 	 * @date Apr 9, 2012; 12:56:30 AM
 	 */
 	class MenuListener implements ActionListener {
+
+		/**
+		 * Format compiler output as a test case.
+		 * 
+		 * @author Josh Ventura
+		 * @date Apr 18, 2012; 3:41:55 AM
+		 * @modified UNMODIFIED
+		 * @return HTML test case report.
+		 */
+		String getTestCase() {
+			FileTab ft = (FileTab) tabPane.getSelectedComponent();
+			if (ft == null)
+				return "";
+			String res = "<h1>Input</h1>\n<pre>";
+			Module m = ft.compile();
+			if (m == null)
+				return "";
+			res += ft.jt.getHTML();
+			res += "</pre>\n<br />\n";
+
+			String[][] table = m.getSymbolTable().toStringTable();
+			res += "<h1>Symbol table</h1>\n";
+			res += "<table>\n";
+			res += "  <tr>\n";
+			for (int i = 0; i < table[0].length; i++)
+				res += "    <th>" + table[0][0] + "</th>\n";
+			res += "  </tr>";
+
+			for (int i = 1; i < table.length; i++) {
+				res += "  <tr>\n";
+				for (int j = 0; j < table[i].length; j++)
+					res += "    <td>" + table[i][j] + "</td>\n";
+				res += "  </tr>\n";
+			}
+			res += "</table>\n<br />\n";
+
+			res += "<h1>User report</h1>\n";
+			res += "<pre>";
+			res += m.toString();
+			res += "</pre>\n";
+
+			return res;
+		}
+
 		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
 		@Override public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == compile) {
@@ -430,6 +481,39 @@ public class GUIMain {
 						}
 					}
 				}
+				return;
+			}
+			if (e.getSource() == writeHTMLTest) {
+				JFileChooser jfc = new JFileChooser();
+				jfc.setMultiSelectionEnabled(false);
+				if (jfc.showSaveDialog(mainWindow) == JFileChooser.APPROVE_OPTION) {
+					File f = jfc.getSelectedFile();
+					if (!f.exists()
+							|| JOptionPane.showConfirmDialog(mainWindow,
+									"Overwrite existing file?") == JOptionPane.YES_OPTION) {
+						try {
+							FileWriter fw = new FileWriter(f);
+							FileTab ft = (FileTab) tabPane
+									.getSelectedComponent();
+							if (ft != null) {
+								fw.write("<html>\n<body>\n");
+								fw.write(getTestCase());
+								fw.write("</body>\n</html>\n");
+							}
+							fw.close();
+						} catch (FileNotFoundException e1) {
+							JOptionPane.showMessageDialog(mainWindow,
+									"Failed to open file.");
+						} catch (IOException e1) {
+							JOptionPane.showMessageDialog(mainWindow,
+									"Failed to write to file.");
+						}
+					}
+				}
+			}
+			if (e.getSource() == copyHTMLTest) {
+			    StringSelection ss = new StringSelection(getTestCase());
+			    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 			}
 			if (e.getSource() == exit) {
 				System.exit(0);
