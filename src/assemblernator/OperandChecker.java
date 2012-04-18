@@ -27,12 +27,10 @@ public class OperandChecker {
 	 * </pre>
 	 * @specRef N/A
 	 */
-	public static boolean isValidIndex(String exp) {
+	public static boolean isValidIndex(int exp) {
 		boolean valid = true;
 		try {
-			int indexReg = Integer.parseInt(exp);
-
-			if (indexReg > 7 || indexReg < 1) {
+			if (exp > 7 || exp < 1) {
 				valid = false;
 			}
 		} catch (NumberFormatException e) {
@@ -60,12 +58,10 @@ public class OperandChecker {
 	 * </pre>
 	 * @specRef N/A
 	 */
-	public static boolean isValidReg(String exp) {
+	public static boolean isValidReg(int exp) {
 		boolean valid = true;
 		try {
-			int indexReg = Integer.parseInt(exp);
-
-			if (indexReg > 7 || indexReg < 0) {
+			if (exp > 7 || exp < 0) {
 				valid = false;
 			}
 		} catch (NumberFormatException e) {
@@ -91,12 +87,10 @@ public class OperandChecker {
 	 * @return check
 	 * @specRef N/A
 	 */
-	public static boolean isValidShiftConstant(String exp) {
+	public static boolean isValidShiftConstant(int exp) {
 		boolean check = true;
 		try {
-			int fcreg = Integer.parseInt(exp);
-
-			if (fcreg < 0 || fcreg > 31) {
+			if (exp < 0 || exp > 31) {
 				check = false;
 			}
 		} catch (NumberFormatException e) {
@@ -118,13 +112,11 @@ public class OperandChecker {
 	 * @return
 	 * @specRef N/A
 	 */
-	public static boolean isValidNumWords(String exp) {
+	public static boolean isValidNumWords(int exp) {
 		boolean valid = true;
 
 		try {
-			int nw = Integer.parseInt(exp);
-
-			if (nw > 15 || nw < 0) {
+			if (exp > 15 || exp < 0) {
 				valid = false;
 			}
 		} catch (NumberFormatException e) {
@@ -147,7 +139,8 @@ public class OperandChecker {
 	 * @return
 	 * @specRef N/A
 	 */
-	public static boolean isValidLiteral(String lit) {
+	//literal for arithmetic
+	public static boolean isValidLiteral(int lit) {
 		return true;
 	}
 
@@ -165,15 +158,14 @@ public class OperandChecker {
 	 * @specRef N/A
 	 */
 	//needs to check for 2^16-1 to -(2^16)
-	public static boolean isValidConstant(String cnst) {
+	public static boolean isValidConstant(int cnst) {
 		return true;
 	}
 
-	public static boolean isValidExpression(String exp) {
+	public static boolean isValidExpression(int exp) {
 		return true;
 	}
-	
-	public static boolean isValidLabel(String exp) {
+	public static boolean isValidLabel(int exp) {
 		return true;
 	}
 
@@ -191,13 +183,11 @@ public class OperandChecker {
 	 * @return
 	 * @specRef N/A
 	 */
-	public static boolean isValidMem(String exp) {
+	public static boolean isValidMem(int exp) {
 		boolean valid = true;
 
 		try {
-			int addr = Integer.parseInt(exp);
-
-			if (addr > 4095 || addr < 0) {
+			if (exp > 4095 || exp < 0) {
 				valid = false;
 			}
 		} catch (NumberFormatException e) {
@@ -205,23 +195,6 @@ public class OperandChecker {
 		}
 
 		return valid;
-	}
-
-	/**
-	 * 
-	 * @author Noah
-	 * @date Apr 14, 2012; 5:10:47 PM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
-	 * @param addr
-	 * @return
-	 * @specRef N/A
-	 */
-	public static boolean isValidMem(int addr) {
-		return true;
 	}
 
 	/**
