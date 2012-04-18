@@ -41,7 +41,7 @@ public class USI_ENT extends AbstractDirective {
 	@Override
 	public boolean check(ErrorHandler hErr, Module module) {
 		//check for ent LR label is correct
-		for(int i = 0;this.countOperand("LR") != i;i++){
+		for(int i = 0;this.countOperand("LR") > i;i++){
 		if (!module.getSymbolTable().hasLocalEntry(this.getOperand("LR", i))){
 			hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
 			return false;
@@ -81,6 +81,11 @@ public class USI_ENT extends AbstractDirective {
 						isValid = false;
 					}
 				}
+			}else{
+				isValid = false;
+				hErr.reportError(
+						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
+						this.lineNum, -1);
 			}
 		}else{
 			isValid = false;

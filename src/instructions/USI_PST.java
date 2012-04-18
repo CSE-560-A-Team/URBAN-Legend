@@ -66,7 +66,7 @@ public class USI_PST extends AbstractInstruction {
 			//range checking
 			value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
 			isValid = OperandChecker.isValidMem(value);
-			if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
+			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;
 			hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);
