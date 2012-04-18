@@ -1,6 +1,6 @@
 /*!
 
-\page test_case_13 No semicolon after KICKO instruction
+\page testcase13 No semicolon after KICKO instruction
 
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">start</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4000</span>

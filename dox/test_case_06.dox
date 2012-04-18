@@ -1,0 +1,174 @@
+/*!
+
+\page testcase6 Incorrect CLR Test
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">IncorrectCLR</span> <span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">minM1Reg</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">minM1Idx</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">maxP1Reg</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">8</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">maxP1Idx</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">8</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extra1</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extra2</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">wrongOper</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">ex</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">+</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extraOperA</span> <span style="font-weight:bold;color:#000080;">CLRA</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extraOperX</span> <span style="font-weight:bold;color:#000080;">CLRX</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">END</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> deliberately incorrect.</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>extra1</td>
+    <td>0004</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>extra2</td>
+    <td>0005</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>extraOperA</td>
+    <td>0007</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>extraOperX</td>
+    <td>0008</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>maxP1Idx</td>
+    <td>0003</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>maxP1Reg</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>minM1Idx</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>minM1Reg</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>wrongOper</td>
+    <td>0006</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+extra1	 0004	LABEL
+extra2	 0005	LABEL
+extraOperA	 0007	LABEL
+extraOperX	 0008	LABEL
+maxP1Idx	 0003	LABEL
+maxP1Reg	 0002	LABEL
+minM1Idx	 0001	LABEL
+minM1Reg	 0000	LABEL
+wrongOper	 0006	LABEL
+
+Instruction breakdowns:
+original source line: IncorrectCLR KICKO FL:0;
+Line number: 1 LC: 0000 Label: IncorrectCLR,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FL:0	Binary Equivalent: 0
+ERROR: 040: Missing `FC' operand to `KICKO' directive
+
+
+original source line: minM1Reg clr dr:-1;
+Line number: 2 LC: 0000 Label: minM1Reg,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DR:-1	Binary Equivalent: 11111111111111111111111111111111
+ERROR: 072: Operand `DR' for `CLR' instruction must be within range: [1,7]
+
+
+original source line: minM1Idx clr dx:0;
+Line number: 3 LC: 0001 Label: minM1Idx,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DX:0	Binary Equivalent: 0
+ERROR: 072: Operand `DX' for `CLR' instruction must be within range: [1,7]
+
+
+original source line: maxP1Reg clr dr:8;
+Line number: 4 LC: 0002 Label: maxP1Reg,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DR:8	Binary Equivalent: 1000
+ERROR: 072: Operand `DR' for `CLR' instruction must be within range: [1,7]
+
+
+original source line: maxP1Idx clr dx:8;
+Line number: 5 LC: 0003 Label: maxP1Idx,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DX:8	Binary Equivalent: 1000
+ERROR: 072: Operand `DX' for `CLR' instruction must be within range: [1,7]
+
+
+original source line: extra1 clr dr:0, dr:0;
+Line number: 6 LC: 0004 Label: extra1,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DR:0	Binary Equivalent: 0
+Operand 2: DR:0	Binary Equivalent: 0
+ERROR: 049: Too many operands to `CLR' instruction.
+
+
+original source line: extra2 clr dx:0, dr:0;
+Line number: 7 LC: 0005 Label: extra2,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DX:0	Binary Equivalent: 0
+Operand 2: DR:0	Binary Equivalent: 0
+ERROR: 049: Too many operands to `CLR' instruction.
+
+
+original source line: wrongOper clr ex:1+1;
+Line number: 8 LC: 0006 Label: wrongOper,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: EX:1+1	Binary Equivalent: 0
+ERROR: 046: Operand `EX' is inapplicable for `CLR' instruction
+
+
+original source line: extraOperA CLRA DR:0;
+Line number: 9 LC: 0007 Label: extraOperA,
+instruction/Directive: CLRA Binary Equivalent: 010001
+Operand 1: DR:0	Binary Equivalent: 0
+ERROR: 049: Too many operands to `CLRA' instruction.
+
+
+original source line: extraOperX CLRX FM:0;
+Line number: 10 LC: 0008 Label: extraOperX,
+instruction/Directive: CLRX Binary Equivalent: 010010
+Operand 1: FM:0	Binary Equivalent: 0
+ERROR: 049: Too many operands to `CLRX' instruction.
+
+
+original source line: END; deliberately incorrect.
+Line number: 11 LC: 0009 Label: ,
+instruction/Directive: END Binary Equivalent: ------
+ERROR: 040: Missing `LR' operand to `END' directive
+</pre>
+
+*/
