@@ -14,6 +14,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.Instruction.Operand;
 import assemblernator.Instruction.Usage;
@@ -97,26 +98,39 @@ public class Module {
 		 * 
 		 * @author Noah
 		 * @date Apr 6, 2012; 1:56:43 PM
-		 * @modified UNMODIFIED
+		 * @modified Apr 18, 2012 PM: Added checks for duplicate symbols. -Noah
 		 * @tested UNTESTED
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @param instr
-		 *            instruction to add.
+		 * @param instr instruction to add.
+		 * @param hErr handles errors.
 		 * @specRef N/A
 		 */
-		public void addEntry(Instruction instr) {
+		public void addEntry(Instruction instr, ErrorHandler hErr) {
 			// keep track of instructions w/ opID "ENT" and "EXT" separately.
 			if (instr.getOpId().equalsIgnoreCase("ENT")
 					|| instr.getOpId().equalsIgnoreCase("EXT")) {
 				// put each operand as a separate entry into the symbol table.
 				for (int i = 1; i < instr.countOperand("LR") + 1; i++) {
-					extEntSymbols.put(instr.getOperand("LR", i), instr);
+					String lbl = instr.getOperand("LR", i);
+					if(instr.usage == Usage.EXTERNAL && symbols.containsKey(lbl)) { //EXT label and is already in local
+						hErr.reportError(makeError("shadowLabel", lbl, Integer.toString(symbols.get(lbl).lineNum)), instr.lineNum, -1);
+						//don't add.
+					} else { //add.
+						extEntSymbols.put(instr.getOperand("LR", i), instr);
+					}
 				}
-			}
-			else {
-				symbols.put(instr.label, instr);
+			} else {
+				if(extEntSymbols.containsKey(instr.label) && extEntSymbols.get(instr.label).usage == Usage.EXTERNAL) {
+					Instruction ext = extEntSymbols.remove(instr.label); //remove ext label from symbol table.
+					hErr.reportError(makeError("shadowLabel", instr.label, Integer.toString(ext.lineNum)), instr.lineNum, -1);
+					symbols.put(instr.label, instr);  //put local label in symbol table.
+				} else if(!symbols.containsKey(instr.label)) { //no duplicates allowed.
+					symbols.put(instr.label, instr);
+				} else {
+					hErr.reportError(makeError("duplicateSymbol", instr.label, Integer.toString(symbols.get(instr.label).lineNum)), instr.lineNum, -1);
+				}
 			}
 
 		}

@@ -202,7 +202,7 @@ public class Assembler {
 	
 				//if instr can be used in symbol table.
 				if (instr.usage != Usage.NONE && valid) {
-					module.getSymbolTable().addEntry(instr);
+					module.getSymbolTable().addEntry(instr, hErr);
 				}
 	
 				module.assembly.add(instr);
