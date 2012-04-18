@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Instruction.Operand;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -49,7 +50,11 @@ public class USI_RET extends AbstractInstruction {
 			if(this.hasOperand("DM")){
 				dest = "DM";
 				//range check
-				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
+				Operand o = getOperandData("DM");
+				int constantSize = module.evaluate(o.expression, true, hErr, this,
+						o.valueStartPosition);
+				this.getOperandData("DM").value = constantSize;
+				isValid = OperandChecker.isValidMem(constantSize);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 			}else{
 				isValid=false;

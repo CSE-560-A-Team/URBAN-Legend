@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Instruction.Operand;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -53,17 +54,29 @@ public class USI_TRDR extends AbstractInstruction {
 			if(this.hasOperand("DM")){
 				dest="DM";
 				//range check
-				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
+				Operand o = getOperandData("DM");
+				int constantSize = module.evaluate(o.expression, true, hErr, this,
+						o.valueStartPosition);
+				this.getOperandData("DM").value = constantSize;
+				isValid = OperandChecker.isValidMem(constantSize);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 				if(this.hasOperand("FR")){
 					src="FR";
 					//range checking
-					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
+					Operand o1 = getOperandData("FR");
+					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+							o1.valueStartPosition);
+					this.getOperandData("FR").value = constantSize1;
+					isValid = OperandChecker.isValidReg(constantSize1);
 					if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				}else if(this.hasOperand("FX")){
 					src="FX";
 					//range checking
-					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
+					Operand o1 = getOperandData("FX");
+					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+							o1.valueStartPosition);
+					this.getOperandData("FR").value = constantSize1;
+					isValid = OperandChecker.isValidIndex(constantSize1);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 				}else{
 					isValid=false;
@@ -78,19 +91,35 @@ public class USI_TRDR extends AbstractInstruction {
 			if(this.hasOperand("DX") && this.hasOperand("DM")){
 				dest="DMDX";
 				//range check
-				isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
+				Operand o1 = getOperandData("DX");
+				int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+						o1.valueStartPosition);
+				this.getOperandData("DX").value = constantSize1;
+				isValid = OperandChecker.isValidIndex(constantSize1);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
-				isValid = OperandChecker.isValidMem(this.getOperand("DM"));
+				Operand o2 = getOperandData("DM");
+				int constantSize2 = module.evaluate(o2.expression, true, hErr, this,
+						o2.valueStartPosition);
+				this.getOperandData("DM").value = constantSize2;
+				isValid = OperandChecker.isValidMem(constantSize2);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 				if(this.hasOperand("FR")){
 					src="FR";
 					//range checking
-					isValid = OperandChecker.isValidReg(this.getOperand("FR"));
+					Operand o = getOperandData("FR");
+					int constantSize = module.evaluate(o.expression, false, hErr, this,
+							o.valueStartPosition);
+					this.getOperandData("FR").value = constantSize;
+					isValid = OperandChecker.isValidReg(constantSize);
 					if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
 				}else if(this.hasOperand("FX")){
 					src="FX";
 					//range checking
-					isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
+					Operand o = getOperandData("FX");
+					int constantSize = module.evaluate(o.expression, false, hErr, this,
+							o.valueStartPosition);
+					this.getOperandData("FX").value = constantSize;
+					isValid = OperandChecker.isValidIndex(constantSize);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 				}else{
 					isValid=false;

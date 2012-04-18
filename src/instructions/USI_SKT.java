@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Instruction.Operand;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -49,7 +50,11 @@ public class USI_SKT extends AbstractInstruction {
 					if(this.hasOperand("DR")){
 						dest = "DR";
 						//range check
-						isValid = OperandChecker.isValidMem(this.getOperand("DR"));
+						Operand o = getOperandData("DR");
+						int constantSize = module.evaluate(o.expression, false, hErr, this,
+								o.valueStartPosition);
+						this.getOperandData("DR").value = constantSize;
+						isValid = OperandChecker.isValidReg(constantSize);
 						if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 					}else{
 						isValid=false;

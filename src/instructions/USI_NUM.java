@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Instruction.Operand;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -57,8 +58,11 @@ public class USI_NUM extends AbstractDirective {
 		}else if (this.operands.size() == 1){
 			if(this.hasOperand("FC")){
 				src = "FC";
-				//range check
-				isValid = OperandChecker.isValidConstant(this.getOperand("FC"));
+				Operand o = getOperandData("FC");
+				int constantSize = module.evaluate(o.expression, false, hErr, this,
+						o.valueStartPosition);
+				this.getOperandData("FC").value = constantSize;
+				isValid = OperandChecker.isValidConstant(constantSize, ConstantRange.RANGE_16_TC);
 				if(!isValid) hErr.reportError(makeError("OOR13tc", "FC", this.getOpId()), this.lineNum, -1);
 			}else{
 				isValid=false;
