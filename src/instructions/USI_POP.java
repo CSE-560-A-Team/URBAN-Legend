@@ -43,12 +43,12 @@ public class USI_POP extends AbstractInstruction {
 			isValid =  false;
 		} else if(this.hasOperand("DR")) {
 			//range checking
-			isValid = OperandChecker.isValidMem(value);
+			isValid = OperandChecker.isValidReg(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("DM")){
 			//range checking
 			value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
-			isValid = OperandChecker.isValidMem(value);
+			isValid = OperandChecker.isValidIndex(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DM", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;
