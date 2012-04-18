@@ -64,73 +64,30 @@ public class USI_ENT extends AbstractDirective {
 			hErr.reportError(makeError("noLabel", this.getOpId()), this.lineNum, -1);
 			isValid = false;
 		}
-		if (this.operands.size() < 1) {
+		//checks if there isnt enogh operands
+		if(this.operands.size() < 1){
 			isValid = false;
 			hErr.reportError(
 					makeError("directiveMissingOp", this.getOpId(), "LR"),
 					this.lineNum, -1);
-		} else if (this.operands.size() == 1) {
-			if (this.hasOperand("LR")) {
-				src = "LR";
-				if (!IOFormat.isValidLabel(this.getOperand("LR"))){
-					hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
-					isValid = false;
+			//checks that there are not to many operands
+		}else if(this.operands.size() <= 4){
+			//makes sure only lr's are used
+			if(this.countOperand("LR") == this.operands.size()){
+				//checks for valid label
+				for(int i=0; this.countOperand("LR") > i; i++){
+					if(!IOFormat.isValidLabel(this.getOperand("LR", i))){
+						hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+						isValid = false;
+					}
 				}
-			} else {
-				isValid = false;
-				hErr.reportError(
-						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
-						this.lineNum, -1);
 			}
-		} else if (this.operands.size() == 2) {
-			if (this.countOperand("LR") == 2) {
-				src = "LRLR";
-				if (!IOFormat.isValidLabel(this.getOperand("LR", 0)) || !IOFormat.isValidLabel(this.getOperand("LR", 1))){
-					hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
-					isValid = false;
-				}
-
-			}else{
-				isValid = false;
-				hErr.reportError(
-						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
-						this.lineNum, -1);
-			}
-		} else if (this.operands.size() == 3) {
-			if (this.countOperand("LR") == 3) {
-				src = "LRLRLR";
-				if (!IOFormat.isValidLabel(this.getOperand("LR", 0)) || !IOFormat.isValidLabel(this.getOperand("LR", 1))
-						|| !IOFormat.isValidLabel(this.getOperand("LR", 2))){
-					hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
-					isValid = false;
-				}
-
-			}else{
-				isValid = false;
-				hErr.reportError(
-						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
-						this.lineNum, -1);
-			}
-		} else if (this.operands.size() == 4) {
-			if (this.countOperand("LR") == 4) {
-				src = "LRLRLRLR";
-				if (!IOFormat.isValidLabel(this.getOperand("LR", 0)) || !IOFormat.isValidLabel(this.getOperand("LR", 1))
-						|| !IOFormat.isValidLabel(this.getOperand("LR", 2)) || !IOFormat.isValidLabel(this.getOperand("LR", 3))){
-					hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
-					isValid = false;
-				}
-			}else{
-				isValid = false;
-				hErr.reportError(
-						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
-						this.lineNum, -1);
-			}
-		} else {
+		}else{
 			isValid = false;
 			hErr.reportError(makeError("extraOperandsDir", this.getOpId()),
 					this.lineNum, -1);
 		}
-		return isValid; // TODO: IMPLEMENT
+		return isValid;
 	}
 
 	// =========================================================
