@@ -202,6 +202,7 @@ public class Assembler {
 				lc = instr.getNewLC(lc, module);
 	
 				if(lc > 4095) {
+					instr.errors.add(instr.errors.size(), makeError("OOM")); //add error into list of errors.
 					hErr.reportError(makeError("OOM"), lineNum, -1);
 				}
 				
