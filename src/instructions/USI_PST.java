@@ -52,16 +52,19 @@ public class USI_PST extends AbstractInstruction {
 			value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
 			isValid = OperandChecker.isValidReg(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+			this.getOperandData("DR").value = value;
 		}  else if(this.hasOperand("FM")) {
 			//range checking
 			value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition);
 			isValid = OperandChecker.isValidMem(value);
 			hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
+			this.getOperandData("FM").value = value;
 			if(this.hasOperand("FX")) {
 				//range checking - FX only possible if FM appears before it.
 				value = module.evaluate(this.getOperand("FX"), false, hErr, this, this.getOperandData("FX").keywordStartPosition);
 				isValid = OperandChecker.isValidIndex(value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("FX").value = value;
 			}
 		}  else if(this.hasOperand("FC")) {
 			//range checking
@@ -69,12 +72,14 @@ public class USI_PST extends AbstractInstruction {
 			isValid = OperandChecker.isValidConstant(value,ConstantRange.RANGE_SHIFT);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(),
 					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+			this.getOperandData("FC").value = value;
 		}  else if(this.hasOperand("FL")){
 			//range checking
 			value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
 			isValid = OperandChecker.isValidMem(value);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),
 					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+			this.getOperandData("FL").value = value;
 		} else{
 			isValid = false;
 			if(this.hasOperand("FR")){
