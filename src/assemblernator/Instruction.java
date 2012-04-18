@@ -492,7 +492,7 @@ public abstract class Instruction {
 				throw new IOException("RAL");
 
 			if (!Character.isWhitespace(line.charAt(i)))
-				throw new URBANSyntaxException(makeError("unexSymFollow", ""
+				throw new URBANSyntaxException(makeError("unexpSymFollow", ""
 						+ line.charAt(i), "label"), i);
 
 			while (++i < line.length()
