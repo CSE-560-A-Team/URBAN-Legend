@@ -67,7 +67,7 @@ public class USI_END extends AbstractDirective {
 				}
 			}else{
 				isValid=false;
-				hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "any operand other than LR"), this.lineNum, -1);
+				hErr.reportError(makeError("operandDirWrong", this.getOpId(), this.operands.get(0).operand), this.lineNum, -1);
 			}
 			//more than 1 operand error
 		}else{

@@ -212,10 +212,10 @@ public class Assembler {
 				 * execStart of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO") && !firstKICKO) {
 					module.startAddr = startAddr;
-					instr.immediateCheck(instr.getHErr(hErr), module);
+					//instr.immediateCheck(instr.getHErr(hErr), module);
 					module.programName = instr.label;
 					firstKICKO = true;
-				}
+				} 
 
 				if (!firstKICKO) {
 					hErr.reportError(makeError("KICKOlineNum"), lineNum, -1);

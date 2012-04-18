@@ -36,7 +36,8 @@ public class USI_DMP extends AbstractInstruction {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
+	/** @see assemblernator.Instruction#check(ErrorHandler, Module) 
+	 *  @modified Apr 18, 2012; 11:38:12 AM Changed error type generated.*/
 	@Override 
 	public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
@@ -46,7 +47,8 @@ public class USI_DMP extends AbstractInstruction {
 		} else {
 			int value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); 
 			if(!isValidConstant(value, ConstantRange.RANGE_DMP)) {
-				hErr.reportError(makeError("OOR13tc", "FC", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("OORconstant", "FC", this.getOpId(), 
+						Integer.toString(ConstantRange.RANGE_DMP.min), Integer.toString(ConstantRange.RANGE_DMP.max)), this.lineNum, -1);
 				isValid = false;
 			}
 			this.operands.get(0).value = value;
