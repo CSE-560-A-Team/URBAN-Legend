@@ -132,21 +132,17 @@ public class Module {
 			else {
 				if (extEntSymbols.containsKey(instr.label)
 						&& extEntSymbols.get(instr.label).usage == Usage.EXTERNAL) {
-					Instruction ext = extEntSymbols.remove(instr.label); // remove
-																			// ext
-																			// label
-																			// from
-																			// symbol
-																			// table.
+					// remove ext label from symbol table.
+					Instruction ext = extEntSymbols.remove(instr.label); 
 					hErr.reportError(
 							makeError("shadowLabel", instr.label,
 									Integer.toString(ext.lineNum)),
 							instr.lineNum, -1);
-					symbols.put(instr.label, instr); // put local label in
-														// symbol table.
+					// put local label in symbol table.
+					symbols.put(instr.label, instr); 
 				}
-				else if (!symbols.containsKey(instr.label)) { // no duplicates
-																// allowed.
+				// no duplicates allowed.
+				else if (!symbols.containsKey(instr.label)) { 
 					symbols.put(instr.label, instr);
 				}
 				else {
@@ -496,7 +492,7 @@ public class Module {
 		if (IOFormat.isValidLabel(exp)) {
 			Instruction i = symbolTable.getEntry(exp);
 			if (i == null) {
-				hErr.reportError(makeError("undefEqLabel", exp),
+				hErr.reportError(makeError((MREF? "undefLabel" : "undefEqLabel"), exp),
 						caller.lineNum, pos);
 				return 0;
 			}
