@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Instruction.ConstantRange;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -39,12 +40,16 @@ public class USI_PST extends AbstractInstruction {
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 	
 		boolean isValid = true;
-		int value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-		if(this.operands.size() > 1 || this.operands.size() == 0) {
+		int value ;
+		if(this.operands.size() < 1){
+			isValid = false;
+			hErr.reportError(makeError("tooFewOperands"), this.lineNum, -1);
+		} else if(this.operands.size() > 1 ) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
 		} else if(this.hasOperand("DR")) {
 			//range checking
+			value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
 			isValid = OperandChecker.isValidReg(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 		}  else if(this.hasOperand("FM")) {
@@ -62,12 +67,14 @@ public class USI_PST extends AbstractInstruction {
 			//range checking
 			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
 			isValid = OperandChecker.isValidConstant(value,ConstantRange.RANGE_SHIFT);
-			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId()), this.lineNum, -1);
+			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(),
+					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 		}  else if(this.hasOperand("FL")){
 			//range checking
 			value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
 			isValid = OperandChecker.isValidMem(value);
-			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId()), this.lineNum, -1);
+			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),
+					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 		} else{
 			isValid = false;
 			if(this.hasOperand("FR")){
