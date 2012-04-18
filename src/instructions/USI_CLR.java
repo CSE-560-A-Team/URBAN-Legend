@@ -37,16 +37,18 @@ public class USI_CLR extends AbstractInstruction {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
+		int value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
 		if(this.operands.size() > 1 || this.operands.size() == 0) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
 		} else if(this.hasOperand("DR")) {
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("DR"));
+			isValid = OperandChecker.isValidMem(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("DX")){
 			//range checking
-			isValid = OperandChecker.isValidMem(this.getOperand("DX"));
+			value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;
