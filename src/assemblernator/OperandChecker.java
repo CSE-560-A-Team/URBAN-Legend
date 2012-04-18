@@ -61,7 +61,7 @@ public class OperandChecker {
 	 * @specRef N/A
 	 */
 	public static boolean isValidNumWords(int nw) {
-		return (nw <= 15 && nw >= 0);
+		return (nw <= 15 && nw >= 0); //NW is 4 bits in instruction format.
 	}
 
 	/**
