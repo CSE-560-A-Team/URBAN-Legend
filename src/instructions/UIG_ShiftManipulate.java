@@ -44,7 +44,8 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 		else if(!(this.hasOperand("FC"))){
 			isValid = false;
 			isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_SHIFT);
-			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);	
+			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId()), this.lineNum, -1);
 			//now there are 2 operands, one of which is FC
 		} else if(this.hasOperand("DR")){
 			dest = "DR";
