@@ -1,0 +1,38 @@
+/*!
+
+\page test_case_13 No semicolon after KICKO instruction
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">start</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4000</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">Iadd</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">movd</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">16383</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">16383</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">iadd</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">455</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">start</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr></table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+
+Instruction breakdowns:
+</pre>
+
+!*/
