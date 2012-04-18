@@ -135,6 +135,39 @@ public abstract class Instruction {
 		PROGNAME
 	}
 
+	/**
+	 * An enumeration of ranges for operand values of type FC.
+	 * @author Noah
+	 * @date Apr 17, 2012; 10:20:27 PM
+	 */
+	public enum ConstantRange {
+		/** DMP constant range.*/
+		RANGE_DMP(1,3),	//[1,3]
+		/** SHIFT constant range.*/
+		RANGE_SHIFT(0, 31), //[0, 31]
+		/** 13 bit 2's complement range.*/
+		RANGE_13_TC(-4095, 4095), //[-2^12, (2^12) - 1]
+		/** 16 bit 2's complement range.*/
+		RANGE_16_TC(-32768, 32767), //[-2^15, (2^15) - 1]
+		/** 12 bit address range.*/
+		RANGE_ADDR(0, 4095); //[0, 4095]
+		
+		/** max value of constant. */
+		public int max;
+		/** minimum value of constant. */
+		public int min;
+		
+		/**
+		 * constructs ConstantRange with a minimum value and maximum value.
+		 * @param min minimum value of constant operand.
+		 * @param max maximum value of constant operand.
+		 */
+		ConstantRange(int min, int max) {
+			this.min = min;
+			this.max = max;
+		}
+		
+	}
 	// =====================================================================
 	// == Members valid in the global instance, obtained with getInstance()
 	// =====================================================================

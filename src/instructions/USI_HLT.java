@@ -6,7 +6,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
-import assemblernator.OperandChecker;
+import static assemblernator.OperandChecker.isValidConstant;
 
 /**
  * The HLT instruction.
@@ -42,9 +42,13 @@ public class USI_HLT extends AbstractInstruction {
 		if(!this.hasOperand("FC") || this.operands.size() > 1) {
 			hErr.reportError(this.getOpId() + " should have exactly one operand: \"FC\"", this.lineNum, -1);
 			isValid = false;
-		} else if(!OperandChecker.isValidConstant(this.getOperand("FC"))) {
-			hErr.reportError(makeError("OOR13tc", "FC", this.getOpId()), this.lineNum, -1);
-			isValid = false;
+		} else {
+			int value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); 
+			if(!isValidConstant(value, ConstantRange.RANGE_13_TC)) {
+				hErr.reportError(makeError("OOR13tc", "FC", this.getOpId()), this.lineNum, -1);
+				isValid = false;
+			}
+			this.operands.get(0).value = value;
 		}
 		
 		return isValid;

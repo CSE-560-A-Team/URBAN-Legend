@@ -1,6 +1,7 @@
 package assemblernator;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Instruction.ConstantRange;
 
 /**
  * checks operands for correct values.
@@ -71,33 +72,6 @@ public class OperandChecker {
 		return valid;
 	}
 
-	/**
-	 * Checks if the FC in Shift/Manipulate functions is within the range [0-31]
-	 * or not.
-	 * 
-	 * @author Ratul Khosla
-	 * @date Apr 15, 2012; 6:08:32 PM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
-	 * @param exp
-	 *            value of the FC register
-	 * @return check
-	 * @specRef N/A
-	 */
-	public static boolean isValidShiftConstant(int exp) {
-		boolean check = true;
-		try {
-			if (exp < 0 || exp > 31) {
-				check = false;
-			}
-		} catch (NumberFormatException e) {
-			check = false;
-		}
-		return check;
-	}
 
 	/**
 	 * 
@@ -145,21 +119,21 @@ public class OperandChecker {
 	}
 
 	/**
-	 * 
+	 * Checks whether a constant value falls within range.
 	 * @author Noah
 	 * @date Apr 14, 2012; 5:10:41 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 17, 2012; 10:44 PM changed to accomodate new ConstantRange enum. - Noah
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param cnst
-	 * @return
+	 * @param cnst the constant value to check.
+	 * @param range range of valid constant values.
+	 * @return if cnst falls within range, then return true, else return false.
 	 * @specRef N/A
 	 */
-	//needs to check for 2^16-1 to -(2^16)
-	public static boolean isValidConstant(int cnst) {
-		return true;
+	public static boolean isValidConstant(int cnst, ConstantRange range) {
+		return (cnst <= range.max && cnst >= range.min);
 	}
 
 	public static boolean isValidExpression(int exp) {
