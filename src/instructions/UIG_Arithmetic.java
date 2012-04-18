@@ -74,7 +74,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 							o1.valueStartPosition);
 					this.getOperandData("FL").value = constantSize1;
 					isValid = OperandChecker.isValidLiteral(constantSize1, ConstantRange.RANGE_ADDR);
-					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
 				} else {
 					isValid = false;
 					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FR,FM, or FL", "DM"), this.lineNum, -1);
