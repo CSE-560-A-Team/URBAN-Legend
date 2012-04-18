@@ -66,6 +66,7 @@ public class USI_AEXS extends AbstractDirective {
 					this.getOpId(), Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 		} else {
 			isValid = false;
+			if(!isValid) hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC' or `LR"), this.lineNum, -1);
 		}
 		return isValid;
 	}

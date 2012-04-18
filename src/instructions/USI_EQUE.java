@@ -26,6 +26,11 @@ public class USI_EQUE extends UIG_Equated {
 
 	/** @see assemblernator.Instruction#immediateCheck(ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
+		boolean isValid = true;
+		if (label == null) {
+			hErr.reportError(makeError("noRQlabel", opId), lineNum, 0);
+			isValid = false;
+		}
 		if (operands.size() > 1) {
 			hErr.reportError(makeError("extraOperandsDir", opId), lineNum, -1);
 			return false;
@@ -40,7 +45,7 @@ public class USI_EQUE extends UIG_Equated {
 			return false;
 		}
 		value = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
-		return true;
+		return isValid;
 	}
 
 	// =========================================================
