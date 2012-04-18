@@ -157,7 +157,16 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					this.getOperandData("FX").value = constantSize1;
 					isValid = OperandChecker.isValidIndex(constantSize1);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
-				} else {
+				}else if (this.hasOperand("FR")){
+					src = "FR";
+					//range checking
+					Operand o1 = getOperandData("FR");
+					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+							o1.valueStartPosition);
+					this.getOperandData("FR").value = constantSize1;
+					isValid = OperandChecker.isValidReg(constantSize1);
+					if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
+				}else {
 					isValid = false;
 					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FX or FL", "DX"), this.lineNum, -1);
 				}
