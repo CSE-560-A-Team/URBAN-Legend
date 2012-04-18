@@ -25,11 +25,11 @@ Several of URBAN's operand specifications are overly restrictive.
           words will be used to hold the complete string.</li>
       <li>C-style escape sequences are permitted. These include the following:
         <ul>
-          <li>Octal escapes \000 - \377; up to three digits will be considered, or two digits if the
+          <li>Octal escapes \\000 - \\377; up to three digits will be considered, or two digits if the
               third digit would otherwise exceed 0377.</li>
-          <li>Hexadecimal escapes \x00 - \xFF, where up to two digits are considered.</li>
-          <li>Whitespace escapes: \r = CR, \n = LF, \t = TAB.</li>
-          <li>Control escapes: \' = Single quote, \" = Double quote, \\ = Backslash.</li>
+          <li>Hexadecimal escapes \\x00 - \\xFF, where up to two digits are considered.</li>
+          <li>Whitespace escapes: \\r = CR, \\n = LF, \\t = TAB.</li>
+          <li>Control escapes: \\' = Single quote, \\\" = Double quote, \\\\ = Backslash.</li>
         </ul></li>
     </ul></td>
   </tr>
@@ -37,7 +37,7 @@ Several of URBAN's operand specifications are overly restrictive.
     <td>MV0 MV1 IA0 IA1 IA2 IA3 IA4 IA5 IA6 IA7 IM6 IM7</td>
     <td>
         URBAN-Legend allows these operands to use register-to-register and non-indexed
-        memory-to-memory operand combinations. See \s formats section for more information.
+        memory-to-memory operand combinations. See \link formats section for more information.
     </td>
   </tr>
 </table>

@@ -806,7 +806,7 @@ public abstract class Instruction {
 	// --- Error Handling -----------------------------------------------
 	// ------------------------------------------------------------------
 	/** Any errors reported through our handler  */
-	ArrayList<String> errors;
+	ArrayList<String> errors = new ArrayList<String>();
 	
 	/**
 	 * @author Josh Ventura
