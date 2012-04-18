@@ -51,13 +51,13 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 				dest = "DR";
 				//range checking
 				value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-				isValid = OperandChecker.isValidMem(value);
+				isValid = OperandChecker.isValidReg(value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 			} else if(this.hasOperand("DX")){
 				dest = "DX";
 				//range checking
 				value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
-				isValid = OperandChecker.isValidMem(value);
+				isValid = OperandChecker.isValidIndex(value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 			} else {
 			isValid = false;
@@ -67,6 +67,8 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);				
 			}  else if(this.hasOperand("FL")){
 				hErr.reportError(makeError("operandInsWrong", "FL", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("FX")){
+				hErr.reportError(makeError("operandInsWrong", "FX", this.getOpId()), this.lineNum, -1);				
 			} else if(this.hasOperand("FS")){
 				hErr.reportError(makeError("operandInsWrong", "FS", this.getOpId()), this.lineNum, -1);				
 			} else if(this.hasOperand("LR")){
