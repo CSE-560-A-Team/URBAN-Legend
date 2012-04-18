@@ -70,7 +70,23 @@ public class USI_PST extends AbstractInstruction {
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;
-			hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);
+			if(this.hasOperand("FR")){
+				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
+			}  else if(this.hasOperand("DM")){
+				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("FS")){
+				hErr.reportError(makeError("operandInsWrong", "FS", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("LR")){
+				hErr.reportError(makeError("operandInsWrong", "LR", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("DX")){
+				hErr.reportError(makeError("operandInsWrong", "DX", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("EX")){
+				hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("NW")){
+				hErr.reportError(makeError("operandInsWrong", "NW", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("ST")){
+				hErr.reportError(makeError("operandInsWrong", "ST", this.getOpId()), this.lineNum, -1);				
+			}
 		}
 			return isValid;
 
