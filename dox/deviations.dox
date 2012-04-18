@@ -1,0 +1,127 @@
+/*!
+\page deviations Deviations
+
+As is almost always the case for languages, the URBAN specification leaves room for
+modifications to improve user experience. URBAN Legend changes several aspects of the
+original specification to make coding in the language more pleasant.
+
+\section operands Operands
+
+Several of URBAN's operand specifications are overly restrictive.
+
+<table>
+  <tr>
+    <th>Specification</th>
+    <th>Changes made</th>
+  </tr>
+  <tr>
+    <td>D5, D6</td>
+    <td>URBAN Legend does not limit the number of labels you may import/export per directive.</td>
+  </tr>
+  <tr>
+    <td>D10</td>
+    <td><ul>
+      <li>URBAN Legend allows multi-word string literals. If you exceed four characters, additional
+          words will be used to hold the complete string.</li>
+      <li>C-style escape sequences are permitted. These include the following:
+        <ul>
+          <li>Octal escapes \\000 - \\377; up to three digits will be considered, or two digits if the
+              third digit would otherwise exceed 0377.</li>
+          <li>Hexadecimal escapes \\x00 - \\xFF, where up to two digits are considered.</li>
+          <li>Whitespace escapes: \\r = CR, \\n = LF, \\t = TAB.</li>
+          <li>Control escapes: \\' = Single quote, \\\" = Double quote, \\\\ = Backslash.</li>
+        </ul></li>
+    </ul></td>
+  </tr>
+  <tr>
+    <td>MV0 MV1 IA0 IA1 IA2 IA3 IA4 IA5 IA6 IA7 IM6 IM7</td>
+    <td>
+        URBAN-Legend allows these operands to use register-to-register and non-indexed
+        memory-to-memory operand combinations. See \link formats section for more information.
+    </td>
+  </tr>
+</table>
+
+\section expressions Expressions
+
+URBAN's expression syntax was also somewhat limiting, but only minor changes were made.
+
+<table>
+  <tr>
+    <th>Specification</th>
+    <th>Changes made</th>
+  </tr>
+  <tr>
+    <td>EX1</td>
+    <td><ul>
+      <li>Star notation may be used in any expression containing sufficient bits to hold the address.</li>
+      <li>A star may be used anywhere within the expression, not exclusively as the first character.</li>
+      <li>External labels may be used in any expression.</li>
+    </ul></td>
+  </tr>
+  <tr>
+    <td>EX2</td>
+    <td><ul>
+      <li>A star may be used anywhere within the expression, not exclusively as the first character.</li>
+      <li>You may use any number of stars in the expression, though this feature may only be useful
+           for placing repeated blocks at the very beginning of memory (eg, using *+* to obtain the
+           address following a second block of equal size from the start of memory.</li>
+    </ul></td>
+  </tr>
+  <tr>
+    <td>EX3</td>
+    <td><ul>
+      <li>A star may be used anywhere within the expression, not exclusively as the first character.</li>
+      <li>You may use any number of stars in the expression (see EX2 notes above).</li>
+    </ul></td>
+  </tr>
+</table>
+
+\section formats Formats
+
+Due to collisions and other issues in byte codes in the URBAN specification, versions 1.1 and 1.2, the
+following instruction formats were added to URBAN Legend:
+
+<pre>
+<span style="color:green">; Format zero: Memory + optional index and a Register</span>
+OPRAND FMT ORD REG IXR LIT STACK ADDRESS (15bit)
+000000 00  0   000 000 0   0     000000000000000  ; MOVD FR:0, DM:0
+
+OPRAND FMT ORD REG IXR LIT STACK ADDRESS (15bit)
+000000 00  1   000 000 0   0     000000000000000  ; MOVD FM:0, DR:0
+
+OPRAND FMT ORD REG IXR LIT SIGN? LITERAL (15bit)
+000000 00  1   000 000 1   0     011111111111111  ; MOVD FL:16383, DR:0
+
+OPRAND FMT ORD REG IXR LIT SIGN? LITERAL (15bit)
+000000 00  1   000 001 1   0     011111111111111  ; MOVD FL:16383, DX:1 <span style="color:green">-- When literal bit is set, but IXR is non-zero.</span>
+
+OPRAND FMT ORD REG IXR LIT STACK ADDRESS (15bit)
+000000 00  0   000 001 0   0     000000000000000  ; MOVD FR:0, DM:0, DX:1
+
+OPRAND FMT ORD REG IXR LIT STACK ADDRESS (15bit)
+000000 00  1   000 001 0   0     000000000000000  ; MOVD FM:0, FX:1, DR:0
+
+<span style="color:green">; Format one: flag added for "treat as index"</span>
+OPRAND FMT X REG X REG UNUSED (16 bit)
+000000 01  0 000 0 001 0000000000000000  ; MOVD FR:0, DR:1
+
+OPRAND FMT X REG X REG UNUSED (16 bit)
+000000 01  0 000 1 001 0000000000000000  ; MOVD FR:0, DX:1
+
+OPRAND FMT X REG X REG UNUSED (16 bit)
+000000 01  1 001 0 000 0000000000000000  ; MOVD FX:1, DR:0
+
+OPRAND FMT X REG X REG UNUSED (16 bit)
+000000 01  1 001 1 010 0000000000000000  ; MOVD FX:1, DX:2
+
+<span style="color:green">; Format two: Memory to memory, no index register</span>
+OPRAND FMT ADDRESS 1(12) ADDRESS 2(12)
+000000 10  000000000001  000000000000  ; MOVD FM:1, DM:0
+
+<span style="color:green">; Format three: Literal to memory, no index register</span>
+OPRAND FMT LITERAL (12)  ADDRESS 2(12)
+000000 11  000111000111  000000000000  ; MOVD FL:455, DM:0
+</pre>
+
+*/

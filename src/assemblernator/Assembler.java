@@ -13,6 +13,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import assemblernator.ErrorReporting.ErrorHandler;
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.Instruction.Usage;
 
@@ -184,22 +185,26 @@ public class Assembler {
 				 * execStart of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO") && !firstKICKO) {
 					module.startAddr = startAddr;
-					instr.immediateCheck(hErr, module);
+					instr.immediateCheck(instr.getHErr(hErr), module);
 					module.programName = instr.label;
 					firstKICKO = true;
 				}
 				
 				if(!firstKICKO) {
-					hErr.reportError("MODULE must begin with a KICKO statement.", lineNum, -1);
+					hErr.reportError(makeError("KICKOlineNum"), lineNum, -1);
 					break;
 				}
 				
 				instr.lc = lc;
 				//checks for operand errors in instruction.
-				valid = instr.immediateCheck(hErr, module);
+				valid = instr.immediateCheck(instr.getHErr(hErr), module);
 				// Get new lc for next instruction.
 				lc = instr.getNewLC(lc, module);
 	
+				if(lc > 4095) {
+					hErr.reportError(makeError("OOM"), lineNum, -1);
+				}
+				
 				//if instr can be used in symbol table.
 				if (instr.usage != Usage.NONE && valid) {
 					module.getSymbolTable().addEntry(instr, hErr);
@@ -227,7 +232,7 @@ public class Assembler {
 		
 		// Pass two
 		for (Instruction i : module.assembly)
-			i.check(hErr, module);
+			i.check(i.getHErr(hErr), module);
 
 		return module;
 	}

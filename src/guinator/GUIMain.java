@@ -151,7 +151,7 @@ public class GUIMain {
 		 * Default constructor; build tab UI
 		 */
 		FileTab() {
-			JoshTextPanel jtp = new JoshTextPanel();
+			JoshTextPanel jtp = new JoshTextPanel(null, false);
 			
 			jt = jtp.text;
 			jt.setTokenMarker(new URBANhighlighter());
