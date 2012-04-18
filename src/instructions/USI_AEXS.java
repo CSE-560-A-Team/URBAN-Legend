@@ -1,9 +1,13 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Instruction.ConstantRange;
+import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.OperandChecker;
 
 /**
  * The AEXS instruction.
@@ -31,7 +35,7 @@ public class USI_AEXS extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
-		return false; // TODO: IMPLEMENT
+		return true;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
@@ -41,8 +45,28 @@ public class USI_AEXS extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean isValid = true;
+		int value;
+		
+		if(this.operands.size() > 1) {
+			isValid = false;
+			hErr.reportError(makeError("extraOperandsDir", opId), lineNum, -1);
+		} else if (this.operands.size() < 1) {
+			isValid = false;
+			hErr.reportError(makeError("directiveMissingOp2", opId, "FC", "LR"), lineNum, -1);
+		} else if(this.hasOperand("LR")){
+			value = module.evaluate(this.getOperand("LR"), false, hErr, this, this.getOperandData("LR").keywordStartPosition); 
+			if(!IOFormat.isValidLabel(this.getOperand("LR", 0))){
+				hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, getOperandData("LR",0).valueStartPosition);
+				isValid = false;
+			}
+		} else if(this.hasOperand("FC")){
+			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); 
+			isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_ADDR); //check if value of FC is valid.
+		} else {
+			isValid = false;
+		}
+		return isValid;
 	}
 
 	// =========================================================
