@@ -37,19 +37,30 @@ public class USI_POP extends AbstractInstruction {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		int value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-		if(this.operands.size() > 1 || this.operands.size() == 0) {
+		int value;
+		if(this.operands.size() > 2) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
+		} else if(this.operands.size() < 1) {
+			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("DR")) {
+			value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
 			//range checking
 			isValid = OperandChecker.isValidReg(value);
-			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
-		} else if(this.hasOperand("DM")){
+			if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+		} else if(this.hasOperand("DM") && this.hasOperand("DX")){
 			//range checking
+			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			
 			value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
 			isValid = OperandChecker.isValidIndex(value);
-			if(!isValid) hErr.reportError(makeError("OORidxReg", "DM", this.getOpId()), this.lineNum, -1);
+			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+		} else if(this.hasOperand("DM") && this.operands.size() == 1) {
+			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;
 			if(this.hasOperand("FR")){
