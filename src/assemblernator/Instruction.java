@@ -45,7 +45,8 @@ public abstract class Instruction {
 	/**
 	 * @author Josh Ventura
 	 * @date Apr 8, 2012; 1:51:01 AM
-	 * @modified Apr 17, 2012; 6:43:11 PM: added value field and toString() function. - Noah
+	 * @modified Apr 17, 2012; 6:43:11 PM: added value field and toString()
+	 *           function. - Noah
 	 */
 	public static class Operand {
 		/** The operand keyword */
@@ -84,7 +85,7 @@ public abstract class Instruction {
 			keywordStartPosition = key_sp;
 			valueStartPosition = val_sp;
 		}
-		
+
 		/**
 		 * @author Noah
 		 * @date Apr 17, 2012; 5:52:59 PM
@@ -131,10 +132,12 @@ public abstract class Instruction {
 
 	/**
 	 * An enumeration of ranges for operand values of type FC.
+	 * 
 	 * @author Noah
 	 * @date Apr 17, 2012; 10:20:27 PM
 	 */
 	public enum ConstantRange {
+<<<<<<< HEAD
 		/** DMP constant range.*/
 		RANGE_DMP(1,3),	//[1,3]
 		/** SHIFT constant range.*/
@@ -146,22 +149,27 @@ public abstract class Instruction {
 		/** 12 bit address range.*/
 		RANGE_ADDR(0, 4095); //[0, 4095]
 		
+>>>>>>> refs/remotes/origin/master
 		/** max value of constant. */
 		public int max;
 		/** minimum value of constant. */
 		public int min;
-		
+
 		/**
 		 * constructs ConstantRange with a minimum value and maximum value.
-		 * @param min minimum value of constant operand.
-		 * @param max maximum value of constant operand.
+		 * 
+		 * @param min
+		 *            minimum value of constant operand.
+		 * @param max
+		 *            maximum value of constant operand.
 		 */
 		ConstantRange(int min, int max) {
 			this.min = min;
 			this.max = max;
 		}
-		
+
 	}
+
 	// =====================================================================
 	// == Members valid in the global instance, obtained with getInstance()
 	// =====================================================================
@@ -429,6 +437,10 @@ public abstract class Instruction {
 	 *           Apr 15, 2012; 12:14:28 PM: Added tracking of operand locations
 	 *           relative to the line on which they are used. Refactored operand
 	 *           loop.
+	 * 
+	 *           Apr 18, 2012; 5:18:05 AM: Fixes string OOB errors when trying
+	 *           to
+	 *           read a label at the end of a line.
 	 * @tested Apr 7, 2012; 12:52:43 AM: Tested with basic MOVD codes, given
 	 *         various kinds of expressions. While more instructions are
 	 *         necessary to get a full idea of whether or not this code is
@@ -536,7 +548,10 @@ public abstract class Instruction {
 
 			// Isolate the keyword
 			final int key_sp = i;
-			while (Character.isLetter(line.charAt(++i)));
+			while (++i < line.length() && Character.isLetter(line.charAt(i)));
+			if (i >= line.length())
+				throw new IOException("RAL9");
+
 			String operand = line.substring(key_sp, i);
 			if (!Assembler.keyWords.contains(operand.toUpperCase()))
 				throw new URBANSyntaxException(
@@ -552,11 +567,10 @@ public abstract class Instruction {
 				throw new URBANSyntaxException(makeError("expectOpColon",
 						operand), i);
 
-			if (++i >= line.length())
+			while (++i < line.length()
+					&& Character.isWhitespace(line.charAt(i)));
+			if (i >= line.length())
 				throw new IOException("RAL5");
-			while (Character.isWhitespace(line.charAt(i)))
-				if (++i >= line.length())
-					throw new IOException("RAL6");
 
 
 			final int val_sp = i;
@@ -565,6 +579,8 @@ public abstract class Instruction {
 				// Don't get bitten by oddly formatted labels.
 				if (Character.isLetter(line.charAt(i))) {
 					i += IOFormat.readLabel(line, i).length();
+					if (i >= line.length())
+						throw new IOException("RAL6");
 					continue;
 				}
 
@@ -614,8 +630,8 @@ public abstract class Instruction {
 			}
 
 			String exp = line.substring(val_sp, i);
-			res.operands.add(new Operand(operand.toUpperCase(), exp, key_sp,
-					val_sp));
+			res.operands.add(new Operand(operand.toUpperCase(), exp.trim(),
+					key_sp, val_sp));
 
 			// Check if we have more work to do.
 			if (line.charAt(i) == ',')
@@ -644,7 +660,8 @@ public abstract class Instruction {
 	 * @param hErr
 	 *            An error handler which will receive any error or warning
 	 *            messages.
-	 * @param module TODO
+	 * @param module
+	 *            TODO
 	 * @return Returns whether the instruction is semantically correct.
 	 * @date Apr 4, 2012; 01:40:29AM
 	 */
@@ -661,14 +678,16 @@ public abstract class Instruction {
 	 * @param hErr
 	 *            An error handler which will receive any error or warning
 	 *            messages.
-	 * @param module TODO
+	 * @param module
+	 *            TODO
 	 * @return Returns whether the instruction is semantically correct.
 	 * @date Apr 4, 2012; 01:40:29AM
 	 */
 	public abstract boolean immediateCheck(ErrorHandler hErr, Module module);
-	
+
 	/**
 	 * Used to check if this Instruction is actually a directive.
+	 * 
 	 * @author Josh Ventura
 	 * @date Apr 16, 2012; 8:24:58 PM
 	 * @modified UNMODIFIED
@@ -680,7 +699,7 @@ public abstract class Instruction {
 	 * @specRef N/A
 	 */
 	public abstract boolean isDirective();
-	
+
 	/**
 	 * Assemble this instruction to byte code after it has been checked.
 	 * 
@@ -711,24 +730,30 @@ public abstract class Instruction {
 
 	/**
 	 * Returns a string representation of Instruction:
-	 * origSourceLine + "Line number: " + instr.LineNum + " " + LC: " + lc + " " + "Label: " + label + ",\n"
-	 * 		+ "instruction/Directive: " + instr.getOpID() + " " + Binary Equivalent: " + binEquiv + "\n" 
-	 * 		+ "operand " + i + operandKeyWord + ":" + operandValue + "Binary Equivalent: " + operBinEquiv;
-	 * 			where if instr does not have a label, then label = "", 
-	 * 				else label = instr.label, and
-	 * 			if instr is a directive and thus has no opcode, then binEquiv = "------", 
-	 * 				else binEquiv = instr.opcode in binary format, and
-	 * 			i represents the ith operand of instr, and
-	 * 				operandKeyword = the key word for the ith operand;
-	 * 				operandValue = the value associated w the operand with operandKeyword keyword for the ith operand, and
-	 * 			origSourceLine = instr.origSrcLine,
-	 * 			operBinEquiv = string representation of Operand.
-	 * 			and lc = instr.lc displayed in hexadecimal w/ 4 bits.
+	 * origSourceLine + "Line number: " + instr.LineNum + " " + LC: " + lc + "
+	 * " + "Label: " + label + ",\n"
+	 * + "instruction/Directive: " + instr.getOpID() + " " + Binary Equivalent:
+	 * " + binEquiv + "\n"
+	 * + "operand " + i + operandKeyWord + ":" + operandValue +
+	 * "Binary Equivalent: " + operBinEquiv;
+	 * where if instr does not have a label, then label = "",
+	 * else label = instr.label, and
+	 * if instr is a directive and thus has no opcode, then binEquiv = "------",
+	 * else binEquiv = instr.opcode in binary format, and
+	 * i represents the ith operand of instr, and
+	 * operandKeyword = the key word for the ith operand;
+	 * operandValue = the value associated w the operand with operandKeyword
+	 * keyword for the ith operand, and
+	 * origSourceLine = instr.origSrcLine,
+	 * operBinEquiv = string representation of Operand.
+	 * and lc = instr.lc displayed in hexadecimal w/ 4 bits.
+	 * 
 	 * @author Josh Ventura
 	 * @date Apr 5, 2012; 9:37:34 PM
 	 * @modified Apr 7 2012; 12:39:44 AM: Corrected formatting for printing
 	 *           multiple operands (added a comma between them). -Josh
-	 *           Apr 17, 2012; 6:39:41 PM: changed definition of toString to breakdown of Instruction. -Noah.
+	 *           Apr 17, 2012; 6:39:41 PM: changed definition of toString to
+	 *           breakdown of Instruction. -Noah.
 	 * @tested Apr 7 2012; 12:38:06 AM: Tested with basic MOVD instructions.
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
@@ -736,8 +761,7 @@ public abstract class Instruction {
 	 * @return Returns a string representation of Instruction.
 	 * @specRef N/A
 	 */
-	@Override 
-	public String toString() {
+	@Override public String toString() {
 		String rep = "";
 		rep = rep + "original source line: " + this.origSrcLine + "\n";
 
@@ -758,10 +782,10 @@ public abstract class Instruction {
 		}
 
 
-		String instrBreak = "Line number: " + this.lineNum + " " + "LC: "
-				+ lc + " " + "Label: " + label + ",\n"
-				+ "instruction/Directive: " + this.getOpId() + " "
-				+ "Binary Equivalent: " + binEquiv + "\n";
+		String instrBreak = "Line number: " + this.lineNum + " " + "LC: " + lc
+				+ " " + "Label: " + label + ",\n" + "instruction/Directive: "
+				+ this.getOpId() + " " + "Binary Equivalent: " + binEquiv
+				+ "\n";
 
 		Iterator<Operand> operandIt = operands.iterator();
 
@@ -770,19 +794,20 @@ public abstract class Instruction {
 			Operand oprnd = operandIt.next();
 
 			instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand
-					+ ":" + oprnd.expression + "\tBinary Equivalent: " + oprnd.toString() + "\n";
-			
+					+ ":" + oprnd.expression + "\tBinary Equivalent: "
+					+ oprnd.toString() + "\n";
+
 			i++;
 		}
 
-		for(String error : errors) {
+		for (String error : errors) {
 			instrBreak = instrBreak + error + "\n";
 		}
-		
+
 		instrBreak = instrBreak + "\n";
 
 		rep = rep + instrBreak;
-		
+
 		return rep;
 	}
 
@@ -805,35 +830,39 @@ public abstract class Instruction {
 		Assembler.instructions.put(iname, this);
 		Assembler.byteCodes.put(opcode, this);
 	}
-	
+
 	// ------------------------------------------------------------------
 	// --- Error Handling -----------------------------------------------
 	// ------------------------------------------------------------------
-	/** Any errors reported through our handler  */
+	/** Any errors reported through our handler */
 	ArrayList<String> errors = new ArrayList<String>();
-	
+
 	/**
 	 * @author Josh Ventura
 	 * @date Apr 18, 2012; 3:13:22 AM
-	 * @param hErr The error handler which will be invoked in chain.
+	 * @param hErr
+	 *            The error handler which will be invoked in chain.
 	 * @return A wrapper to the error handler which also logs errors to this.
 	 */
 	public final ErrorHandler getHErr(ErrorHandler hErr) {
 		return new WrapHErr(hErr);
 	}
-	
+
 	/**
 	 * Wrapper class to an error handler that copies errors into this.
+	 * 
 	 * @author Josh Ventura
 	 * @date Apr 18, 2012; 3:10:59 AM
 	 */
 	class WrapHErr implements ErrorHandler {
 		/** The error handler we are intercepting messages to. */
 		private final ErrorHandler wrapped;
+
 		/**
 		 * Adds error to our list and calls wrapped instance.
 		 * 
-		 * @see assemblernator.ErrorReporting.ErrorHandler#reportError(java.lang.String, int, int)
+		 * @see assemblernator.ErrorReporting.ErrorHandler#reportError(java.lang.String,
+		 *      int, int)
 		 */
 		@Override public void reportError(String err, int line, int pos) {
 			errors.add("ERROR: " + err);
@@ -843,15 +872,17 @@ public abstract class Instruction {
 		/**
 		 * Adds warning to our list and calls wrapped instance.
 		 * 
-		 * @see assemblernator.ErrorReporting.ErrorHandler#reportWarning(java.lang.String, int, int)
+		 * @see assemblernator.ErrorReporting.ErrorHandler#reportWarning(java.lang.String,
+		 *      int, int)
 		 */
 		@Override public void reportWarning(String warn, int line, int pos) {
 			errors.add("Warning: " + warn);
 			wrapped.reportWarning(warn, line, pos);
 		}
-		
+
 		/**
-		 * @param hErr The error handler to wrap reports to.
+		 * @param hErr
+		 *            The error handler to wrap reports to.
 		 */
 		WrapHErr(ErrorHandler hErr) {
 			wrapped = hErr;

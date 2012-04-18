@@ -40,6 +40,12 @@ Several of URBAN's operand specifications are overly restrictive.
         memory-to-memory operand combinations. See \link formats section for more information.
     </td>
   </tr>
+  <tr>
+    <td>JT3</td>
+    <td>
+        URBAN-Legend allows jumps to memory with an index register. Useful for impromptu switch() structures.
+    </td>
+  </tr>
 </table>
 
 \section expressions Expressions

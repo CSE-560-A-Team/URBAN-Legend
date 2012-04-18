@@ -14,7 +14,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import assemblernator.ErrorReporting.ErrorHandler;
-import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.Instruction.Operand;
 import assemblernator.Instruction.Usage;
@@ -103,8 +102,10 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @param instr instruction to add.
-		 * @param hErr handles errors.
+		 * @param instr
+		 *            instruction to add.
+		 * @param hErr
+		 *            handles errors.
 		 * @specRef N/A
 		 */
 		public void addEntry(Instruction instr, ErrorHandler hErr) {
@@ -114,22 +115,45 @@ public class Module {
 				// put each operand as a separate entry into the symbol table.
 				for (int i = 1; i < instr.countOperand("LR") + 1; i++) {
 					String lbl = instr.getOperand("LR", i);
-					if(instr.usage == Usage.EXTERNAL && symbols.containsKey(lbl)) { //EXT label and is already in local
-						hErr.reportError(makeError("shadowLabel", lbl, Integer.toString(symbols.get(lbl).lineNum)), instr.lineNum, -1);
-						//don't add.
-					} else { //add.
+					if (instr.usage == Usage.EXTERNAL
+							&& symbols.containsKey(lbl)) { // EXT label and is
+															// already in local
+						hErr.reportError(
+								makeError("shadowLabel", lbl, Integer
+										.toString(symbols.get(lbl).lineNum)),
+								instr.lineNum, -1);
+						// don't add.
+					}
+					else { // add.
 						extEntSymbols.put(instr.getOperand("LR", i), instr);
 					}
 				}
-			} else {
-				if(extEntSymbols.containsKey(instr.label) && extEntSymbols.get(instr.label).usage == Usage.EXTERNAL) {
-					Instruction ext = extEntSymbols.remove(instr.label); //remove ext label from symbol table.
-					hErr.reportError(makeError("shadowLabel", instr.label, Integer.toString(ext.lineNum)), instr.lineNum, -1);
-					symbols.put(instr.label, instr);  //put local label in symbol table.
-				} else if(!symbols.containsKey(instr.label)) { //no duplicates allowed.
+			}
+			else {
+				if (extEntSymbols.containsKey(instr.label)
+						&& extEntSymbols.get(instr.label).usage == Usage.EXTERNAL) {
+					Instruction ext = extEntSymbols.remove(instr.label); // remove
+																			// ext
+																			// label
+																			// from
+																			// symbol
+																			// table.
+					hErr.reportError(
+							makeError("shadowLabel", instr.label,
+									Integer.toString(ext.lineNum)),
+							instr.lineNum, -1);
+					symbols.put(instr.label, instr); // put local label in
+														// symbol table.
+				}
+				else if (!symbols.containsKey(instr.label)) { // no duplicates
+																// allowed.
 					symbols.put(instr.label, instr);
-				} else {
-					hErr.reportError(makeError("duplicateSymbol", instr.label, Integer.toString(symbols.get(instr.label).lineNum)), instr.lineNum, -1);
+				}
+				else {
+					hErr.reportError(
+							makeError("duplicateSymbol", instr.label, Integer
+									.toString(symbols.get(instr.label).lineNum)),
+							instr.lineNum, -1);
 				}
 			}
 
@@ -426,18 +450,21 @@ public class Module {
 	 * 
 	 * @author Josh, Noah
 	 * @date Apr 8, 2012; 1:34:17 AM
-	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible -
-	 *           Josh
-	 *           operands to EQU.
+	 * @modified Apr 8, 2012; 11:44:46 PM: Changed to support all possible
+	 *           operands to EQU. - Josh
 	 *           Apr 12, 2012; 8:50:02 PM: modified for readability. - Noah
 	 *           Apr 13, 2012; 11:23:33 PM: modified for correctness - Noah
 	 *           Apr 13, 2012; 9:34:50 PM: symbolTable.getEntry(exp) can return
 	 *           null, so added i == null check - Noah
+	 * 
 	 *           Apr 17, 2012; 1:59:37 AM: Recoded to support compound
 	 *           expressions. -Josh
+	 * 
+	 *           Apr 18, 2012; 5:35:00 AM: Added check for empty expression.
+	 * 
 	 * @tested Apr 17, 2012; 2:33:20 AM: Field tested with five term sums in
 	 *         nested EQUs. Worked provided expression did not contain spaces.
-	 * @errors NO ERRORS REPORTED
+	 * @errors Reports errors 021-039.
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param exp
@@ -459,6 +486,12 @@ public class Module {
 	public int evaluate(String exp, boolean MREF, ErrorHandler hErr,
 			Instruction caller, int pos) {
 		exp = exp.trim(); // trim off leading and trailing white-space.
+
+		if (exp.length() == 0) {
+			hErr.reportError(makeError("emptyExpr"), caller.lineNum, pos);
+			return 0;
+		}
+
 		// First, check if we have a standard label
 		if (IOFormat.isValidLabel(exp)) {
 			Instruction i = symbolTable.getEntry(exp);
@@ -534,8 +567,9 @@ public class Module {
 	 * Returns a string representation of Module.
 	 * 
 	 * @author Noah
-	 * @date Apr 8, 2012; 12:26:15 PM: Added output of binary equivalent for operands.  Now calls toString() of Instruction.
-	 * @modified Apr 17, output 
+	 * @date Apr 8, 2012; 12:26:15 PM: Added output of binary equivalent for
+	 *       operands. Now calls toString() of Instruction.
+	 * @modified Apr 17, output
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
