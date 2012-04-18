@@ -47,21 +47,39 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId()), this.lineNum, -1);
 			//now there are 2 operands, one of which is FC
-		} else if(this.hasOperand("DR")){
-			dest = "DR";
-			//range checking
-			value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-			isValid = OperandChecker.isValidMem(value);
-			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
-		} else if(this.hasOperand("DX")){
-			dest = "DX";
-			//range checking
-			value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
-			isValid = OperandChecker.isValidMem(value);
-			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
-		} else{
+		}else if(this.hasOperand("DR")){
+				dest = "DR";
+				//range checking
+				value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
+				isValid = OperandChecker.isValidMem(value);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+			} else if(this.hasOperand("DX")){
+				dest = "DX";
+				//range checking
+				value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
+				isValid = OperandChecker.isValidMem(value);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+			} else {
 			isValid = false;
-			hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);
+			if(this.hasOperand("FR")){
+				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
+			}  else if(this.hasOperand("DM")){
+				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);				
+			}  else if(this.hasOperand("FL")){
+				hErr.reportError(makeError("operandInsWrong", "FL", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("FS")){
+				hErr.reportError(makeError("operandInsWrong", "FS", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("LR")){
+				hErr.reportError(makeError("operandInsWrong", "LR", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("FM")){
+				hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("EX")){
+				hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("NW")){
+				hErr.reportError(makeError("operandInsWrong", "NW", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("ST")){
+				hErr.reportError(makeError("operandInsWrong", "ST", this.getOpId()), this.lineNum, -1);				
+			}
 		}
 		
 		//checks for invalid combo's between operands and opid's.
@@ -78,6 +96,16 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 					|| this.getOpId().equals("ROL"))) {
 				isValid = false;
 				hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
+			} else if (this.hasOperand("FX") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
+					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
+					|| this.getOpId().equals("ROL"))) {
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "FX", this.getOpId()), this.lineNum, -1);
+			} else if (this.hasOperand("FR") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
+					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
+					|| this.getOpId().equals("ROL"))) {
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
 			} else if (this.hasOperand("EX") && (this.getOpId().equals("ISHR") || this.getOpId().equals("ISHL")
 					|| this.getOpId().equals("ISRA") || this.getOpId().equals("ISLA") || this.getOpId().equals("ROR") 
 					|| this.getOpId().equals("ROL"))) {

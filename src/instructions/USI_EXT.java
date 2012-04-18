@@ -1,12 +1,11 @@
 package instructions;
 
-import assemblernator.AbstractDirective;
 import static assemblernator.ErrorReporting.makeError;
+import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
-import assemblernator.OperandChecker;
 
 /**
  * The EXT instruction.
