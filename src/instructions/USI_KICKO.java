@@ -4,9 +4,8 @@ import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
-import assemblernator.Instruction.Usage;
 import assemblernator.Module;
-import static assemblernator.OperandChecker.isValidMem;
+import static assemblernator.OperandChecker.isValidConstant;
 
 /**
  * The KICKO instruction.
@@ -43,7 +42,8 @@ public class USI_KICKO extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) 
 	 * @modified 12:43:13 changed lineNum check to != 1. first line = 1.
-	 * @modified 11:02:09PM;  moved check to immediateCheck - Noah
+	 * 			 11:02:09PM;  moved check to immediateCheck - Noah
+	 * 			 11:16:32 PM; changed isValidConstant.
 	 */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
@@ -60,7 +60,7 @@ public class USI_KICKO extends AbstractDirective {
 		} else {
 			// We know at this point that operands.get(0) is our one and only operand, FC.
 			ownLC = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
-			if (!isValidMem(ownLC)) {
+			if (!isValidConstant(ownLC, ConstantRange.RANGE_ADDR)) {
 				isValid = false;
 				hErr.reportError(makeError("OORmemAddr", "FC", this.getOpId()), this.lineNum, -1);
 			}
