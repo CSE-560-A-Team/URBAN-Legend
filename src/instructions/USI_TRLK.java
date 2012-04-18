@@ -76,8 +76,8 @@ public class USI_TRLK extends AbstractInstruction {
 					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 							o1.valueStartPosition);
 					this.getOperandData("FL").value = constantSize1;
-					isValid = OperandChecker.isValidLiteral(constantSize1,ConstantRange.RANGE_SHIFT);
-					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
+					isValid = OperandChecker.isValidLiteral(constantSize1,ConstantRange.RANGE_ADDR);
+					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
 				}else{
 					isValid=false;
 					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FM or FL"), this.lineNum, -1);
