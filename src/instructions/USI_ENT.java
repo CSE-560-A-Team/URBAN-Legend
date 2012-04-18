@@ -71,7 +71,7 @@ public class USI_ENT extends AbstractDirective {
 					makeError("directiveMissingOp", this.getOpId(), "LR"),
 					this.lineNum, -1);
 			//checks that there are not to many operands
-		}else if(this.operands.size() <= 4){
+		}else{
 			//makes sure only lr's are used
 			if(this.countOperand("LR") == this.operands.size()){
 				//checks for valid label
@@ -87,10 +87,6 @@ public class USI_ENT extends AbstractDirective {
 						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
 						this.lineNum, -1);
 			}
-		}else{
-			isValid = false;
-			hErr.reportError(makeError("extraOperandsDir", this.getOpId()),
-					this.lineNum, -1);
 		}
 		return isValid;
 	}
