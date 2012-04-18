@@ -1,14 +1,15 @@
 package assemblernator;
 
+import static assemblernator.ErrorReporting.makeError;
 import instructions.Comment;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.ErrorReporting.ErrorHandler;
-import static assemblernator.ErrorReporting.makeError;
+import assemblernator.ErrorReporting.URBANSyntaxException;
 
 
 /**
@@ -85,19 +86,12 @@ public abstract class Instruction {
 		}
 		
 		/**
-		 * 
 		 * @author Noah
 		 * @date Apr 17, 2012; 5:52:59 PM
-		 * @modified UNMODIFIED
-		 * @tested UNTESTED
-		 * @errors NO ERRORS REPORTED
-		 * @codingStandards Awaiting signature
-		 * @testingStandards Awaiting signature
-		 * @param module
-		 * @return
+		 * @return The bit string of the value of this operand.
 		 * @specRef N/A
 		 */
-		public String toString() {
+		@Override public String toString() {
 			return Integer.toBinaryString(value);
 		}
 	}
@@ -806,5 +800,57 @@ public abstract class Instruction {
 	protected Instruction(String iname, int opcode) {
 		Assembler.instructions.put(iname, this);
 		Assembler.byteCodes.put(opcode, this);
+	}
+	
+	// ------------------------------------------------------------------
+	// --- Error Handling -----------------------------------------------
+	// ------------------------------------------------------------------
+	/** Any errors reported through our handler  */
+	ArrayList<String> errors;
+	
+	/**
+	 * @author Josh Ventura
+	 * @date Apr 18, 2012; 3:13:22 AM
+	 * @param hErr The error handler which will be invoked in chain.
+	 * @return A wrapper to the error handler which also logs errors to this.
+	 */
+	public final ErrorHandler getHErr(ErrorHandler hErr) {
+		return new WrapHErr(hErr);
+	}
+	
+	/**
+	 * Wrapper class to an error handler that copies errors into this.
+	 * @author Josh Ventura
+	 * @date Apr 18, 2012; 3:10:59 AM
+	 */
+	class WrapHErr implements ErrorHandler {
+		/** The error handler we are intercepting messages to. */
+		private final ErrorHandler wrapped;
+		/**
+		 * Adds error to our list and calls wrapped instance.
+		 * 
+		 * @see assemblernator.ErrorReporting.ErrorHandler#reportError(java.lang.String, int, int)
+		 */
+		@Override public void reportError(String err, int line, int pos) {
+			errors.add("ERROR: " + err);
+			wrapped.reportError(err, line, pos);
+		}
+
+		/**
+		 * Adds warning to our list and calls wrapped instance.
+		 * 
+		 * @see assemblernator.ErrorReporting.ErrorHandler#reportWarning(java.lang.String, int, int)
+		 */
+		@Override public void reportWarning(String warn, int line, int pos) {
+			errors.add("Warning: " + warn);
+			wrapped.reportWarning(warn, line, pos);
+		}
+		
+		/**
+		 * @param hErr The error handler to wrap reports to.
+		 */
+		WrapHErr(ErrorHandler hErr) {
+			wrapped = hErr;
+		}
 	}
 }
