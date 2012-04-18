@@ -52,7 +52,7 @@ public class USI_PSH extends AbstractInstruction {
 		} else if(this.hasOperand("FL")){
 			//range checking
 			value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
-			isValid = OperandChecker.isValidLiteral(value);
+			isValid = OperandChecker.isValidLiteral(value,ConstantRange.RANGE_SHIFT);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId()), this.lineNum, -1);
 		} else{
 			isValid = false;

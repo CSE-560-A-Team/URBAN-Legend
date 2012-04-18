@@ -73,7 +73,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 							o1.valueStartPosition);
 					this.getOperandData("FL").value = constantSize1;
-					isValid = OperandChecker.isValidLiteral(constantSize1);
+					isValid = OperandChecker.isValidLiteral(constantSize1, ConstantRange.RANGE_ADDR);
 					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 				} else {
 					isValid = false;
@@ -113,7 +113,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 							o1.valueStartPosition);
 					this.getOperandData("FL").value = constantSize1;
-					isValid = OperandChecker.isValidLiteral(constantSize1);
+					isValid = OperandChecker.isValidLiteral(constantSize1,ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 					src = "FL";
 				} else if (this.hasOperand("FX")) {
@@ -146,7 +146,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 							o1.valueStartPosition);
 					this.getOperandData("FL").value = constantSize1;
-					isValid = OperandChecker.isValidLiteral(constantSize1);
+					isValid = OperandChecker.isValidLiteral(constantSize1, ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
 				} else if (this.hasOperand("FX")) {
 					src = "FX";
