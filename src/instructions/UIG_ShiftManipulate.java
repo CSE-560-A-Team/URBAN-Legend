@@ -53,7 +53,8 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			//check FC
 			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); //value of FC
 			isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_SHIFT); //check if value of FC is valid.
-			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId()), this.lineNum, -1);
+			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
+					this.getOpId(), Integer.toString(ConstantRange.RANGE_SHIFT.min), Integer.toString(ConstantRange.RANGE_SHIFT.max)), this.lineNum, -1);
 			this.getOperandData("FC").value = value;
 			//
 			dest = "DR";
