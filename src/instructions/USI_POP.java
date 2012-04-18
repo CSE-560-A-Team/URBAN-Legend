@@ -65,8 +65,6 @@ public class USI_POP extends AbstractInstruction {
 			isValid = false;
 			if(this.hasOperand("FR")){
 				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
-			}  else if(this.hasOperand("DM")){
-				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);				
 			}  else if(this.hasOperand("FC")){
 				hErr.reportError(makeError("operandInsWrong", "FC", this.getOpId()), this.lineNum, -1);				
 			}  else if(this.hasOperand("FL")){
