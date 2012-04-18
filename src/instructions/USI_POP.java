@@ -70,6 +70,40 @@ public class USI_POP extends AbstractInstruction {
 			isValid = OperandChecker.isValidMem(value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("DM")){
+			//range checking
+			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			isValid = OperandChecker.isValidMem(value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			
+			if(this.hasOperand("FR")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
+			}  else if(this.hasOperand("FC")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "FC", this.getOpId()), this.lineNum, -1);				
+			}  else if(this.hasOperand("FL")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "FL", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("FS")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "FS", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("LR")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "LR", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("FM")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("EX")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "EX", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("NW")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "NW", this.getOpId()), this.lineNum, -1);				
+			} else if(this.hasOperand("ST")){
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", "ST", this.getOpId()), this.lineNum, -1);				
+			}
+		}else {
 			isValid = false;
 			if(this.hasOperand("FR")){
 				hErr.reportError(makeError("operandInsWrong", "FR", this.getOpId()), this.lineNum, -1);
