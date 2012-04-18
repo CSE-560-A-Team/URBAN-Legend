@@ -101,21 +101,22 @@ public class OperandChecker {
 	}
 
 	/**
-	 * 
+	 * Checks whether a literal value falls within range.
 	 * @author Noah
 	 * @date Apr 14, 2012; 5:10:38 PM
-	 * @modified UNMODIFIED
+	 * @modified Apr 18, 2012; 12:08 AM: added implementation and new arg.
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param lit
-	 * @return
+	 * @param lit the literal value to check.
+	 * @param range range of valid constant values.
+	 * @return if lit falls within range, then return true, else return false.
 	 * @specRef N/A
 	 */
 	//literal for arithmetic
-	public static boolean isValidLiteral(int lit) {
-		return true;
+	public static boolean isValidLiteral(int lit, ConstantRange range) {
+		return isValidConstant(lit, range);
 	}
 
 	/**
