@@ -81,6 +81,11 @@ public class USI_ENT extends AbstractDirective {
 						isValid = false;
 					}
 				}
+			}else{
+				isValid = false;
+				hErr.reportError(
+						makeError("operandDirWrong", this.getOpId(), "any operand other than LR"),
+						this.lineNum, -1);
 			}
 		}else{
 			isValid = false;
