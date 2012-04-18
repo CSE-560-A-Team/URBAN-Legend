@@ -137,7 +137,7 @@ public abstract class Instruction {
 	 * @date Apr 17, 2012; 10:20:27 PM
 	 */
 	public enum ConstantRange {
-<<<<<<< HEAD
+
 		/** DMP constant range.*/
 		RANGE_DMP(1,3),	//[1,3]
 		/** SHIFT constant range.*/
@@ -149,7 +149,7 @@ public abstract class Instruction {
 		/** 12 bit address range.*/
 		RANGE_ADDR(0, 4095); //[0, 4095]
 		
->>>>>>> refs/remotes/origin/master
+
 		/** max value of constant. */
 		public int max;
 		/** minimum value of constant. */
