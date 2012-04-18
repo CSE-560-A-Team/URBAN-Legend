@@ -140,7 +140,7 @@ public abstract class Instruction {
 		/** SHIFT constant range.*/
 		RANGE_SHIFT(0, 31), //[0, 31]
 		/** 13 bit 2's complement range.*/
-		RANGE_13_TC(-4095, 4095), //[-2^12, (2^12) - 1]
+		RANGE_13_TC(-4096, 4095), //[-2^12, (2^12) - 1]
 		/** 16 bit 2's complement range.*/
 		RANGE_16_TC(-32768, 32767), //[-2^15, (2^15) - 1]
 		/** 12 bit address range.*/

@@ -169,7 +169,7 @@ public class Assembler {
 		Module module = new Module();
 		int startAddr = 0;
 		int lc = 0;
-		boolean firstKICKO = false, valid = true;
+		boolean firstKICKO = false, valid = true, hasEnd = false;
 
 		hasNextLineLoop: while (source.hasNextLine()) {
 			try {
@@ -182,6 +182,10 @@ public class Assembler {
 				for (;;) {
 					try {
 						instr = Instruction.parse(line);
+						if(instr != null && hasEnd) {
+							instr.errors.add(instr.errors.size(), makeError("OOM")); //add error into list of errors.
+							hErr.reportWarning("LinePastEnd", lineNum, -1);
+						}
 						break;
 					} catch (IOException e) {
 						if (!source.hasNextLine()) {
@@ -192,12 +196,17 @@ public class Assembler {
 						skipls++;
 					}
 				}
-				if (instr == null)
+				if (instr == null) {
 					continue;
+				} 
+					
 
 				instr.origSrcLine = line; // Gives instruction source line.
 				instr.lineNum = lineNum;
 
+				if(instr.getOpId().equalsIgnoreCase("END")) {
+					hasEnd = true;
+				}
 
 				/* if start of module, record startAddr of module.
 				 * execStart of module. */
@@ -245,6 +254,10 @@ public class Assembler {
 		// Pass two
 		for (Instruction i : module.assembly)
 			i.check(i.getHErr(hErr), module);
+		
+		if(!hasEnd && module.assembly.size() > 0) {
+			hErr.reportWarning(makeError("NoEnd"), lineNum, -1);
+		}
 
 		return module;
 	}

@@ -105,14 +105,14 @@ public abstract class UIG_IO extends AbstractInstruction{
 		if(isValid) {
 			if(this.hasOperand("DM") && (this.getOpId().equals("IWSR") || this.getOpId().equals("CWSR"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "DM", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "DM"), this.lineNum, -1);
 				
 			} else if (this.hasOperand("FM") && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "FM", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FM"), this.lineNum, -1);
 			} else if (this.hasOperand("FL") && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
 				isValid = false;
-				hErr.reportError(makeError("operandInsWrong", "FL", this.getOpId()), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FL"), this.lineNum, -1);
 			}	
 		}
 		
@@ -143,7 +143,7 @@ public abstract class UIG_IO extends AbstractInstruction{
 				value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition); 
 				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(), 
-						Integer.toString(ConstantRange.RANGE_13_TC.min), Integer.toString(ConstantRange.RANGE_13_TC.min)), this.lineNum, -1);
+						Integer.toString(ConstantRange.RANGE_13_TC.min), Integer.toString(ConstantRange.RANGE_13_TC.max)), this.lineNum, -1);
 				this.getOperandData("FL").value = value;
 				
 			} else {
