@@ -25,7 +25,7 @@ The exact specifications of this language can be seen below.
 
 
 
-<h3><a name="SH">Specifications Hardware: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<h3><a name="SH">Specifications Hardware: </a>			 <a href="#MENU"> Back to Menu</a></h3> 
 <p>
 The table below illustrates the Hardware specifications of the URBAN machine and lists the description of each item in the machine.
 </p>
@@ -80,7 +80,7 @@ The table below illustrates the Hardware specifications of the URBAN machine and
 <tr>
 <td>H4</td>
 <td>Arithmetic Unit</td>
-<td>Two’s compliment arithmetic</td>
+<td>Twoâ€™s compliment arithmetic</td>
 </tr>
 
 
@@ -116,7 +116,7 @@ information.</td>
 </tr>
 </table>
 <p>
-<h3><a name="IS">Instruction Specifications: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<h3><a name="IS">Instruction Specifications: </a>			 <a href="#MENU"> Back to Menu</a></h3> 
 </p>
 <p>
 	The following 7 tables give the different formats that are possible in the URBAN language.
@@ -290,7 +290,7 @@ information.</td>
 </tr>
 </table>
 
-<h3></center></td><a name="DS">Directive Specifications: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<h3></center></td><a name="DS">Directive Specifications: </a>			 <a href="#MENU"> Back to Menu</a></h3> 
 <p>
 The following table gives the syntax for each directive and their format along with it.
 </p>
@@ -374,7 +374,7 @@ different module</td>
 <tr>
 <td>DS3.8</td>
 <td>Expression</td>
-<td>begins with a * and is followed by a single + or – with the next operand 
+<td>begins with a * and is followed by a single + or â€“ with the next operand 
 being a constant or previously equated symbol. The result of the 
 computation must be in the range 0 to 4095. (can not use in conjunction with 
 external references)  e.g. 
@@ -387,7 +387,7 @@ IADD DR:1,EX:*+1</td>
 </tr>
 </table>
 
-<h3><a name="SS">Syntax Specifications:  </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<h3><a name="SS">Syntax Specifications:  </a>			 <a href="#MENU"> Back to Menu</a></h3> 
 <p>
 The basic syntax for URBAN is:
 	label opc DR:___,FM:_____,FX:__; comments
@@ -550,7 +550,7 @@ MOVD DR:1,EX:*-ll</td>
 </table>
 
 
-<h3><a name="D"> Directives: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<h3><a name="D"> Directives: </a> 			<a href="#MENU"> Back to Menu</a></h3> 
 <p>
 There are 12 directives in the URBAN language.They are given in the following table along with their format and descriptions.
 </p>
@@ -674,7 +674,7 @@ or    FC:memr</td>
 <tr>
 <td>D10</td>
 <td>char</td>
-<td>Olabel  CHAR ST:’cccc’</td>
+<td>Olabel  CHAR ST:â€™ccccâ€™</td>
 <td>CHARacter Constant</td>
 <td>Yes</td>
 </tr>
@@ -704,8 +704,8 @@ relocatable or external.</td>
 </table>
 <p>
 The syntax of the operands for this language requires the use of keywords. The keywords
-indicate how the operands are to be interpreted.  The operands specify the ”from” location or the 
-“destination” location or in some cases constants or index registers. In the example below the 
+indicate how the operands are to be interpreted.  The operands specify the â€�fromâ€� location or the 
+â€œdestinationâ€� location or in some cases constants or index registers. In the example below the 
 instruction MOVD (movedata) causes data movement between a register and memory. The 
 destination (DR) for the data value is the register. The data is coming from memory (FM).
 Label MOVD  DR:1,FM:Tree;
@@ -717,7 +717,7 @@ Tree is a label representing a local or external address.
 </p>
 
 
-<h3><a name="OPK">Operand Keywords: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<h3><a name="OPK">Operand Keywords: </a>			 <a href="#MENU"> Back to Menu</a></h3> 
 <p>
 The operands can have many different keywords. The table below identifies each key word and their corresponding function. 
 The same character combinations can be used as a label.
@@ -784,7 +784,7 @@ The same character combinations can be used as a label.
 </table>
 
 
-<h3><a name="I"> Instructions: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<h3><a name="I"> Instructions: </a>			 <a href="#MENU"> Back to Menu</a></h3> 
 <p>
 The following tables describe the various instructions with their formats and their binary equivalent opcodes.
 </p>
@@ -922,7 +922,7 @@ MREF is invalid</td>
 </table>
 
 
-<h4>Instruction: Register Tools: &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<h4>Instruction: Register Tools:			 <a href="#MENU"> Back to Menu</a></h4> 
 
 <table>
 <tr>
@@ -1066,7 +1066,7 @@ Including sign bit</td>
 </table>
 
 
-<h4>Instruction: Logical  &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<h4>Instruction: Logical 			 <a href="#MENU"> Back to Menu</a></h4> 
 <table>
 <tr>
 <th>Ref.</th>
@@ -1101,7 +1101,7 @@ c(MREF)=c(MREF) OR c(R)</td>
 </table>
 
 
-<h4>Instruction: Jump &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<h4>Instruction: Jump 						 <a href="#MENU"> Back to Menu</a></h4> 
 <table>
 <tr>
 <th>Ref.</th>
@@ -1191,7 +1191,7 @@ use.</td>
 </table>
 
 
-<h4>Instruction: Input/Output:  &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<h4>Instruction: Input/Output: 			 <a href="#MENU"> Back to Menu</a></h4> 
 <table>
 <tr>
 <th>Ref.</th>
@@ -1244,7 +1244,7 @@ Each line can only have one instruction,and a line with just a semi-colon is val
 </p>
 
 
-<h4>Instruction: Stack Management &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<h4>Instruction: Stack Management 			 <a href="#MENU"> Back to Menu</a></h4> 
 <table>
 <tr>
 <th>Ref.</th>
@@ -1288,7 +1288,7 @@ If >  load DR with 3</td>
 </table>
 
 
-<h4>Instruction: Control &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h4> 
+<h4>Instruction: Control 			 <a href="#MENU"> Back to Menu</a></h4> 
 <table>
 <tr>
 <th>Ref.</th>
@@ -1332,7 +1332,7 @@ Display constant to scrn</td>
 </table>
 
 <p>
-<h3><a name = "IO">URBAN Legend Input and Output Description and Format: </a> &nbsp&nbsp&nbsp&nbsp&nbsp <a href="#MENU"> Back to Menu</a></h3> 
+<h3><a name = "IO">URBAN Legend Input and Output Description and Format: </a> 			 <a href="#MENU"> Back to Menu</a></h3> 
 </p>
 <p>
 <h5>URBAN Legend Input:</h5>
