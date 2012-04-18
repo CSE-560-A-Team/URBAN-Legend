@@ -5,8 +5,10 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Module;
-import assemblernator.OperandChecker;
-
+import static assemblernator.OperandChecker.isValidIndex;
+import static assemblernator.OperandChecker.isValidMem;
+import static assemblernator.OperandChecker.isValidLiteral;
+import static assemblernator.OperandChecker.isValidNumWords;
 
 /**
  * Parent class of input/output leaf instruction classes.
@@ -116,57 +118,50 @@ public abstract class UIG_IO extends AbstractInstruction{
 		
 		//checks for ranges of operand values and store values in Operand..
 		if(isValid) {
-			int value = module.evaluate(this.getOperand("NW"), false, hErr, this, -1);
-			isValid = OperandChecker.isValidNumWords(this.getOperand("NW"));
-			if(!isValid) {
-				hErr.reportError(makeError("OORmemAddr", "NW", this.getOpId()), this.lineNum, -1);
-			} else {
-				this.getOperandData("NW").value = value;
-				if(this.operandType.input) {
-					value = module.evaluate(this.getOperand("DM"), true, hErr, this, -1); //evaluate value of operand
-					isValid = OperandChecker.isValidMem(this.getOperand("DM")); //check value of operand.
-					if(!isValid) {
-						hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
-					} else {
-						this.getOperandData("DM").value = value;
-					}
+			int value = module.evaluate(this.getOperand("NW"), false, hErr, this, this.getOperandData("NW").keywordStartPosition);
+			isValid = isValidNumWords(value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "NW", this.getOpId()), this.lineNum, -1);
+			this.getOperandData("NW").value = value;
+			
+			if(this.operandType.input) {
+				 //evaluate value of operand
+				value = module.evaluate(this.getOperand("DM"), true, hErr, this, this.getOperandData("DM").keywordStartPosition);
+				isValid = isValidMem(value); //check value of operand.
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("DM").value = value;
+				
+				if(this.operandType.index) {
+					//evaluate value of operand.
+					value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition); 
+					isValid = isValidIndex(value);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+					this.getOperandData("DX").value = value;
 					
-					if(this.operandType.index) {
-						value = module.evaluate(this.getOperand("DX"), false, hErr, this, -1); //evaluate value of operand.
-						isValid = OperandChecker.isValidIndex(this.getOperand("DX"));
-						if(!isValid) {
-							hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
-						} else {
-							this.getOperandData("DX").value = value;
-						}
-					}
-				} else if(this.operandType.literal){
-					value = module.evaluate(this.getOperand("FL"), false, hErr, this, -1); //evaluate value of operand.
-					isValid = OperandChecker.isValidMem(this.getOperand("FL"));
-					if(!isValid) {
-						hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
-					} else {
-						this.getOperandData("FL").value = value;
-					}
-				} else {
-					value = module.evaluate(this.getOperand("FM"), true, hErr, this, -1); //evaluate value of operand.
-					isValid = OperandChecker.isValidMem(this.getOperand("FM"));
-					if(!isValid) {
-						hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
-					} else {
-						this.getOperandData("FM").value = value;
-					}
-					if(this.operandType.index) {
-						value = module.evaluate(this.getOperand("FX"), false, hErr, this, -1); //evaluate value of operand.
-						isValid = OperandChecker.isValidIndex(this.getOperand("FX"));
-						if(!isValid) {
-							hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
-						} else {
-							this.getOperandData("FX").value = value;
-						}
-					}
+				}
+			} else if(this.operandType.literal){
+				//evaluate value of operand.
+				value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition); 
+				isValid = isValidMem(value);
+				if(!isValid) hErr.reportError(makeError("OOR13tc", "FL", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("FL").value = value;
+				
+			} else {
+				//evaluate value of operand.
+				value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition); 
+				isValid = isValidMem(value);
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("FM").value = value;
+				
+				if(this.operandType.index) {
+					//evaluate value of operand.
+					value = module.evaluate(this.getOperand("FX"), false, hErr, this, this.getOperandData("FX").keywordStartPosition); 
+					isValid = isValidIndex(value);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+					this.getOperandData("FX").value = value;
+					
 				}
 			}
+			
 		}
 		
 		
