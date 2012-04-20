@@ -3,8 +3,6 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Instruction.ConstantRange;
-import assemblernator.Instruction.Operand;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -41,9 +39,6 @@ public class USI_PST extends AbstractInstruction {
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 	
 		boolean isValid = true;
-<<<<<<< HEAD
-		
-=======
 		//anything less than 2 operands is an error
 			if(this.operands.size() < 2){
 				//error
@@ -123,13 +118,8 @@ public class USI_PST extends AbstractInstruction {
 				//error
 				isValid = false;
 				hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
->>>>>>> refs/remotes/origin/master
 			}
-<<<<<<< HEAD
-
-=======
 				return isValid;
->>>>>>> refs/remotes/origin/master
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
