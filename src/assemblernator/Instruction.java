@@ -146,6 +146,7 @@ public abstract class Instruction {
 		RANGE_13_TC(-4096, 4095), //[-2^12, (2^12) - 1]
 		/** 16 bit 2's complement range.*/
 		RANGE_16_TC(-32768, 32767), //[-2^15, (2^15) - 1]
+		RANGE_32_TC(-2147483648, 2147483647),
 		/** 12 bit address range.*/
 		RANGE_ADDR(0, 4095); //[0, 4095]
 		
@@ -263,7 +264,7 @@ public abstract class Instruction {
 	 */
 	public boolean hasOperand(String op) {
 		for (int i = 0; i < operands.size(); i++)
-			if (operands.get(i).operand.equals(op))
+			if (operands.get(i).operand.equalsIgnoreCase(op))
 				return true;
 		return false;
 	}
@@ -282,7 +283,7 @@ public abstract class Instruction {
 	public int countOperand(String op) {
 		int count = 0;
 		for (int i = 0; i < operands.size(); i++)
-			if (operands.get(i).operand.equals(op))
+			if (operands.get(i).operand.equalsIgnoreCase(op))
 				++count;
 		return count;
 	}
@@ -298,7 +299,7 @@ public abstract class Instruction {
 	 */
 	public String getOperand(String op) {
 		for (int i = 0; i < operands.size(); i++)
-			if (operands.get(i).operand.equals(op))
+			if (operands.get(i).operand.equalsIgnoreCase(op))
 				return operands.get(i).expression;
 		return null;
 	}
@@ -314,7 +315,7 @@ public abstract class Instruction {
 	 */
 	public Operand getOperandData(String op) {
 		for (int i = 0; i < operands.size(); i++)
-			if (operands.get(i).operand.equals(op))
+			if (operands.get(i).operand.equalsIgnoreCase(op))
 				return operands.get(i);
 		return null;
 	}
@@ -333,7 +334,7 @@ public abstract class Instruction {
 	 */
 	public String getOperand(String op, int indx) {
 		for (int i = 0; i < operands.size(); i++)
-			if (operands.get(i).operand.equals(op))
+			if (operands.get(i).operand.equalsIgnoreCase(op))
 				if (indx-- <= 0)
 					return operands.get(i).expression;
 		return null;
@@ -353,7 +354,7 @@ public abstract class Instruction {
 	 */
 	public Operand getOperandData(String op, int indx) {
 		for (int i = 0; i < operands.size(); i++)
-			if (operands.get(i).operand.equals(op))
+			if (operands.get(i).operand.equalsIgnoreCase(op))
 				if (indx-- <= 0)
 					return operands.get(i);
 		return null;

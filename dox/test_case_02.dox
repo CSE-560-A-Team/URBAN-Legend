@@ -1,0 +1,113 @@
+/*!
+
+\page testcase2 Correct CLR Test
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">CorrectCLR</span> <span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">minReg</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">minIdx</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">maxReg</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">maxIdx</span> <span style="font-weight:bold;color:#000080;">clr</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">CLRA</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">CLRX</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">END</span> <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">CorrectCLR</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>CorrectCLR</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>maxIdx</td>
+    <td>0003</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>maxReg</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>minIdx</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>minReg</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+CorrectCLR	 0000	PROGNAME
+maxIdx	 0003	LABEL
+maxReg	 0002	LABEL
+minIdx	 0001	LABEL
+minReg	 0000	LABEL
+
+Instruction breakdowns:
+original source line: CorrectCLR KICKO FC:0;
+Line number: 1 LC: 0000 Label: CorrectCLR,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FC:0	Binary Equivalent: 0
+
+
+original source line: minReg clr dr:0;
+Line number: 2 LC: 0000 Label: minReg,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DR:0	Binary Equivalent: 0
+
+
+original source line: minIdx clr dx:1;
+Line number: 3 LC: 0001 Label: minIdx,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DX:1	Binary Equivalent: 1
+
+
+original source line: maxReg clr dr:7;
+Line number: 4 LC: 0002 Label: maxReg,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DR:7	Binary Equivalent: 111
+
+
+original source line: maxIdx clr dx:7;
+Line number: 5 LC: 0003 Label: maxIdx,
+instruction/Directive: CLR Binary Equivalent: 010000
+Operand 1: DX:7	Binary Equivalent: 111
+
+
+original source line: CLRA;
+Line number: 6 LC: 0004 Label: ,
+instruction/Directive: CLRA Binary Equivalent: 010001
+
+
+original source line: CLRX;
+Line number: 7 LC: 0005 Label: ,
+instruction/Directive: CLRX Binary Equivalent: 010010
+
+
+original source line: END LR:CorrectCLR;
+Line number: 8 LC: 0006 Label: ,
+instruction/Directive: END Binary Equivalent: ------
+Operand 1: LR:CorrectCLR	Binary Equivalent: 0
+
+
+</pre>
+
+*/

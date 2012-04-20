@@ -1,0 +1,134 @@
+/*!
+
+\page testcase15 Operand Combinations in Arithmetic Tests
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">start</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">231</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">treq</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">324</span> <span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">trlt</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">432</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">trgt</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span> <span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> error</span>
+<span style="font-weight:bold;color:#000080;">treq</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4095</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">trlt</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4096</span> <span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
+<span style="font-weight:bold;color:#000080;">trgt</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="font-style:italic;color:#800080;">a</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> error</span>
+<span style="font-weight:bold;color:#000080;">treq</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span> <span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">trlt</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">trgt</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span> <span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">treq</span> <span style="font-style:italic;color:#800080;">f3r</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
+<span style="font-weight:bold;color:#000080;">trlt</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">123</span> <span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">trgt</span> <span style="color:#0000ff;">fr</span> <span style="color:#00e1af;">3</span> <span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">321</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">start</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>start</td>
+    <td>00E7</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+start	 00E7	PROGNAME
+
+Instruction breakdowns:
+original source line: start kicko fc:231;
+Line number: 1 LC: 00E7 Label: start,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FC:231	Binary Equivalent: 0
+
+
+original source line: treq fr:5 ,dm:324 ;
+Line number: 2 LC: 00E7 Label: ,
+instruction/Directive: TREQ Binary Equivalent: 100000
+Operand 1: FR:5	Binary Equivalent: 101
+Operand 2: DM:324	Binary Equivalent: 101000100
+
+
+original source line: trlt fr:7 ,dm:432;
+Line number: 3 LC: 00E8 Label: ,
+instruction/Directive: TRLT Binary Equivalent: 100001
+Operand 1: FR:7	Binary Equivalent: 111
+Operand 2: DM:432	Binary Equivalent: 110110000
+
+
+original source line: trgt fr:1 ,dm:2 , dx:0; error
+Line number: 4 LC: 00E9 Label: ,
+instruction/Directive: TRGT Binary Equivalent: 100010
+Operand 1: FR:1	Binary Equivalent: 1
+Operand 2: DM:2	Binary Equivalent: 10
+Operand 3: DX:0	Binary Equivalent: 0
+ERROR: 072: Operand `DX' for `TRGT' instruction must be within range: [1,7]
+
+
+original source line: treq fr:0 ,dm:4095;
+Line number: 5 LC: 00EA Label: ,
+instruction/Directive: TREQ Binary Equivalent: 100000
+Operand 1: FR:0	Binary Equivalent: 0
+Operand 2: DM:4095	Binary Equivalent: 111111111111
+
+
+original source line: trlt fr:0 ,dm:4096 , dx:1;error
+Line number: 6 LC: 00EB Label: ,
+instruction/Directive: TRLT Binary Equivalent: 100001
+Operand 1: FR:0	Binary Equivalent: 0
+Operand 2: DM:4096	Binary Equivalent: 1000000000000
+Operand 3: DX:1	Binary Equivalent: 1
+ERROR: 071: Operand `DM' for `TRLT' instruction/directive must be within range: [0, 4095]
+
+
+original source line: trgt fr:3 ,dm:2a; error
+Line number: 7 LC: 00EC Label: ,
+instruction/Directive: TRGT Binary Equivalent: 100010
+Operand 1: FR:3	Binary Equivalent: 11
+Operand 2: DM:2a	Binary Equivalent: 0
+ERROR: 024: Unexpected symbol 'a' in expression
+
+
+original source line: treq fr:5 ,dm:5 , dx:5;
+Line number: 8 LC: 00ED Label: ,
+instruction/Directive: TREQ Binary Equivalent: 100000
+Operand 1: FR:5	Binary Equivalent: 101
+Operand 2: DM:5	Binary Equivalent: 101
+Operand 3: DX:5	Binary Equivalent: 101
+
+
+original source line: trlt fr:3 ,dm:3;
+Line number: 9 LC: 00EE Label: ,
+instruction/Directive: TRLT Binary Equivalent: 100001
+Operand 1: FR:3	Binary Equivalent: 11
+Operand 2: DM:3	Binary Equivalent: 11
+
+
+original source line: trgt fr:2 ,dm:2 , dx:2;
+Line number: 10 LC: 00EF Label: ,
+instruction/Directive: TRGT Binary Equivalent: 100010
+Operand 1: FR:2	Binary Equivalent: 10
+Operand 2: DM:2	Binary Equivalent: 10
+Operand 3: DX:2	Binary Equivalent: 10
+
+
+original source line: trlt fr:3 ,dm:123 , dx:2;
+Line number: 12 LC: 00F0 Label: ,
+instruction/Directive: TRLT Binary Equivalent: 100001
+Operand 1: FR:3	Binary Equivalent: 11
+Operand 2: DM:123	Binary Equivalent: 1111011
+Operand 3: DX:2	Binary Equivalent: 10
+
+
+original source line: end lr:start;
+Line number: 14 LC: 00F1 Label: ,
+instruction/Directive: END Binary Equivalent: ------
+Operand 1: LR:start	Binary Equivalent: 0
+
+
+</pre>
+!*/

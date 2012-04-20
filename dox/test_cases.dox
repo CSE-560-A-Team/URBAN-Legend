@@ -3,14 +3,111 @@
 This is a collection of test cases.
 
 <table>
-  <tr><th>Test case</th><th>Description</th></tr>
-  <tr><td>\subpage testcase0</td><td>Tests some quirks of URBAN and complicated facets.</td></tr>
+  <tr>
+    <th>Test case</th>
+    <th>Author</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>\subpage testcase0</td>
+    <td>Josh</td>
+    <td>Tests some quirks of URBAN and URBAN Legend's more complicated facets.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase1</td>
+    <td>Josh</td>
+    <td>Similar to \subpage testcase0, but gives error cases.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase2</td>
+    <td>Noah</td>
+    <td>Tests correct use cases of the CLR family of instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase3</td>
+    <td>Noah</td>
+    <td>Tests correct use cases of the DMP and HLT instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase4</td>
+    <td>Noah</td>
+    <td>Tests correct use cases of the stack instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase5</td>
+    <td>Noah</td>
+    <td>Tests correct use cases of the I/O instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase6</td>
+    <td>Noah</td>
+    <td>Tests error cases of the CLR family of instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase7</td>
+    <td>Noah</td>
+    <td>Tests error cases of the HLT and DMP instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase8</td>
+    <td>Noah</td>
+    <td>Tests for reporting of lines following the END instruction.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase9</td>
+    <td>Noah</td>
+    <td>Tests invalid uses of the Stack instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase10</td>
+    <td>Noah</td>
+    <td>Tests error cases for the I/O instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase11</td>
+    <td>Eric</td>
+    <td>Tests all valid combinations for arithmetic instructions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase12</td>
+    <td>Eric</td>
+    <td>Tests ranges for arithmetic operands.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase13</td>
+    <td>Eric</td>
+    <td>Tests for existence of semicolon after KICKO.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase14</td>
+    <td>Eric</td>
+    <td>Test for invalid operands, missing operands, and invalid operand values.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase15</td>
+    <td>Eric</td>
+    <td>Test for operand combinations for the TransferCond family of instructions, as well as operand bounds, invalid operands, and other invalid operand inputs.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase16</td>
+    <td>Eric</td>
+    <td>Tests for jumps to work correctly.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase17</td>
+    <td>Ratul</td>
+    <td>Tests correct uses of Shift/Manipulate functions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase18</td>
+    <td>Ratul</td>
+    <td>Tests incorrect uses of Shift/Manipulate functions.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase19</td>
+    <td>Ratul</td>
+    <td>Tests invalid operands for Shift/Manipulate.</td>
+  </tr>
 </table>
-
-\page testcase0 Test Case 0
-
-
-
-
 
 */

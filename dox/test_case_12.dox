@@ -1,0 +1,147 @@
+/*!
+
+\page testcase12 Incorrect range for Arithmetic Operations
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">start</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4000</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4095</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4095</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">32767</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">32768</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4096</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
+<span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">32768</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">start</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>start</td>
+    <td>0FA0</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+start	 0FA0	PROGNAME
+
+Instruction breakdowns:
+original source line: start kicko FC:4000;
+Line number: 1 LC: 0FA0 Label: start,
+instruction/Directive: KICKO Binary Equivalent: ------
+Operand 1: FC:4000	Binary Equivalent: 0
+
+
+original source line: MOVD FR:5, DM:4095;
+Line number: 2 LC: 0FA0 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FR:5	Binary Equivalent: 101
+Operand 2: DM:4095	Binary Equivalent: 111111111111
+
+
+original source line: MOVD FM:4095, DR:0;
+Line number: 3 LC: 0FA1 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FM:4095	Binary Equivalent: 111111111111
+Operand 2: DR:0	Binary Equivalent: 0
+
+
+original source line: MOVD FL:32767, DR:0;
+Line number: 4 LC: 0FA2 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FL:32767	Binary Equivalent: 111111111111111
+Operand 2: DR:0	Binary Equivalent: 0
+
+
+original source line: MOVD FL:-32768, DX:1;
+Line number: 5 LC: 0FA3 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FL:-32768	Binary Equivalent: 11111111111111111000000000000000
+Operand 2: DX:1	Binary Equivalent: 1
+
+
+original source line: MOVD FR:0, DM:4096, DX:1;error
+Line number: 6 LC: 0FA4 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FR:0	Binary Equivalent: 0
+Operand 2: DM:4096	Binary Equivalent: 1000000000000
+Operand 3: DX:1	Binary Equivalent: 1
+ERROR: 071: Operand `DM' for `MOVD' instruction/directive must be within range: [0, 4095]
+
+
+original source line: MOVD FM:0, FX:1, DR:0;
+Line number: 7 LC: 0FA5 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FM:0	Binary Equivalent: 0
+Operand 2: FX:1	Binary Equivalent: 1
+Operand 3: DR:0	Binary Equivalent: 0
+
+
+original source line: MOVD FR:0, DR:1;
+Line number: 8 LC: 0FA6 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FR:0	Binary Equivalent: 0
+Operand 2: DR:1	Binary Equivalent: 1
+
+
+original source line: MOVD FR:0, DX:1;
+Line number: 9 LC: 0FA7 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FR:0	Binary Equivalent: 0
+Operand 2: DX:1	Binary Equivalent: 1
+
+
+original source line: MOVD FX:0, DR:0;error
+Line number: 10 LC: 0FA8 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FX:0	Binary Equivalent: 0
+Operand 2: DR:0	Binary Equivalent: 0
+ERROR: 072: Operand `FX' for `MOVD' instruction must be within range: [1,7]
+
+
+original source line: MOVD FX:1, DX:0;error
+Line number: 11 LC: 0FA9 Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FX:1	Binary Equivalent: 1
+Operand 2: DX:0	Binary Equivalent: 0
+ERROR: 072: Operand `DX' for `MOVD' instruction must be within range: [1,7]
+
+
+original source line: MOVD FM:1, DM:-1;error
+Line number: 12 LC: 0FAA Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FM:1	Binary Equivalent: 1
+Operand 2: DM:-1	Binary Equivalent: 11111111111111111111111111111111
+ERROR: 071: Operand `DM' for `MOVD' instruction/directive must be within range: [0, 4095]
+
+
+original source line: MOVD FL:32768, DM:0;error
+Line number: 13 LC: 0FAB Label: ,
+instruction/Directive: MOVD Binary Equivalent: 000000
+Operand 1: FL:32768	Binary Equivalent: 1000000000000000
+Operand 2: DM:0	Binary Equivalent: 0
+ERROR: 071: Operand `FL' for `MOVD' instruction/directive must be within range: [0, 4095]
+
+
+original source line: end LR:start;
+Line number: 14 LC: 0FAC Label: ,
+instruction/Directive: END Binary Equivalent: ------
+Operand 1: LR:start	Binary Equivalent: 0
+
+
+</pre>
+!*/
