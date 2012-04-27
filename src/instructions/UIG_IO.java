@@ -7,7 +7,8 @@ import static assemblernator.OperandChecker.isValidMem;
 import static assemblernator.OperandChecker.isValidNumWords;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.IOFormat;
+import static assemblernator.InstructionFormatter.formatInput;
+import static assemblernator.InstructionFormatter.formatOutput;
 import assemblernator.Module;
 
 /**
@@ -179,48 +180,11 @@ public abstract class UIG_IO extends AbstractInstruction{
 	 */
 	@Override
 	public final int[] assemble() {
-		//all instructions start w/ 6 bit opcode.
-		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //011000
-		String index = "000"; //default value of index bits if index registers are not used. 
-		int mem; 
-		int[] assembled = new int[1];
-		
-		code = code + "0000"; //i/o instructions have a unused 4 bits following opcode. //011000 0000
-		
-		if(operandType.input) { //operands = {DM, NW} or {DM, NW, DX} 
-			mem = this.getOperandData("DM").value; //mem = value of dm operand.
-			if(operandType.index) { //operand = {DM, NW, DX}
-				index = IOFormat.formatBinInteger(this.getOperandData("DX").value, 3); //get index register decimal then format into binary integer string.
-			}
+		if(operandType.input) {
+			return formatInput(this);
 		} else {
-			if(operandType.literal) { //operands = {FL, NW}
-				mem = this.getOperandData("FL").value;
-			} else { //operands = {FM, NW} or {FM, FX, NW}
-				mem = this.getOperandData("FM").value;
-				if(operandType.index) {
-					index = IOFormat.formatBinInteger(this.getOperandData("FX").value, 3); //get index register decimal then format into binary integer string.
-				}
-			}
+			return formatOutput(this);
 		}
-		
-		code = code + index;//add index register bits.
-		code = code + IOFormat.formatBinInteger(this.getOperandData("NW").value, 4); //add number of word bits.
-		
-		if(operandType.input) { 
-			code = code + "00"; //unused two bits for input instruction format.
-		} else {
-			code = code + "0"; //1 unused bit for output instruction format.
-			//followed by literal bit.
-			if(operandType.literal) {
-				code = code + "1"; 
-			} else {
-				code = code + "0";
-			}
-		}
-		
-		code = code + IOFormat.formatBinInteger(mem, 13); //concat mem bits.
-		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
-		return assembled;
 	}
 	
 	/**
