@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
 
@@ -151,9 +152,34 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 	 */
 	@Override
 	public final int[] assemble() {
+		//all instructions start w/ 6 bit opcode.
+		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //011000
 		
+		code = code + "0";// order bit is always 0 for shift/manipulate instructions.
+		
+		String reg = "000"; //default value of register bits if registers are not used.
+		String index = "000"; //default value of index bits if index registers are not used. 
+		String mem; 
+		int[] assembled = new int[1];
+			
+		
+		if(this.hasOperand("DX")) { 
+			index = IOFormat.formatBinInteger(this.getOperandData("DX").value,3);
+		} else if(this.hasOperand("DR")) { 
+			reg = IOFormat.formatBinInteger(this.getOperandData("DR").value,3);
+		}
 
-		return null;
+		code = code + reg;
+		code = code + index;//add index register bits.
+		code = code + IOFormat.formatBinInteger(Integer.parseInt(this.getOperand("NW")), 3); //add number of word bits.
+		code = code + "00"; //for stack and literal bits 	
+		
+		mem = IOFormat.formatBinInteger(this.getOperandData("FC").value,13);
+				
+		code = code + mem; //concat mem bits.
+		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
+		
+		return assembled;
 	}
 
 
