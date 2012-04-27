@@ -175,6 +175,7 @@ public abstract class UIG_IO extends AbstractInstruction{
 	
 	/**
 	 * @see assemblernator.Instruction#assemble()
+	 * @modified 5:55:50PM; now uses cached value in Operands -Noah.
 	 */
 	@Override
 	public final int[] assemble() {
@@ -187,25 +188,23 @@ public abstract class UIG_IO extends AbstractInstruction{
 		code = code + "0000"; //i/o instructions have a unused 4 bits following opcode. //011000 0000
 		
 		if(operandType.input) { //operands = {DM, NW} or {DM, NW, DX} 
-			mem = Integer.parseInt(this.getOperand("DM")); //parse into decimal integer.
+			mem = this.getOperandData("DM").value; //mem = value of dm operand.
 			if(operandType.index) { //operand = {DM, NW, DX}
-				index = this.getOperand("DX"); //get index register decimal.
-				index = IOFormat.formatBinInteger(Integer.parseInt(index), 3); //convert base-10 to binary.
+				index = IOFormat.formatBinInteger(this.getOperandData("DX").value, 3); //get index register decimal then format into binary integer string.
 			}
 		} else {
 			if(operandType.literal) { //operands = {FL, NW}
-				mem = Integer.parseInt(this.getOperand("FL"));
-			} else {
-				mem = Integer.parseInt(this.getOperand("FM"));
+				mem = this.getOperandData("FL").value;
+			} else { //operands = {FM, NW} or {FM, FX, NW}
+				mem = this.getOperandData("FM").value;
 				if(operandType.index) {
-					index = this.getOperand("FX"); //get index register decimal.
-					index = IOFormat.formatBinInteger(Integer.parseInt(index), 3); //convert base-10 to binary.
+					index = IOFormat.formatBinInteger(this.getOperandData("FX").value, 3); //get index register decimal then format into binary integer string.
 				}
 			}
 		}
 		
 		code = code + index;//add index register bits.
-		code = code + IOFormat.formatBinInteger(Integer.parseInt(this.getOperand("NW")), 3); //add number of word bits.
+		code = code + IOFormat.formatBinInteger(this.getOperandData("NW").value, 4); //add number of word bits.
 		
 		if(operandType.input) { 
 			code = code + "00"; //unused two bits for input instruction format.
