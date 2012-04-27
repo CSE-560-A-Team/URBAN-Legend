@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
 
@@ -253,18 +254,83 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 	 */
 	@Override
 	public final int[] assemble() {
-		//String code = IOFormat.formatBinInteger(this.getOpcode(), 6);
-		if (dest == "DR") {
-			if (src == "FM" || src == "FL" || src == "FXFM") {
+		String complete = "";
+		String sign = "0";
+		String opcode = IOFormat.formatBinInteger(this.getOpcode(), 6);
+		//all DR operands
+		if (dest.equals("DR")) {
+			String reg = IOFormat.formatBinInteger(this.getOperandData(dest).value,3);
+			if (src.equals("FM") || src.equals("FL") || src.equals("FXFM")) {
 				// format 0
+				if(src.equals("FM")){
+					String mem = IOFormat.formatBinInteger(this.getOperandData(src).value,15);
+					complete = opcode+"001"+reg+"000"+"00"+mem;
+				}else if(src.equals("FL")){
+					if(this.getOperandData(src).value < 0)
+						sign = "1";
+					String lit = IOFormat.formatBinInteger(this.getOperandData(src).value,15);
+					complete = opcode+"001"+reg+"000"+"1"+sign+lit;
+				}else{
+					String index = IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
+					String mem = IOFormat.formatBinInteger(this.getOperandData("FM").value,15);
+					complete = opcode+"001"+reg+index+"00"+mem;
+				}
 			} else {
-				// format 1
+				//format 1
+				if(src.equals("FR")){
+					String freg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
+					complete = opcode+"010"+freg+"0"+reg+"0000000000000000";
+				}else{
+					String index = IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
+					complete = opcode+"011"+index+"0"+reg+"0000000000000000";
+				}
 			}
-		} else if (dest == "DX") {
-			// and so on
+			//all DX operands
+		} else if (dest.equals("DX") || dest.equals("DMDX")) {
+			String index = IOFormat.formatBinInteger(this.getOperandData("DX").value,3);
+			//format 0
+			if(src.equals("FL")){
+				if(this.getOperandData(src).value < 0)
+					sign = "1";
+				String lit = IOFormat.formatBinInteger(this.getOperandData(src).value,15);
+				complete = opcode+"001000"+index+"0"+sign+lit;
+			}else if(src.equals("FR")){
+				String reg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
+				String mem = IOFormat.formatBinInteger(this.getOperandData("DM").value,15);
+				complete = opcode+"000"+reg+index+"00"+mem;
+			}
+			//format 1
+			else if(src.equals("FR")){
+				String freg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
+				complete = opcode+"010"+freg+"1"+index+"0000000000000000";
+			}else{
+				String findex = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
+				complete = opcode+"011"+findex+"1"+index+"0000000000000000";
+			}
+			//all the DM operands
+		}else{
+			//format 0
+			if(src.equals("FR")){
+				String dmem = IOFormat.formatBinInteger(this.getOperandData(dest).value,15);
+				String freg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
+				complete = opcode+"000"+freg+"00000"+dmem;
+			}
+			//format 2
+			else if(src.equals("FM")) {
+				String dmem = IOFormat.formatBinInteger(this.getOperandData(dest).value,12);
+				String fmem = IOFormat.formatBinInteger(this.getOperandData(src).value,12);
+				complete = opcode+"10"+fmem+dmem;
+			}
+			//format 3
+			else{
+				String dmem = IOFormat.formatBinInteger(this.getOperandData(dest).value,12);
+				String lit = IOFormat.formatBinInteger(this.getOperandData(src).value,12);
+				complete = opcode+"11"+lit+dmem;
+			}
 		}
-
-		return null;
+		int[] assembled = new int[1];
+		assembled[0] = Integer.parseInt(complete, 2);
+		return assembled;
 
 	}
 	
