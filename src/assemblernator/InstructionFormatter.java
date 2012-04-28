@@ -22,73 +22,40 @@ public class InstructionFormatter {
 	 */
 	public static int [] formatOther(Instruction instr) {
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //011000
-		boolean fromReg = !(instr.hasOperand("DR") || instr.hasOperand("DX"));
-		boolean literal = instr.hasOperand("FL");
-		//if destination is a register then order bit is 0.
-		if(fromReg) {
-			code = code + "0";
+		String fmt;
+		String srcReg;
+		String destReg;
+		String ixr;
+		int mem;
+		
+		if(instr.hasOperand("FL") && instr.hasOperand("DM")) {
+			fmt = "11";
+		} else if(instr.hasOperand("FM") && instr.hasOperand("DM")) {
+			fmt = "10";
+		} else if(instr.hasOperand("FL")) {
+			fmt = "01";
 		} else {
-			code = code + "1";
+			fmt = "00";
 		}
 		
-		String reg = "000"; //default value of register bits if registers are not used.
-		String index = "000"; //default value of index bits if index registers are not used. 
-		String nw = "0000";
-		String lit = "0";
-		String stack = "0";
-		
-		if(instr.hasOperand("NW")) {
-			nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value, 4);
-		}
-		
-		if(literal) {
-			lit = "1";
-		}
-
-		//if the instruction uses the stack.
-		if(instr.getOpId().equalsIgnoreCase("PSH") 
-				|| instr.getOpId().equalsIgnoreCase("POP") 
-				|| instr.getOpId().equalsIgnoreCase("PST")) {
-			stack = "1";
-		} 
-		
-		int mem; 
-		int[] assembled = new int[1];
-		
-		if(instr.hasOperand("DX")) { 
-			index = IOFormat.formatBinInteger(instr.getOperandData("DX").value,3);
-		} else if(instr.hasOperand("DR")) { 
-			reg = IOFormat.formatBinInteger(instr.getOperandData("DR").value,3);
-		} else if(instr.hasOperand("FX")) { 
-			index = IOFormat.formatBinInteger(instr.getOperandData("FX").value,3);
-		} else if(instr.hasOperand("FR")) { 
-			reg = IOFormat.formatBinInteger(instr.getOperandData("FR").value,3);
-		} 
-
-		code = code + reg;
-		code = code + index;//add index register bits.
-		code = code + nw;//NW bits.
-		code = code + stack;//stack bit.
-		code = code + lit; //literal bit.
-		
-		if(instr.hasOperand("DM")) { 
+		if(instr.hasOperand("DM")) {
 			mem = instr.getOperandData("DM").value;
-		} else if(instr.hasOperand("FM")) { 
-			mem = instr.getOperandData("FM").value;
-		} else if(instr.hasOperand("FL")){
-			mem = instr.getOperandData("FL").value;
-		} else {
-			mem = instr.getOperandData("FC").value;
+			destReg = "1000";
+			if(instr.hasOperand("DX")) {
+				ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value, 4);
+			}
+		} else if(instr.hasOperand("DR")) {
+			destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value, 4);
+		} else if(instr.hasOperand("DX")) {
+			destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value, 4);
 		}
 		
-		code = code + IOFormat.formatBinInteger(mem, 13); //concat mem bits.
-		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
-		
-		return assembled;
+		return new int[0];
 	}
 	
 	/**
 	 * Formats instructions USI_HLT and USI_DMP into bit code.
+	 * opcode(6 bits) + "0000000000" (10 unused bits) + constant (16 constant bits).
 	 * @author Noah
 	 * @date Apr 27, 2012; 6:17:09 PM
 	 * @modified UNMODIFIED
@@ -103,16 +70,15 @@ public class InstructionFormatter {
 	public static int [] formatHaltDump(Instruction instr) {
 		int[] assembled = new int[1];
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //"111111"
-		code = code + "0000000000000"; //13 unused bits.  "111111 0000000000000"
-		//13 bits of constant in memory.  "111111 000000000000 0000000011111"
-		code = code + IOFormat.formatBinInteger(instr.getOperandData("FC").value, 13); 
-		
-		assembled[0] = Integer.parseInt(code, 2);
-		
+		code = code + "0000000000"; //10 unused bits.  "111111 0000000000"
+		//16 bits of constant in memory.  "111111 000000000000 0000000011111"
+		code = code + IOFormat.formatBinInteger(instr.getOperandData("FC").value, 16); 
+		assembled[0] = (int)Long.parseLong(code, 2);
 		return assembled;
 	}
 	
 	/**
+	 * opcode(6 bits) + "00000000000000000000000000" (26 unused bits).
 	 * @author Ratul Khosla
 	 * @date Apr 27, 2012; 6:35:33 PM
 	 * @modified Apr 27, 2012; 7:34:00 PM removed spaces from string of 0's. -Noah
@@ -130,9 +96,9 @@ public class InstructionFormatter {
 		int[] assembled = new int[1];
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //get opcode.
 		
-		code = code + "00000000000000000000000000"; 
+		code = code + "00000000000000000000000000"; //26 bits.
 		
-		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
+		assembled[0] = (int)Long.parseLong(code, 2);
 		
 		return assembled;	
 		
@@ -152,25 +118,28 @@ public class InstructionFormatter {
 	 * @specRef N/A
 	 */
 	public static int [] formatInput(Instruction instr) {
+		//opcode(6b) + "00" + number of words (4b) + "1000" + memAddr(16b) or 
+		//opcode(6b) + "00" + number of words (4b) + "1000" + ixr(4b) + memAddr(12b)
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //e.g. 011000
-		String index = "000"; //default value of index bits if index registers are not used. 
+		String fmt = "00";
+		String nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value, 4);
+		String destReg = "1000"; //destination is never a register.
 		int mem; 
 		int[] assembled = new int[1];
 		
-		code = code + "0000"; //i/o instructions have a unused 4 bits following opcode. //011000 0000
+		code = code + fmt + nw + destReg;
+		
+		if(instr.hasOperand("DX")) {
+			code = code + IOFormat.formatBinInteger(instr.getOperandData("DX").value, 4); //add ixr bits.
+		} else {
+			code = code + "0000"; //ixr bits are 0'd.
+		}
 		
 		mem = instr.getOperandData("DM").value; //mem = value of dm operand.
 		
-		if(instr.hasOperand("DX")) { //operand = {DM, NW, DX}
-			index = IOFormat.formatBinInteger(instr.getOperandData("DX").value, 3); //get index register decimal then format into binary integer string.
-		}
+		code = code + IOFormat.formatBinInteger(mem, 12); //concat memory bits.
+		assembled[0] = (int)Long.parseLong(code, 2);
 		
-		code = code + index;//add index register bits.
-		code = code + IOFormat.formatBinInteger(instr.getOperandData("NW").value, 4); //add number of word bits.
-		code = code + "00"; //unused two bits for input instruction format.
-		
-		code = code + IOFormat.formatBinInteger(mem, 13); //concat mem bits.
-		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
 		return assembled;
 	}
 	
@@ -189,34 +158,28 @@ public class InstructionFormatter {
 	 */
 	public static int [] formatOutput(Instruction instr) {
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //e.g. 011000
-		String index = "000"; //default value of index bits if index registers are not used. 
+		String fmt;
+		String nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value, 4);
+		String ixr = "0000";
 		int mem; 
 		int[] assembled = new int[1];
 		
-		code = code + "0000"; //i/o instructions have a unused 4 bits following opcode. //011000 0000
-		
 		if(instr.hasOperand("FL")) {
+			fmt = "01";
 			mem = instr.getOperandData("FL").value;
-		} else {
+			code = code + fmt + "1000" + nw + IOFormat.formatBinInteger(mem, 16); 
+		} else { 
+			fmt = "00";
 			mem = instr.getOperandData("FM").value; //mem = value of fm operand.
-			
+	
 			if(instr.hasOperand("FX")) { //operand = {DM, NW, DX}
-				index = IOFormat.formatBinInteger(instr.getOperandData("DX").value, 3); //get index register decimal then format into binary integer string.
+				 ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value, 4); //get index register decimal then format into binary integer string.
 			}
+			
+			code = code + fmt + "1000"+  nw + ixr +  IOFormat.formatBinInteger(mem, 12); 
 		}
 		
-		code = code + index;//add index register bits.
-		code = code + IOFormat.formatBinInteger(instr.getOperandData("NW").value, 4); //add number of word bits.
-		code = code + "0"; //unused two bits for input instruction format.
-		
-		if(instr.hasOperand("FL")) {
-			code = code + "1"; 
-		} else {
-			code = code + "0";
-		}
-		
-		code = code + IOFormat.formatBinInteger(mem, 13); //concat mem bits.
-		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
+		assembled[0] = (int)Long.parseLong(code, 2);
 		return assembled;
 	}
 }

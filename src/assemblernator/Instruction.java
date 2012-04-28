@@ -771,6 +771,9 @@ public abstract class Instruction {
 		String binEquiv = IOFormat.formatBinInteger(this.getOpcode(), 6);
 		String lc = IOFormat.formatHexInteger(this.lc, 4);
 		String label = this.label;
+		String instrBreak;
+		String instrCode;
+		int[] assemble = this.assemble();
 
 		// instr is a directive and thus has no opcode.
 		if (this.getOpcode() == 0xFFFFFFFF) {
@@ -784,7 +787,7 @@ public abstract class Instruction {
 		}
 
 
-		String instrBreak = "Line number: " + this.lineNum + " " + "LC: " + lc
+		instrBreak = "Line number: " + this.lineNum + " " + "LC: " + lc
 				+ " " + "Label: " + label + ",\n" + "instruction/Directive: "
 				+ this.getOpId() + " " + "Binary Equivalent: " + binEquiv
 				+ "\n";
@@ -792,6 +795,7 @@ public abstract class Instruction {
 		Iterator<Operand> operandIt = operands.iterator();
 
 		int i = 1;
+		//operands w/ their binary equivalents.
 		while (operandIt.hasNext()) {
 			Operand oprnd = operandIt.next();
 
@@ -802,15 +806,26 @@ public abstract class Instruction {
 			i++;
 		}
 
+		//errors.
 		for (String error : errors) {
 			instrBreak = instrBreak + error + "\n";
 		}
 
+		//binary code of instruction.
+		instrBreak = instrBreak + "Binary Code: \n";
+		if(!this.isDirective() || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
+			for(int j = 0; j < assemble().length; j++) {
+				instrBreak = instrBreak + IOFormat.formatBinInteger(assemble[j], 32) + "\n";
+			}
+		} else {
+			instrBreak = instrBreak + "--------------------------------";
+		}
 		instrBreak = instrBreak + "\n";
 
 		rep = rep + instrBreak;
 
 		return rep;
+		
 	}
 
 	/**
