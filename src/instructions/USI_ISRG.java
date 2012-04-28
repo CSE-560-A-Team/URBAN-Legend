@@ -1,5 +1,11 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.OperandChecker.isValidNumWords;
+import static assemblernator.OperandChecker.isValidReg;
+import static assemblernator.OperandChecker.isValidIndex;
+import static assemblernator.OperandChecker.isValidMem;
+import static assemblernator.OperandChecker.isValidLiteral;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -34,7 +40,77 @@ public class USI_ISRG extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
-		return false; // TODO: IMPLEMENT
+		boolean isValid = true;
+		int value;
+		
+		//check for operand combos.
+		if(this.hasOperand("NW")) {
+			if(this.operands.size() == 4) {
+				if(!(this.hasOperand("FM") && this.hasOperand("FX") && this.hasOperand("DX"))) {
+					isValid = false;
+					hErr.reportError(makeError("instructionMissingOp3", this.getOpId(), "FM", "FX", "DX"), this.lineNum, -1);
+				}
+			} else if(this.operands.size() == 3) {
+				if(!(this.hasOperand("DR") || this.hasOperand("DX"))) {
+					isValid = false;
+					hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "DR", "DX"), this.lineNum, -1);
+				} else if(!(this.hasOperand("FM") || this.hasOperand("FL"))) {
+					isValid = false;
+					hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "FM", "FL"), this.lineNum, -1);
+				}
+			} else {
+				isValid = false;
+				if(this.operands.size() > 4) {
+					hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+				} else {
+					hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
+				}
+			}
+		} else {
+			isValid = false;
+			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "NW"), this.lineNum, -1);
+		}
+		
+		//check for operand values.
+		if(isValid) {
+			value = module.evaluate(this.getOperand("NW"), false, hErr, this, this.getOperandData("NW").keywordStartPosition);
+			isValid = isValidNumWords(value);
+			if(!isValid) hErr.reportError(makeError("OORnw", this.getOpId()), this.lineNum, -1);
+			this.getOperandData("NW").value = value;
+			
+			if(this.hasOperand("FM") && isValid) {
+				value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition);
+				isValid = isValidMem(value);
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("FM").value = value;
+			} else if(this.hasOperand("FL")) {
+				value = module.evaluate(this.getOperand("FL"), true, hErr, this, this.getOperandData("FL").keywordStartPosition);
+				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("FL").value = value;
+			}
+			
+			if(this.hasOperand("FX") && isValid) {
+				value = module.evaluate(this.getOperand("FX"), true, hErr, this, this.getOperandData("FX").keywordStartPosition);
+				isValid = isValidIndex(value);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("FX").value = value;
+			}
+			
+			if(this.hasOperand("DR") && isValid) {
+				value = module.evaluate(this.getOperand("DR"), true, hErr, this, this.getOperandData("DR").keywordStartPosition);
+				isValid = isValidIndex(value);
+				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("DR").value = value;
+			} else if(this.hasOperand("DX")) {
+				value = module.evaluate(this.getOperand("DX"), true, hErr, this, this.getOperandData("DX").keywordStartPosition);
+				isValid = isValidIndex(value);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+				this.getOperandData("DX").value = value;
+			}
+		}
+		
+		return isValid; 
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
