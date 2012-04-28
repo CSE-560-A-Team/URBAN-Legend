@@ -4,8 +4,8 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.OperandChecker.isValidConstant;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.IOFormat;
 import assemblernator.Instruction;
+import static assemblernator.InstructionFormatter.formatHaltDump;
 import assemblernator.Module;
 
 /**
@@ -57,17 +57,11 @@ public class USI_DMP extends AbstractInstruction {
 		return isValid;
 	}
 
-	/** @see assemblernator.Instruction#assemble() */
+	/** @see assemblernator.Instruction#assemble() 
+	 *  @modified Apr 27, 2012; 7:59:50 use InstructionFormatter.
+	 */
 	@Override public int[] assemble() {
-		int[] assembled = new int[1];
-		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //"111111"
-		code = code + "0000000000000"; //13 unused bits.  "111111 0000000000000"
-		//13 bits of constant in memory.  "111111 000000000000 0000000011111"
-		code = code + IOFormat.formatBinInteger(Integer.parseInt(this.getOperand("FC")), 13); 
-		
-		assembled[0] = Integer.parseInt(code);
-		
-		return assembled;
+		return formatHaltDump(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
