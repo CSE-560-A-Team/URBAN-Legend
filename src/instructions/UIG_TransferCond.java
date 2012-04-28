@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
 
@@ -114,6 +115,13 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 	 */
 	@Override
 	public final int[] assemble() {
+		String complete = "";
+		String freg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
+		if(dest.equals("DM")){
+			
+		}else{
+			
+		}
 		return null;
 	}
 	
