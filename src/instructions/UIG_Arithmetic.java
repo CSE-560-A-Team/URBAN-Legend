@@ -74,9 +74,18 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					this.getOperandData("FL").value = constantSize1;
 					isValid = OperandChecker.isValidLiteral(constantSize1, ConstantRange.RANGE_ADDR);
 					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
-				} else {
+				}else if (this.hasOperand("FX")) {
+					//range checking
+					Operand o1 = getOperandData("FX");
+					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+							o1.valueStartPosition);
+					this.getOperandData("FX").value = constantSize1;
+					isValid = OperandChecker.isValidIndex(constantSize1);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+					src = "FX";
+				}else {
 					isValid = false;
-					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FR,FM, or FL", "DM"), this.lineNum, -1);
+					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FR,FM,FL, or FX", "DM"), this.lineNum, -1);
 				}
 				// checks combos associated with DR
 			} else if (this.hasOperand("DR")) {
@@ -165,9 +174,18 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					this.getOperandData("FR").value = constantSize1;
 					isValid = OperandChecker.isValidReg(constantSize1);
 					if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
+				}else if(this.hasOperand("FM")){
+					src = "FM";
+					//range checking
+					Operand o1 = getOperandData("FM");
+					int constantSize1 = module.evaluate(o1.expression, true, hErr, this,
+							o1.valueStartPosition);
+					this.getOperandData("FM").value = constantSize1;
+					isValid = OperandChecker.isValidMem(constantSize1);
+					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 				}else {
 					isValid = false;
-					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FX or FL", "DX"), this.lineNum, -1);
+					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FX, FL,FM ,or FR", "DX"), this.lineNum, -1);
 				}
 
 			} else {
@@ -234,9 +252,59 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					isValid = false;
 					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FX and FM", "DR"), this.lineNum, -1);
 				}
-			} else {
+			}else if(this.hasOperand("FX") && this.hasOperand("DM") && this.hasOperand("DX")){
+				src="FX";
+				dest="DMDX";
+				//check for FX
+				Operand o1 = getOperandData("FX");
+				int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+						o1.valueStartPosition);
+				this.getOperandData("FX").value = constantSize1;
+				isValid = OperandChecker.isValidIndex(constantSize1);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+				//check for DM
+				Operand o2 = getOperandData("DM");
+				int constantSize2 = module.evaluate(o2.expression, true, hErr, this,
+						o2.valueStartPosition);
+				this.getOperandData("DM").value = constantSize2;
+				isValid = OperandChecker.isValidMem(constantSize2);
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				//check for DX
+				Operand o = getOperandData("DX");
+				int constantSize = module.evaluate(o.expression, false, hErr, this,
+						o.valueStartPosition);
+				this.getOperandData("DX").value = constantSize;
+				isValid = OperandChecker.isValidIndex(constantSize);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+				
+			}else if(this.hasOperand("FX") && this.hasOperand("FM") && this.hasOperand("DX")){
+				src="FMFX";
+				dest="DX";
+				//check for DX
+				Operand o = getOperandData("DX");
+				int constantSize = module.evaluate(o.expression, false, hErr, this,
+						o.valueStartPosition);
+				this.getOperandData("DX").value = constantSize;
+				isValid = OperandChecker.isValidIndex(constantSize);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+				//check for FX
+				Operand o1 = getOperandData("FX");
+				int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+						o1.valueStartPosition);
+				this.getOperandData("FX").value = constantSize1;
+				isValid = OperandChecker.isValidIndex(constantSize1);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+				//check for FM
+				Operand o2 = getOperandData("FM");
+				int constantSize2 = module.evaluate(o2.expression, true, hErr, this,
+						o2.valueStartPosition);
+				this.getOperandData("FM").value = constantSize2;
+				isValid = OperandChecker.isValidMem(constantSize2);
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+			}
+			else {
 				isValid = false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FR or DR"), this.lineNum, -1);
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
 			}
 			// more than three operands is invalid
 		} else {
@@ -255,83 +323,86 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 	@Override
 	public final int[] assemble() {
 		String complete = "";
-		String sign = "0";
 		String opcode = IOFormat.formatBinInteger(this.getOpcode(), 6);
-		//all DR operands
-		if (dest.equals("DR")) {
-			String reg = IOFormat.formatBinInteger(this.getOperandData(dest).value,3);
-			if (src.equals("FM") || src.equals("FL") || src.equals("FXFM")) {
-				// format 0
-				if(src.equals("FM")){
-					String mem = IOFormat.formatBinInteger(this.getOperandData(src).value,15);
-					complete = opcode+"001"+reg+"000"+"00"+mem;
-				}else if(src.equals("FL")){
-					if(this.getOperandData(src).value < 0)
-						sign = "1";
-					String lit = IOFormat.formatBinInteger(this.getOperandData(src).value,15);
-					complete = opcode+"001"+reg+"000"+"1"+sign+lit;
-				}else{
-					String index = IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
-					String mem = IOFormat.formatBinInteger(this.getOperandData("FM").value,15);
-					complete = opcode+"001"+reg+index+"00"+mem;
-				}
-			} else {
-				//format 1
-				if(src.equals("FR")){
-					String freg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
-					complete = opcode+"010"+freg+"0"+reg+"0000000000000000";
-				}else{
-					String index = IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
-					complete = opcode+"011"+index+"0"+reg+"0000000000000000";
-				}
-			}
-			//all DX operands
-		} else if (dest.equals("DX") || dest.equals("DMDX")) {
-			String index = IOFormat.formatBinInteger(this.getOperandData("DX").value,3);
-			//format 0
-			if(src.equals("FL")){
-				if(this.getOperandData(src).value < 0)
-					sign = "1";
-				String lit = IOFormat.formatBinInteger(this.getOperandData(src).value,15);
-				complete = opcode+"001000"+index+"0"+sign+lit;
-			}else if(src.equals("FR")){
-				String reg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
-				String mem = IOFormat.formatBinInteger(this.getOperandData("DM").value,15);
-				complete = opcode+"000"+reg+index+"00"+mem;
-			}
+		if(this.hasOperand("DR")){
+			String reg = IOFormat.formatBinInteger(this.getOperandData("DR").value,3);
 			//format 1
-			else if(src.equals("FR")){
-				String freg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
-				complete = opcode+"010"+freg+"1"+index+"0000000000000000";
+			if(this.hasOperand("FL")){
+				String lit = IOFormat.formatBinInteger(this.getOperandData("FL").value,16);
+				complete = opcode+"0110000"+reg+lit;
 			}else{
-				String findex = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
-				complete = opcode+"011"+findex+"1"+index+"0000000000000000";
+				//format 0
+				if(this.hasOperand("FM") && this.hasOperand("FX")){
+					String ixr = IOFormat.formatBinInteger(this.getOperandData("FX").value,4);
+					String mem = IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
+					complete = opcode+"0010000"+reg+ixr+mem;
+				}else if(this.hasOperand("FM")){
+					String mem = IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
+					complete = opcode+"0010000"+reg+"0000"+mem;
+				}else if(this.hasOperand("FR")){
+					String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
+					complete = opcode+"000"+freg+"0"+reg+"0000000000000000";
+				}else{
+					String index = IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
+					complete = opcode+"001"+index+"0"+reg+"0000000000000000";
+				}
 			}
-			//all the DM operands
+		}else if(this.hasOperand("DX")){
+			String dindex = IOFormat.formatBinInteger(this.getOperandData("DX").value,3);
+			//format 1
+			if(this.hasOperand("FL")){
+				String lit = IOFormat.formatBinInteger(this.getOperandData("FL").value,16);
+				complete = opcode+"0110001"+dindex+lit;
+			}else{
+				//format 0
+				if(this.hasOperand("FR") && this.hasOperand("DM")){
+					String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
+					String mem = IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
+					complete = opcode+"000"+freg+"10000"+dindex+mem;
+				}else if (this.hasOperand("FX") && this.hasOperand("DM")){
+					String findex= IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
+					String mem= IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
+					complete = opcode+"001"+findex+"10000"+dindex+mem;
+				}else if(this.hasOperand("FM") && this.hasOperand("FX")){
+					String mem=IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
+					String findex=IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
+					complete = opcode+"0010001"+dindex+"0"+findex+mem;
+				}else if(this.hasOperand("FM")){
+					String mem=IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
+					complete= opcode+"0010001"+dindex+"0000"+mem;
+				}else if(this.hasOperand("FR")){
+					String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
+					complete = opcode+"000"+freg+"1"+dindex+"0000000000000000";
+				}else{
+					String findex=IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
+					complete= opcode+"001"+findex+"1"+dindex+"0000000000000000";
+				}
+			}
 		}else{
+			String dmem = IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
 			//format 0
 			if(src.equals("FR")){
-				String dmem = IOFormat.formatBinInteger(this.getOperandData(dest).value,15);
-				String freg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
-				complete = opcode+"000"+freg+"00000"+dmem;
+				String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
+				complete = opcode+"000"+freg+"10000000"+dmem;
+			}else if(this.hasOperand("FX")){
+				String findex = IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
+				complete = opcode+"001"+findex+"10000000"+dmem;
 			}
 			//format 2
-			else if(src.equals("FM")) {
-				String dmem = IOFormat.formatBinInteger(this.getOperandData(dest).value,12);
-				String fmem = IOFormat.formatBinInteger(this.getOperandData(src).value,12);
+			else if(this.hasOperand("FM")) {
+				String fmem = IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
 				complete = opcode+"10"+fmem+dmem;
 			}
 			//format 3
 			else{
-				String dmem = IOFormat.formatBinInteger(this.getOperandData(dest).value,12);
-				String lit = IOFormat.formatBinInteger(this.getOperandData(src).value,12);
+				String lit = IOFormat.formatBinInteger(this.getOperandData("FL").value,12);
 				complete = opcode+"11"+lit+dmem;
 			}
 		}
+		
 		int[] assembled = new int[1];
-		assembled[0] = Integer.parseInt(complete, 2);
+		assembled[0] = Integer.parseInt(complete, 2); //parse as a binary integer.
 		return assembled;
-
 	}
 	
 	/**
