@@ -43,7 +43,8 @@ public class USI_NUM extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		int[] assembled = {this.getOperandData("FC").value};
+		return assembled;
 	}
 
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
