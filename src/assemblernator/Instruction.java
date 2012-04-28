@@ -146,6 +146,7 @@ public abstract class Instruction {
 		RANGE_13_TC(-4096, 4095), //[-2^12, (2^12) - 1]
 		/** 16 bit 2's complement range.*/
 		RANGE_16_TC(-32768, 32767), //[-2^15, (2^15) - 1]
+		/** 32 bit memory words; valid only for NUM. */
 		RANGE_32_TC(-2147483648, 2147483647),
 		/** 12 bit address range.*/
 		RANGE_ADDR(0, 4095); //[0, 4095]
