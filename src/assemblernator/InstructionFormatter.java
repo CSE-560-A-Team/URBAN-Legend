@@ -33,11 +33,18 @@ public class InstructionFormatter {
 		
 		String reg = "000"; //default value of register bits if registers are not used.
 		String index = "000"; //default value of index bits if index registers are not used. 
+		String nw = "0000";
 		String lit = "0";
+		String stack = "0";
+		
+		if(instr.hasOperand("NW")) {
+			nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value, 4);
+		}
+		
 		if(literal) {
 			lit = "1";
 		}
-		String stack = "0";
+
 		//if the instruction uses the stack.
 		if(instr.getOpId().equalsIgnoreCase("PSH") 
 				|| instr.getOpId().equalsIgnoreCase("POP") 
@@ -60,7 +67,7 @@ public class InstructionFormatter {
 
 		code = code + reg;
 		code = code + index;//add index register bits.
-		code = code + "0000";//NW bits.
+		code = code + nw;//NW bits.
 		code = code + stack;//stack bit.
 		code = code + lit; //literal bit.
 		
