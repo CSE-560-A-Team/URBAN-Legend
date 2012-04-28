@@ -1,5 +1,9 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.OperandChecker.isValidIndex;
+import static assemblernator.OperandChecker.isValidConstant;
+import static assemblernator.OperandChecker.isValidReg;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -33,7 +37,44 @@ public class USI_PWR extends AbstractInstruction {
 	}
 
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
-	@Override public boolean check(ErrorHandler hErr, Module module) {
+	@Override 
+	public boolean check(ErrorHandler hErr, Module module) {
+		int value;
+		boolean isValid;
+		if(this.operands.size() == 2) {
+			if(this.hasOperand("FC")) {
+				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
+				isValid = isValidConstant(value, ConstantRange.RANGE_ADDR);
+				if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(), 
+						Integer.toString(ConstantRange.RANGE_13_TC.min), Integer.toString(ConstantRange.RANGE_13_TC.max)), this.lineNum, -1);
+				this.getOperandData("FC").value = value;
+				
+				if(isValid) {
+					if(this.hasOperand("DR")) {
+						value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
+						isValid = isValidReg(value);
+						if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+						this.getOperandData("DR").value = value;
+					} else if(this.hasOperand("DX")) {
+						value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition); 
+						isValid = isValidIndex(value);
+						if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+						this.getOperandData("DX").value = value;
+					} else {
+						isValid = false;
+						hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "DR", "DX"), this.lineNum, -1);
+					}
+				}
+			} else {
+				isValid = false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+			}
+		} else if(this.operands.size() > 2) {
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
+		} else {
+			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
+		}
+		
 		return false; // TODO: IMPLEMENT
 	}
 

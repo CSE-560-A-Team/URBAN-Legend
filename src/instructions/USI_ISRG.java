@@ -84,26 +84,26 @@ public class USI_ISRG extends AbstractInstruction {
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("FM").value = value;
 			} else if(this.hasOperand("FL")) {
-				value = module.evaluate(this.getOperand("FL"), true, hErr, this, this.getOperandData("FL").keywordStartPosition);
+				value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
 				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("FL").value = value;
 			}
 			
 			if(this.hasOperand("FX") && isValid) {
-				value = module.evaluate(this.getOperand("FX"), true, hErr, this, this.getOperandData("FX").keywordStartPosition);
+				value = module.evaluate(this.getOperand("FX"), false, hErr, this, this.getOperandData("FX").keywordStartPosition);
 				isValid = isValidIndex(value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("FX").value = value;
 			}
 			
 			if(this.hasOperand("DR") && isValid) {
-				value = module.evaluate(this.getOperand("DR"), true, hErr, this, this.getOperandData("DR").keywordStartPosition);
-				isValid = isValidIndex(value);
+				value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
+				isValid = isValidReg(value);
 				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DR").value = value;
 			} else if(this.hasOperand("DX")) {
-				value = module.evaluate(this.getOperand("DX"), true, hErr, this, this.getOperandData("DX").keywordStartPosition);
+				value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
 				isValid = isValidIndex(value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DX").value = value;
