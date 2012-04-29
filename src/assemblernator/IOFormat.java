@@ -170,6 +170,22 @@ public class IOFormat {
 	}
 
 	/**
+	 * Parses 32 bit binary integer string representation into an int object.
+	 * @author Noah
+	 * @date Apr 28, 2012; 11:17:55 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param rep string representation of 32 bit binary integer.
+	 * @return int that rep represents as a 32 bit binary integer.
+	 * @specRef N/A
+	 */
+	public static int parseBin32Int(String rep) {
+		return (int) Long.parseLong(rep, 2);
+	}
+	/**
 	 * Format an integer to a zero-padded decimal representation.
 	 * 
 	 * @date Apr 3, 2012; 3:09:00 PM
