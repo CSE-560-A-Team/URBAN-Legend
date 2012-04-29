@@ -116,13 +116,22 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 	@Override
 	public final int[] assemble() {
 		String complete = "";
-		String freg = IOFormat.formatBinInteger(this.getOperandData(src).value,3);
-		if(dest.equals("DM")){
-			
+		String opcode = IOFormat.formatBinInteger(this.getOpcode(), 6);
+		// assemble for FR DM DX, format 0
+		if(this.hasOperand("DX")){
+			String dmem = IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
+			String dindex = IOFormat.formatBinInteger(this.getOperandData("DX").value,3);
+			String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
+			complete = opcode+"000"+freg+"10000"+dindex+dmem;
+			//assemble for DM FR, format 0
 		}else{
-			
+			String dmem = IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
+			String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
+			complete = opcode+"000"+freg+"10000000"+dmem;
 		}
-		return null;
+		int[] assembled = new int[1];
+		assembled[0] = Integer.parseInt(complete, 2); //parse as a binary integer.
+		return assembled;
 	}
 	
 	

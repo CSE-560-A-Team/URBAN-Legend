@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.OperandChecker;
@@ -138,6 +139,11 @@ public class USI_TRDR extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
+		String complete = "";
+		String opcode = IOFormat.formatBinInteger(this.getOpcode(), 6);
+		if(this.hasOperand("DX") && this.hasOperand("FR")){
+			
+		}
 		return null; // TODO: IMPLEMENT
 	}
 
