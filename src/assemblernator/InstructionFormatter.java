@@ -82,7 +82,7 @@ public class InstructionFormatter {
 			code = code+fmt+srcReg+destReg+ixr+mem;
 		}
 		int[] assembled = new int[1];
-		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
+		assembled[0] = (int)Long.parseLong(code, 2); //parse as a binary integer.
 		return assembled;
 	}
 	
