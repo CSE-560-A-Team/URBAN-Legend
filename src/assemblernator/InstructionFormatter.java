@@ -82,7 +82,7 @@ public class InstructionFormatter {
 			code = code+fmt+srcReg+destReg+ixr+mem;
 		}
 		int[] assembled = new int[1];
-		assembled[0] = (int)Long.parseLong(code, 2); //parse as a binary integer.
+		assembled[0] = IOFormat.parseBin32Int(code); //parse as a binary integer.
 		return assembled;
 	}
 	
@@ -106,7 +106,7 @@ public class InstructionFormatter {
 		code = code + "0000000000"; //10 unused bits.  "111111 0000000000"
 		//16 bits of constant in memory.  "111111 000000000000 0000000011111"
 		code = code + IOFormat.formatBinInteger(instr.getOperandData("FC").value, 16); 
-		assembled[0] = (int)Long.parseLong(code, 2);
+		assembled[0] = IOFormat.parseBin32Int(code);
 		return assembled;
 	}
 	
@@ -131,7 +131,7 @@ public class InstructionFormatter {
 		
 		code = code + "00000000000000000000000000"; //26 bits.
 		
-		assembled[0] = (int)Long.parseLong(code, 2);
+		assembled[0] = IOFormat.parseBin32Int(code);
 		
 		return assembled;	
 		
@@ -171,7 +171,7 @@ public class InstructionFormatter {
 		mem = instr.getOperandData("DM").value; //mem = value of dm operand.
 		
 		code = code + IOFormat.formatBinInteger(mem, 12); //concat memory bits.
-		assembled[0] = (int)Long.parseLong(code, 2);
+		assembled[0] = IOFormat.parseBin32Int(code);
 		
 		return assembled;
 	}
@@ -212,7 +212,7 @@ public class InstructionFormatter {
 			code = code + fmt + "1000"+  nw + ixr +  IOFormat.formatBinInteger(mem, 12); 
 		}
 		
-		assembled[0] = (int)Long.parseLong(code, 2);
+		assembled[0] = IOFormat.parseBin32Int(code);
 		return assembled;
 	}
 }
