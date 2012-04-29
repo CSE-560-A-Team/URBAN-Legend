@@ -3,6 +3,8 @@ package assemblernator;
 import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -562,6 +564,47 @@ public class Module {
 		return 0;
 	}
 
+	/**
+	 * Writes object file.
+	 * @author Noah
+	 * @date Apr 28, 2012; 6:25:13 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param out
+	 * @specRef N/A
+	 */
+	public void writeObjectFile(OutputStream out, int execStart, int asmblrVersion) throws IOException, Exception {
+		//write header record.
+		ObjectWriter.writeHeaderRecord(out, this.programName, this.startAddr, moduleLength, execStart, asmblrVersion);
+		
+		Iterator<Map.Entry<String, Instruction>> symbTableIt = this.symbolTable.iterator();
+		
+		//write all linking records.
+		while(symbTableIt.hasNext()) {
+			Instruction entry = symbTableIt.next().getValue();
+			ObjectWriter.writeLinkingRecord(out, entry.label, this.programName, entry.lc);
+		}
+		
+		//write all text records.
+		for(Instruction instr : this.assembly) {
+			int [] code;
+			int mods = 0; //have no idea what this does so just leaving it hear for now.
+			char relocFlag = 'A'; //will not be here later.
+			if(instr.getOpId().equalsIgnoreCase("CHAR")) {
+				code = instr.assemble();
+				for(int i = 0; i < code.length; ++i) {
+					ObjectWriter.writeTextRecord(out, this.programName, instr.lc, code[i], mods, relocFlag);
+				}
+			} else if(!instr.isDirective() || instr.getOpId().equalsIgnoreCase("NUM")) {
+				ObjectWriter.writeTextRecord(out, this.programName, instr.lc, instr.assemble()[0], mods, relocFlag);
+			} 
+		}
+		
+	}
+	
 	/**
 	 * Returns a string representation of Module.
 	 * 
