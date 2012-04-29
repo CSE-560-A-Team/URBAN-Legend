@@ -23,34 +23,63 @@ public class InstructionFormatter {
 	public static int [] formatOther(Instruction instr) {
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //011000
 		String fmt;
-		String srcReg;
-		String destReg;
-		String ixr;
-		int mem;
+		String srcReg = "1000";
+		String destReg = "1000";
+		String ixr = "0000";
+		String mem = "000000000000";
 		
 		if(instr.hasOperand("FL") && instr.hasOperand("DM")) {
 			fmt = "11";
+			String dmem = IOFormat.formatBinInteger(instr.getOperandData("DM").value,12);
+			String lit = IOFormat.formatBinInteger(instr.getOperandData("FL").value,12);
+			code = fmt+lit+dmem;
 		} else if(instr.hasOperand("FM") && instr.hasOperand("DM")) {
 			fmt = "10";
+			String dmem = IOFormat.formatBinInteger(instr.getOperandData("DM").value,12);
+			String fmem = IOFormat.formatBinInteger(instr.getOperandData("FM").value,12);
+			code = fmt+fmem+dmem;
 		} else if(instr.hasOperand("FL")) {
 			fmt = "01";
+			String lit = IOFormat.formatBinInteger(instr.getOperandData("FL").value,16);
+			if(instr.hasOperand("DR")){
+				String reg = IOFormat.formatBinInteger(instr.getOperandData("DR").value,3);
+				code= fmt+"10000"+reg+lit;
+			}else{
+				String dindex = IOFormat.formatBinInteger(instr.getOperandData("DX").value,3);
+				code= fmt+"10001"+dindex+lit;
+			}
 		} else {
 			fmt = "00";
-		}
-		
-		if(instr.hasOperand("DM")) {
-			mem = instr.getOperandData("DM").value;
-			destReg = "1000";
-			if(instr.hasOperand("DX")) {
-				ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value, 4);
+			if(instr.hasOperand("DM")){
+				mem = IOFormat.formatBinInteger(instr.getOperandData("DM").value,12);
+				if(instr.hasOperand("DX")){
+					ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value,4);
+				}
+			}else if(instr.hasOperand("DX")){
+				destReg = IOFormat.formatBinInteger(instr.getOperandData("DX").value,3);
+				destReg="1"+destReg;
+			}else if(instr.hasOperand("DR")){
+				destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value,3);
+				destReg="0"+destReg;
 			}
-		} else if(instr.hasOperand("DR")) {
-			destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value, 4);
-		} else if(instr.hasOperand("DX")) {
-			destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value, 4);
+			
+			if(instr.hasOperand("FM")){
+				mem = IOFormat.formatBinInteger(instr.getOperandData("FM").value,12);
+				if(instr.hasOperand("FX")){
+					ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value,4);
+				}
+			}else if(instr.hasOperand("FR")){
+				srcReg = IOFormat.formatBinInteger(instr.getOperandData("FR").value,3);
+				srcReg = "0"+srcReg;
+			}else if(instr.hasOperand("FX")){
+				srcReg = IOFormat.formatBinInteger(instr.getOperandData("FX").value,3);
+				srcReg = "1"+srcReg;
+			}
+			code = fmt+srcReg+destReg+ixr+mem;
 		}
-		
-		return new int[0];
+		int[] assembled = new int[1];
+		assembled[0] = Integer.parseInt(code, 2); //parse as a binary integer.
+		return assembled;
 	}
 	
 	/**
