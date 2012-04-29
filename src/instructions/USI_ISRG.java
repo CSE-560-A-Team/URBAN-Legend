@@ -1,6 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.OperandChecker.isValidNumWords;
 import static assemblernator.OperandChecker.isValidReg;
 import static assemblernator.OperandChecker.isValidIndex;
@@ -115,7 +116,7 @@ public class USI_ISRG extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		return formatOther(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
