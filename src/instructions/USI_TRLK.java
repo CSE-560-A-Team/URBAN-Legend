@@ -60,31 +60,23 @@ public class USI_TRLK extends AbstractInstruction {
 				this.getOperandData("DR").value = constantSize;
 				isValid = OperandChecker.isValidReg(constantSize);
 				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
-				if(this.hasOperand("FM")){
-					src="FM";
+				if(this.hasOperand("DM")){
+					src="DM";
 					//range check
-					Operand o1 = getOperandData("FM");
+					Operand o1 = getOperandData("DM");
 					int constantSize1 = module.evaluate(o1.expression, true, hErr, this,
 							o1.valueStartPosition);
-					this.getOperandData("FM").value = constantSize1;
+					this.getOperandData("DM").value = constantSize1;
 					isValid = OperandChecker.isValidMem(constantSize1);
-					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
-					//dont know if this is need but can be cut out
-				}else if (this.hasOperand("FL")){
-					src="FL";
-					//range check
-					Operand o1 = getOperandData("FL");
-					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
-							o1.valueStartPosition);
-					this.getOperandData("FL").value = constantSize1;
-					isValid = OperandChecker.isValidLiteral(constantSize1,ConstantRange.RANGE_ADDR);
-					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				
 				}else{
 					isValid=false;
 					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FM or FL"), this.lineNum, -1);
 				}
 			}else{
-				
+				isValid=false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DR"), this.lineNum, -1);
 			}
 			//checks combos for 3 operands
 		}else if(this.operands.size() == 3){
@@ -97,25 +89,28 @@ public class USI_TRLK extends AbstractInstruction {
 				this.getOperandData("DR").value = constantSize;
 				isValid = OperandChecker.isValidReg(constantSize);
 				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
-				if(this.hasOperand("FM") && this.hasOperand("FX")){
-					src="FMFX";
+				if(this.hasOperand("DM") && this.hasOperand("DX")){
+					src="DMFX";
 					//range check
-					Operand o1 = getOperandData("FX");
+					Operand o1 = getOperandData("DX");
 					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 							o1.valueStartPosition);
-					this.getOperandData("FX").value = constantSize1;
+					this.getOperandData("DX").value = constantSize1;
 					isValid = OperandChecker.isValidIndex(constantSize1);
-					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
-					Operand o2 = getOperandData("FM");
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+					Operand o2 = getOperandData("DM");
 					int constantSize2 = module.evaluate(o2.expression, true, hErr, this,
 							o2.valueStartPosition);
-					this.getOperandData("FM").value = constantSize2;
+					this.getOperandData("DM").value = constantSize2;
 					isValid = OperandChecker.isValidMem(constantSize2);
-					if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+					if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 				}else{
 					isValid=false;
 					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FM and FX", "DR"), this.lineNum, -1);
 				}
+			} else {
+				isValid=false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DR"), this.lineNum, -1);
 			}
 		}else{
 			isValid =false;
