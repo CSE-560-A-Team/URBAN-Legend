@@ -764,6 +764,7 @@ public abstract class Instruction {
 	 * @specRef N/A
 	 */
 	@Override public String toString() {
+		/*
 		String rep = "";
 		rep = rep + "original source line: " + this.origSrcLine + "\n";
 
@@ -824,6 +825,28 @@ public abstract class Instruction {
 
 		rep = rep + instrBreak;
 
+		return rep;
+		*/
+		
+		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
+		System.err.println(rep);
+		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
+			for(int i = 0; i < assemble().length; i++) {
+				rep = rep + IOFormat.formatBinInteger(this.assemble()[i], 32);
+				if(i < assemble().length - 1) {
+					rep = rep + ", ";
+				}
+			}
+		} else {
+			rep = rep + "--------------------------------------------------------";
+		}
+		//"A" and "R" are for rep flag... which we currently don't have.
+		rep = rep + "\t" + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
+		rep = rep + "errors:\n";
+		for (String error : errors) {
+			rep = rep + error + "\n";
+		}
+		
 		return rep;
 		
 	}

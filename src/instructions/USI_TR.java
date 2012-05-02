@@ -1,6 +1,8 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatOther;
+import static assemblernator.InstructionFormatter.formatInput;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
@@ -91,20 +93,7 @@ public class USI_TR extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		String complete = "";
-		String opcode = IOFormat.formatBinInteger(this.getOpcode(), 6);
-		if(this.hasOperand("DX")){
-			String dmem = IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
-			String dindex = IOFormat.formatBinInteger(this.getOperandData("DX").value,3);
-			complete = opcode+"00100010000"+dindex+dmem;
-		}else{
-			String dmem = IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
-			complete = opcode+"00100010000000"+dmem;
-		}
-		
-		int[] assembled = new int[1];
-		assembled[0] = Integer.parseInt(complete, 2); //parse as a binary integer.
-		return assembled;
+		return formatOther(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */

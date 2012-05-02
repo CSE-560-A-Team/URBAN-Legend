@@ -1,6 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatOther;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
@@ -322,87 +323,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 	 */
 	@Override
 	public final int[] assemble() {
-		String complete = "";
-		String opcode = IOFormat.formatBinInteger(this.getOpcode(), 6);
-		if(this.hasOperand("DR")){
-			String reg = IOFormat.formatBinInteger(this.getOperandData("DR").value,3);
-			//format 1
-			if(this.hasOperand("FL")){
-				String lit = IOFormat.formatBinInteger(this.getOperandData("FL").value,16);
-				complete = opcode+"0110000"+reg+lit;
-			}else{
-				//format 0
-				if(this.hasOperand("FM") && this.hasOperand("FX")){
-					String ixr = IOFormat.formatBinInteger(this.getOperandData("FX").value,4);
-					String mem = IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
-					complete = opcode+"0010000"+reg+ixr+mem;
-				}else if(this.hasOperand("FM")){
-					String mem = IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
-					complete = opcode+"0010000"+reg+"0000"+mem;
-				}else if(this.hasOperand("FR")){
-					String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
-					complete = opcode+"000"+freg+"0"+reg+"0000000000000000";
-				}else{
-					String index = IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
-					complete = opcode+"001"+index+"0"+reg+"0000000000000000";
-				}
-			}
-		}else if(this.hasOperand("DX")){
-			String dindex = IOFormat.formatBinInteger(this.getOperandData("DX").value,3);
-			//format 1
-			if(this.hasOperand("FL")){
-				String lit = IOFormat.formatBinInteger(this.getOperandData("FL").value,16);
-				complete = opcode+"0110001"+dindex+lit;
-			}else{
-				//format 0
-				if(this.hasOperand("FR") && this.hasOperand("DM")){
-					String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
-					String mem = IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
-					complete = opcode+"000"+freg+"10000"+dindex+mem;
-				}else if (this.hasOperand("FX") && this.hasOperand("DM")){
-					String findex= IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
-					String mem= IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
-					complete = opcode+"001"+findex+"10000"+dindex+mem;
-				}else if(this.hasOperand("FM") && this.hasOperand("FX")){
-					String mem=IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
-					String findex=IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
-					complete = opcode+"0010001"+dindex+"0"+findex+mem;
-				}else if(this.hasOperand("FM")){
-					String mem=IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
-					complete= opcode+"0010001"+dindex+"0000"+mem;
-				}else if(this.hasOperand("FR")){
-					String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
-					complete = opcode+"000"+freg+"1"+dindex+"0000000000000000";
-				}else{
-					String findex=IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
-					complete= opcode+"001"+findex+"1"+dindex+"0000000000000000";
-				}
-			}
-		}else{
-			String dmem = IOFormat.formatBinInteger(this.getOperandData("DM").value,12);
-			//format 0
-			if(src.equals("FR")){
-				String freg = IOFormat.formatBinInteger(this.getOperandData("FR").value,3);
-				complete = opcode+"000"+freg+"10000000"+dmem;
-			}else if(this.hasOperand("FX")){
-				String findex = IOFormat.formatBinInteger(this.getOperandData("FX").value,3);
-				complete = opcode+"001"+findex+"10000000"+dmem;
-			}
-			//format 2
-			else if(this.hasOperand("FM")) {
-				String fmem = IOFormat.formatBinInteger(this.getOperandData("FM").value,12);
-				complete = opcode+"10"+fmem+dmem;
-			}
-			//format 3
-			else{
-				String lit = IOFormat.formatBinInteger(this.getOperandData("FL").value,12);
-				complete = opcode+"11"+lit+dmem;
-			}
-		}
-		
-		int[] assembled = new int[1];
-		assembled[0] = Integer.parseInt(complete, 2); //parse as a binary integer.
-		return assembled;
+		return formatOther(this);
 	}
 	
 	/**

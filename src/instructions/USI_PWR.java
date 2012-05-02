@@ -1,6 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidConstant;
 import static assemblernator.OperandChecker.isValidReg;
@@ -80,7 +81,7 @@ public class USI_PWR extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		return formatOther(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
