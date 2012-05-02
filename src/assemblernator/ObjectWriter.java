@@ -166,4 +166,71 @@ public class ObjectWriter {
 		out.write(progName.getBytes());
 	}
 	
+	/**
+	 * Writes an End Record to Output stream.
+	 * 
+	 * @author Ratul Khosla
+	 * @date May 1, 2012; 11:29:35 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param out
+	 *            The stream to which the header will be written.
+	 * @param progname
+	 *            The name of the program being assembled, which must be a valid
+	 *            label.
+	 * @param totRecords
+	 * 			  The total number of records that are present in a 
+	 * @param totTextRecords
+	 * 			  The total number of Text Records that are present in a 
+	 * @throws IOException
+	 *             Throws an IOException if data cannot be written.
+	 * @throws Exception
+	 *             Throws Exception if the program name is not a valid label.
+	 * @specRef OB5.1
+	 * @specRef LM5.2
+	 * @specRef LM5.3
+	 * @specRef LM5.4
+	 * @specRef LM5.5
+	 * @specRef LM5.6
+	 * @specRef OB5.7
+	 */
+	public static void writeEndRecord(OutputStream out, String progname,
+			int totRecords, int totTextRecords)
+			throws IOException, Exception {
+		// ===================================================================
+		// ==== Check formatting. ============================================
+		// ===================================================================
+
+		if (progname.length() > 32 || IOFormat.isValidLabel(progname))
+			throw new Exception("Program name is not in valid label format");
+
+		// ===================================================================
+		// ==== Write End. ================================================
+		// ===================================================================
+
+		// OB5.1: 'E' - Single character
+		out.write('E');
+		
+		// LM5.2: ':' - Single character
+		out.write(':');
+		
+		// LM5.3: 'Total number of Records' - 4 digit hex number
+		out.write(IOFormat.formatIntegerWithRadix(totRecords, 16, 4));
+		
+		// LM5.4: ':' - Single character
+		out.write(':');
+		
+		// LM5.5: 'totTextRecords' -
+		out.write(IOFormat.formatIntegerWithRadix(totTextRecords, 16, 4));
+		
+		// OB5.7: Program name` - String of 1 to 32 characters and numbers
+		// meeting syntax rules for a label
+		out.write(progname.getBytes());
+	
+	}
+	
+	
 }
