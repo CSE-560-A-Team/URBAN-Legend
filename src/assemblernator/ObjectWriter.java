@@ -143,17 +143,23 @@ public class ObjectWriter {
 	 * @param lc address of instruction/directive.
 	 * @param code code for the instruction/directive.
 	 * @param mods required M adjustements for instruction/directive.
+	 * @param srcAddrStatFlag 
+	 * @param destAddrStatFlag 
 	 * @param relocFlag specifies type of address.
 	 * @throws IOException throws if data cannot be written.
 	 * @specRef N/A
 	 */
 	public static void writeTextRecord(OutputStream out, String progName, 
-			int lc, int code, int mods, char relocFlag) throws IOException {
+			int lc, int code, int mods, char srcAddrStatFlag, char destAddrStatFlag) throws IOException {
 		out.write('T');
 		out.write(':');
 		out.write(IOFormat.formatIntegerWithRadix(lc, 16, 4)); //address of instruction/directive
 		out.write(':');
 		out.write(IOFormat.formatIntegerWithRadix(code, 16, 8)); //code for instruction/directive
+		out.write(':');
+		out.write(srcAddrStatFlag); //source address status flag
+		out.write(':');
+		out.write(destAddrStatFlag); //destination address status flag.
 		out.write(':');
 		out.write(IOFormat.formatIntegerWithRadix(mods, 16, 1)); //modification count for instruction/directive.
 		out.write(':');

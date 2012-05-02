@@ -596,10 +596,10 @@ public class Module {
 			if(instr.getOpId().equalsIgnoreCase("CHAR")) {
 				code = instr.assemble();
 				for(int i = 0; i < code.length; ++i) {
-					ObjectWriter.writeTextRecord(out, this.programName, instr.lc, code[i], mods, relocFlag);
+					//ObjectWriter.writeTextRecord(out, this.programName, instr.lc, code[i], mods, relocFlag);
 				}
 			} else if(!instr.isDirective() || instr.getOpId().equalsIgnoreCase("NUM")) {
-				ObjectWriter.writeTextRecord(out, this.programName, instr.lc, instr.assemble()[0], mods, relocFlag);
+				//ObjectWriter.writeTextRecord(out, this.programName, instr.lc, instr.assemble()[0], mods, relocFlag);
 			} 
 		}
 		
