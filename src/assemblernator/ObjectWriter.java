@@ -130,6 +130,94 @@ public class ObjectWriter {
 	}
 	
 	/**
+	 * @author Ratul Khosla
+	 * @date May 1, 2012; 11:51:53 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param out
+	 *            The stream to which the header will be written.
+	 * @param progname
+	 *            The name of the program being assembled, which must be a valid
+	 *            label.
+	 * @param progloc
+	 * 			  Program location for address modification.
+	 * @param adj
+	 * 			   Adjustments.
+	 * @param sign
+	 * 			  The sign - Plus(+) or Minus(-)
+	 * @param label 
+	 *            TRhe Label name to be used as an index to the Linker Table.
+	 * @throws IOException
+	 *             Throws an IOException if data cannot be written.
+	 * @throws Exception
+	 *             Throws Exception if the program name is not a valid label.
+	 * @specRef OB4.1
+	 * @specRef OB4.2
+	 * @specRef OB4.3
+	 * @specRef OB4.4
+	 * @specRef OB4.5
+	 * @specRef OB4.7.1
+	 * @specRef OB4.7.2
+	 * @specRef OB4.7.3
+	 * @specRef OB4.7.4
+	 * @specRef OB4.8
+	 * @specRef OB4.9
+	 */
+	public static void writeModRecord(OutputStream out, String progname,
+			int progloc, int adj, String sign, String label)
+			throws IOException, Exception {
+		// ===================================================================
+		// ==== Check formatting. ============================================
+		// ===================================================================
+
+		if (progname.length() > 32 || IOFormat.isValidLabel(progname))
+			throw new Exception("Program name is not in valid label format");
+
+		// ===================================================================
+		// ==== Write Modification Record. ================================================
+		// ===================================================================
+
+		// OB4.1: 'M' - Single character
+		out.write('M');
+		
+		// OB4.2: ':' - Single character
+		out.write(':');
+		
+		// OB4.3: 'Program Assigned Location' - 4 digit hex number HHHH
+		out.write(IOFormat.formatIntegerWithRadix(progloc, 16, 4));
+		
+		// OB4.4: ':' - Single character
+		out.write(':');
+		
+		// OB4.5: 'Adjustments' - Upto 4 sets of adjustments
+		out.write(IOFormat.formatIntegerWithRadix(adj, 16, 4));
+		
+		// OB4.7.1: ':' - Single character
+		out.write(':');
+		
+		// OB4.7.2: 'Sign' - Either a plus or a minus.
+		out.write(sign.getBytes());
+		
+		// OB4.7.3: ':' - Single character
+		out.write(':');
+		
+		// OB4.7.4: 'label' - String of 1 to 32 characters and numbers
+		// meeting syntax rules for a label
+		out.write(label.getBytes());
+		
+		// OB4.8: ':' - Single character
+		out.write(':');
+		
+		// OB4.9: `Program name` - String of 1 to 32 characters and numbers
+		// meeting syntax rules for a label
+		out.write(progname.getBytes());
+	
+	}
+	
+	/**
 	 * 
 	 * @author Noah
 	 * @date Apr 28, 2012; 6:17:13 PM
@@ -182,23 +270,31 @@ public class ObjectWriter {
 	 *            The name of the program being assembled, which must be a valid
 	 *            label.
 	 * @param totRecords
-	 * 			  The total number of records that are present in a 
+	 * 			  The total number of records that are present.
+	 * @param totLinkRecords
+	 * 			  The total number of Linking Records that are present. 
 	 * @param totTextRecords
-	 * 			  The total number of Text Records that are present in a 
+	 * 			  The total number of Text Records that are present.
+	 * @param totModRecords
+	 * 			  The total number of Modification Records that are present.
 	 * @throws IOException
 	 *             Throws an IOException if data cannot be written.
 	 * @throws Exception
 	 *             Throws Exception if the program name is not a valid label.
 	 * @specRef OB5.1
-	 * @specRef LM5.2
-	 * @specRef LM5.3
-	 * @specRef LM5.4
-	 * @specRef LM5.5
-	 * @specRef LM5.6
+	 * @specRef OB5.2
+	 * @specRef OB5.3
+	 * @specRef OB5.4
+	 * @specRef OB5.5
+	 * @specRef OB5.6
 	 * @specRef OB5.7
+	 * @specRef OB5.8
+	 * @specRef OB5.9
+	 * @specRef OB5.10
+	 * @specRef OB5.11
 	 */
 	public static void writeEndRecord(OutputStream out, String progname,
-			int totRecords, int totTextRecords)
+			int totRecords, int totLinkRecords,  int totTextRecords, int totModRecords)
 			throws IOException, Exception {
 		// ===================================================================
 		// ==== Check formatting. ============================================
@@ -214,19 +310,34 @@ public class ObjectWriter {
 		// OB5.1: 'E' - Single character
 		out.write('E');
 		
-		// LM5.2: ':' - Single character
+		// OB5.2: ':' - Single character
 		out.write(':');
 		
-		// LM5.3: 'Total number of Records' - 4 digit hex number
+		// OB5.3: 'Total number of Records' - 4 digit hex number
 		out.write(IOFormat.formatIntegerWithRadix(totRecords, 16, 4));
 		
-		// LM5.4: ':' - Single character
+		// OB5.4: ':' - Single character
 		out.write(':');
 		
-		// LM5.5: 'totTextRecords' -
+		// OB5.5: 'totLinkRecords' - 4 digit hex number
+		out.write(IOFormat.formatIntegerWithRadix(totLinkRecords, 16, 4));
+		
+		// OB5.6: ':' - Single character
+		out.write(':');
+				
+		// OB5.7: 'totTextRecords' - 4 digit hex number
 		out.write(IOFormat.formatIntegerWithRadix(totTextRecords, 16, 4));
 		
-		// OB5.7: Program name` - String of 1 to 32 characters and numbers
+		// OB5.8: ':' - Single character
+		out.write(':');
+			
+		// OB5.9: 'totModRecords' - 4 digit hex number
+		out.write(IOFormat.formatIntegerWithRadix(totModRecords, 16, 4));
+		
+		// OB5.10: ':' - Single character
+		out.write(':');
+				
+		// OB5.11: Program name` - String of 1 to 32 characters and numbers
 		// meeting syntax rules for a label
 		out.write(progname.getBytes());
 	
