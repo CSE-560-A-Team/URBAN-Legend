@@ -632,7 +632,14 @@ public class Module {
 		String rep = "Symbol Table:\n" + symbolTable.toString()
 				+ "\nInstruction breakdowns:\n";
 		Iterator<Instruction> assemblyIt = assembly.iterator();
-
+		
+		int pad = 10;
+		//rep = rep + "LC\tObject Code\tSrc/Dest\tLine Num\tSource Line\n";
+		//rep = rep + String.format("%1$-25s %2$-75s %3$-15s %4$-10s", "LC", "Object Code", "Addr State", "Line Num");
+		rep = rep + String.format("%1$-" + ("LC".length()+pad) + "s"
+				+ "%2$-" + ("Object Code".length()+pad) + "s"
+				+ "%3$-" + ("Addr Flags".length()+pad) + "s", "LC", "Object Code", "Addr Flags");
+		rep = rep + "\n(hex)\t(hex)\tAddr flags\t(dec)\n";
 		while (assemblyIt.hasNext()) {
 			Instruction instr = assemblyIt.next();
 

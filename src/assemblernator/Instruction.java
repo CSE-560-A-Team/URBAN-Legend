@@ -829,16 +829,15 @@ public abstract class Instruction {
 		*/
 		
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
-		System.err.println(rep);
 		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
 			for(int i = 0; i < assemble().length; i++) {
-				rep = rep + IOFormat.formatBinInteger(this.assemble()[i], 32);
+				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8);
 				if(i < assemble().length - 1) {
 					rep = rep + ", ";
 				}
 			}
 		} else {
-			rep = rep + "--------------------------------------------------------";
+			rep = rep + "----------------";
 		}
 		//"A" and "R" are for rep flag... which we currently don't have.
 		rep = rep + "\t" + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
