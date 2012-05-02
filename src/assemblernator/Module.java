@@ -114,7 +114,7 @@ public class Module {
 			// keep track of instructions w/ opID "ENT" and "EXT" separately.
 			if (instr.getOpId().equalsIgnoreCase("ENT")
 					|| instr.getOpId().equalsIgnoreCase("EXT")) {
-				//System.err.println("here");
+				// System.err.println("here");
 				// put each operand as a separate entry into the symbol table.
 				for (int i = 0; i < instr.countOperand("LR"); i++) {
 					System.err.println("here");
@@ -129,7 +129,7 @@ public class Module {
 						// don't add.
 					}
 					else { // add.
-						//System.err.println("here");
+							// System.err.println("here");
 						extEntSymbols.put(instr.getOperand("LR", i), instr);
 					}
 				}
@@ -138,16 +138,16 @@ public class Module {
 				if (extEntSymbols.containsKey(instr.label)
 						&& extEntSymbols.get(instr.label).usage == Usage.EXTERNAL) {
 					// remove ext label from symbol table.
-					Instruction ext = extEntSymbols.remove(instr.label); 
+					Instruction ext = extEntSymbols.remove(instr.label);
 					hErr.reportError(
 							makeError("shadowLabel", instr.label,
 									Integer.toString(ext.lineNum)),
 							instr.lineNum, -1);
 					// put local label in symbol table.
-					symbols.put(instr.label, instr); 
+					symbols.put(instr.label, instr);
 				}
 				// no duplicates allowed.
-				else if (!symbols.containsKey(instr.label)) { 
+				else if (!symbols.containsKey(instr.label)) {
 					symbols.put(instr.label, instr);
 				}
 				else {
@@ -462,6 +462,10 @@ public class Module {
 	 *           expressions. -Josh
 	 * 
 	 *           Apr 18, 2012; 5:35:00 AM: Added check for empty expression.
+	 *           -Josh
+	 * 
+	 *           May 1, 2012; 11:52:22 PM: Fixed issue with expressions
+	 *           containing only an asterisk. -Josh
 	 * 
 	 * @tested Apr 17, 2012; 2:33:20 AM: Field tested with five term sums in
 	 *         nested EQUs. Worked provided expression did not contain spaces.
@@ -497,7 +501,8 @@ public class Module {
 		if (IOFormat.isValidLabel(exp)) {
 			Instruction i = symbolTable.getEntry(exp);
 			if (i == null) {
-				hErr.reportError(makeError((MREF? "undefLabel" : "undefEqLabel"), exp),
+				hErr.reportError(
+						makeError((MREF ? "undefLabel" : "undefEqLabel"), exp),
 						caller.lineNum, pos);
 				return 0;
 			}
@@ -543,7 +548,8 @@ public class Module {
 		}
 		else if (exp.charAt(i) == '*') {
 			lhs = caller.lc;
-			++i;
+			if (++i >= exp.length())
+				return lhs;
 		}
 
 		// This will not overflow, because our string is trimmed.
@@ -566,6 +572,7 @@ public class Module {
 
 	/**
 	 * Writes object file.
+	 * 
 	 * @author Noah
 	 * @date Apr 28, 2012; 6:25:13 PM
 	 * @modified UNMODIFIED
@@ -576,35 +583,44 @@ public class Module {
 	 * @param out
 	 * @specRef N/A
 	 */
-	public void writeObjectFile(OutputStream out, int execStart, int asmblrVersion) throws IOException, Exception {
-		//write header record.
-		ObjectWriter.writeHeaderRecord(out, this.programName, this.startAddr, moduleLength, execStart, asmblrVersion);
-		
-		Iterator<Map.Entry<String, Instruction>> symbTableIt = this.symbolTable.iterator();
-		
-		//write all linking records.
-		while(symbTableIt.hasNext()) {
+	public void writeObjectFile(OutputStream out, int execStart,
+			int asmblrVersion) throws IOException, Exception {
+		// write header record.
+		ObjectWriter.writeHeaderRecord(out, this.programName, this.startAddr,
+				moduleLength, execStart, asmblrVersion);
+
+		Iterator<Map.Entry<String, Instruction>> symbTableIt = this.symbolTable
+				.iterator();
+
+		// write all linking records.
+		while (symbTableIt.hasNext()) {
 			Instruction entry = symbTableIt.next().getValue();
-			ObjectWriter.writeLinkingRecord(out, entry.label, this.programName, entry.lc);
+			ObjectWriter.writeLinkingRecord(out, entry.label, this.programName,
+					entry.lc);
 		}
-		
-		//write all text records.
-		for(Instruction instr : this.assembly) {
-			int [] code;
-			int mods = 0; //have no idea what this does so just leaving it hear for now.
-			char relocFlag = 'A'; //will not be here later.
-			if(instr.getOpId().equalsIgnoreCase("CHAR")) {
+
+		// write all text records.
+		for (Instruction instr : this.assembly) {
+			int[] code;
+			int mods = 0; // have no idea what this does so just leaving it hear
+							// for now.
+			char relocFlag = 'A'; // will not be here later.
+			if (instr.getOpId().equalsIgnoreCase("CHAR")) {
 				code = instr.assemble();
-				for(int i = 0; i < code.length; ++i) {
-					ObjectWriter.writeTextRecord(out, this.programName, instr.lc, code[i], mods, relocFlag);
+				for (int i = 0; i < code.length; ++i) {
+					ObjectWriter.writeTextRecord(out, this.programName,
+							instr.lc, code[i], mods, relocFlag);
 				}
-			} else if(!instr.isDirective() || instr.getOpId().equalsIgnoreCase("NUM")) {
-				ObjectWriter.writeTextRecord(out, this.programName, instr.lc, instr.assemble()[0], mods, relocFlag);
-			} 
+			}
+			else if (!instr.isDirective()
+					|| instr.getOpId().equalsIgnoreCase("NUM")) {
+				ObjectWriter.writeTextRecord(out, this.programName, instr.lc,
+						instr.assemble()[0], mods, relocFlag);
+			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Returns a string representation of Module.
 	 * 
