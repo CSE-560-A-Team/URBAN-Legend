@@ -783,8 +783,7 @@ public abstract class Instruction {
 
 		// if the instruction has no label
 		if (this.label == null) {
-			label = ""; // no label to print.
-			// also, can't print "------" b/c label may be "------".
+			label = "------"; // no label to print.
 		}
 
 
@@ -827,21 +826,22 @@ public abstract class Instruction {
 
 		return rep;
 		*/
-		
+		int pad = 20;
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
 		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
 			for(int i = 0; i < assemble().length; i++) {
-				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8);
+				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8) + "\t";
 				if(i < assemble().length - 1) {
 					rep = rep + ", ";
 				}
 			}
 		} else {
-			rep = rep + "----------------";
+			rep = rep + "------------\t";
+			//rep = rep + String.format("%1$-" + pad + "s", "________");
 		}
 		//"A" and "R" are for rep flag... which we currently don't have.
-		rep = rep + "\t" + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
-		rep = rep + "errors:\n";
+		rep = rep + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
+		rep = rep + "\nerrors:\n";
 		for (String error : errors) {
 			rep = rep + error + "\n";
 		}
