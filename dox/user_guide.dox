@@ -361,7 +361,49 @@ Combinations that can not be used in the above formats include the following:<br
 </table>
 
 <h1 id="valtypes">Value Types<a href="#toc" class="backlink">Back to Top</a></h1>
-This specification will refer to several types of value types and ranges.
+In URBAN, many operands accept numeric values. URBAN legend does not distinguish types of
+expressions which may be passed to each operand. Instead, the distinction is made at the
+instruction/directive level between which instructions can accept what in their expressions.
+
+<table>
+  <tr>
+    <th>Abbr</th>
+    <th>Expression Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td id="literal">literal</td>
+    <td>Literals</td>
+    <td>Literals are constants which are not encapsulated under an identifier name.
+  </tr>
+  <tr>
+    <td class="stripebg" rowspan="2"></td>
+    <td>Numeric Literal</td>
+    <td>Numeric literals are denoted exclusively using the numerals 0-9.</td>
+  </tr>
+  <tr>
+    <td>String Literal</td>
+    <td>String literals are collections of characters given in single quotes, such
+        as 'hello, world!'. See <a href="#strlit">strlit</a>.</td>
+  </tr>
+  <tr>
+    <td id="const">const</td>
+    <td>Constant expression</td>
+    <td>Constant expressions may contain arithmetic between <a href="#literal">literals</a> and between
+        previously defined labels; ie, forward references and external references are prohibited.
+        Star notation and address references to previous labels are both allowed. The assembler must
+        be able to evaluate a constant expression for its final, pre-link value upon reading it.<br/>
+        <i>Using a const expression in a non-const field will allow the linker to adjust its value.</i></td>
+  </tr>
+  <tr>
+    <td id="expr">expr</td>
+    <td>Expression</td>
+    <td>Expressions can be constant expressions, but can also use forward referencing and incorporate
+        external addresses via <a href="#exlabel">exlabels</a>.</td>
+  </tr>
+</table>
+
+Fields in this specification will refer to several types of value types and ranges.
 
 <table>
   <tr>
@@ -451,7 +493,7 @@ This specification will refer to several types of value types and ranges.
         different combinations of operands.</td>
   </tr>
   <tr>
-    <td rowspan="9" class="stripebg"><td>DS3.1</td>
+    <td rowspan="8" class="stripebg"><td>DS3.1</td>
     <td id="number">number</td>
     <td>A signed two's compliment number, in range (-2<sup>16</sup>) to (2<sup>16</sup>-1).</td>
   </tr>
@@ -484,19 +526,15 @@ This specification will refer to several types of value types and ranges.
     <td>Obsolete synonym for <a href="#mlit">mlit</a>.</td>
   </tr>
   <tr>
-    <td id="DS3.7">DS3.7</td>
-    <td>none</td>
-    <td></td>
-  </tr>
-  <tr>
     <td id="DS3.8">DS3.8</td>
-    <td>Expression</td>
-    <td>An expression meeting the rules laid forth in <a href="#valtypes">Value Types</a></td>
+    <td id="expression">expression</td>
+    <td>An expression meeting the rules laid forth in <a href="#valtypes">Value Types</a>.</td>
   </tr>
   <tr>
     <td id="DS3.9">DS3.9</td>
     <td>Star</td>
-    <td>* or *+number or *-number (number ranges 0 to 4095)</td>
+    <td>Star notation is allowed in expressions; see <a href="#valtypes">Value Types</a>.
+    </td>
   </tr>
 </table>
 
@@ -688,7 +726,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
     <td>D3</td>
     <td id="d_">EQU</td>
     <td><a href="#rqlabel">rqlabel</a>  equ  FC:<a href="#mlit">mlit</a>;<br/>
-        <a href="#rqlabel">rqlabel</a>  equ  LR:eqlabel;</td>
+        <a href="#rqlabel">rqlabel</a>  equ  LR:<a href="#eqlabel">eqlabel</a>;</td>
     <td>Equate the label of this directive to the operand of FC or LR. Any labels used in
         those expressions must have been previously equated. Expressions and star notation are allowed.</td>
     <td>No</td>
@@ -696,7 +734,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
   <tr>
     <td>D4</td>
     <td id="d_">EQUe</td>
-    <td><a href="#rqlabel">rqlabel</a> eque ex:expression;</td>
+    <td><a href="#rqlabel">rqlabel</a> eque ex:<a href="#expression">expression</a>;</td>
     <td><b>Equ</b>ated <b>E</b>xpression. Added for compatibility with other URBAN assemblers;
         originally intended to be similar to EQU but support EX expressions. EQU supports both.</td>
     <td>No</td>
@@ -704,7 +742,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
   <tr>
     <td>D5</td>
     <td id="d_">ENT</td>
-    <td><a href="#nolabel">none</a> ENT LR:rlabel, ...;<br/>
+    <td><a href="#nolabel">none</a> ENT LR:<a href="#rlabel">rlabel</a>, ...;<br/>
     <i>Multiple operands supported</i></td>
     <td><b>Ent</b>ry point name: denotes to the linker that local labels given in LR operands
         can be referenced in other programs if declared with <a href="#EXT">EXT</a>.
@@ -714,7 +752,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
   <tr>
     <td>D6</td>
     <td id="d_">EXT</td>
-    <td><a href="#nolabel">none</a> EXT LR:exlabel, ...;<br/>
+    <td><a href="#nolabel">none</a> EXT LR:<a href="#exlabel">exlabel</a>, ...;<br/>
     <i>Multiple operands supported</i></td>
     <td>EXTernal variable name: declares the label and denotes to the linker that it will be in
         another file. Labels given to LR must not appear in this program, or they will be shadowed.
@@ -808,7 +846,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
   </tr>
   <tr>
     <td>DX</td>
-    <td><b>D</b>estination inde<b>X</b> Register</td>
+    <td><b>D</b>estination inde<b>x</b> Register</td>
   </tr>
   <tr>
     <td>EX</td>
@@ -832,7 +870,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
   </tr>
   <tr>
     <td>FX</td>
-    <td><b>F</b>rom inde<b>X</b> Register</td>
+    <td><b>F</b>rom inde<b>x</b> Register</td>
   </tr>
   <tr>
     <td>LR</td>
@@ -844,7 +882,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
     </tr>
   <tr>
     <td>ST</td>
-    <td><b>ST</b>ring Literal</td>
+    <td><b>St</b>ring Literal</td>
   </tr>
 </table>
 
@@ -856,545 +894,45 @@ The following tables describe the various instructions with their formats and th
 </p>
 
 
-<h4>Instructions: Data Movement</h4>
 <table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-<tr>
-<td>MV0</td>
-<td>000000</td>
-<td>MOVD</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>MOVe Data elements</td>
-<td>c(R)=c(MREF) or
-c(MREF)= c(R)</td>
-</tr>
-<tr>
-<td>MV1</td>
-<td>000001</td>
-<td>MOVDN</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>MOVe Data elements
-Negative</td>
-<td>c(R)=c(MREF)*-1 or
-c(MREF)= c(R)*-1</td>
-</tr>
-</table>
-
-
-<h4>Instructions: Arithmetic</h4>
-<table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-<tr>
-<td>IA0</td>
-<td>001000</td>
-<td>IADD</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>Integer ADD</td>
-<td>c(R)=c(R)+c(MREF) or
-c(MREF)=c(MREF)+c(R)</td>
-</tr>
-<tr>
-<td>IA1</td>
-<td>001001</td>
-<td>IMAD</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>Integer Multiply and ADd</td>
-<td>c(R)=c(R)*c(MREF)+ c(MREF) or
-c(MREF)=c(MREF)*c(R)+c(R)</td>
-</tr>
-<tr>
-<td>IA2</td>
-<td>001010</td>
-<td>IAA</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>Integer Add Absolute</td>
-<td>c(R)=c(R)+ABS(c(MREF)) or
-c(MREF)=c(MREF)+ABS(c(R))</td>
-</tr>
-<tr>
-<td>IA3</td>
-<td>001011</td>
-<td>ISRG</td>
-<td>REG,MREF,NW 
- or
-MREF,REG,NW</td>
-<td>Integer Sum Range
-Can only be used when 
-the destintation is a
-register</td>
-<td>c(R)=c(R)+ All words from
-MREF to MREF+NW</td>
-</tr>
-<tr>
-<td>IA4</td>
-<td>001100</td>
-<td>ISUB</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>Integer SUBtract</td>
-<td>c(R)=c(R)-c(MREF) or
-c(MREF)=c(MREF)-c(R)</td>
-</tr>
-<tr>
-<td>IA5</td>
-<td>001101</td>
-<td>Imul</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>Integer MULtiply</td>
-<td>c(R)=c(R)*c(MREF) or
-c(MREF)=c(MREF)*c(R)</td>
-</tr>
-<tr>
-<td>IA6</td>
-<td>001110</td>
-<td>IDIV</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>Integer DIVide</td>
-<td>c(R)=c(R)/c(MREF) or
-c(MREF)=c(MREF)/c(R)</td>
-</tr>
-<tr>
-<td>IA7</td>
-<td>001111</td>
-<td>PWR</td>
-<td>REG,constant</td>
-<td>t PoWeR
-Can only be used when 
-DM is a register</td>
-<td>c(R)=c(R)**FC
-MREF is invalid</td>
-</tr>
-</table>
-
-
-<h4>Instruction: Register Tools: <a href="#toc" style="float:right;">Back to Menu</a></h4> 
-
-<table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-<tr>
-<td>IS0</td>
-<td>010000</td>
-<td>CLR</td>
-<td>DR:     or
-DX:</td>
-<td>CLear Register
-Arith. or index</td>
-<td>c(R) = 0; can not be used to clear
-arithmetic register 0
-Only one operand</td>
-</tr>
-
-
-<tr>
-<td>IS1</td>
-<td>010001</td>
-<td>CLRA</td>
-<td>none</td>
-<td>CLeaR all 
-Arithmetic 
-registers</td>
-<td>R0-7 set to zero
-No operands</td>
-</tr>
-
-
-<tr>
-<td>IS2</td>
-<td>010010</td>
-<td>CLRX</td>
-<td>none</td>
-<td>CLeaR all 
-Index 
-registers</td>
-<td>X1-7 set to zero
-No operands</td>
-</tr>
-</table>
-<p>
-<a href="#MENU">Back to Menu</a>
-</p>
-
-
-<h4>Instruction: Shift/manipulate</h4>
-<table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-
-
-<tr>
-<td>IM0</td>
-<td>011000</td>
-<td>ISHR</td>
-<td>REG,FC:SRG
-or
-FC:SRG,REG</td>
-<td>Integer Shift 
-Right Logical</td>
-<td>Shift right constant
-Places fill with 
-zeros</td>
-</tr>
-<tr>
-<td>IM1</td>
-<td>011001</td>
-<td>ISHL</td>
-<td>REG,FC:SRG
-or
-FC:SRG,REG</td>
-<td>Integer Shift 
-Left Logical</td>
-<td>Shift left constant
-Places fill with 
-zeros</td>
-</tr>
-<tr>
-<td>IM2</td>
-<td>011010</td>
-<td>ISHRA</td>
-<td>REG,FC:SRG
-or
-FC:SRG,REG</td>
-<td>Integer Shift 
-Right Arithmetic</td>
-<td>Shift right constant
-places, fill with 
-sign bit</td>
-</tr>
-<tr>
-<td>IM3</td>
-<td>011011</td>
-<td>ISHLA</td>
-<td>REG,FC:SRG
-or
-FC:SRG,REG</td>
-<td>Integer Shift 
-Left Arithmetic</td>
-<td>Shift left constant
-places, fill with 
-sign bit</td>
-</tr>
-<tr>
-<td>IM4</td>
-<td>011100</td>
-<td>ROL</td>
-<td>REG,FC:SRG
-or
-FC:SRG,REG</td>
-<td>ROtate Left</td>
-<td>Rotate left
-Including sign bit</td>
-</tr>
-<tr>
-<td>IM5</td>
-<td>011101</td>
-<td>ROR</td>
-<td>REG,FC:SRG
-or
-FC:SRG,REG</td>
-<td>ROtate Right</td>
-<td>Rotate right
-Including sign bit</td>
-</tr>
-</table>
-
-
-<h4>Instruction: Logical 			 <a href="#MENU" style="float:right;">Back to Menu</a></h4> 
-<table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-
-
-<tr>
-<td>IM6</td>
-<td>011110</td>
-<td>AND</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>AND</td>
-<td>c(R)=c(R) AND c(MREF) or
-c(MREF)=c(MREF) AND c(R)</td>
-</tr>
-<tr>
-<td>IM7</td>
-<td>011111</td>
-<td>OR</td>
-<td>REG,MREF   or
-MREF,REG</td>
-<td>OR</td>
-<td>c(R)=c(R) OR c(MREF) or
-c(MREF)=c(MREF) OR c(R)</td>
-</tr>
-</table>
-
-
-<h4>Instruction: Jump 						 <a href="#MENU" style="float:right;">Back to Menu</a></h4> 
-<table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-
-
-<tr>
-<td>JT0</td>
-<td>100000</td>
-<td>TREQ</td>
-<td>FR:n,DM:MREF</td>
-<td>TRansfer on equal to </td>
-<td>if c(R) =0 then 
-LC= DM+DF</td>
-</tr>
-<tr>
-<td>JT1</td>
-<td>100001</td>
-<td>TRLT</td>
-<td>FR:n,DM:MREF</td>
-<td>TRansfer on 
-Less than zero</td>
-<td>if c(R) < 0 then 
-LC= DM+DF</td>
-</tr>
-<tr>
-<td>JT2</td>
-<td>100010</td>
-<td>TRGT</td>
-<td>FR:n,DM:MREF</td>
-<td>TRansfer on 
-Greater Than Zero</td>
-<td>if c(R) > 0 then 
-LC= DM+DF</td>
-</tr>
-<tr>
-<td>JT3</td>
-<td>100011</td>
-<td>TR</td>
-<td>DM:MREF</td>
-<td>TRansfer
-Unconditionally</td>
-<td>LC=MREF</td>
-</tr>
-<tr>
-<td>JT4</td>
-<td>100100</td>
-<td>TRDR</td>
-<td>FX:n,DM</td>
-<td>Jump or 
-Decrement Register</td>
-<td>c(R)=c(R)-1,
-if FR or FX=0 then LC=DM+DX</td>
-</tr>
-<tr>
-<td>JT5</td>
-<td>100101</td>
-<td>TRLK</td>
-<td>DR:n,MREF</td>
-<td>Transfer and LinK</td>
-<td>c(R)=LC+1
-LC=DM+DX</td>
-</tr>
-<tr>
-<td>JT6</td>
-<td>100110</td>
-<td>RET</td>
-<td>DM:MREF</td>
-<td>RETurn to calling
-program</td>
-<td>LC=MREF</td>
-</tr>
-<tr>
-<td>JT7</td>
-<td>100111</td>
-<td>SKT</td>
-<td>DR:n</td>
-<td>StacK Test</td>
-<td>Load register with number of stack elements in 
-use.</td>
-</tr>
-</table>
-
-
-<h4>Instruction: Input/Output: 			 <a href="#MENU" style="float:right;">Back to Menu</a></h4> 
-<table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-</tr>
-
-
-<tr>
-<td>IO0</td>
-<td>101000</td>
-<td>IWSR</td>
-<td>MREF,NW</td>
-<td>Signed Integer Write to ScReen
-NW words from memory</td>
-</tr>
-<tr>
-<td>IO1</td>
-<td>101001</td>
-<td>IRKB</td>
-<td>MREF,NW</td>
-<td>Signed Integer Read from KeyBoard
-NWwords into memory </td>
-</tr>
-<tr>
-<td>IO2</td>
-<td>101010</td>
-<td>CWSR</td>
-<td>MREF,NW</td>
-<td>Character Write to ScReen
-NW words from memory as </td>
-</tr>
-<tr>
-<td>IO3</td>
-<td>101011</td>
-<td>CRKB</td>
-<td>MREF,NW</td>
-<td>Character Read from KeyBoard
-NW words into memory</td>
-</tr>
-</table>
-
-
-<p>
-<h5>Note: </h5>
-Anything following a semicolon that ends an instruction is a comment.
-Each line can only have one instruction,and a line with just a semi-colon is valid, and can be followed by a comment on that line. 
-</p>
-
-
-<h4>Instruction: Stack Management 			 <a href="#MENU" style="float:right;">Back to Menu</a></h4> 
-<table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-</tr>
-
-
-<tr>
-<td>S0</td>
-<td>110000</td>
-<td>PSH</td>
-<td>FM:MREF   or
-Literal or
-FC</td>
-<td>PUSH memory element onto top of stack</td>
-</tr>
-<tr>
-<td>S1</td>
-<td>110001</td>
-<td>POP</td>
-<td>DM:MREF or DR</td>
-<td>POP top stack element to memory</td>
-</tr>
-<tr>
-<td>S2</td>
-<td>110010</td>
-<td>PST</td>
-<td>MREF
-DR:
-or
-Literal</td>
-<td>pop and TEST (compare) with MREF or Literal
-If =  load DR with 0
-If ^= load DR with 1
-If <  load DR with 2
-If >  load DR with 3</td>
-</tr>
-</table>
-
-
-<h4>Instruction: Control 			 <a href="#MENU" style="float:right;">Back to Menu</a></h4> 
-<table>
-<tr>
-<th>Ref.</th>
-<th>Binary rep.</th>
-<th>Label</th>
-<th>Syntax</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-
-
-<tr>
-<td>C0</td>
-<td>111101</td>
-<td>NOP</td>
-<td>none</td>
-<td>No operation </td>
-<td>Works like
-IADD DR:0,LT:0</td>
-</tr>
-<tr>
-<td>C1</td>
-<td>111110</td>
-<td>DMP</td>
-<td>FC</td>
-<td>DuMP Memory, LC, 
-MEM(LC), and registers </td>
-<td>if=1 then Level 1 Dump
-if=2 then Level 2 Dump
-if=3 then Level 3 Dump</td>
-</tr>
-<tr>
-<td>C2</td>
-<td>111111</td>
-<td>HLT</td>
-<td>FC</td>
-<td>HaLT program execution</td>
-<td>Halt execution
-Display constant to scrn</td>
-</tr>
+<tr><th>spec key   </th><th> instruction name                              </th><th> opcode </th><th> valid operand combos                                                                                                                                                           </th><th> special ranges                           </th><th> instruction format              </th><th> description                                                                                                                                                            </th></tr>
+<tr><td>MVO        </td><td> MOVD                                          </td><td> 000000 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Moves data from a register to memory loc or memory loc to a register or register to register                                                                           </td></tr>
+<tr><td>MV1        </td><td> MOVDN                                         </td><td> 000001 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Moves data from a register-1 to memory lco or memory loc -1 to a register or register-1 to register                                                                    </td></tr>
+<tr><td>IA0        </td><td> IADD                                          </td><td> 001000 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Adds memory loc and a register together or a register and a register                                                                                                   </td></tr>
+<tr><td>IA1        </td><td> IMAD                                          </td><td> 001001 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Multiplys memory loc or register with a register or memory loc and adds memory loc or register to total                                                                </td></tr>
+<tr><td>IA2        </td><td> IAA                                           </td><td> 001010 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Adds absolute value of memory loc to a register or absolute value register to memory loc or absolute register to register                                              </td></tr>
+<tr><td>IA4        </td><td> ISUB                                          </td><td> 001100 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Subtracts memory loc and a register together or a register and another register                                                                                        </td></tr>
+<tr><td>IA5        </td><td> IMUL                                          </td><td> 001101 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Mulitplys memory loc and a register together or a register and another register                                                                                        </td></tr>
+<tr><td>IA6        </td><td> IDIV                                          </td><td> 001110 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Divides memory loc and a register together or a register and anotherregister                                                                                           </td></tr>
+<tr><td>IS0        </td><td> CLR  (clear register)                         </td><td> 010000 </td><td> {DR},{DX}                                                                                                                                                                      </td><td>                                          </td><td> memory                          </td><td> clear an index or arithmetic register.                                                                                                                                 </td></tr>
+<tr><td>IS1        </td><td> CLRA (clear arithmetic registers)             </td><td> 010001 </td><td> {}                                                                                                                                                                             </td><td>                                          </td><td> CLRA/CLRX                       </td><td> clears all arithmetic registers.                                                                                                                                       </td></tr>
+<tr><td>IS2        </td><td> CLRX (clear index registers)                  </td><td> 010010 </td><td> {}                                                                                                                                                                             </td><td>                                          </td><td> CLRA/CLRX                       </td><td> clears all index registers.                                                                                                                                            </td></tr>
+<tr><td>IM0        </td><td> ISHR (integer shift right logical)            </td><td> 011000 </td><td> {FC,DR},{FC,DX},{EX,DR},{EX,DX}                                                                                                                                                </td><td> FC:[0,31]                                </td><td> literal                         </td><td> shifts the right given constant bits and fills all the shifted bits with 0's                                                                                           </td></tr>
+<tr><td>IM1        </td><td> ISHL (integer shift left logical)             </td><td> 011001 </td><td> {FC,DR},{FC,DX},{EX,DR},{EX,DX}                                                                                                                                                </td><td> FC:[0,31]                                </td><td> literal                         </td><td> shifts the left given constant bits and fills all the shifted bits with 0's                                                                                            </td></tr>
+<tr><td>IM2        </td><td> ISRA (integer shift right arithmetic)         </td><td> 011010 </td><td> {FC,DR},{FC,DX},{EX,DR},{EX,DX}                                                                                                                                                </td><td> FC:[0,31]                                </td><td> literal                         </td><td> shifts the right given constant bits and fills all the shifted bits with the sign bit                                                                                  </td></tr>
+<tr><td>IM3        </td><td> ISLA (integer shift left arithmetic)          </td><td> 011011 </td><td> {FC,DR},{FC,DX},{EX,DR},{EX,DX}                                                                                                                                                </td><td> FC:[0,31]                                </td><td> literal                         </td><td> shifts the left given constant bits and fills all the shifted bits with the sign bit                                                                                   </td></tr>
+<tr><td>IM4        </td><td> ROL  (rotate left)                            </td><td> 011100 </td><td> {FC,DR},{FC,DX},{EX,DR},{EX,DX}                                                                                                                                                </td><td> FC:[0,31]                                </td><td> literal                         </td><td> rotates left, including the sign bit                                                                                                                                   </td></tr>
+<tr><td>IM5        </td><td> ROR  (rotate right)                           </td><td> 011101 </td><td> {FC,DR},{FC,DX},{EX,DR},{EX,DX}                                                                                                                                                </td><td> FC:[0,31]                                </td><td> literal                         </td><td> rotates right, including the sign bit                                                                                                                                  </td></tr>
+<tr><td>IM6        </td><td> AND                                           </td><td> 011110 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Ands a memory loc and a register together or a register and another register                                                                                           </td></tr>
+<tr><td>IM7        </td><td> OR                                            </td><td> 011111 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> mem,lit,mem + mem,mem + lit     </td><td> Ors a memory loc and a register together or a register and another register                                                                                            </td></tr>
+<tr><td>JT0        </td><td> TREQ (Transfer on equal to zero)              </td><td> 100000 </td><td> {FR,DM},{FR,DM,DX}                                                                                                                                                             </td><td>                                          </td><td> memory                          </td><td> if contents of register = 0, then jump to address given.                                                                                                               </td></tr>
+<tr><td>JT1        </td><td> TRLT (Transfer on less than zero)             </td><td> 100001 </td><td> {FR,DM},{FR,DM,DX}                                                                                                                                                             </td><td>                                          </td><td> memory                          </td><td> if contents of register < 0, then jump to address given.                                                                                                               </td></tr>
+<tr><td>JT2        </td><td> TRGT (Transfer on greater than zero)          </td><td> 100010 </td><td> {FR,DM},{FR,DM,DX}                                                                                                                                                             </td><td>                                          </td><td> memory                          </td><td> if contents of register > 0, then jump to address given.                                                                                                               </td></tr>
+<tr><td>JT3        </td><td> TR   (Transfer unconditionally)               </td><td> 100011 </td><td> {DM},{DM, DX}                                                                                                                                                                  </td><td>                                          </td><td> memory                          </td><td> Jumps to address given.                                                                                                                                                </td></tr>
+<tr><td>JT4        </td><td> TRDR (Transfer or decrement register)         </td><td> 100100 </td><td> {FR,DM},{FR,DM,DX},{FX,DM},{FX,DM,DX}                                                                                                                                          </td><td>                                          </td><td> memory                          </td><td> Decrements contents of register and jumps to address given.                                                                                                            </td></tr>
+<tr><td>JT5        </td><td> TRLK (Transfer and link)                      </td><td> 100101 </td><td> {DM, DR}, {DM,DX,DR}                                                                                                                                                           </td><td>                                          </td><td> memory                          </td><td> The Return address of the instruction is stored in register, and the instruction jumps to address given.                                                               </td></tr>
+<tr><td>JT6        </td><td> RET  (Return to calling program)              </td><td> 100110 </td><td> {DM},{DM,DX}                                                                                                                                                                   </td><td>                                          </td><td> memory                          </td><td>                                                                                                                                                                        </td></tr>
+<tr><td>JT7        </td><td> SKT  (Stack test)                             </td><td> 100111 </td><td> {DR}                                                                                                                                                                           </td><td>                                          </td><td> memory                          </td><td>                                                                                                                                                                        </td></tr>
+<tr><td>IO0        </td><td> IWSR (integer write to screen)                </td><td> 101000 </td><td> {NW, FM, FX},{NW,FM},{NW, FL},{NW, EX}                                                                                                                                         </td><td> FL,EX:[0, 4095]                          </td><td> output                          </td><td> outputs an integer to screen from memory.                                                                                                                              </td></tr>
+<tr><td>IO2        </td><td> CWSR (character write to screen)              </td><td> 101010 </td><td> {NW, FM, FX},{NW,FM},{NW, FL},{NW, EX}                                                                                                                                         </td><td> FL,EX:[0, 4095]                          </td><td> output                          </td><td> outputs a character to screen from memory.                                                                                                                             </td></tr>
+<tr><td>IO1        </td><td> IRKB (integer read from keyboard)             </td><td> 101001 </td><td> {NW, DM},{NW,DM,DX}                                                                                                                                                            </td><td>                                          </td><td> input                           </td><td> inputs an integer from keyboard to memory.                                                                                                                             </td></tr>
+<tr><td>IO3        </td><td> CRKB (character read from keyboard)           </td><td> 101100 </td><td> {NW, DM},{NW,DM,DX}                                                                                                                                                            </td><td>                                          </td><td> input                           </td><td> inputs a character from keyboard to memory.                                                                                                                            </td></tr>
+<tr><td>S0         </td><td> PSH  (push)                                   </td><td> 110000 </td><td> {FC},{FL},{EX},{FM}                                                                                                                                                            </td><td> FL,EX:[0, 4095]                          </td><td> memory,literal                  </td><td> pushes the memory element onto the top of the stack                                                                                                                    </td></tr>
+<tr><td>S1         </td><td> POP  (pop)                                    </td><td> 110001 </td><td> {DR},{DM}                                                                                                                                                                      </td><td> FL,EX:[0, 4095]                          </td><td> memory,literal                  </td><td> pops the top stack element into memory or register.                                                                                                                    </td></tr>
+<tr><td>S2         </td><td> PST  (pop and test)                           </td><td> 110010 </td><td> {FM,DR},{FM,FX,DR},{FL,DR},{EX,DR}                                                                                                                                             </td><td> FL,EX:[0, 4095]                          </td><td> memory,literal                  </td><td> pops the top stack element, and compares the element with memory or literal: if = then load DR with 0; if != load DR with 1; if < load DR with 2; if > load DR with 3. </td></tr>
+<tr><td>C0         </td><td> NOP (no-operation)                            </td><td> 111101 </td><td> {}                                                                                                                                                                             </td><td>                                          </td><td> 0xF4000000                      </td><td> no operation.                                                                                                                                                          </td></tr>
+<tr><td>C2         </td><td> HLT (halt)                                    </td><td> 111110 </td><td> {FC},{EX}                                                                                                                                                                      </td><td> FC:[-4096, 4095]                         </td><td> halt/dump                       </td><td> halts the program, and displays the constant to screen.                                                                                                                </td></tr>
+<tr><td>C1         </td><td> DMP (dump)                                    </td><td> 111111 </td><td> {FC},{EX}                                                                                                                                                                      </td><td> FC:[1,3]                                 </td><td> halt/dump                       </td><td> displays register and memory contents to screen.  if fc = 1, then level 1 dump; if fc = 2, then level 2 dump; if fc = 3, then level 3 dump.                            </td></tr>
 </table>
 
 

@@ -1,14 +1,14 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatInput;
+import static assemblernator.InstructionFormatter.formatOutput;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
 import static assemblernator.OperandChecker.isValidNumWords;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import static assemblernator.InstructionFormatter.formatInput;
-import static assemblernator.InstructionFormatter.formatOutput;
 import assemblernator.Module;
 
 /**

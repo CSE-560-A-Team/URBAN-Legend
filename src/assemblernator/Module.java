@@ -580,14 +580,16 @@ public class Module {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param out
+	 * @param execStart The address at which execution of this program starts.
+	 * @param out The output stream of the object file.
+	 * @throws IOException Does not catch IO Exceptions that arise.
+	 * @throws Exception  Does not catch general exceptions.
 	 * @specRef N/A
 	 */
-	public void writeObjectFile(OutputStream out, int execStart,
-			int asmblrVersion) throws IOException, Exception {
+	public void writeObjectFile(OutputStream out, int execStart) throws IOException, Exception {
 		// write header record.
 		ObjectWriter.writeHeaderRecord(out, this.programName, this.startAddr,
-				moduleLength, execStart, asmblrVersion);
+				moduleLength, execStart, Assembler.VERSION);
 
 		Iterator<Map.Entry<String, Instruction>> symbTableIt = this.symbolTable
 				.iterator();
@@ -602,7 +604,7 @@ public class Module {
 		// write all text records.
 		for (Instruction instr : this.assembly) {
 			int[] code;
-			int mods = 0; // have no idea what this does so just leaving it hear
+			int mods = 0; // have no idea what this does so just leaving it here
 							// for now.
 			char relocFlag = 'A'; // will not be here later.
 			if (instr.getOpId().equalsIgnoreCase("CHAR")) {

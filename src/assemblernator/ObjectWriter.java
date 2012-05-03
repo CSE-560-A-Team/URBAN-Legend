@@ -227,13 +227,12 @@ public class ObjectWriter {
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param out output stream.
-	 * @param progName name of program.
-	 * @param lc address of instruction/directive.
+	 * @param progName The name of the containing program.
+	 * @param lc Location Counter of instruction/directive.
 	 * @param code code for the instruction/directive.
-	 * @param mods required M adjustements for instruction/directive.
-	 * @param srcAddrStatFlag 
-	 * @param destAddrStatFlag 
-	 * @param relocFlag specifies type of address.
+	 * @param mods Number of M adjustments required for instruction/directive.
+	 * @param srcAddrStatFlag AREC flag of the address, or the source address if there are two.
+	 * @param destAddrStatFlag AREC flag of the destination address, if there are two addresses for this record.
 	 * @throws IOException throws if data cannot be written.
 	 * @specRef N/A
 	 */

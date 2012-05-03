@@ -1,11 +1,11 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatHaltDump;
 import static assemblernator.OperandChecker.isValidConstant;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
-import static assemblernator.InstructionFormatter.formatHaltDump;
 import assemblernator.Module;
 
 /**

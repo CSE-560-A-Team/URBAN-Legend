@@ -6,7 +6,6 @@ import instructions.Comment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
@@ -826,7 +825,6 @@ public abstract class Instruction {
 
 		return rep;
 		*/
-		int pad = 20;
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
 		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
 			for(int i = 0; i < assemble().length; i++) {
