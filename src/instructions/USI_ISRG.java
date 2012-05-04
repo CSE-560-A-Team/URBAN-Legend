@@ -77,7 +77,7 @@ public class USI_ISRG extends AbstractInstruction {
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("FL").value = value;
 						} else if(this.hasOperand("EX")) {
-							value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
+							value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition);
 							isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "EX", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("EX").value = value;

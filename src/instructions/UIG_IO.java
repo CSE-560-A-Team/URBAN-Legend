@@ -164,7 +164,7 @@ public abstract class UIG_IO extends AbstractInstruction{
 				this.getOperandData("FL").value = value;
 			} else if(this.operandType.expression) {
 				//evaluate value of operand.
-				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition); 
+				value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition); 
 				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
