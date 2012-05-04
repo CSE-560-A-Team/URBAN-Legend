@@ -148,7 +148,9 @@ public abstract class Instruction {
 		/** 32 bit memory words; valid only for NUM. */
 		RANGE_32_TC(-2147483648, 2147483647),
 		/** 12 bit address range.*/
-		RANGE_ADDR(0, 4095); //[0, 4095]
+		RANGE_ADDR(0, 4095), //[0, 4095]
+		/** 12 bit 2's complement range. */
+		RANGE_12_TC(-2048,2047); 
 		
 
 		/** max value of constant. */

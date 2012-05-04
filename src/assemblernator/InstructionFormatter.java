@@ -7,7 +7,7 @@ package assemblernator;
  */
 public class InstructionFormatter {
 	/**
-	 * @author Ratul Khosla
+	 * @author Eric Smith
 	 * @date Apr 27, 2012; 6:20:32 PM
 	 * @modified Apr 27, 2012; 7:34:47 PM generalized implementation. -Noah
 	 * @tested UNTESTED
@@ -27,20 +27,41 @@ public class InstructionFormatter {
 		String destReg = "1000";
 		String ixr = "0000";
 		String mem = "000000000000";
-		
-		if(instr.hasOperand("FL") && instr.hasOperand("DM")) {
+		// formats FL DM, FC DM, EX DM
+		if(instr.hasOperand("FL") && instr.hasOperand("DM") || instr.hasOperand("FC") && instr.hasOperand("DM") || instr.hasOperand("EX") && instr.hasOperand("DM")) {
 			fmt = "11";
-			String dmem = IOFormat.formatBinInteger(instr.getOperandData("DM").value,12);
-			String lit = IOFormat.formatBinInteger(instr.getOperandData("FL").value,12);
+			String dmem;
+			String lit;
+			if(instr.hasOperand("FL")){
+				 lit = IOFormat.formatBinInteger(instr.getOperandData("FL").value,12);
+			}else if(instr.hasOperand("FC")){
+				 lit = IOFormat.formatBinInteger(instr.getOperandData("FC").value,12);
+			}else{
+				 lit = IOFormat.formatBinInteger(instr.getOperandData("EX").value,12);
+			}
+			dmem = IOFormat.formatBinInteger(instr.getOperandData("DM").value,12);
 			code = code+fmt+lit+dmem;
+			//formats FM DM
 		} else if(instr.hasOperand("FM") && instr.hasOperand("DM")) {
 			fmt = "10";
 			String dmem = IOFormat.formatBinInteger(instr.getOperandData("DM").value,12);
 			String fmem = IOFormat.formatBinInteger(instr.getOperandData("FM").value,12);
 			code = code+fmt+fmem+dmem;
-		} else if(instr.hasOperand("FL")) {
+			//formats for {FL DR}, {FL DX}, {EX DR}, {EX DX}, {FC DX}, {FC DR}
+		} else if(instr.hasOperand("FL") || instr.hasOperand("EX") || instr.hasOperand("FC")) {
 			fmt = "01";
-			String lit = IOFormat.formatBinInteger(instr.getOperandData("FL").value,16);
+			String lit;
+			//gets value for literal part of format
+			if(instr.hasOperand("FL")){
+				lit = IOFormat.formatBinInteger(instr.getOperandData("FL").value,16);
+			}
+			else if(instr.hasOperand("EX")){
+				lit = IOFormat.formatBinInteger(instr.getOperandData("EX").value,16);
+			}
+			else{
+				lit = IOFormat.formatBinInteger(instr.getOperandData("FC").value,16);
+			}	
+			//gets value for dest part of format
 			if(instr.hasOperand("DR")){
 				String reg = IOFormat.formatBinInteger(instr.getOperandData("DR").value,3);
 				code= code+fmt+"10000"+reg+lit;
@@ -48,6 +69,7 @@ public class InstructionFormatter {
 				String dindex = IOFormat.formatBinInteger(instr.getOperandData("DX").value,3);
 				code= code+fmt+"10001"+dindex+lit;
 			}
+			//formats all other combos
 		} else {
 			fmt = "00";
 			//gets destReg, mem , and ixr
@@ -55,6 +77,9 @@ public class InstructionFormatter {
 				mem = IOFormat.formatBinInteger(instr.getOperandData("DM").value,12);
 				if(instr.hasOperand("DX")){
 					ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value,4);
+				}
+				if(instr.hasOperand("DR")){
+					srcReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value,4);
 				}
 			}else if(instr.hasOperand("DX")){
 				destReg = IOFormat.formatBinInteger(instr.getOperandData("DX").value,3);
@@ -76,8 +101,6 @@ public class InstructionFormatter {
 			}else if(instr.hasOperand("FX")){
 				srcReg = IOFormat.formatBinInteger(instr.getOperandData("FX").value,3);
 				srcReg = "1"+srcReg;
-			}else if(instr.hasOperand("FC")){
-				mem = IOFormat.formatBinInteger(instr.getOperandData("FC").value,12);
 			}
 			code = code+fmt+srcReg+destReg+ixr+mem;
 		}
