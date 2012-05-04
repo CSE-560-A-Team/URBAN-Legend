@@ -7,7 +7,7 @@ package assemblernator;
  */
 public class InstructionFormatter {
 	/**
-	 * @author Ratul Khosla
+	 * @author Eric Smith
 	 * @date Apr 27, 2012; 6:20:32 PM
 	 * @modified Apr 27, 2012; 7:34:47 PM generalized implementation. -Noah
 	 * @tested UNTESTED
