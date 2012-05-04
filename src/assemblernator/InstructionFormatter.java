@@ -87,6 +87,9 @@ public class InstructionFormatter {
 			}else if(instr.hasOperand("DR")){
 				destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value,3);
 				destReg="0"+destReg;
+				if(instr.hasOperand("DM")){
+					mem = IOFormat.formatBinInteger(instr.getOperandData("DM").value,12);
+				}
 			}
 			
 			//gets srcReg, mem, and ixr
