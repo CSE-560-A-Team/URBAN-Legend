@@ -78,6 +78,9 @@ public class InstructionFormatter {
 				if(instr.hasOperand("DX")){
 					ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value,4);
 				}
+				if(instr.hasOperand("DR")){
+					srcReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value,4);
+				}
 			}else if(instr.hasOperand("DX")){
 				destReg = IOFormat.formatBinInteger(instr.getOperandData("DX").value,3);
 				destReg="1"+destReg;

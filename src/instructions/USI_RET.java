@@ -61,6 +61,27 @@ public class USI_RET extends AbstractInstruction {
 				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM"), this.lineNum, -1);
 			}
 			//more than 1 operand error
+		}else if(this.operands.size() == 2){
+			if(this.hasOperand("DM") && this.hasOperand("DX")){
+				dest="DMDX";
+				//range check
+				Operand o1 = getOperandData("DX");
+				int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+						o1.valueStartPosition);
+				this.getOperandData("DX").value = constantSize1;
+				isValid = OperandChecker.isValidIndex(constantSize1);
+				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+				Operand o2 = getOperandData("DM");
+				int constantSize2 = module.evaluate(o2.expression, true, hErr, this,
+						o2.valueStartPosition);
+				this.getOperandData("DM").value = constantSize2;
+				isValid = OperandChecker.isValidMem(constantSize2);
+				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			}else{
+				isValid=false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM or DX"), this.lineNum, -1);
+			}
+			//to many operands
 		}else{
 			isValid =false;
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);

@@ -72,7 +72,7 @@ public class USI_TRLK extends AbstractInstruction {
 				
 				}else{
 					isValid=false;
-					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FM or FL"), this.lineNum, -1);
+					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM"), this.lineNum, -1);
 				}
 			}else{
 				isValid=false;
@@ -90,7 +90,7 @@ public class USI_TRLK extends AbstractInstruction {
 				isValid = OperandChecker.isValidReg(constantSize);
 				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 				if(this.hasOperand("DM") && this.hasOperand("DX")){
-					src="DMFX";
+					src="DMDX";
 					//range check
 					Operand o1 = getOperandData("DX");
 					int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
@@ -106,7 +106,7 @@ public class USI_TRLK extends AbstractInstruction {
 					if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 				}else{
 					isValid=false;
-					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FM and FX", "DR"), this.lineNum, -1);
+					hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "DM and DX", "DR"), this.lineNum, -1);
 				}
 			} else {
 				isValid=false;
