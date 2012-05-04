@@ -6,7 +6,6 @@ import instructions.Comment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
@@ -764,6 +763,7 @@ public abstract class Instruction {
 	 * @specRef N/A
 	 */
 	@Override public String toString() {
+		/*
 		String rep = "";
 		rep = rep + "original source line: " + this.origSrcLine + "\n";
 
@@ -782,8 +782,7 @@ public abstract class Instruction {
 
 		// if the instruction has no label
 		if (this.label == null) {
-			label = ""; // no label to print.
-			// also, can't print "------" b/c label may be "------".
+			label = "------"; // no label to print.
 		}
 
 
@@ -824,6 +823,27 @@ public abstract class Instruction {
 
 		rep = rep + instrBreak;
 
+		return rep;
+		*/
+		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
+		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
+			for(int i = 0; i < assemble().length; i++) {
+				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8) + "\t";
+				if(i < assemble().length - 1) {
+					rep = rep + ", ";
+				}
+			}
+		} else {
+			rep = rep + "------------\t";
+			//rep = rep + String.format("%1$-" + pad + "s", "________");
+		}
+		//"A" and "R" are for rep flag... which we currently don't have.
+		rep = rep + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
+		rep = rep + "errors:\n";
+		for (String error : errors) {
+			rep = rep + error + "\n";
+		}
+		
 		return rep;
 		
 	}

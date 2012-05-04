@@ -2,8 +2,8 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
-import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidConstant;
+import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidReg;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
@@ -41,14 +41,22 @@ public class USI_PWR extends AbstractInstruction {
 	@Override 
 	public boolean check(ErrorHandler hErr, Module module) {
 		int value;
-		boolean isValid;
+		boolean isValid = true;;
 		if(this.operands.size() == 2) {
-			if(this.hasOperand("FC")) {
-				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
-				isValid = isValidConstant(value, ConstantRange.RANGE_ADDR);
-				if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(), 
-						Integer.toString(ConstantRange.RANGE_13_TC.min), Integer.toString(ConstantRange.RANGE_13_TC.max)), this.lineNum, -1);
-				this.getOperandData("FC").value = value;
+			if(this.hasOperand("FC") || this.hasOperand("EX")) {
+				if(this.hasOperand("FC")) {
+					value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
+					isValid = isValidConstant(value, ConstantRange.RANGE_16_TC);
+					if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(), 
+							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
+					this.getOperandData("FC").value = value;
+				} else if(this.hasOperand("EX")) {
+					value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
+					isValid = isValidConstant(value, ConstantRange.RANGE_16_TC);
+					if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
+							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
+					this.getOperandData("EX").value = value;
+				}
 				
 				if(isValid) {
 					if(this.hasOperand("DR")) {
@@ -68,7 +76,7 @@ public class USI_PWR extends AbstractInstruction {
 				}
 			} else {
 				isValid = false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+				hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "FC", "EX"), this.lineNum, -1);
 			}
 		} else if(this.operands.size() > 2) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
@@ -76,7 +84,7 @@ public class USI_PWR extends AbstractInstruction {
 			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 		}
 		
-		return false; // TODO: IMPLEMENT
+		return isValid;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */

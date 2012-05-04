@@ -1,11 +1,11 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatHaltDump;
 import static assemblernator.OperandChecker.isValidConstant;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
-import static assemblernator.InstructionFormatter.formatHaltDump;
 import assemblernator.Module;
 
 /**
@@ -38,13 +38,21 @@ public class USI_HLT extends AbstractInstruction {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		if(!this.hasOperand("FC") || this.operands.size() > 1) {
-			hErr.reportError(this.getOpId() + " should have exactly one operand: \"FC\"", this.lineNum, -1);
+		if((!(this.hasOperand("FC") || this.hasOperand("EX"))) || this.operands.size() > 1) {
+			hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "FC", "EX"), this.lineNum, -1);
 			isValid = false;
 		} else {
-			int value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); 
+			int value;
+			String errOperand;
+			if(this.hasOperand("FC")) {
+				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
+				errOperand = "FC";
+			} else {
+				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
+				errOperand = "EX";
+			}
 			if(!isValidConstant(value, ConstantRange.RANGE_13_TC)) {
-				hErr.reportError(makeError("OORconstant", "FC", this.getOpId(), 
+				hErr.reportError(makeError("OORconstant", errOperand, this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_13_TC.min), Integer.toString(ConstantRange.RANGE_13_TC.max)), this.lineNum, -1);
 				isValid = false;
 			}

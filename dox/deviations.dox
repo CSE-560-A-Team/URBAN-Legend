@@ -37,13 +37,15 @@ Several of URBAN's operand specifications are overly restrictive.
     <td>MV0 MV1 IA0 IA1 IA2 IA3 IA4 IA5 IA6 IA7 IM6 IM7</td>
     <td>
         URBAN-Legend allows these operands to use register-to-register and non-indexed
-        memory-to-memory operand combinations. See \link formats section for more information.
+        memory-to-memory operand combinations. See <a href="#formats">formats</a> section
+        for more information.
     </td>
   </tr>
   <tr>
     <td>JT3</td>
     <td>
-        URBAN-Legend allows jumps to memory with an index register. Useful for impromptu switch() structures.
+        URBAN-Legend allows jumps to memory with an index register. Useful for impromptu switch()
+        structures and indirect jumps.
     </td>
   </tr>
 </table>
@@ -88,46 +90,85 @@ URBAN's expression syntax was also somewhat limiting, but only minor changes wer
 Due to collisions and other issues in byte codes in the URBAN specification, versions 1.1 and 1.2, the
 following instruction formats were added to URBAN Legend:
 
-<pre>
-<span style="color:green">; Format zero: Memory + optional index and a Register</span>
-OPRAND FMT ORD REG IXR LIT STACK ADDRESS (15bit)
-000000 00  0   000 000 0   0     000000000000000  ; MOVD FR:0, DM:0
-
-OPRAND FMT ORD REG IXR LIT STACK ADDRESS (15bit)
-000000 00  1   000 000 0   0     000000000000000  ; MOVD FM:0, DR:0
-
-OPRAND FMT ORD REG IXR LIT SIGN? LITERAL (15bit)
-000000 00  1   000 000 1   0     011111111111111  ; MOVD FL:16383, DR:0
-
-OPRAND FMT ORD REG IXR LIT SIGN? LITERAL (15bit)
-000000 00  1   000 001 1   0     011111111111111  ; MOVD FL:16383, DX:1 <span style="color:green">-- When literal bit is set, but IXR is non-zero.</span>
-
-OPRAND FMT ORD REG IXR LIT STACK ADDRESS (15bit)
-000000 00  0   000 001 0   0     000000000000000  ; MOVD FR:0, DM:0, DX:1
-
-OPRAND FMT ORD REG IXR LIT STACK ADDRESS (15bit)
-000000 00  1   000 001 0   0     000000000000000  ; MOVD FM:0, FX:1, DR:0
-
-<span style="color:green">; Format one: flag added for "treat as index"</span>
-OPRAND FMT X REG X REG UNUSED (16 bit)
-000000 01  0 000 0 001 0000000000000000  ; MOVD FR:0, DR:1
-
-OPRAND FMT X REG X REG UNUSED (16 bit)
-000000 01  0 000 1 001 0000000000000000  ; MOVD FR:0, DX:1
-
-OPRAND FMT X REG X REG UNUSED (16 bit)
-000000 01  1 001 0 000 0000000000000000  ; MOVD FX:1, DR:0
-
-OPRAND FMT X REG X REG UNUSED (16 bit)
-000000 01  1 001 1 010 0000000000000000  ; MOVD FX:1, DX:2
-
-<span style="color:green">; Format two: Memory to memory, no index register</span>
-OPRAND FMT ADDRESS 1(12) ADDRESS 2(12)
-000000 10  000000000001  000000000000  ; MOVD FM:1, DM:0
-
-<span style="color:green">; Format three: Literal to memory, no index register</span>
-OPRAND FMT LITERAL (12)  ADDRESS 2(12)
-000000 11  000111000111  000000000000  ; MOVD FL:455, DM:0
-</pre>
+<tt>
+<b><span style="color:#ff0000">OPCODE</span> <span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X
+REG</span> <span style="color:#cc33cc">IXR&nbsp;
+MEMORY(12bit)</span></b><br>
+ 000000 00&nbsp; 0 000 1 000 0000 000000000000&nbsp; ; MOVD FR:0, DM:0<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
+ 000000 00&nbsp; 1 000 0 000 0000 000000000000&nbsp; ; MOVD FM:0, DR:0<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
+ 000000 00&nbsp; 1 001 1 000 0000 000000000000&nbsp; ; MOVD FX:1, DM:0<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
+ 000000 00&nbsp; 1 000 1 001 0000 000000000000&nbsp; ; MOVD FM:0, DX:1<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
+ 000000 00&nbsp; 0 000 1 000 0001 000000000000&nbsp; ; MOVD FR:0, DM:0, DX:1<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span> <span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
+ 000000 00&nbsp; 1 001 1 000 0001 000000000000&nbsp; ; MOVD FX:1, DM:0, DX:1<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
+ 000000 00&nbsp; 1 000 0 000 0001 000000000000&nbsp; ; MOVD FM:0, FX:1, DR:0<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span> <span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span></b><b> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b> <br>
+000000 00&nbsp; 1 000 1 001 0011 000000000000&nbsp; ; MOVD FM:0, FX:3, DX:1<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">UNUSED (16 bit)</span></b><br>
+ 000000 00&nbsp; 0 000 0 000 0000000000000000&nbsp; ; MOVD FR:0, DR:1<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">UNUSED (16 bit)</span></b><br>
+ 000000 00&nbsp; 0 000 1 001 0000000000000000&nbsp; ; MOVD FR:0, DX:1<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">UNUSED (16 bit)</span></b><br>
+ 000000 00&nbsp; 1 001 0 000 0000000000000000&nbsp; ; MOVD FX:1, DR:0<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span></b><b> <span style="color:#cc33cc">UNUSED (16 bit) </span></b><br>
+000000 00&nbsp; 1 001 1 010 0000000000000000&nbsp; ; MOVD FX:1, DX:2<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">LITERAL (16 bit)</span></b><br>
+ 000000 01&nbsp; 1 000 0 000 0111111111111111&nbsp; ; MOVD FL:32767,
+DR:0<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
+<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span></b><b> <span style="color:#cc33cc">LITERAL (16 bit) </span></b><br>
+000000 01&nbsp; 1 000 1 001 0111111111111111&nbsp; ; MOVD FL:32767, DX:1<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span>
+<span style="color:#ff6600">FM</span><span style="color:#009900">T</span></b><b>
+<span style="color:#339999">ADDRESS1(12)</span> <span style="color:#3333ff">ADDRESS2(12)</span></b><br>
+000000 10&nbsp; 000000000000 000000000001&nbsp;&nbsp;&nbsp;&nbsp; ; MOVD FM:0, DM:1<br>
+<b><br>
+<span style="color:#ff0000">OPCODE</span> <span style="color:#ff6600">FM</span><span style="color:#009900">T</span></b><b>
+<span style="color:#339999">LITERAL (12)</span> <span style="color:#3333ff">ADDRESS2(12)</span></b><br>
+000000 11&nbsp; 011111111111 000000000001&nbsp;&nbsp;&nbsp;&nbsp; ; MOVD FL:2047, DM:1<br>
+</tt>
 
 */

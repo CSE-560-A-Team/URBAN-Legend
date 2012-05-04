@@ -1,14 +1,14 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatInput;
+import static assemblernator.InstructionFormatter.formatOutput;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
 import static assemblernator.OperandChecker.isValidNumWords;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import static assemblernator.InstructionFormatter.formatInput;
-import static assemblernator.InstructionFormatter.formatOutput;
 import assemblernator.Module;
 
 /**
@@ -29,15 +29,17 @@ public abstract class UIG_IO extends AbstractInstruction{
 	 */
 	public enum OperandType {
 		/** operands = {NW, DM} */
-		DM(true, false, false),
+		DM(true, false, false, false),
 		/** operands = {NW, DM, DX} */
-		DMDX(true, true, false),
+		DMDX(true, true, false, false),
 		/** operands = {NW, FM} */
-		FM(false, false, false),
+		FM(false, false, false, false),
 		/** operands = {NW, FM, FX} */
-		FMFX(false, true, false),
+		FMFX(false, true, false, false),
 		/** operands = {NW, FL}*/
-		FL(false, false, true);
+		FL(false, false, true, false),
+		/** operands = {NW, EX}*/
+		EX(false, false, false, true);
 		
 		/** is the instruction input or output instruction */
 		private boolean input;
@@ -45,17 +47,21 @@ public abstract class UIG_IO extends AbstractInstruction{
 		private boolean index;
 		/** is the instruction using a literal.*/
 		private boolean literal;
+		/** is the instruction using a expression.*/
+		private boolean expression;
 		
 		/**
 		 * Constructs.
 		 * @param input is the instruction being used as input or output?
 		 * @param index is there an index register being used?
 		 * @param literal is there a literal being used?
+		 * @param exp is there an expression being used?
 		 */
-		OperandType(boolean input, boolean index, boolean literal) {
+		OperandType(boolean input, boolean index, boolean literal, boolean exp) {
 			this.input = input;
 			this.index = index;
 			this.literal = literal;
+			this.expression = exp;
 		}
 	}
 
@@ -79,6 +85,8 @@ public abstract class UIG_IO extends AbstractInstruction{
 				this.operandType = OperandType.FM;
 			} else if(this.hasOperand("FL")){
 				this.operandType = OperandType.FL;
+			} else if(this.hasOperand("EX")) {
+				this.operandType = OperandType.EX;
 			} else {
 				isValid = false;
 				hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "MREF", "NW"), this.lineNum, -1);
@@ -108,17 +116,20 @@ public abstract class UIG_IO extends AbstractInstruction{
 		//checks for invalid combo's between operands and opid's.
 		//only checks if is valid so far.
 		if(isValid) {
-			if(this.hasOperand("DM") && (this.getOpId().equals("IWSR") || this.getOpId().equals("CWSR"))) {
+			if(this.operandType.input && (this.getOpId().equals("IWSR") || this.getOpId().equals("CWSR"))) {
 				isValid = false;
 				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "DM"), this.lineNum, -1);
 				
-			} else if (this.hasOperand("FM") && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
+			} else if ((!this.operandType.input) && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
 				isValid = false;
 				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FM"), this.lineNum, -1);
-			} else if (this.hasOperand("FL") && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
+			} else if (this.operandType.literal && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
 				isValid = false;
 				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FL"), this.lineNum, -1);
-			}	
+			}  else if (this.operandType.expression && (this.getOpId().equals("IRKB") || this.getOpId().equals("CRKB"))) {
+				isValid = false;
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "EX"), this.lineNum, -1);
+			}
 		}
 		
 		//checks for ranges of operand values and store values in Operand..
@@ -150,7 +161,13 @@ public abstract class UIG_IO extends AbstractInstruction{
 				if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 				this.getOperandData("FL").value = value;
-				
+			} else if(this.operandType.expression) {
+				//evaluate value of operand.
+				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition); 
+				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
+				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
+						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+				this.getOperandData("EX").value = value;
 			} else {
 				//evaluate value of operand.
 				value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition); 
