@@ -1,8 +1,9 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatInput;
-import static assemblernator.InstructionFormatter.formatOutput;
+import static assemblernator.InstructionFormatter.formatDestRange;
+import static assemblernator.InstructionFormatter.formatSrcRange;
+import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
@@ -198,9 +199,9 @@ public abstract class UIG_IO extends AbstractInstruction{
 	@Override
 	public final int[] assemble() {
 		if(operandType.input) {
-			return formatInput(this);
+			return formatDestRange(this);
 		} else {
-			return formatOutput(this);
+			return formatSrcRange(this);
 		}
 	}
 	

@@ -154,7 +154,7 @@ public class InstructionFormatter {
 	 * @return bit code.
 	 * @specRef N/A
 	 */
-	public static int [] formatInput(Instruction instr) {
+	public static int [] formatDestRange(Instruction instr) {
 		//opcode(6b) + "00" + number of words (4b) + "1000" + memAddr(16b) or 
 		//opcode(6b) + "00" + number of words (4b) + "1000" + ixr(4b) + memAddr(12b)
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //e.g. 011000
@@ -193,7 +193,7 @@ public class InstructionFormatter {
 	 * @return bit code.
 	 * @specRef N/A
 	 */
-	public static int [] formatOutput(Instruction instr) {
+	public static int [] formatSrcRange(Instruction instr) {
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //e.g. 011000
 		String fmt;
 		String nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value, 4);
