@@ -64,9 +64,18 @@ public class USI_NUM extends AbstractDirective {
 				this.getOperandData("FC").value = constantSize;
 				isValid = OperandChecker.isValidConstant(constantSize, ConstantRange.RANGE_32_TC);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(), "-2^31", "2^31 -1"), this.lineNum, -1);
-			}else{
+			}else if (this.hasOperand("EX")){
+				src = "EX";
+				Operand o = getOperandData("EX");
+				int constantSize = module.evaluate(o.expression, false, hErr, this,
+						o.valueStartPosition);
+				this.getOperandData("EX").value = constantSize;
+				isValid = OperandChecker.isValidConstant(constantSize, ConstantRange.RANGE_32_TC);
+				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), "-2^31", "2^31 -1"), this.lineNum, -1);
+			}
+			else{
 				isValid=false;
-				hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+				hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC or EX"), this.lineNum, -1);
 			}
 			//more than 1 operand error
 		}else{
