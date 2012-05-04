@@ -129,7 +129,7 @@ public class InstructionFormatter {
 	 * 				the binary code of the instruction. 
 	 * @specRef N/A
 	 */
-	public static int [] formatClearXClearA(Instruction instr) {
+	public static int [] formatOPOnly(Instruction instr) {
 		int[] assembled = new int[1];
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //get opcode.
 		
