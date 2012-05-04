@@ -105,7 +105,11 @@ public class InstructionFormatter {
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //"111111"
 		code = code + "0000000000"; //10 unused bits.  "111111 0000000000"
 		//16 bits of constant in memory.  "111111 000000000000 0000000011111"
-		code = code + IOFormat.formatBinInteger(instr.getOperandData("FC").value, 16); 
+		if(instr.hasOperand("FC")) {
+			code = code + IOFormat.formatBinInteger(instr.getOperandData("FC").value, 16); 
+		} else if(instr.hasOperand("EX")){
+			code = code + IOFormat.formatBinInteger(instr.getOperandData("EX").value, 16); 
+		}
 		assembled[0] = IOFormat.parseBin32Int(code);
 		return assembled;
 	}
@@ -197,9 +201,13 @@ public class InstructionFormatter {
 		int mem; 
 		int[] assembled = new int[1];
 		
-		if(instr.hasOperand("FL")) {
+		if(instr.hasOperand("FL") || instr.hasOperand("EX")) {
 			fmt = "01";
-			mem = instr.getOperandData("FL").value;
+			if(instr.hasOperand("FL")) {
+				mem = instr.getOperandData("FL").value;
+			} else {
+				mem = instr.getOperandData("EX").value;
+			}
 			code = code + fmt + "1000" + nw + IOFormat.formatBinInteger(mem, 16); 
 		} else { 
 			fmt = "00";

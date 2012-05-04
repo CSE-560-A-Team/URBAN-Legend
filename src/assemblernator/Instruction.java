@@ -839,7 +839,7 @@ public abstract class Instruction {
 		}
 		//"A" and "R" are for rep flag... which we currently don't have.
 		rep = rep + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
-		rep = rep + "\nerrors:\n";
+		rep = rep + "errors:\n";
 		for (String error : errors) {
 			rep = rep + error + "\n";
 		}

@@ -41,13 +41,22 @@ public class USI_DMP extends AbstractInstruction {
 	@Override 
 	public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		if(!this.hasOperand("FC") || this.operands.size() > 1) {
-			hErr.reportError(this.getOpId() + " should have exactly one operand: \"FC\"", this.lineNum, -1);
+		if((!(this.hasOperand("FC") || this.hasOperand("EX"))) || this.operands.size() > 1) {
+			hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "FC", "EX"), this.lineNum, -1);
 			isValid = false;
 		} else {
-			int value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); 
+			int value;
+			String errOperand;
+			if(this.hasOperand("FC")) {
+				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
+				errOperand = "FC";
+			} else {
+				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
+				errOperand = "EX";
+			}
+
 			if(!isValidConstant(value, ConstantRange.RANGE_DMP)) {
-				hErr.reportError(makeError("OORconstant", "FC", this.getOpId(), 
+				hErr.reportError(makeError("OORconstant", errOperand, this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_DMP.min), Integer.toString(ConstantRange.RANGE_DMP.max)), this.lineNum, -1);
 				isValid = false;
 			}
