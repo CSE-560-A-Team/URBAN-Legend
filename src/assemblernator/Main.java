@@ -3,6 +3,7 @@ package assemblernator;
 import guinator.GUIMain;
 import instructions.USI_EQU;
 import instructions.USI_EXT;
+import instructions.USI_NOISE;
 import instructions.USI_NUM;
 
 import java.io.File;
@@ -41,7 +42,7 @@ public class Main {
 		for (int i = 0; i < num.length; i++) {
 			Instruction in = USI_EQU.getInstance().getNewInstance();
 			in.label = num[i];
-			((USI_EQU) in).value = new Value(i,'A');
+			((USI_EQU) in).value = new Value(i, 'A');
 			in.usage = Usage.EQUATE;
 			m.getSymbolTable().addEntry(in, null);
 		}
@@ -73,6 +74,9 @@ public class Main {
 					.getInstance().getNewInstance(), 0);
 			System.out.println(x[i] + " = " + a.value + ", flag = " + a.arec);
 		}
+
+
+		USI_NOISE.test();
 
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
