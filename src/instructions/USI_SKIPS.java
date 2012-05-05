@@ -5,6 +5,7 @@ import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
 
 /**
@@ -64,8 +65,11 @@ public class USI_SKIPS extends AbstractDirective {
 			if (o != null) {
 				src = "FC";
 
-				skipSize = module.evaluate(o.expression, false, hErr, this,
+				 Value tempv = module.evaluate(o.expression, false, hErr, this,
 						o.valueStartPosition);
+				 if (tempv.arec != 'A')
+					 hErr.reportError(makeError("nonConstExpr", o.expression), lineNum, o.valueStartPosition);
+				 skipSize = tempv.value;
 				isValid = OperandChecker.isValidMem(skipSize);
 
 

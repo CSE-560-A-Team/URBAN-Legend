@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
+import assemblernator.Module.Value;
 
 
 /**
@@ -53,7 +54,7 @@ public abstract class Instruction {
 		/** The expression given to the operand */
 		public String expression;
 		/** The value of the operand. */
-		public int value;
+		public Value value;
 		/**
 		 * The position in the line at which the keyword for this operand
 		 * started
@@ -92,7 +93,7 @@ public abstract class Instruction {
 		 * @specRef N/A
 		 */
 		@Override public String toString() {
-			return Integer.toBinaryString(value);
+			return Integer.toBinaryString(value.value);
 		}
 	}
 

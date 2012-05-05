@@ -11,6 +11,7 @@ import static assemblernator.OperandChecker.isValidNumWords;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * Parent class of input/output leaf instruction classes.
@@ -135,22 +136,22 @@ public abstract class UIG_IO extends AbstractInstruction{
 		
 		//checks for ranges of operand values and store values in Operand..
 		if(isValid) {
-			int value = module.evaluate(this.getOperand("NW"), false, hErr, this, this.getOperandData("NW").keywordStartPosition);
-			isValid = isValidNumWords(value);
+			Value value = module.evaluate(this.getOperand("NW"), false, hErr, this, this.getOperandData("NW").keywordStartPosition);
+			isValid = isValidNumWords(value.value);
 			if(!isValid) hErr.reportError(makeError("OORnw", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("NW").value = value;
 			
 			if(this.operandType.input) {
 				 //evaluate value of operand
 				value = module.evaluate(this.getOperand("DM"), true, hErr, this, this.getOperandData("DM").keywordStartPosition);
-				isValid = isValidMem(value); //check value of operand.
+				isValid = isValidMem(value.value); //check value of operand.
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DM").value = value;
 				
 				if(this.operandType.index) {
 					//evaluate value of operand.
 					value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition); 
-					isValid = isValidIndex(value);
+					isValid = isValidIndex(value.value);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 					this.getOperandData("DX").value = value;
 					
@@ -158,28 +159,28 @@ public abstract class UIG_IO extends AbstractInstruction{
 			} else if(this.operandType.literal){
 				//evaluate value of operand.
 				value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition); 
-				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
+				isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 				this.getOperandData("FL").value = value;
 			} else if(this.operandType.expression) {
 				//evaluate value of operand.
 				value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition); 
-				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
+				isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 				this.getOperandData("EX").value = value;
 			} else {
 				//evaluate value of operand.
 				value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition); 
-				isValid = isValidMem(value);
+				isValid = isValidMem(value.value);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("FM").value = value;
 				
 				if(this.operandType.index) {
 					//evaluate value of operand.
 					value = module.evaluate(this.getOperand("FX"), false, hErr, this, this.getOperandData("FX").keywordStartPosition); 
-					isValid = isValidIndex(value);
+					isValid = isValidIndex(value.value);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 					this.getOperandData("FX").value = value;
 					

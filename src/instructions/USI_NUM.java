@@ -5,6 +5,7 @@ import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
 
 /**
@@ -22,57 +23,71 @@ public class USI_NUM extends AbstractDirective {
 	 * instruction ID.
 	 */
 	private static final String opId = "NUM";
-	
+
 	/** The static instance for this instruction. */
 	static USI_NUM staticInstance = new USI_NUM(true);
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+1;
+		return lc + 1;
 	}
-	
+
 	/**
 	 * The type of operand specifying the source for this operation.
 	 */
 	String src = "";
-	
+
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
-	return true;
+		return true;
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		int[] assembled = {this.getOperandData("FC").value};
+		int[] assembled = { this.getOperandData("FC").value.value };
 		return assembled;
 	}
 
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	/**
+	 * @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler,
+	 *      Module)
+	 */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		//less than 1 operand error
-		if(this.operands.size() < 1){
-			isValid=false;
-			hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
-			//checks for FC
-		}else if (this.operands.size() == 1){
-			if(this.hasOperand("FC")){
+		// less than 1 operand error
+		if (this.operands.size() < 1) {
+			isValid = false;
+			hErr.reportError(
+					makeError("directiveMissingOp", this.getOpId(), "FC"),
+					this.lineNum, -1);
+			// checks for FC
+		}
+		else if (this.operands.size() == 1) {
+			if (this.hasOperand("FC")) {
 				src = "FC";
 				Operand o = getOperandData("FC");
-				int constantSize = module.evaluate(o.expression, false, hErr, this,
-						o.valueStartPosition);
+				Value constantSize = module.evaluate(o.expression, false, hErr,
+						this, o.valueStartPosition);
 				this.getOperandData("FC").value = constantSize;
-				isValid = OperandChecker.isValidConstant(constantSize, ConstantRange.RANGE_32_TC);
-				if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(), "-2^31", "2^31 -1"), this.lineNum, -1);
+				isValid = OperandChecker.isValidConstant(constantSize.value,
+						ConstantRange.RANGE_32_TC);
+				if (!isValid)
+					hErr.reportError(
+							makeError("OORconstant", "FC", this.getOpId(),
+									"-2^31", "2^31 -1"), this.lineNum, -1);
 			}
-			else{
-				isValid=false;
-				hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
+			else {
+				isValid = false;
+				hErr.reportError(
+						makeError("directiveMissingOp", this.getOpId(), "FC"),
+						this.lineNum, -1);
 			}
-			//more than 1 operand error
-		}else{
-			isValid =false;
-			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
+			// more than 1 operand error
+		}
+		else {
+			isValid = false;
+			hErr.reportError(makeError("extraOperandsDir", this.getOpId()),
+					this.lineNum, -1);
 		}
 		return isValid; // TODO: IMPLEMENT
 	}
@@ -117,4 +132,3 @@ public class USI_NUM extends AbstractDirective {
 	/** Default constructor; does nothing. */
 	private USI_NUM() {}
 }
-

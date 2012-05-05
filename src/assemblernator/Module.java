@@ -487,6 +487,33 @@ public class Module {
 	}
 
 	/**
+	 * Type returned by evaluate().
+	 * 
+	 * @author Josh Ventura
+	 * @date May 4, 2012; 12:00:09 AM
+	 */
+	public static class Value {
+		/** The value gleaned from the expression */
+		public int value;
+		/** The linker AREC flag for the value. */
+		public char arec;
+
+		/** Default constructor; does nothing. */
+		public Value() {}
+
+		/**
+		 * @param v
+		 *            The integer value this instance represents.
+		 * @param flag
+		 *            The AREC flag of this value.
+		 */
+		public Value(int v, char flag) {
+			value = v;
+			arec = flag;
+		}
+	}
+
+	/**
 	 * Evaluates an expression in terms of constants and EQU directives.
 	 * 
 	 * @author Josh, Noah
@@ -507,6 +534,8 @@ public class Module {
 	 *           May 1, 2012; 11:52:22 PM: Fixed issue with expressions
 	 *           containing only an asterisk. -Josh
 	 * 
+	 *           May 4, 2012; 7:34:26 PM: Refactored to be iterative.
+	 * 
 	 * @tested Apr 17, 2012; 2:33:20 AM: Field tested with five term sums in
 	 *         nested EQUs. Worked provided expression did not contain spaces.
 	 * @errors Reports errors 021-039.
@@ -516,8 +545,8 @@ public class Module {
 	 *            The expression to be evaluated.
 	 * @param MREF
 	 *            True if this expression is a memory reference. Enabling this
-	 *            parameter enables forward-referencing of EQ Labels as well as
-	 *            address referencing of regular labels.
+	 *            parameter enables address referencing for regular labels
+	 *            without warning.
 	 * @param hErr
 	 *            The error handler which will receive problems in evaluation.
 	 * @param caller
@@ -528,86 +557,90 @@ public class Module {
 	 * @return The value of the expression.
 	 * @specRef N/A
 	 */
-	public int evaluate(String exp, boolean MREF, ErrorHandler hErr,
+	public Value evaluate(String exp, boolean MREF, ErrorHandler hErr,
 			Instruction caller, int pos) {
-		exp = exp.trim(); // trim off leading and trailing white-space.
+		int result = 0, i;
+		boolean readAnything = false;
 
-		if (exp.length() == 0) {
-			hErr.reportError(makeError("emptyExpr"), caller.lineNum, pos);
-			return 0;
-		}
+		int lrefs = 0, exrefs = 0;
 
-		// First, check if we have a standard label
-		if (IOFormat.isValidLabel(exp)) {
-			Instruction i = symbolTable.getEntry(exp);
-			if (i == null) {
-				hErr.reportError(
-						makeError((MREF ? "undefLabel" : "undefEqLabel"), exp),
-						caller.lineNum, pos);
-				return 0;
+		exploop:
+		for (i = 0; i < exp.length();) // Iterate the whole expression
+		{
+			int sign = 1;
+
+			for (;; ++i) {
+				if (i >= exp.length()) {
+					if (!readAnything)
+						hErr.reportError(makeError("emptyExpr"),
+								caller.lineNum, pos);
+					break exploop;
+				}
+				if (Character.isWhitespace(exp.charAt(i)))
+					continue;
+				if (exp.charAt(i) == '+')
+					continue;
+				if (exp.charAt(i) == '-') {
+					sign *= -1;
+					continue;
+				}
+				break;
 			}
-			if (i.usage == Usage.EQUATE)
-				return ((UIG_Equated) i).value;
-			if (MREF)
-				return i.lc;
-			hErr.reportError(makeError("illegalRefAmp", exp), caller.lineNum,
-					pos);
-			return 0;
-		}
 
-		// Turns out, we don't. Maybe we have a number?
-		if (IOFormat.isNumeric(exp)) {
-			try {
-				return Integer.parseInt(exp);
-			} catch (NumberFormatException nfe) {}
-			return 0;
-		}
+			readAnything = true;
 
-		// Guess we're a compound expression.
-
-		int lhs = 0, i = 0;
-		if (Character.isLetter(exp.charAt(0))) {
-			String lbl;
-			try {
-				lbl = IOFormat.readLabel(exp, 0);
-			} catch (URBANSyntaxException e) {
-				hErr.reportError(
-						makeError("compilerError",
-								"Invalid label should have been reported earlier"),
-						caller.lineNum, pos);
-				return 0;
+			if (Character.isLetter(exp.charAt(i))) {
+				String lbl;
+				try {
+					lbl = IOFormat.readLabel(exp, i);
+				} catch (URBANSyntaxException e) {
+					hErr.reportError(
+							makeError("compilerError",
+									"Invalid label should have been reported earlier"),
+							caller.lineNum, pos);
+					break;
+				}
+				Instruction instr = symbolTable.getEntry(lbl);
+				if (instr == null)
+					hErr.reportError(
+							makeError((MREF ? "undefLabel" : "undefEqLabel"),
+									lbl), caller.lineNum, pos);
+				else {
+					if (instr.usage == Usage.EQUATE)
+						result += sign * ((UIG_Equated) instr).value.value;
+					else {
+						if (MREF)
+							result += sign * instr.lc;
+						else
+							hErr.reportError(makeError("illegalRefAmp", lbl),
+									caller.lineNum, pos);
+						if (instr.usage == Usage.EXTERNAL)
+							++exrefs;
+						else
+							lrefs += sign;
+					}
+				}
+				i += lbl.length();
 			}
-			lhs = evaluate(lbl, MREF, hErr, caller, pos);
-			i += lbl.length();
-		}
-		else if (Character.isDigit(exp.charAt(0))) {
-			// We won't hit end of char doing this, or parseInt would have
-			// succeeded.
-			while (Character.isDigit(exp.charAt(++i)));
-			lhs = evaluate(exp.substring(0, i), MREF, hErr, caller, pos);
-		}
-		else if (exp.charAt(i) == '*') {
-			lhs = caller.lc;
-			if (++i >= exp.length())
-				return lhs;
+			else if (Character.isDigit(exp.charAt(i))) {
+				final int si = i;
+				while (++i < exp.length() && Character.isDigit(exp.charAt(i)));
+				try {
+					result += sign * Integer.parseInt(exp.substring(si, i));
+				} catch (NumberFormatException nfe) {}
+			}
+			else if (exp.charAt(i) == '*') {
+				result += sign * caller.lc;
+				++i;
+			}
+			else
+				hErr.reportError(makeError("unexpSymExp", "" + exp.charAt(i)),
+						caller.lineNum, pos + i);
 		}
 
-		// This will not overflow, because our string is trimmed.
-		while (Character.isWhitespace(exp.charAt(i)))
-			++i;
-
-		if (exp.charAt(i) == '+')
-			return lhs
-					+ evaluate(exp.substring(i + 1), MREF, hErr, caller, pos
-							+ i + 1);
-		else if (exp.charAt(i) == '-')
-			return lhs
-					- evaluate(exp.substring(i + 1), MREF, hErr, caller, pos
-							+ i + 1);
-
-		hErr.reportError(makeError("unexpSymExp", "" + exp.charAt(i)),
-				caller.lineNum, pos + i);
-		return 0;
+		char arec = exrefs > 0 ? lrefs != 0 || exrefs > 1 ? 'C' : 'E'
+				: lrefs != 0 ? 'R' : 'A';
+		return new Value(result, arec);
 	}
 
 	/**
@@ -620,13 +653,18 @@ public class Module {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param execStart The address at which execution of this program starts.
-	 * @param out The output stream of the object file.
-	 * @throws IOException Does not catch IO Exceptions that arise.
-	 * @throws Exception  Does not catch general exceptions.
+	 * @param execStart
+	 *            The address at which execution of this program starts.
+	 * @param out
+	 *            The output stream of the object file.
+	 * @throws IOException
+	 *             Does not catch IO Exceptions that arise.
+	 * @throws Exception
+	 *             Does not catch general exceptions.
 	 * @specRef N/A
 	 */
-	public void writeObjectFile(OutputStream out, int execStart) throws IOException, Exception {
+	public void writeObjectFile(OutputStream out, int execStart)
+			throws IOException, Exception {
 		// write header record.
 		ObjectWriter.writeHeaderRecord(out, this.programName, this.startAddr,
 				moduleLength, execStart, Assembler.VERSION);
@@ -649,11 +687,15 @@ public class Module {
 			char relocFlag = 'A'; // will not be here later.
 			if (instr.getOpId().equalsIgnoreCase("CHAR")) {
 				code = instr.assemble();
-				for(int i = 0; i < code.length; ++i) {
-					//ObjectWriter.writeTextRecord(out, this.programName, instr.lc, code[i], mods, relocFlag);
+				for (int i = 0; i < code.length; ++i) {
+					// ObjectWriter.writeTextRecord(out, this.programName,
+					// instr.lc, code[i], mods, relocFlag);
 				}
-			} else if(!instr.isDirective() || instr.getOpId().equalsIgnoreCase("NUM")) {
-				//ObjectWriter.writeTextRecord(out, this.programName, instr.lc, instr.assemble()[0], mods, relocFlag);
+			}
+			else if (!instr.isDirective()
+					|| instr.getOpId().equalsIgnoreCase("NUM")) {
+				// ObjectWriter.writeTextRecord(out, this.programName, instr.lc,
+				// instr.assemble()[0], mods, relocFlag);
 			}
 		}
 
@@ -682,12 +724,11 @@ public class Module {
 	 * 
 	 * @specRef N/A
 	 */
-	@Override 
-	public String toString() {
+	@Override public String toString() {
 		String rep = "Symbol Table:\n" + symbolTable.toString()
 				+ "\nInstruction breakdowns:\n";
 		Iterator<Instruction> assemblyIt = assembly.iterator();
-		
+
 		rep = rep + "LC\tObject Code\tAddress Status\tLine Num\tSource Line\n";
 		rep = rep + "(hex)\t(hex)\tsrc:, dest:\t(dec)\n";
 		while (assemblyIt.hasNext()) {

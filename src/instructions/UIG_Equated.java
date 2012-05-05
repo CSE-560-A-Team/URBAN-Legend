@@ -2,6 +2,7 @@ package instructions;
 
 import assemblernator.AbstractDirective;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * Parent class for equated types, introducing a constant value member.
@@ -11,7 +12,7 @@ import assemblernator.Module;
  */
 public abstract class UIG_Equated extends AbstractDirective {
 	/** The equated value of this instruction. */
-	public int value;
+	public Value value;
 
 	/**
 	 * Equated directives are basically macros, and do not affect the LC.

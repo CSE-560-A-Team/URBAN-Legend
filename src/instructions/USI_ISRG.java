@@ -11,6 +11,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * The ISRG instruction.
@@ -42,12 +43,12 @@ public class USI_ISRG extends AbstractInstruction {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		int value;
+		Value value;
 		
 		//check for operand combos.
 		if(this.hasOperand("NW")) {
 			value = module.evaluate(this.getOperand("NW"), false, hErr, this, this.getOperandData("NW").keywordStartPosition);
-			isValid = isValidNumWords(value);
+			isValid = isValidNumWords(value.value);
 			if(!isValid) hErr.reportError(makeError("OORnw", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("NW").value = value;
 			
@@ -55,12 +56,12 @@ public class USI_ISRG extends AbstractInstruction {
 				if(this.hasOperand("DR") || this.hasOperand("DX")) {
 					if(this.hasOperand("DR")) {
 						value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-						isValid = isValidReg(value);
+						isValid = isValidReg(value.value);
 						if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 						this.getOperandData("DR").value = value;
 					} else if(this.hasOperand("DX")) {
 						value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
-						isValid = isValidIndex(value);
+						isValid = isValidIndex(value.value);
 						if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 						this.getOperandData("DX").value = value;
 					}
@@ -68,17 +69,17 @@ public class USI_ISRG extends AbstractInstruction {
 					if(isValid) {
 						if(this.hasOperand("FM")) {
 							value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition);
-							isValid = isValidMem(value);
+							isValid = isValidMem(value.value);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("FM").value = value;
 						} else if(this.hasOperand("FL")) {
 							value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
-							isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
+							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("FL").value = value;
 						} else if(this.hasOperand("EX")) {
 							value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition);
-							isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
+							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "EX", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("EX").value = value;
 						} else {
