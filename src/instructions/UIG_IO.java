@@ -3,7 +3,6 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatDestRange;
 import static assemblernator.InstructionFormatter.formatSrcRange;
-import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
