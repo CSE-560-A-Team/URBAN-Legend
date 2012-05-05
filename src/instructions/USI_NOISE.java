@@ -93,13 +93,13 @@ public class USI_NOISE extends AbstractInstruction {
 		String sample = IOFormat.escapeString(op.expression, lineNum,
 				op.valueStartPosition, hErr).toLowerCase();
 		switch (sample.charAt(0)) {//@formatter:off
-		case 'w': if (sample == "white")  { sampleType = SampleType.WHITE;  break; }
-		case 'p': if (sample == "pink")   { sampleType = SampleType.PINK;   break; }
-		          if (sample == "pluck")  { sampleType = SampleType.PLUCK;  break; }
-		case 's': if (sample == "sine")   { sampleType = SampleType.SINE;   break; }
-		          if (sample == "saw")    { sampleType = SampleType.SAW;    break; }
-		          if (sample == "square") { sampleType = SampleType.SQUARE; break; }
-		case 'b': if (sample == "boink")  { sampleType = SampleType.BOINK;  break; }
+		case 'w': if (sample.equals("white") ) { sampleType = SampleType.WHITE;  break; }
+		case 'p': if (sample.equals("pink")  ) { sampleType = SampleType.PINK;   break; }
+		          if (sample.equals("pluck") ) { sampleType = SampleType.PLUCK;  break; }
+		case 's': if (sample.equals("sine")  ) { sampleType = SampleType.SINE;   break; }
+		          if (sample.equals("saw")   ) { sampleType = SampleType.SAW;    break; }
+		          if (sample.equals("square")) { sampleType = SampleType.SQUARE; break; }
+		case 'b': if (sample.equals("boink") ) { sampleType = SampleType.BOINK;  break; }
 		default:  hErr.reportError(makeError("unmatchedStr", sample, "any built-in sample"), lineNum, op.keywordStartPosition);
 		} //@formatter:on
 
@@ -138,7 +138,7 @@ public class USI_NOISE extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return formatSrcRange(this);
+		return new int[] { opCode << 26 };
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
@@ -216,7 +216,7 @@ public class USI_NOISE extends AbstractInstruction {
 	/** Test audio. */
 	public static void test() {
 		byte buf[] = new byte[65536 * 10];
-		int bpos = 0, notedur = 0;
+		int bpos = 0;
 
 		Note[] mhall = { new Note(Tone.B, Duration.QUARTER),
 				new Note(Tone.A, Duration.QUARTER),
@@ -234,10 +234,13 @@ public class USI_NOISE extends AbstractInstruction {
 		for (int n = 0; n < mhall.length; n++) {
 			int bend = bpos + (mhall[n].dur.ms * 65536) / 1000;
 			int i;
-			for (i = bpos; i < bend-200; i++)
-				buf[i] = (byte) (Math.sin(2 * Math.PI * ((i-bpos)/65536.0 * mhall[n].tone.freq)) * 64 + 128);
-			byte frqat = buf[i-1];
-			while (i < bend) buf[i++] = frqat = (byte) (frqat > 128? frqat - 1 : frqat < 128 ? frqat + 1 : 128);
+			for (i = bpos; i < bend - 200; i++)
+				buf[i] = (byte) (Math.sin(2 * Math.PI
+						* ((i - bpos) / 65536.0 * mhall[n].tone.freq)) * 64 + 128);
+			byte frqat = buf[i - 1];
+			while (i < bend)
+				buf[i++] = frqat = (byte) (frqat > 128 ? frqat - 1
+						: frqat < 128 ? frqat + 1 : 128);
 			bpos = bend;
 		}
 		play(buf, 65536);
