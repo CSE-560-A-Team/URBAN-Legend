@@ -52,7 +52,7 @@ public class USI_DMP extends AbstractInstruction {
 				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
 				errOperand = "FC";
 			} else {
-				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
+				value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition);
 				errOperand = "EX";
 			}
 

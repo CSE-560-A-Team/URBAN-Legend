@@ -1,8 +1,9 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatInput;
-import static assemblernator.InstructionFormatter.formatOutput;
+import static assemblernator.InstructionFormatter.formatDestRange;
+import static assemblernator.InstructionFormatter.formatSrcRange;
+import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
@@ -164,7 +165,7 @@ public abstract class UIG_IO extends AbstractInstruction{
 				this.getOperandData("FL").value = value;
 			} else if(this.operandType.expression) {
 				//evaluate value of operand.
-				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition); 
+				value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition); 
 				isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
@@ -199,9 +200,9 @@ public abstract class UIG_IO extends AbstractInstruction{
 	@Override
 	public final int[] assemble() {
 		if(operandType.input) {
-			return formatInput(this);
+			return formatDestRange(this);
 		} else {
-			return formatOutput(this);
+			return formatSrcRange(this);
 		}
 	}
 	

@@ -1,7 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatOther;
+import static assemblernator.InstructionFormatter.formatSrcRange;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
@@ -78,7 +78,7 @@ public class USI_ISRG extends AbstractInstruction {
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("FL").value = value;
 						} else if(this.hasOperand("EX")) {
-							value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
+							value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition);
 							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "EX", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("EX").value = value;
@@ -109,7 +109,7 @@ public class USI_ISRG extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return formatOther(this);
+		return formatSrcRange(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */

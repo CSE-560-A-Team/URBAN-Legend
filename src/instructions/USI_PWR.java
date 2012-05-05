@@ -52,7 +52,7 @@ public class USI_PWR extends AbstractInstruction {
 							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
 					this.getOperandData("FC").value = value;
 				} else if(this.hasOperand("EX")) {
-					value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
+					value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition);
 					isValid = isValidConstant(value.value, ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);

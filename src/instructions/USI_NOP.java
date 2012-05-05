@@ -1,9 +1,9 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatOPOnly;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -48,13 +48,7 @@ public class USI_NOP extends AbstractInstruction {
 	/** @see assemblernator.Instruction#assemble() */
 	@Override 
 	public int[] assemble() {
-		int[] assembled = new int[1];
-		String code = IOFormat.formatBinInteger(this.getOpcode(), 6); //"111101"
-		code = code + "00000000000000000000000"; //111101 00 0 000 000 0 0 000000000000000
-		
-		assembled[0] = Integer.parseInt(code, 2);
-		
-		return assembled;
+		return formatOPOnly(this);
 
 	}
 
