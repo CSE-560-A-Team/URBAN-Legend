@@ -231,6 +231,29 @@ public class Module {
 		}
 
 		/**
+		 * Returns all linking records from symbol table.
+		 * @author Noah
+		 * @date May 4, 2012; 9:00:19 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @return a two dimensional array of bytes.  Each row of the array corresponds to one linking record.
+		 * @specRef N/A
+		 */
+		public byte[][] getLinkRecord() {
+			//Iterator<Map.Entry<String, Instruction>> extEntIt = this.extEntSymbols.entrySet().iterator();
+			List<List<Byte>> records = new ArrayList<List<Byte>>();
+			for(Map.Entry<String, Instruction> entry : this.extEntSymbols.entrySet()) {
+				List<Byte> record = new ArrayList<Byte>();
+				
+			
+			}
+			return new byte[0][0];
+		}
+		
+		/**
 		 * provides an Iterator over the elements of the symbol table.
 		 * 
 		 * @author Noah
