@@ -249,10 +249,17 @@ public class Module {
 			for(Map.Entry<String, Instruction> entry : this.extEntSymbols.entrySet()) {
 				records.add((byte)'L');
 				records.add((byte)':');
+				//add label bytes.
 				byte[] temp = entry.getKey().getBytes();
 				for(int i = 0; i < temp.length; ++i) {
-					
+					records.add(temp[i]);
 				}
+				
+				records.add((byte)':');
+				temp = IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4);
+				
+				
+				
 				
 				
 				
