@@ -115,10 +115,8 @@ public class Module {
 			// keep track of instructions w/ opID "ENT" and "EXT" separately.
 			if (instr.getOpId().equalsIgnoreCase("ENT")
 					|| instr.getOpId().equalsIgnoreCase("EXT")) {
-				// System.err.println("here");
 				// put each operand as a separate entry into the symbol table.
 				for (int i = 0; i < instr.countOperand("LR"); i++) {
-					System.err.println("here");
 					String lbl = instr.getOperand("LR", i);
 					if (instr.usage == Usage.EXTERNAL
 							&& symbols.containsKey(lbl)) { // EXT label and is
@@ -130,7 +128,6 @@ public class Module {
 						// don't add.
 					}
 					else { // add.
-							// System.err.println("here");
 						extEntSymbols.put(instr.getOperand("LR", i), instr);
 					}
 				}
@@ -552,13 +549,13 @@ public class Module {
 	 */
 	public Value evaluate(String exp, boolean MREF, ErrorHandler hErr,
 			Instruction caller, int pos) {
-		int result = 0, i;
+		int result = 0, i = 0;
 		boolean readAnything = false;
 
 		int lrefs = 0, exrefs = 0;
 
 		exploop:
-		for (i = 0; i < exp.length();) // Iterate the whole expression
+		for (;;) // Iterate the whole expression
 		{
 			int sign = 1;
 
