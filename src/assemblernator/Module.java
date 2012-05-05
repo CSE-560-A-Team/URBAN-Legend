@@ -234,6 +234,7 @@ public class Module {
 		/**
 		 * Returns all linking records from symbol table.
 		 * @author Noah
+		 * @param progName program name.
 		 * @date May 4, 2012; 9:00:19 PM
 		 * @modified UNMODIFIED
 		 * @tested UNTESTED
@@ -241,35 +242,39 @@ public class Module {
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
 		 * @return a two dimensional array of bytes.  Each row of the array corresponds to one linking record.
-		 * @specRef N/A
+		 * @specRef OB2
 		 */
-		public byte[] getLinkRecord() {
+		public List<Byte> getLinkRecord(String progName) {
 			//Iterator<Map.Entry<String, Instruction>> extEntIt = this.extEntSymbols.entrySet().iterator();
 			List<Byte> records = new ArrayList<Byte>();
 			for(Map.Entry<String, Instruction> entry : this.extEntSymbols.entrySet()) {
-				records.add((byte)'L');
-				records.add((byte)':');
-				//add label bytes.
-				byte[] temp = entry.getKey().getBytes();
-				for(int i = 0; i < temp.length; ++i) {
-					records.add(temp[i]);
+				//if the entry is an ENT entry.
+				if(entry.getValue().getOpId().equalsIgnoreCase("ENT")) {
+					records.add((byte)'L');
+					records.add((byte)':');
+					//add label bytes.
+					byte[] temp = entry.getKey().getBytes();
+					for(int i = 0; i < temp.length; ++i) {
+						records.add(temp[i]);
+					}
+					
+					records.add((byte)':');
+					//address
+					temp = IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4);
+					for(int i = 0; i < temp.length; ++i) {
+						records.add(temp[i]);
+					}
+					
+					records.add((byte)':');
+					//program name
+					temp = progName.getBytes();
+					for(int i = 0; i < temp.length; ++i) {
+						records.add(temp[i]);
+					}
 				}
-				
-				records.add((byte)':');
-				temp = IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4);
-				for(int i = 0; i < temp.length; ++i) {
-					records.add(temp[i]);
-				}
-				
-				records.add((byte)':');
-				
-				temp = entry.getKey().getBytes();
-				for(int i = 0; i < temp.length; ++i) {
-					records.add(temp[i]);
-				}
-
 			}
-			return new byte[0];
+
+			return records;
 		}
 		
 		/**
@@ -668,37 +673,10 @@ public class Module {
 	public void writeObjectFile(OutputStream out, int execStart)
 			throws IOException, Exception {
 		// write header record.
-		ObjectWriter.writeHeaderRecord(out, this.programName, this.startAddr,
-				moduleLength, execStart, Assembler.VERSION);
-
-		Iterator<Map.Entry<String, Instruction>> symbTableIt = this.symbolTable
-				.iterator();
-
-		// write all linking records.
-		while (symbTableIt.hasNext()) {
-			Instruction entry = symbTableIt.next().getValue();
-			ObjectWriter.writeLinkingRecord(out, entry.label, this.programName,
-					entry.lc);
-		}
-
-		// write all text records.
-		for (Instruction instr : this.assembly) {
-			int[] code;
-			int mods = 0; // have no idea what this does so just leaving it here
-							// for now.
-			char relocFlag = 'A'; // will not be here later.
-			if (instr.getOpId().equalsIgnoreCase("CHAR")) {
-				code = instr.assemble();
-				for (int i = 0; i < code.length; ++i) {
-					// ObjectWriter.writeTextRecord(out, this.programName,
-					// instr.lc, code[i], mods, relocFlag);
-				}
-			}
-			else if (!instr.isDirective()
-					|| instr.getOpId().equalsIgnoreCase("NUM")) {
-				// ObjectWriter.writeTextRecord(out, this.programName, instr.lc,
-				// instr.assemble()[0], mods, relocFlag);
-			}
+		
+		//write linking records.
+		for(byte linkByte : this.symbolTable.getLinkRecord(this.programName)) {
+			out.write(linkByte);
 		}
 
 	}
