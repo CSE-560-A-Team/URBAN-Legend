@@ -6,6 +6,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
 
 /**
@@ -50,26 +51,26 @@ public class USI_PST extends AbstractInstruction {
 				if(this.hasOperand("DR")){
 					//error checking
 					Operand o = getOperandData("DR");
-					int constantSize = module.evaluate(o.expression, false, hErr, this,
+					Value constantSize = module.evaluate(o.expression, false, hErr, this,
 							o.valueStartPosition);
 					this.getOperandData("DR").value = constantSize;
-					isValid = OperandChecker.isValidReg(constantSize);
+					isValid = OperandChecker.isValidReg(constantSize.value);
 					if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 					if(this.hasOperand("FL")){
 						//error checking
 						Operand o1 = getOperandData("FL");
-						int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+						Value constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 								o1.valueStartPosition);
 						this.getOperandData("FL").value = constantSize1;
-						isValid = OperandChecker.isValidLiteral(constantSize1,ConstantRange.RANGE_13_TC);
+						isValid = OperandChecker.isValidLiteral(constantSize1.value,ConstantRange.RANGE_13_TC);
 						if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),"-2^12", "2^12 - 1"), this.lineNum, -1);
 					}else if (this.hasOperand("FM")){
 						//error checking
 						Operand o1 = getOperandData("FM");
-						int constantSize1 = module.evaluate(o1.expression, true, hErr, this,
+						Value constantSize1 = module.evaluate(o1.expression, true, hErr, this,
 								o1.valueStartPosition);
 						this.getOperandData("FM").value = constantSize1;
-						isValid = OperandChecker.isValidMem(constantSize1);
+						isValid = OperandChecker.isValidMem(constantSize1.value);
 						if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 					}else{
 						isValid = false;
@@ -85,24 +86,24 @@ public class USI_PST extends AbstractInstruction {
 				if(this.hasOperand("DR")){
 					//error checking
 					Operand o = getOperandData("DR");
-					int constantSize = module.evaluate(o.expression, false, hErr, this,
+					Value constantSize = module.evaluate(o.expression, false, hErr, this,
 							o.valueStartPosition);
 					this.getOperandData("DR").value = constantSize;
-					isValid = OperandChecker.isValidReg(constantSize);
+					isValid = OperandChecker.isValidReg(constantSize.value);
 					if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 					if (this.hasOperand("FM") && this.hasOperand("FX")){
 						//error checking
 						Operand o1 = getOperandData("FX");
-						int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+						Value constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 								o1.valueStartPosition);
 						this.getOperandData("FX").value = constantSize1;
-						isValid = OperandChecker.isValidIndex(constantSize1);
+						isValid = OperandChecker.isValidIndex(constantSize1.value);
 						if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 						Operand o2 = getOperandData("FM");
-						int constantSize2 = module.evaluate(o2.expression, true, hErr, this,
+						Value constantSize2 = module.evaluate(o2.expression, true, hErr, this,
 								o2.valueStartPosition);
 						this.getOperandData("FM").value = constantSize2;
-						isValid = OperandChecker.isValidMem(constantSize2);
+						isValid = OperandChecker.isValidMem(constantSize2.value);
 						if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 					}else{
 						//error

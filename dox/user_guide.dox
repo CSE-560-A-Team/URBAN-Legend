@@ -157,7 +157,7 @@ An illustration of the breakdown of these formats is given in the two following 
   </tr>
   <tr>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>0</td>
+    <td><b>0</b></td><td><b>0</b></td>
     <td>1</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
@@ -175,32 +175,14 @@ An illustration of the breakdown of these formats is given in the two following 
   </tr>
   <tr>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>1</td>
+    <td><b>0</b></td><td><b>1</b></td>
     <td>1</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
   </tr>
   <tr style="background:#DAE0FF">
-    <th rowspan="2">ISRG</th>
-    <td colspan="6"><b>OP Code</b></td>
-    <td colspan="2"><b>Format</b></td>
-    <td colspan="4"><b><i>Word Count</i></b></td>
-    <td colspan="1"><b>Index?</b></td>
-    <td colspan="3"><b>Register</b></td>
-    <td colspan="4"><b>IXR</b></td>
-    <td colspan="12"><b>Memory address</b></td>
-  </tr>
-  <tr>
-    <td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td>
-    <td>0</td><td>0</td>
-    <td>0</td><td>0</td><td>0</td><td>1</td>
-    <td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-  </tr>
-  <tr style="background:#DAE0FF">
-    <th rowspan="2">Input</th>
+    <th rowspan="2">DEST-Range</th>
     <td colspan="6"><b>OP Code</b></td>
     <td colspan="2"><b>Format</b></td>
     <td colspan="4"><b><i>Word Count</i></b></td>
@@ -211,14 +193,14 @@ An illustration of the breakdown of these formats is given in the two following 
   </tr>
   <tr>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>0</td>
+    <td><b>0</b></td><td><b>0</b></td>
     <td>0</td><td>0</td><td>0</td><td>1</td>
-    <td>1</td><td>0</td><td>0</td><td>0</td>
+    <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
   </tr>
   <tr style="background:#DAE0FF">
-    <th rowspan="2">Output</th>
+    <th rowspan="2">SRC-Range</th>
     <td colspan="6"><b>OP Code</b></td>
     <td colspan="2"><b>Format</b></td>
     <td colspan="1"><b>Index?</b></td>
@@ -229,14 +211,14 @@ An illustration of the breakdown of these formats is given in the two following 
   </tr>
   <tr>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>0</td>
+    <td><b>0</b></td><td><b>0</b></td>
     <td>1</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>1</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
   </tr>
   <tr style="background:#DAE0FF">
-    <th rowspan="2">HLT/DMP</th>
+    <th rowspan="2">OP-Literal</th>
     <td colspan="6"><b>OP Code</b></td>
     <td colspan="2"><b>Format</b></td>
     <td colspan="4"><b>Unused</b></td>
@@ -245,14 +227,14 @@ An illustration of the breakdown of these formats is given in the two following 
   </tr>
   <tr>
     <td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td>
-    <td>0</td><td>1</td>
+    <td><b>0</b></td><td><b>1</b></td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
   </tr>
   <tr style="background:#DAE0FF">
-    <th rowspan="2">CLRA/CLRX</th>
+    <th rowspan="2">OP Only</th>
     <td colspan="6"><b>OP Code</b></td>
     <td colspan="2"><b>Unused</b></td>
     <td colspan="4"><b>Unused</b></td>
@@ -261,7 +243,7 @@ An illustration of the breakdown of these formats is given in the two following 
   </tr>
   <tr>
     <td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>0</td>
+    <td><b>0</b></td><td><b>0</b></td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
@@ -290,7 +272,7 @@ An illustration of the breakdown of these formats is given in the two following 
   </tr>
   <tr>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>1</td><td>0</td>
+    <td><b>1</b></td><td><b>0</b></td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
   </tr>
@@ -303,7 +285,7 @@ An illustration of the breakdown of these formats is given in the two following 
   </tr>
   <tr>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>1</td><td>1</td>
+    <td><b>1</b></td><td><b>1</b></td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
   </tr>

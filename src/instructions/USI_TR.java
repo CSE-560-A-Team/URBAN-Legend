@@ -6,6 +6,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
 
 /**
@@ -51,10 +52,10 @@ public class USI_TR extends AbstractInstruction {
 				dest="DM";
 				//range check
 				Operand o = getOperandData("DM");
-				int constantSize = module.evaluate(o.expression, true, hErr, this,
+				Value constantSize = module.evaluate(o.expression, true, hErr, this,
 						o.valueStartPosition);
 				this.getOperandData("DM").value = constantSize;
-				isValid = OperandChecker.isValidMem(constantSize);
+				isValid = OperandChecker.isValidMem(constantSize.value);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 			}else{
 				isValid=false;
@@ -66,16 +67,16 @@ public class USI_TR extends AbstractInstruction {
 				dest="DMDX";
 				//range check
 				Operand o1 = getOperandData("DX");
-				int constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+				Value constantSize1 = module.evaluate(o1.expression, false, hErr, this,
 						o1.valueStartPosition);
 				this.getOperandData("DX").value = constantSize1;
-				isValid = OperandChecker.isValidIndex(constantSize1);
+				isValid = OperandChecker.isValidIndex(constantSize1.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				Operand o2 = getOperandData("DM");
-				int constantSize2 = module.evaluate(o2.expression, true, hErr, this,
+				Value constantSize2 = module.evaluate(o2.expression, true, hErr, this,
 						o2.valueStartPosition);
 				this.getOperandData("DM").value = constantSize2;
-				isValid = OperandChecker.isValidMem(constantSize2);
+				isValid = OperandChecker.isValidMem(constantSize2.value);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 			}else{
 				isValid=false;

@@ -9,6 +9,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * The PWR instruction.
@@ -40,19 +41,19 @@ public class USI_PWR extends AbstractInstruction {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override 
 	public boolean check(ErrorHandler hErr, Module module) {
-		int value;
+		Value value;
 		boolean isValid = true;;
 		if(this.operands.size() == 2) {
 			if(this.hasOperand("FC") || this.hasOperand("EX")) {
 				if(this.hasOperand("FC")) {
 					value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
-					isValid = isValidConstant(value, ConstantRange.RANGE_16_TC);
+					isValid = isValidConstant(value.value, ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(), 
 							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
 					this.getOperandData("FC").value = value;
 				} else if(this.hasOperand("EX")) {
 					value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
-					isValid = isValidConstant(value, ConstantRange.RANGE_16_TC);
+					isValid = isValidConstant(value.value, ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
 					this.getOperandData("EX").value = value;
@@ -61,12 +62,12 @@ public class USI_PWR extends AbstractInstruction {
 				if(isValid) {
 					if(this.hasOperand("DR")) {
 						value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-						isValid = isValidReg(value);
+						isValid = isValidReg(value.value);
 						if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 						this.getOperandData("DR").value = value;
 					} else if(this.hasOperand("DX")) {
 						value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition); 
-						isValid = isValidIndex(value);
+						isValid = isValidIndex(value.value);
 						if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 						this.getOperandData("DX").value = value;
 					} else {

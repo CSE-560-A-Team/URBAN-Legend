@@ -6,6 +6,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
 
 /**
@@ -45,7 +46,7 @@ public class USI_AEXS extends AbstractDirective {
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		int value;
+		Value value;
 		
 		if(this.operands.size() > 1) {
 			isValid = false;
@@ -61,7 +62,7 @@ public class USI_AEXS extends AbstractDirective {
 			}
 		} else if(this.hasOperand("FC")){
 			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); 
-			isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_ADDR); //check if value of FC is valid.
+			isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_ADDR); //check if value of FC is valid.
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
 					this.getOpId(), Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 		} else {

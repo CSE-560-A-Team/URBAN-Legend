@@ -6,6 +6,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
 
 /**
@@ -51,10 +52,10 @@ public class USI_SKT extends AbstractInstruction {
 						dest = "DR";
 						//range check
 						Operand o = getOperandData("DR");
-						int constantSize = module.evaluate(o.expression, false, hErr, this,
+						Value constantSize = module.evaluate(o.expression, false, hErr, this,
 								o.valueStartPosition);
 						this.getOperandData("DR").value = constantSize;
-						isValid = OperandChecker.isValidReg(constantSize);
+						isValid = OperandChecker.isValidReg(constantSize.value);
 						if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 					}else{
 						isValid=false;

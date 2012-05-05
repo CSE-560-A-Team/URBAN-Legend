@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Module.Value;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -24,7 +25,7 @@ public class USI_NEWLC extends AbstractDirective {
 
 	/** The static instance for this instruction. */
 	static USI_NEWLC staticInstance = new USI_NEWLC(true);
-	
+
 	/** The LC the user specified. */
 	int ownLC;
 
@@ -36,25 +37,36 @@ public class USI_NEWLC extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		return new int[0];
 	}
 
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	/**
+	 * @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler,
+	 *      Module)
+	 */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
 		Operand o = this.getOperandData("FC");
-		if (o != null) {
-			ownLC = module.evaluate(o.expression, false, hErr, this, o.valueStartPosition);
-		} else {
+		if (o == null) {
 			o = this.getOperandData("LR");
-			if (o != null) {
-				ownLC = module.evaluate(o.expression, false, hErr, this, o.valueStartPosition);
-			}
-			else {
-				hErr.reportError(makeError("directiveMissingOp2",this.getOpId(),"FC","LR"), lineNum, -1);
-				isValid = false;
+			if (o == null) {
+				o = this.getOperandData("FL");
+				if (o == null) {
+					hErr.reportError(
+							makeError("directiveMissingOp2", this.getOpId(),
+									"FC", "LR"), lineNum, -1);
+					isValid = false;
+				}
 			}
 		}
+
+		Value tempv = module.evaluate(o.expression, false, hErr, this,
+				o.valueStartPosition);
+		if (tempv.arec != 'A')
+			hErr.reportError(makeError("nonConstExpr", o.expression), lineNum,
+					o.valueStartPosition);
+		ownLC = tempv.value;
+
 		if (isValid && ownLC < lc) {
 			hErr.reportError(makeError("lcBackward"), lineNum, -1);
 			isValid = false;
@@ -102,4 +114,3 @@ public class USI_NEWLC extends AbstractDirective {
 	/** Default constructor; does nothing. */
 	private USI_NEWLC() {}
 }
-

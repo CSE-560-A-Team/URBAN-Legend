@@ -7,6 +7,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * The HLT instruction.
@@ -42,7 +43,7 @@ public class USI_HLT extends AbstractInstruction {
 			hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "FC", "EX"), this.lineNum, -1);
 			isValid = false;
 		} else {
-			int value;
+			Value value;
 			String errOperand;
 			if(this.hasOperand("FC")) {
 				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
@@ -51,7 +52,7 @@ public class USI_HLT extends AbstractInstruction {
 				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition);
 				errOperand = "EX";
 			}
-			if(!isValidConstant(value, ConstantRange.RANGE_13_TC)) {
+			if(!isValidConstant(value.value, ConstantRange.RANGE_13_TC)) {
 				hErr.reportError(makeError("OORconstant", errOperand, this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_13_TC.min), Integer.toString(ConstantRange.RANGE_13_TC.max)), this.lineNum, -1);
 				isValid = false;

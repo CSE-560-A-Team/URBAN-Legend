@@ -2,21 +2,26 @@ package assemblernator;
 
 import guinator.GUIMain;
 import instructions.USI_EQU;
+import instructions.USI_EXT;
+import instructions.USI_NUM;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import assemblernator.ErrorReporting.DefaultErrorHandler;
+import assemblernator.Instruction.Operand;
+import assemblernator.Instruction.Usage;
+import assemblernator.Module.Value;
 
 /**
  * @file Main.java
  * @author Ratul Khosla, Eric Smith, Noah Torrance, Josh Ventura
  */
 
-/** 
+/**
  * @mainpage
- *   <img src="custom/logo.svg" style="clear:both" /><br/>
- *   <center><h1>An assembler for the URBAN Architecture</h1></center>
+ *           <img src="custom/logo.svg" style="clear:both" /><br/>
+ *           <center><h1>An assembler for the URBAN Architecture</h1></center>
  */
 
 /**
@@ -31,12 +36,48 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Module m = new Module();
-		int a = m.evaluate("1+1+2+3-5", false, new DefaultErrorHandler(), USI_EQU.getInstance().getNewInstance(), 0);
-		System.out.println(a);
-		
+		String num[] = new String[] { "zero", "one", "two", "three", "four",
+				"five", "six", "seven" };
+		for (int i = 0; i < num.length; i++) {
+			Instruction in = USI_EQU.getInstance().getNewInstance();
+			in.label = num[i];
+			((USI_EQU) in).value = new Value(i,'A');
+			in.usage = Usage.EQUATE;
+			m.getSymbolTable().addEntry(in, null);
+		}
+
+		{
+			Instruction in = USI_EXT.getInstance().getNewInstance();
+			for (int i = 0; i < 10; ++i)
+				in.operands.add(new Operand("LR", "exlabel" + i, 0, 0));
+			in.usage = Usage.EXTERNAL;
+			m.getSymbolTable().addEntry(in, null);
+			for (int i = 0; i < 10; ++i) {
+				in = USI_NUM.getInstance().getNewInstance();
+				in.label = "rlabel" + i;
+				in.usage = Usage.LABEL;
+				in.lc = i;
+				m.getSymbolTable().addEntry(in, null);
+			}
+		}
+
+		String x[] = new String[] { "1+1+2+3-5", "1+1", "1+1-1", "1+1+1",
+				"1+1+1+1+1-2", "1 + 3 + 5 + 7 - 2", "1 + 3 - 2 + 5 + 7 - 2",
+				"one + one", "two + two", "six + one", "two + six - one",
+				"one + two + 4 + six - 5 -one+8+*+ 0 + * + *", "rlabel1",
+				"rlabel1 + rlabel3", "rlabel5-rlabel1", "exlabel1",
+				"exlabel1-rlabel1", "exlabel1-rlabel1+rlabel2",
+				"exlabel1 + exlabel2" };
+		for (int i = 0; i < x.length; i++) {
+			Value a = m.evaluate(x[i], true, new DefaultErrorHandler(), USI_EQU
+					.getInstance().getNewInstance(), 0);
+			System.out.println(x[i] + " = " + a.value + ", flag = " + a.arec);
+		}
+
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
-			System.out.println("Usage: java -jar urban.jar file1 file2 file3... -o executablename");
+			System.out
+					.println("Usage: java -jar urban.jar file1 file2 file3... -o executablename");
 			GUIMain.launch();
 			return;
 		}
@@ -50,7 +91,8 @@ public class Main {
 			if (args[i].charAt(0) == '-') {
 				if (args[i].equals("-o")) {
 					if (++i > args.length) {
-						System.err.println("Expected output filename following -o");
+						System.err
+								.println("Expected output filename following -o");
 						System.exit(1);
 					}
 					outputFile = args[i];
@@ -70,14 +112,15 @@ public class Main {
 		}
 		for (int i = 0; i < filesToAssemble.size(); i++) {
 			System.out.println("Assembling " + filesToAssemble.get(i));
-			
+
 			File f = new File(filesToAssemble.get(i));
 			if (f.canRead()) {
 				try {
-					Module aModule = Assembler.parseFile(f, new DefaultErrorHandler());
+					Module aModule = Assembler.parseFile(f,
+							new DefaultErrorHandler());
 					System.out.println("\n" + aModule.toString());
-					
-					
+
+
 				} catch (NullPointerException npe) {
 					System.err.println("Failed to read file `"
 							+ filesToAssemble.get(i)
@@ -91,6 +134,7 @@ public class Main {
 				System.exit(1);
 			}
 		}
-		System.out.println("Currently no binary generation for output to `" + outputFile + "'.");
+		System.out.println("Currently no binary generation for output to `"
+				+ outputFile + "'.");
 	}
 }

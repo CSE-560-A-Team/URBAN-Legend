@@ -6,6 +6,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
 
 /**
@@ -38,7 +39,7 @@ public class USI_PSH extends AbstractInstruction {
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		int value;
+		Value value;
 		if(this.operands.size() > 1) {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
@@ -48,20 +49,20 @@ public class USI_PSH extends AbstractInstruction {
 		} else if(this.hasOperand("FM")) {
 			value = module.evaluate(this.getOperand("FM"), true, hErr, this, this.getOperandData("FM").keywordStartPosition);
 			//range checking
-			isValid = OperandChecker.isValidMem(value);
+			isValid = OperandChecker.isValidMem(value.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("FM").value = value;
 		} else if(this.hasOperand("FC")) {
 			//range checking
 			value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
-			isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_ADDR);
+			isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_ADDR);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(),
 					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 			this.getOperandData("FC").value = value;
 		} else if(this.hasOperand("FL")){
 			//range checking
 			value = module.evaluate(this.getOperand("FL"), false, hErr, this, this.getOperandData("FL").keywordStartPosition);
-			isValid = OperandChecker.isValidLiteral(value,ConstantRange.RANGE_ADDR);
+			isValid = OperandChecker.isValidLiteral(value.value,ConstantRange.RANGE_ADDR);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),
 					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 			this.getOperandData("FL").value = value;

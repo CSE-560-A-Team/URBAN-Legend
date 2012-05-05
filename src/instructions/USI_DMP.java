@@ -7,6 +7,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * The DMP instruction.
@@ -45,7 +46,7 @@ public class USI_DMP extends AbstractInstruction {
 			hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "FC", "EX"), this.lineNum, -1);
 			isValid = false;
 		} else {
-			int value;
+			Value value;
 			String errOperand;
 			if(this.hasOperand("FC")) {
 				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
@@ -55,7 +56,7 @@ public class USI_DMP extends AbstractInstruction {
 				errOperand = "EX";
 			}
 
-			if(!isValidConstant(value, ConstantRange.RANGE_DMP)) {
+			if(!isValidConstant(value.value, ConstantRange.RANGE_DMP)) {
 				hErr.reportError(makeError("OORconstant", errOperand, this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_DMP.min), Integer.toString(ConstantRange.RANGE_DMP.max)), this.lineNum, -1);
 				isValid = false;

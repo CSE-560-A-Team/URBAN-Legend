@@ -4,6 +4,7 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.OperandChecker.isValidConstant;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Module.Value;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -59,7 +60,10 @@ public class USI_KICKO extends AbstractDirective {
 			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
 		} else {
 			// We know at this point that operands.get(0) is our one and only operand, FC.
-			ownLC = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
+			 Value tempv = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
+			 if (tempv.arec != 'A')
+				 hErr.reportError(makeError("nonConstExpr", operands.get(0).expression), lineNum, operands.get(0).valueStartPosition);
+			 ownLC = tempv.value;
 			if (!isValidConstant(ownLC, ConstantRange.RANGE_ADDR)) {
 				isValid = false;
 				hErr.reportError(makeError("OORmemAddr", "FC", this.getOpId()), this.lineNum, -1);

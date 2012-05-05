@@ -1,14 +1,13 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.OperandChecker.isValidLiteral;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Instruction.ConstantRange;
-import assemblernator.IOFormat;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
-import static assemblernator.InstructionFormatter.formatOther;
 
 /**
  * @author Ratul Khosla
@@ -39,7 +38,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 	@Override
 	public final boolean check(ErrorHandler hErr, Module module){
 		boolean isValid = true;
-		int value;
+		Value value;
 		//The only possible combination has 2 operands
 		if(this.operands.size() > 2){
 			isValid = false;
@@ -49,7 +48,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 		} else if(!((this.hasOperand("FC") || (this.hasOperand("EX"))))){
 			isValid = false;
-			//isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_SHIFT);
+			//isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_SHIFT);
 			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FC"), this.lineNum, -1);
 			//if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId()), this.lineNum, -1);
 			//now there are 2 operands, one of which is FC
@@ -57,7 +56,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			if(this.hasOperand("DR")){
 				//check FC
 				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); //value of FC
-				isValid = OperandChecker.isValidConstant(value, ConstantRange.RANGE_SHIFT); //check if value of FC is valid.
+				isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_SHIFT); //check if value of FC is valid.
 				if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
 						this.getOpId(), Integer.toString(ConstantRange.RANGE_SHIFT.min), Integer.toString(ConstantRange.RANGE_SHIFT.max)), this.lineNum, -1);
 				this.getOperandData("FC").value = value;
@@ -65,14 +64,14 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 				dest = "DR";
 				//range checking
 				value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-				isValid = OperandChecker.isValidReg(value);
+				isValid = OperandChecker.isValidReg(value.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DR").value = value;
 			} else if(this.hasOperand("DX")){
 				dest = "DX";
 				//range checking
 				value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
-				isValid = OperandChecker.isValidIndex(value);
+				isValid = OperandChecker.isValidIndex(value.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DX").value = value;
 			} else if(this.hasOperand("EX")){
@@ -83,7 +82,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			if(this.hasOperand("DR")){
 				//check EX
 				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition); 
-				isValid = isValidLiteral(value, ConstantRange.RANGE_ADDR);
+				isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 				this.getOperandData("EX").value = value;
@@ -91,14 +90,14 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 				dest = "DR";
 				//range checking
 				value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
-				isValid = OperandChecker.isValidReg(value);
+				isValid = OperandChecker.isValidReg(value.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DR").value = value;
 			} else if(this.hasOperand("DX")){
 				dest = "DX";
 				//range checking
 				value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
-				isValid = OperandChecker.isValidIndex(value);
+				isValid = OperandChecker.isValidIndex(value.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DX").value = value;
 			} else if(this.hasOperand("FC")){
