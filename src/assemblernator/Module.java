@@ -3,6 +3,7 @@ package assemblernator;
 import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -248,41 +249,35 @@ public class Module {
 		 * @specRef OB2.6
 		 * @specRef OB2.7
 		 */
-		public List<Byte> getLinkRecord(String progName) {
+		public byte[] getLinkRecord(String progName) {
 			//Iterator<Map.Entry<String, Instruction>> extEntIt = this.extEntSymbols.entrySet().iterator();
-			List<Byte> records = new ArrayList<Byte>();
-
-			for(Map.Entry<String, Instruction> entry : this.extEntSymbols.entrySet()) {
-				//if the entry is an ENT entry.
-				if(entry.getValue().getOpId().equalsIgnoreCase("ENT")) {
-					records.add((byte)'L');
-					records.add((byte)':');
-					//add label bytes.
-					byte[] temp = entry.getKey().getBytes();
-					for(int i = 0; i < temp.length; ++i) {
-						records.add(temp[i]);
+			//List<Byte> records = new ArrayList<Byte>();
+			ByteArrayOutputStream records = new ByteArrayOutputStream();
+			try {
+				for(Map.Entry<String, Instruction> entry : this.extEntSymbols.entrySet()) {
+					//if the entry is an ENT entry.
+					if(entry.getValue().getOpId().equalsIgnoreCase("ENT")) {
+						records.write((byte)'L');
+						records.write((byte)':');
+						//add label
+						records.write(entry.getKey().getBytes());
+						
+						records.write((byte)':');
+						//address
+						records.write(IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4));
+						
+						records.write((byte)':');
+						//program name
+						records.write(progName.getBytes());
+	
 					}
-					
-					records.add((byte)':');
-					//address
-					temp = IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4);
-					for(int i = 0; i < temp.length; ++i) {
-						records.add(temp[i]);
-					}
-					
-					records.add((byte)':');
-					//program name
-					temp = progName.getBytes();
-					for(int i = 0; i < temp.length; ++i) {
-						records.add(temp[i]);
-					}
-
-
 				}
-
+			} catch(IOException e) {
+				e.printStackTrace();
+				return ":Something wicked has happened:".getBytes();
 			}
 
-			return records;
+			return records.toByteArray();
 		}
 
 		/**
@@ -693,9 +688,7 @@ public class Module {
 		// write header record.
 		
 		//write linking records.
-		for(byte linkByte : this.symbolTable.getLinkRecord(this.programName)) {
-			out.write(linkByte);
-		}
+		out.write(this.symbolTable.getLinkRecord(this.programName));
 
 	}
 
