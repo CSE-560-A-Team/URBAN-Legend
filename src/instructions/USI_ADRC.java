@@ -1,9 +1,13 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.OperandChecker.isValidMem;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * The ADRC instruction.
@@ -31,17 +35,54 @@ public class USI_ADRC extends AbstractDirective {
 
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
-		return false; // TODO: IMPLEMENT
+		boolean isValid = true;
+		Value val;
+		if(this.hasOperand("LR")) {
+			val = module.evaluate(this.getOperand("LR"), true, hErr, this, this.getOperandData("LR").keywordStartPosition);
+			this.getOperandData("LR").value = val;
+			isValid = isValidMem(val.value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "LR", this.getOpId()), this.lineNum, -1);
+		} else if(this.hasOperand("EX")) {
+			val = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition);
+			this.getOperandData("EX").value = val;
+			isValid = isValidMem(val.value);
+			if(!isValid) hErr.reportError(makeError("OORmemAddr", "EX", this.getOpId()), this.lineNum, -1);
+		} else {
+			isValid = false;
+			hErr.reportError(makeError("directiveMissingOp2", this.getOpId(), "LR", "EX"), this.lineNum, -1);
+		}
+		return false; 
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return null; // TODO: IMPLEMENT
+		int [] assembled = new int[1];
+		if(this.hasOperand("LR")) {
+			assembled[0] = this.getOperandData("LR").value.value;
+		} else {
+			assembled[0] = this.getOperandData("EX").value.value;
+		}
+		
+		return assembled;
 	}
 
 	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		return true;
+		boolean isValid = true;
+		
+		if(this.operands.size() > 1) {
+			isValid = false;
+			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
+		} else if(this.operands.size() < 1){
+			isValid = false;
+			hErr.reportError(makeError("tooFewOperandsDir", this.getOpId()), this.lineNum, -1);
+		} else if(this.hasOperand("LR")) {
+			if(!IOFormat.isValidLabel(this.getOperandData("LR").expression)) {
+				isValid = false;
+				hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
+			}
+		}
+		return isValid;
 	}
 
 	// =========================================================

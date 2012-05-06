@@ -93,7 +93,13 @@ public abstract class Instruction {
 		 * @specRef N/A
 		 */
 		@Override public String toString() {
-			return Integer.toBinaryString(value.value);
+			//return Integer.toBinaryString(value.value);
+			String rep = operand + ", Address Status: ";
+			if(value != null) {
+				rep = rep + value.arec;
+			}
+			
+			return rep;
 		}
 	}
 
@@ -829,7 +835,8 @@ public abstract class Instruction {
 		return rep;
 		*/
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
-		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
+		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR") 
+				|| this.getOpId().equalsIgnoreCase("ADRC")) {
 			for(int i = 0; i < assemble().length; i++) {
 				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8) + "\t";
 				if(i < assemble().length - 1) {
@@ -842,6 +849,13 @@ public abstract class Instruction {
 		}
 		//"A" and "R" are for rep flag... which we currently don't have.
 		rep = rep + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
+
+		int opPos = 0;
+		for(Operand o : operands) {
+			rep = rep + "Operand " + opPos + ": " + o.toString() + "\n";
+			opPos++;
+		}
+		
 		rep = rep + "errors:\n";
 		for (String error : errors) {
 			rep = rep + error + "\n";
