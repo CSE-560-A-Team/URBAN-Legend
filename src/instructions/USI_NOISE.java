@@ -1,7 +1,6 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatSrcRange;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -113,7 +112,7 @@ public class USI_NOISE extends AbstractInstruction {
 		op.value = module.evaluate(op.expression, false, hErr, this,
 				op.valueStartPosition);
 		if (op.value.value < 50 || op.value.value > 20000) {
-			hErr.reportError(makeError("OORconstant", opId, "50", "20000"),
+			hErr.reportError(makeError("OORconstant", "FR", opId, "50", "20000"),
 					lineNum, op.valueStartPosition);
 			return false;
 		}
@@ -128,7 +127,7 @@ public class USI_NOISE extends AbstractInstruction {
 		op.value = module.evaluate(op.expression, false, hErr, this,
 				op.valueStartPosition);
 		if (op.value.value < 10 || op.value.value > 8000) {
-			hErr.reportError(makeError("OORconstant", opId, "50", "20000"),
+			hErr.reportError(makeError("OORconstant", "DM", opId, "50", "20000"),
 					lineNum, op.valueStartPosition);
 			return false;
 		}

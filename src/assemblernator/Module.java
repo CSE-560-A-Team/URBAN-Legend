@@ -2,11 +2,10 @@ package assemblernator;
 
 import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -230,6 +229,7 @@ public class Module {
 
 		/**
 		 * Returns all linking records from symbol table.
+		 * 
 		 * @author Noah
 		 * @date May 4, 2012; 9:00:19 PM
 		 * @modified UNMODIFIED
@@ -237,29 +237,28 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @return a two dimensional array of bytes.  Each row of the array corresponds to one linking record.
+		 * @return a two dimensional array of bytes. Each row of the array
+		 *         corresponds to one linking record.
 		 * @specRef N/A
 		 */
 		public byte[] getLinkRecord() {
-			//Iterator<Map.Entry<String, Instruction>> extEntIt = this.extEntSymbols.entrySet().iterator();
+			// Iterator<Map.Entry<String, Instruction>> extEntIt =
+			// this.extEntSymbols.entrySet().iterator();
 			List<Byte> records = new ArrayList<Byte>();
-			for(Map.Entry<String, Instruction> entry : this.extEntSymbols.entrySet()) {
-				records.add((byte)'L');
-				records.add((byte)':');
+			for (Map.Entry<String, Instruction> entry : this.extEntSymbols
+					.entrySet()) {
+				records.add((byte) 'L');
+				records.add((byte) ':');
 				byte[] temp = entry.getKey().getBytes();
-				for(int i = 0; i < temp.length; ++i) {
-					
+				for (int i = 0; i < temp.length; ++i) {
+
 				}
-				
-				
-				
-				
-				
-			
+
+
 			}
 			return new byte[0];
 		}
-		
+
 		/**
 		 * provides an Iterator over the elements of the symbol table.
 		 * 
@@ -526,6 +525,9 @@ public class Module {
 	 * 
 	 *           May 4, 2012; 7:34:26 PM: Refactored to be iterative.
 	 * 
+	 *           May 5, 2012; 8:07:08 PM: Fixed issue where it was inferring
+	 *           addition when an operator was missing.
+	 * 
 	 * @tested Apr 17, 2012; 2:33:20 AM: Field tested with five term sums in
 	 *         nested EQUs. Worked provided expression did not contain spaces.
 	 * @errors Reports errors 021-039.
@@ -554,10 +556,11 @@ public class Module {
 
 		int lrefs = 0, exrefs = 0;
 
+		int sign = 1;
+
 		exploop:
-		for (;;) // Iterate the whole expression
+		for (;; sign = 0) // Iterate the whole expression
 		{
-			int sign = 1;
 
 			for (;; ++i) {
 				if (i >= exp.length()) {
@@ -568,16 +571,22 @@ public class Module {
 				}
 				if (Character.isWhitespace(exp.charAt(i)))
 					continue;
-				if (exp.charAt(i) == '+')
+				if (exp.charAt(i) == '+') {
+					sign = sign == 0 ? 1 : sign;
 					continue;
+				}
 				if (exp.charAt(i) == '-') {
-					sign *= -1;
+					sign = sign == 0 ? -1 : -sign;
 					continue;
 				}
 				break;
 			}
 
 			readAnything = true;
+			if (sign == 0) {
+				hErr.reportError(makeError("opratorExp"), caller.lineNum, pos
+						+ i);
+			}
 
 			if (Character.isLetter(exp.charAt(i))) {
 				String lbl;
