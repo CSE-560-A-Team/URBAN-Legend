@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Date;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
@@ -279,6 +280,8 @@ public class Module {
 
 			return records.toByteArray();
 		}
+
+		
 
 		/**
 		 * provides an Iterator over the elements of the symbol table.
@@ -730,5 +733,60 @@ public class Module {
 		}
 
 		return rep;
+	}
+	
+	/**
+	 * @author ratul Khosla
+	 * @date May 6, 2012; 7:19:51 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param programName The program name.
+	 * @param asmblrVersion The current assembler version.
+	 * @return A one dimensional array of bytes. The row represents the Header Record.
+	 * @specRef OB1
+	 * @specRef OB1.1
+	 * @specRef OB1.2
+	 * @specRef OB1.3
+	 * @specRef OB1.4
+	 * @specRef OB1.5
+	 * @specRef OB1.6
+	 * @specRef OB1.7
+	 * @specRef OB1.8
+	 * @specRef OB1.9
+	 * @specRef OB1.18
+	 * @specRef OB1.19
+	 * @specRef OB1.20
+	 * @specRef OB1.21
+	 */
+	byte[] getBytes(String programName, int asmblrVersion) {
+		try {
+			Map.Entry<String, Instruction> entry;
+			ByteArrayOutputStream header = new ByteArrayOutputStream();
+			header.write((byte) 'H');// OB1.1
+			header.write((byte) ':');// OB1.2
+			header.write(programName.getBytes());// OB1.3
+			header.write((byte) ':');// OB1.2
+			header.write(IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4));// OB1.3
+			header.write((byte) ':');// OB1.2
+			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength, 16, 4));// OB1.3
+			header.write((byte) ':');// OB1.4
+			header.write(IOFormat.formatIntegerWithRadix(this.execstartAddr, 16, 4));// OB1.5
+			header.write((byte) ':');// OB1.6
+			header.write(IOFormat.formatDate(new Date()));// OB1.7
+			header.write((byte) ':');// OB1.8
+			header.write(IOFormat.formatIntegerWithRadix(asmblrVersion, 16, 4));// OB1.9
+			header.write((byte) ':');// OB1.18
+			header.write("URBAN-ASM".getBytes());// OB1.19
+			header.write((byte) ':');// OB1.20
+			header.write(programName.getBytes());// OB1.21
+			return header.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ":Error!!!Something wrong has happened:".getBytes();
+		}
+		
 	}
 }
