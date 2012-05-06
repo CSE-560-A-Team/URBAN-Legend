@@ -59,7 +59,7 @@ public class USI_ADRC extends AbstractDirective {
 		int [] assembled = new int[1];
 		if(this.hasOperand("LR")) {
 			assembled[0] = this.getOperandData("LR").value.value;
-		} else {
+		} else if(this.hasOperand("EX")){
 			assembled[0] = this.getOperandData("EX").value.value;
 		}
 		

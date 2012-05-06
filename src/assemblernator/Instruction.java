@@ -96,9 +96,14 @@ public abstract class Instruction {
 			//return Integer.toBinaryString(value.value);
 			String rep = operand + ", Address Status: ";
 			if(value != null) {
-				rep = rep + value.arec;
+				if(operand.equalsIgnoreCase("FM") 
+						|| operand.equalsIgnoreCase("FL") 
+						|| operand.equalsIgnoreCase("FC") 
+						|| operand.equalsIgnoreCase("EX")
+						|| operand.equalsIgnoreCase("DM")){
+					rep = rep + value.arec;
+				}
 			}
-			
 			return rep;
 		}
 	}
@@ -259,6 +264,8 @@ public abstract class Instruction {
 	public int lineNum;
 	/** original source line. */
 	public String origSrcLine;
+	/** assembled code. */
+	public int assembled[];
 
 	/**
 	 * Trivial utility method to check if an operand is used in this particular
@@ -834,12 +841,14 @@ public abstract class Instruction {
 
 		return rep;
 		*/
+		int opPos = 0;
+		char srcAddrStat = '-', destAddrStat = '-';
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
 		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR") 
 				|| this.getOpId().equalsIgnoreCase("ADRC")) {
 			for(int i = 0; i < assemble().length; i++) {
-				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8) + "\t";
-				if(i < assemble().length - 1) {
+				rep = rep + IOFormat.formatHexInteger(this.assembled[i], 8) + "\t";
+				if(i < assembled.length - 1) {
 					rep = rep + ", ";
 				}
 			}
@@ -847,10 +856,24 @@ public abstract class Instruction {
 			rep = rep + "------------\t";
 			//rep = rep + String.format("%1$-" + pad + "s", "________");
 		}
+		
+		for(Operand o : this.operands) {
+			if(o.value != null) {
+				String opId = o.operand;
+				if(opId.equalsIgnoreCase("DM")) {
+					destAddrStat = o.value.arec;
+				} else if(opId.equalsIgnoreCase("FM") 
+						|| opId.equalsIgnoreCase("FL") 
+						|| opId.equalsIgnoreCase("FC") 
+						|| opId.equalsIgnoreCase("EX")){
+					srcAddrStat = o.value.arec;
+				}
+			}
+		}
 		//"A" and "R" are for rep flag... which we currently don't have.
-		rep = rep + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
+		rep = rep + "src: " + srcAddrStat + "," + "dest:" + destAddrStat + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
 
-		int opPos = 0;
+	
 		for(Operand o : operands) {
 			rep = rep + "Operand " + opPos + ": " + o.toString() + "\n";
 			opPos++;

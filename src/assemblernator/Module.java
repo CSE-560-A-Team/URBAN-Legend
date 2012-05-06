@@ -238,14 +238,15 @@ public class Module {
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-<<<<<<< HEAD
 		 * @return a two dimensional array of bytes.  Each row of the array corresponds to one linking record.
 		 * @specRef OB2
-=======
-		 * @return a two dimensional array of bytes. Each row of the array
-		 *         corresponds to one linking record.
-		 * @specRef N/A
->>>>>>> refs/remotes/origin/master
+		 * @specRef OB2.1
+		 * @specRef OB2.2
+		 * @specRef OB2.3
+		 * @specRef OB2.4
+		 * @specRef OB2.5
+		 * @specRef OB2.6
+		 * @specRef OB2.7
 		 */
 		public List<Byte> getLinkRecord(String progName) {
 			//Iterator<Map.Entry<String, Instruction>> extEntIt = this.extEntSymbols.entrySet().iterator();

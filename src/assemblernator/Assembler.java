@@ -302,8 +302,15 @@ public class Assembler {
 		}
 
 		// Pass two
-		for (Instruction i : module.assembly)
-			i.check(i.getHErr(hErr), module);
+		for (Instruction i : module.assembly) {
+			valid = i.check(i.getHErr(hErr), module);
+		
+			if(valid) {
+				i.assembled = i.assemble(); //for now.  should replace all assemble w/ directly changing self's field.
+			} else {
+				i.assembled = USI_NOP.getInstance().assemble(); //if not valid replace with nop.
+			}
+		}
 		
 		if(!hasEnd && module.assembly.size() > 0) {
 			hErr.reportWarning(makeError("NoEnd"), lineNum, -1);
