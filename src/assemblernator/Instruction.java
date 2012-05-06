@@ -186,10 +186,15 @@ public abstract class Instruction {
 		@Override public String toString() {
 			// return Integer.toBinaryString(value.value);
 			String rep = operand + ", Address Status: ";
-			if (value != null) {
-				rep = rep + value.arec;
+			if(value != null) {
+				if(operand.equalsIgnoreCase("FM") 
+						|| operand.equalsIgnoreCase("FL") 
+						|| operand.equalsIgnoreCase("FC") 
+						|| operand.equalsIgnoreCase("EX")
+						|| operand.equalsIgnoreCase("DM")){
+					rep = rep + value.arec;
+				}
 			}
-
 			return rep;
 		}
 	}
@@ -245,8 +250,8 @@ public abstract class Instruction {
 		RANGE_16_TC(-32768, 32767), // [-2^15, (2^15) - 1]
 		/** 32 bit memory words; valid only for NUM. */
 		RANGE_32_TC(-2147483648, 2147483647),
-		/** 12 bit address range. */
-		RANGE_ADDR(0, 4095), // [0, 4095]
+		/** 12 bit address range.*/
+		RANGE_ADDR(-4096, 4095), //[-4096, 4095]
 		/** 12 bit 2's complement range. */
 		RANGE_12_TC(-2048, 2047);
 
@@ -350,6 +355,8 @@ public abstract class Instruction {
 	public int lineNum;
 	/** original source line. */
 	public String origSrcLine;
+	/** assembled code. */
+	public int assembled[];
 
 	/**
 	 * Trivial utility method to check if an operand is used in this particular
@@ -863,76 +870,77 @@ public abstract class Instruction {
 	 * @specRef N/A
 	 */
 	@Override public String toString() {
-		/* String rep = "";
-		 * rep = rep + "original source line: " + this.origSrcLine + "\n";
-		 * 
-		 * // opcode.
-		 * String binEquiv = IOFormat.formatBinInteger(this.getOpcode(), 6);
-		 * String lc = IOFormat.formatHexInteger(this.lc, 4);
-		 * String label = this.label;
-		 * String instrBreak;
-		 * String instrCode;
-		 * int[] assemble = this.assemble();
-		 * 
-		 * // instr is a directive and thus has no opcode.
-		 * if (this.getOpcode() == 0xFFFFFFFF) {
-		 * binEquiv = "------"; // so binary equivalent is non-existant.
-		 * }
-		 * 
-		 * // if the instruction has no label
-		 * if (this.label == null) {
-		 * label = "------"; // no label to print.
-		 * }
-		 * 
-		 * 
-		 * instrBreak = "Line number: " + this.lineNum + " " + "LC: " + lc
-		 * + " " + "Label: " + label + ",\n" + "instruction/Directive: "
-		 * + this.getOpId() + " " + "Binary Equivalent: " + binEquiv
-		 * + "\n";
-		 * 
-		 * Iterator<Operand> operandIt = operands.iterator();
-		 * 
-		 * int i = 1;
-		 * //operands w/ their binary equivalents.
-		 * while (operandIt.hasNext()) {
-		 * Operand oprnd = operandIt.next();
-		 * 
-		 * instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand
-		 * + ":" + oprnd.expression + "\tBinary Equivalent: "
-		 * + oprnd.toString() + "\n";
-		 * 
-		 * i++;
-		 * }
-		 * 
-		 * //errors.
-		 * for (String error : errors) {
-		 * instrBreak = instrBreak + error + "\n";
-		 * }
-		 * 
-		 * //binary code of instruction.
-		 * instrBreak = instrBreak + "Binary Code: \n";
-		 * if(!this.isDirective() || this.getOpId().equalsIgnoreCase("NUM") ||
-		 * this.getOpId().equalsIgnoreCase("CHAR")) {
-		 * for(int j = 0; j < assemble().length; j++) {
-		 * instrBreak = instrBreak + IOFormat.formatBinInteger(assemble[j], 32)
-		 * + "\n";
-		 * }
-		 * } else {
-		 * instrBreak = instrBreak + "--------------------------------";
-		 * }
-		 * instrBreak = instrBreak + "\n";
-		 * 
-		 * rep = rep + instrBreak;
-		 * 
-		 * return rep; */
+		/*
+		String rep = "";
+		rep = rep + "original source line: " + this.origSrcLine + "\n";
+
+		// opcode.
+		String binEquiv = IOFormat.formatBinInteger(this.getOpcode(), 6);
+		String lc = IOFormat.formatHexInteger(this.lc, 4);
+		String label = this.label;
+		String instrBreak;
+		String instrCode;
+		int[] assemble = this.assemble();
+
+		// instr is a directive and thus has no opcode.
+		if (this.getOpcode() == 0xFFFFFFFF) {
+			binEquiv = "------"; // so binary equivalent is non-existant.
+		}
+
+		// if the instruction has no label
+		if (this.label == null) {
+			label = "------"; // no label to print.
+		}
+
+
+		instrBreak = "Line number: " + this.lineNum + " " + "LC: " + lc
+				+ " " + "Label: " + label + ",\n" + "instruction/Directive: "
+				+ this.getOpId() + " " + "Binary Equivalent: " + binEquiv
+				+ "\n";
+
+		Iterator<Operand> operandIt = operands.iterator();
+
+		int i = 1;
+		//operands w/ their binary equivalents.
+		while (operandIt.hasNext()) {
+			Operand oprnd = operandIt.next();
+
+			instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand
+					+ ":" + oprnd.expression + "\tBinary Equivalent: "
+					+ oprnd.toString() + "\n";
+
+			i++;
+		}
+
+		//errors.
+		for (String error : errors) {
+			instrBreak = instrBreak + error + "\n";
+		}
+
+		//binary code of instruction.
+		instrBreak = instrBreak + "Binary Code: \n";
+		if(!this.isDirective() || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
+			for(int j = 0; j < assemble().length; j++) {
+				instrBreak = instrBreak + IOFormat.formatBinInteger(assemble[j], 32) + "\n";
+			}
+		} else {
+			instrBreak = instrBreak + "--------------------------------";
+		}
+		instrBreak = instrBreak + "\n";
+
+		rep = rep + instrBreak;
+
+		return rep;
+		*/
+		int opPos = 0;
+		char srcAddrStat = '-', destAddrStat = '-';
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
 		if ((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM")
 				|| this.getOpId().equalsIgnoreCase("CHAR")
 				|| this.getOpId().equalsIgnoreCase("ADRC")) {
-			for (int i = 0; i < assemble().length; i++) {
-				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8)
-						+ "\t";
-				if (i < assemble().length - 1) {
+			for(int i = 0; i < assemble().length; i++) {
+				rep = rep + IOFormat.formatHexInteger(this.assembled[i], 8) + "\t";
+				if(i < assembled.length - 1) {
 					rep = rep + ", ";
 				}
 			}
@@ -941,12 +949,25 @@ public abstract class Instruction {
 			rep = rep + "------------\t";
 			// rep = rep + String.format("%1$-" + pad + "s", "________");
 		}
-		// "A" and "R" are for rep flag... which we currently don't have.
-		rep = rep + "src:A, dest:R" + "\t" + this.lineNum + "\t"
-				+ this.origSrcLine + "\n";
+		
+		for(Operand o : this.operands) {
+			if(o.value != null) {
+				String opId = o.operand;
+				if(opId.equalsIgnoreCase("DM")) {
+					destAddrStat = o.value.arec;
+				} else if(opId.equalsIgnoreCase("FM") 
+						|| opId.equalsIgnoreCase("FL") 
+						|| opId.equalsIgnoreCase("FC") 
+						|| opId.equalsIgnoreCase("EX")){
+					srcAddrStat = o.value.arec;
+				}
+			}
+		}
+		//"A" and "R" are for rep flag... which we currently don't have.
+		rep = rep + "src: " + srcAddrStat + "," + "dest:" + destAddrStat + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
 
-		int opPos = 0;
-		for (Operand o : operands) {
+	
+		for(Operand o : operands) {
 			rep = rep + "Operand " + opPos + ": " + o.toString() + "\n";
 			opPos++;
 		}
