@@ -917,6 +917,110 @@ The following tables describe the various instructions with their formats and th
 <tr><td>C1         </td><td> DMP (dump)                                    </td><td> 111111 </td><td> {FC},{EX}                                                                                                                                                                      </td><td> FC:[1,3]                                 </td><td> halt/dump                       </td><td> displays register and memory contents to screen.  if fc = 1, then level 1 dump; if fc = 2, then level 2 dump; if fc = 3, then level 3 dump.                            </td></tr>
 </table>
 
+<h1 id="objfile">Object File Specification<a href="#toc" class="backlink">Back to Top</a></h1>
+
+<table>
+  <tr>
+    <th colspan="4">Spec Ref</th>
+    <th width="15%">Format</th>
+    <th>Description</th>
+  </tr>
+    <tr>
+      <td colspan="4" id="OB4">OB4</td>
+      <td colspan="2">Modification Record</td>
+    </tr>
+    <tr>
+      <td rowspan="16" class="stripebg"></td>
+      <td colspan="3" id="OB4.1">OB4.1</td>
+      <td>Byte('M')</td>
+      <td>Modification record indicator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB4.2">OB4.2</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB4.3">OB4.3</td>
+      <td>Short, HHHH</td>
+      <td>Four hex nybbles</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB4.4">OB4.4</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB4.5">OB4.5</td>
+      <td>CHUNK</td>
+      <td>Adjustment Chunk: One per link-time adjustment</td>
+    </tr>
+       <tr>
+         <td rowspan="6" class="stripebg"></td>
+         <td colspan="2" id="OB4.5.1">OB4.5.1</td>
+         <td>Byte('+' or '-')</td>
+         <td>The sign of this adjustment; a '+' indicates that the adjustment is added, a '-' denotes that
+         it is instead subtracted.</td>
+       </tr>
+       <tr>
+         <td colspan="2" id="OB4.5.2">OB4.5.2</td>
+         <td>Byte(':')</td>
+         <td>Standard separator</td>
+       </tr>
+       <tr>
+         <td colspan="2" id="OB4.5.3">OB4.5.3</td>
+         <td>Byte('R' or 'E')</td>
+         <td>Address type flag of the label that needs adjustment.</td>
+       </tr>
+       <tr>
+         <td colspan="2" id="OB4.5.4">OB4.5.4</td>
+         <td>Byte(':')</td>
+         <td>Standard separator</td>
+       </tr>
+       <tr>
+         <td colspan="2" id="OB4.5.5">OB4.5.5</td>
+         <td>LABEL, 1-32 Bytes</td>
+         <td>The label whose address the linker will use to adjust this record</td>
+       </tr>
+       <tr>
+         <td colspan="2" id="OB4.5.6">OB4.5.6</td>
+         <td>Byte(':')</td>
+         <td>Standard separator</td>
+       </tr>
+    <tr>
+      <td colspan="3" id="OB4.6">OB4.6</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB4.7">OB4.7</td>
+      <td>Byte('H' or 'L' or 'S')</td>
+      <td>High- or Low-order Address. 'H' if bits 9-20 are to be considered, 'L' 
+          if bits 20-32 are to be considered, 'S' if this was a Single-address
+          instruction.</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB4.8">OB4.8</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB4.9">OB4.9</td>
+      <td>LABEL, 1-32 bytes</td>
+      <td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB4.10">OB4.10</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+  <tr>
+    <td colspan="4" id=""></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
 
 <h1 id="sampleio">URBAN Legend Input and Output Description and Format<a href="#toc" class="backlink">Back to Top</a></h1>
 <p>

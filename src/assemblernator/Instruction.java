@@ -3,6 +3,7 @@ package assemblernator;
 import static assemblernator.ErrorReporting.makeError;
 import instructions.Comment;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,17 +56,107 @@ public abstract class Instruction {
 		public String expression;
 		/** The value of the operand. */
 		public Value value;
-		/**
-		 * The position in the line at which the keyword for this operand
-		 * started
-		 */
+		/** The index in the line at which the keyword of this operand started */
 		public int keywordStartPosition;
-		/**
-		 * The position in the line at which the value for this operand
-		 * started
-		 */
+		/** The index in the line at which the value for this operand started */
 		public int valueStartPosition;
 
+		/** A modification record. */
+		public class MRecord {
+			/** The label that generated this record. */
+			String label;
+			/** The address for which this record exists. */
+			int address;
+
+			/** An adjustment */
+			class Adjustment {
+				/** The sign of this adjustment; either 1 or -1. */
+				int sign;
+				/**
+				 * The address type flag of the label in this adjustment;
+				 * must be either 'R' or 'E', or 'N' to negate the original.
+				 */
+				char arec;
+				/** The label which created this adjustment. */
+				String label;
+			}
+
+			/** The adjustments that need applied. */
+			ArrayList<Adjustment> adjustments;
+
+			/**
+			 * A character representing which address field in the format is
+			 * being modified.
+			 * 
+			 * H: There are two addresses; high-order address field is being
+			 * modified.
+			 * 
+			 * L: There are two addresses; the low-order address field is being
+			 * modified.
+			 * 
+			 * S: There is a single address field in this instruction.
+			 */
+			char addressField;
+
+			/**
+			 * @author Josh Ventura
+			 * @date May 5, 2012; 11:22:51 PM
+			 * @modified UNMODIFIED
+			 * @tested UNTESTED
+			 * @errors NO ERRORS REPORTED
+			 * @codingStandards Awaiting signature
+			 * @testingStandards Awaiting signature
+			 * @param programName
+			 *            The name of the program for which this record was
+			 *            created.
+			 * @return The data of this record.
+			 * @specRef OB4
+			 * @specRef OB4.1
+			 * @specRef OB4.2
+			 * @specRef OB4.3
+			 * @specRef OB4.4
+			 * @specRef OB4.5
+			 * @specRef OB4.5.1
+			 * @specRef OB4.5.2
+			 * @specRef OB4.5.3
+			 * @specRef OB4.5.4
+			 * @specRef OB4.5.5
+			 * @specRef OB4.5.6
+			 * @specRef OB4.6
+			 * @specRef OB4.7
+			 * @specRef OB4.8
+			 * @specRef OB4.9
+			 * @specRef OB4.10
+			 */
+			byte[] getBytes(String programName) {
+				try {
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					baos.write((byte) 'M'); // OB4.1
+					baos.write((byte) ':'); // OB4.2
+					baos.write(IOFormat.formatIntegerWithRadix(address, 16, 4)); // OB4.3
+					baos.write((byte) ':'); // OB4.4
+					for (Adjustment a : adjustments) { // OB4.5
+						baos.write((byte) (a.sign < 0 ? '-' : '+'));
+						baos.write((byte) ':');
+						baos.write((byte) a.arec);
+						baos.write((byte) ':');
+						baos.write(a.label.getBytes());
+						baos.write((byte) ':');
+						break;
+					}
+					baos.write((byte) ':');
+					baos.write((byte) addressField);
+					baos.write((byte) ':');
+					baos.write(programName.getBytes());
+					baos.write((byte) ':');
+
+					return baos.toByteArray();
+				} catch (IOException e) {
+					e.printStackTrace();
+					return ":Something wicked has happened:".getBytes();
+				}
+			}
+		}
 
 		/**
 		 * @param op
@@ -93,12 +184,12 @@ public abstract class Instruction {
 		 * @specRef N/A
 		 */
 		@Override public String toString() {
-			//return Integer.toBinaryString(value.value);
+			// return Integer.toBinaryString(value.value);
 			String rep = operand + ", Address Status: ";
-			if(value != null) {
+			if (value != null) {
 				rep = rep + value.arec;
 			}
-			
+
 			return rep;
 		}
 	}
@@ -144,21 +235,21 @@ public abstract class Instruction {
 	 */
 	public enum ConstantRange {
 
-		/** DMP constant range.*/
-		RANGE_DMP(1,3),	//[1,3]
-		/** SHIFT constant range.*/
-		RANGE_SHIFT(0, 31), //[0, 31]
-		/** 13 bit 2's complement range.*/
-		RANGE_13_TC(-4096, 4095), //[-2^12, (2^12) - 1]
-		/** 16 bit 2's complement range.*/
-		RANGE_16_TC(-32768, 32767), //[-2^15, (2^15) - 1]
+		/** DMP constant range. */
+		RANGE_DMP(1, 3), // [1,3]
+		/** SHIFT constant range. */
+		RANGE_SHIFT(0, 31), // [0, 31]
+		/** 13 bit 2's complement range. */
+		RANGE_13_TC(-4096, 4095), // [-2^12, (2^12) - 1]
+		/** 16 bit 2's complement range. */
+		RANGE_16_TC(-32768, 32767), // [-2^15, (2^15) - 1]
 		/** 32 bit memory words; valid only for NUM. */
 		RANGE_32_TC(-2147483648, 2147483647),
-		/** 12 bit address range.*/
-		RANGE_ADDR(0, 4095), //[0, 4095]
+		/** 12 bit address range. */
+		RANGE_ADDR(0, 4095), // [0, 4095]
 		/** 12 bit 2's complement range. */
-		RANGE_12_TC(-2048,2047); 
-		
+		RANGE_12_TC(-2048, 2047);
+
 
 		/** max value of constant. */
 		public int max;
@@ -772,97 +863,101 @@ public abstract class Instruction {
 	 * @specRef N/A
 	 */
 	@Override public String toString() {
-		/*
-		String rep = "";
-		rep = rep + "original source line: " + this.origSrcLine + "\n";
-
-		// opcode.
-		String binEquiv = IOFormat.formatBinInteger(this.getOpcode(), 6);
-		String lc = IOFormat.formatHexInteger(this.lc, 4);
-		String label = this.label;
-		String instrBreak;
-		String instrCode;
-		int[] assemble = this.assemble();
-
-		// instr is a directive and thus has no opcode.
-		if (this.getOpcode() == 0xFFFFFFFF) {
-			binEquiv = "------"; // so binary equivalent is non-existant.
-		}
-
-		// if the instruction has no label
-		if (this.label == null) {
-			label = "------"; // no label to print.
-		}
-
-
-		instrBreak = "Line number: " + this.lineNum + " " + "LC: " + lc
-				+ " " + "Label: " + label + ",\n" + "instruction/Directive: "
-				+ this.getOpId() + " " + "Binary Equivalent: " + binEquiv
-				+ "\n";
-
-		Iterator<Operand> operandIt = operands.iterator();
-
-		int i = 1;
-		//operands w/ their binary equivalents.
-		while (operandIt.hasNext()) {
-			Operand oprnd = operandIt.next();
-
-			instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand
-					+ ":" + oprnd.expression + "\tBinary Equivalent: "
-					+ oprnd.toString() + "\n";
-
-			i++;
-		}
-
-		//errors.
-		for (String error : errors) {
-			instrBreak = instrBreak + error + "\n";
-		}
-
-		//binary code of instruction.
-		instrBreak = instrBreak + "Binary Code: \n";
-		if(!this.isDirective() || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR")) {
-			for(int j = 0; j < assemble().length; j++) {
-				instrBreak = instrBreak + IOFormat.formatBinInteger(assemble[j], 32) + "\n";
-			}
-		} else {
-			instrBreak = instrBreak + "--------------------------------";
-		}
-		instrBreak = instrBreak + "\n";
-
-		rep = rep + instrBreak;
-
-		return rep;
-		*/
+		/* String rep = "";
+		 * rep = rep + "original source line: " + this.origSrcLine + "\n";
+		 * 
+		 * // opcode.
+		 * String binEquiv = IOFormat.formatBinInteger(this.getOpcode(), 6);
+		 * String lc = IOFormat.formatHexInteger(this.lc, 4);
+		 * String label = this.label;
+		 * String instrBreak;
+		 * String instrCode;
+		 * int[] assemble = this.assemble();
+		 * 
+		 * // instr is a directive and thus has no opcode.
+		 * if (this.getOpcode() == 0xFFFFFFFF) {
+		 * binEquiv = "------"; // so binary equivalent is non-existant.
+		 * }
+		 * 
+		 * // if the instruction has no label
+		 * if (this.label == null) {
+		 * label = "------"; // no label to print.
+		 * }
+		 * 
+		 * 
+		 * instrBreak = "Line number: " + this.lineNum + " " + "LC: " + lc
+		 * + " " + "Label: " + label + ",\n" + "instruction/Directive: "
+		 * + this.getOpId() + " " + "Binary Equivalent: " + binEquiv
+		 * + "\n";
+		 * 
+		 * Iterator<Operand> operandIt = operands.iterator();
+		 * 
+		 * int i = 1;
+		 * //operands w/ their binary equivalents.
+		 * while (operandIt.hasNext()) {
+		 * Operand oprnd = operandIt.next();
+		 * 
+		 * instrBreak = instrBreak + "Operand " + i + ": " + oprnd.operand
+		 * + ":" + oprnd.expression + "\tBinary Equivalent: "
+		 * + oprnd.toString() + "\n";
+		 * 
+		 * i++;
+		 * }
+		 * 
+		 * //errors.
+		 * for (String error : errors) {
+		 * instrBreak = instrBreak + error + "\n";
+		 * }
+		 * 
+		 * //binary code of instruction.
+		 * instrBreak = instrBreak + "Binary Code: \n";
+		 * if(!this.isDirective() || this.getOpId().equalsIgnoreCase("NUM") ||
+		 * this.getOpId().equalsIgnoreCase("CHAR")) {
+		 * for(int j = 0; j < assemble().length; j++) {
+		 * instrBreak = instrBreak + IOFormat.formatBinInteger(assemble[j], 32)
+		 * + "\n";
+		 * }
+		 * } else {
+		 * instrBreak = instrBreak + "--------------------------------";
+		 * }
+		 * instrBreak = instrBreak + "\n";
+		 * 
+		 * rep = rep + instrBreak;
+		 * 
+		 * return rep; */
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
-		if((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM") || this.getOpId().equalsIgnoreCase("CHAR") 
+		if ((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM")
+				|| this.getOpId().equalsIgnoreCase("CHAR")
 				|| this.getOpId().equalsIgnoreCase("ADRC")) {
-			for(int i = 0; i < assemble().length; i++) {
-				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8) + "\t";
-				if(i < assemble().length - 1) {
+			for (int i = 0; i < assemble().length; i++) {
+				rep = rep + IOFormat.formatHexInteger(this.assemble()[i], 8)
+						+ "\t";
+				if (i < assemble().length - 1) {
 					rep = rep + ", ";
 				}
 			}
-		} else {
-			rep = rep + "------------\t";
-			//rep = rep + String.format("%1$-" + pad + "s", "________");
 		}
-		//"A" and "R" are for rep flag... which we currently don't have.
-		rep = rep + "src:A, dest:R" + "\t" + this.lineNum + "\t" + this.origSrcLine + "\n";
+		else {
+			rep = rep + "------------\t";
+			// rep = rep + String.format("%1$-" + pad + "s", "________");
+		}
+		// "A" and "R" are for rep flag... which we currently don't have.
+		rep = rep + "src:A, dest:R" + "\t" + this.lineNum + "\t"
+				+ this.origSrcLine + "\n";
 
 		int opPos = 0;
-		for(Operand o : operands) {
+		for (Operand o : operands) {
 			rep = rep + "Operand " + opPos + ": " + o.toString() + "\n";
 			opPos++;
 		}
-		
+
 		rep = rep + "errors:\n";
 		for (String error : errors) {
 			rep = rep + error + "\n";
 		}
-		
+
 		return rep;
-		
+
 	}
 
 	/**

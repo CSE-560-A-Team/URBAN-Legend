@@ -55,6 +55,8 @@ public class GUIMain {
 	static JMenuItem compile;
 	/** A menu item to export the file as an HTML document */
 	static JMenuItem writeHTML;
+	/** A menu item to copy code, with HTML highlighting. */
+	static JMenuItem copyFormatted;
 	/** A menu item to export a test case as an HTML document */
 	static JMenuItem writeHTMLTest;
 	/** A menu item to copy a test case to the clipboard as HTML */
@@ -111,6 +113,8 @@ public class GUIMain {
 		filemenu.addSeparator();
 		filemenu.add(writeHTML = new JMenuItem("Export as HTML"));
 		writeHTML.addActionListener(ml);
+		filemenu.add(copyFormatted = new JMenuItem("Copy code with highlighting"));
+		copyFormatted.addActionListener(ml);
 		filemenu.add(writeHTMLTest = new JMenuItem("Write HTML Test Case"));
 		writeHTML.addActionListener(ml);
 		filemenu.add(copyHTMLTest = new JMenuItem("Copy HTML Test Case"));
@@ -514,6 +518,13 @@ public class GUIMain {
 			if (e.getSource() == copyHTMLTest) {
 			    StringSelection ss = new StringSelection(getTestCase());
 			    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+			}
+			if (e.getSource() == copyFormatted) {
+				FileTab ft = (FileTab) tabPane.getSelectedComponent();
+				if (ft != null) {
+				    StringSelection ss = new StringSelection(ft.jt.getHTML());
+				    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+				}
 			}
 			if (e.getSource() == exit) {
 				System.exit(0);

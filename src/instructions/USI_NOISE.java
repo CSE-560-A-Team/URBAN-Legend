@@ -45,19 +45,30 @@ public class USI_NOISE extends AbstractInstruction {
 	 */
 	enum SampleType {
 		/** White noise */
-		WHITE,
+		WHITE(0),
 		/** Pink noise */
-		PINK,
+		PINK(1),
 		/** Square wave */
-		SQUARE,
+		SQUARE(2),
 		/** Saw wave */
-		SAW,
+		SAW(3),
 		/** Sine wave */
-		SINE,
+		SINE(4),
 		/** BOINK! */
-		BOINK,
+		BOINK(5),
 		/** Guitar Pluck */
-		PLUCK
+		PLUCK(6);
+
+		/** The integer ID for this sample */
+		public int id;
+
+		/**
+		 * @param ID
+		 *            The ID of this sample type.
+		 */
+		private SampleType(int ID) {
+			id = ID;
+		}
 	}
 
 	/** An integer ID of our sample type. */
@@ -112,7 +123,8 @@ public class USI_NOISE extends AbstractInstruction {
 		op.value = module.evaluate(op.expression, false, hErr, this,
 				op.valueStartPosition);
 		if (op.value.value < 50 || op.value.value > 20000) {
-			hErr.reportError(makeError("OORconstant", "FR", opId, "50", "20000"),
+			hErr.reportError(
+					makeError("OORconstant", "FR", opId, "50", "20000"),
 					lineNum, op.valueStartPosition);
 			return false;
 		}
@@ -126,8 +138,9 @@ public class USI_NOISE extends AbstractInstruction {
 		}
 		op.value = module.evaluate(op.expression, false, hErr, this,
 				op.valueStartPosition);
-		if (op.value.value < 10 || op.value.value > 8000) {
-			hErr.reportError(makeError("OORconstant", "DM", opId, "50", "20000"),
+		if (op.value.value < 10 || op.value.value > 10000) {
+			hErr.reportError(
+					makeError("OORconstant", "DM", opId, "10", "10000"),
 					lineNum, op.valueStartPosition);
 			return false;
 		}
@@ -137,7 +150,9 @@ public class USI_NOISE extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return new int[] { opCode << 26 };
+		return new int[] { (opCode << 26) | (sampleType.id << 23)
+				| (getOperandData("FR").value.value << 9)
+				| (getOperandData("DM").value.value / 10) };
 	}
 
 	/** @see assemblernator.Instruction#execute(int) */
@@ -179,8 +194,9 @@ public class USI_NOISE extends AbstractInstruction {
 		/** 1/4 note. */
 		EIGHTH(125), /** 1/4 note. */
 		QUARTER(250), /** 1/2 note. */
-		HALF(500), /** Full note. */
-		FULL(1000);
+		HALF(500), /** 3/4 note. */
+		TQ(750), /** Whole note. */
+		WHOLE(1000);
 		/** Duration in milliseconds. */
 		int ms;
 
@@ -217,29 +233,34 @@ public class USI_NOISE extends AbstractInstruction {
 		byte buf[] = new byte[65536 * 10];
 		int bpos = 0;
 
-		Note[] mhall = { new Note(Tone.B, Duration.QUARTER),
-				new Note(Tone.A, Duration.QUARTER),
-				new Note(Tone.GbelowC, Duration.QUARTER),
-				new Note(Tone.A, Duration.QUARTER),
-				new Note(Tone.B, Duration.QUARTER),
-				new Note(Tone.B, Duration.QUARTER),
-				new Note(Tone.B, Duration.HALF),
-				new Note(Tone.A, Duration.QUARTER),
-				new Note(Tone.A, Duration.QUARTER),
-				new Note(Tone.A, Duration.HALF),
-				new Note(Tone.B, Duration.QUARTER),
-				new Note(Tone.D, Duration.QUARTER),
-				new Note(Tone.D, Duration.HALF) };
+		Note[] mhall = { new Note(Tone.D, Duration.TQ),
+				new Note(Tone.F, Duration.TQ), new Note(Tone.D, Duration.TQ),
+				new Note(Tone.C, Duration.TQ),
+				new Note(Tone.A, Duration.WHOLE),
+				new Note(Tone.A, Duration.HALF), };
+		/* { new Note(Tone.B, Duration.QUARTER),
+		 * new Note(Tone.A, Duration.QUARTER),
+		 * new Note(Tone.GbelowC, Duration.QUARTER),
+		 * new Note(Tone.A, Duration.QUARTER),
+		 * new Note(Tone.B, Duration.QUARTER),
+		 * new Note(Tone.B, Duration.QUARTER),
+		 * new Note(Tone.B, Duration.HALF),
+		 * new Note(Tone.A, Duration.QUARTER),
+		 * new Note(Tone.A, Duration.QUARTER),
+		 * new Note(Tone.A, Duration.HALF),
+		 * new Note(Tone.B, Duration.QUARTER),
+		 * new Note(Tone.D, Duration.QUARTER),
+		 * new Note(Tone.D, Duration.HALF) }; */
 		for (int n = 0; n < mhall.length; n++) {
 			int bend = bpos + (mhall[n].dur.ms * 65536) / 1000;
 			int i;
-			for (i = bpos; i < bend - 200; i++)
+			for (i = bpos; i < bend - 1200; i++)
 				buf[i] = (byte) (Math.sin(2 * Math.PI
-						* ((i - bpos) / 65536.0 * mhall[n].tone.freq)) * 64 + 128);
+						* ((i - bpos) / 65536.0 * mhall[n].tone.freq)) * 64);
 			byte frqat = buf[i - 1];
-			while (i < bend)
-				buf[i++] = frqat = (byte) (frqat > 128 ? frqat - 1
-						: frqat < 128 ? frqat + 1 : 128);
+			while (i <= bend)
+				buf[i++] = frqat = (byte) (frqat > 0 ? frqat - 1
+						: frqat < 0 ? frqat + 1 : 0);
 			bpos = bend;
 		}
 		play(buf, 65536);
