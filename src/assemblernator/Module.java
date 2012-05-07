@@ -469,6 +469,11 @@ public class Module {
 	 * @specRef OB1.5
 	 */
 	public int execStartAddr;
+	/**
+	 * The address at which program is loaded.
+	 * @specRef OB1.3
+	 */
+	public int loadAddr;
 
 	/**
 	 * The name of the module = label of KICKO directive.

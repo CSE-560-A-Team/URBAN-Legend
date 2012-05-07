@@ -279,6 +279,7 @@ public class Assembler {
 				//assign execStartAddr.
 				if(instr.getOpId().equalsIgnoreCase("KICKO")) {
 					module.execStartAddr = lc;
+					module.loadAddr = lc;
 				}
 
 
