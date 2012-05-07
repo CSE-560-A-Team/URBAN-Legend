@@ -274,10 +274,9 @@ public class Module {
 		 * @specRef OB2.6
 		 * @specRef OB2.7
 		 */
-		public byte[] getLinkRecords(String progName) {
+		public RecordSet getLinkRecords(String progName) {
 			ByteArrayOutputStream records = new ByteArrayOutputStream();
 			int recordCnt = 0;
-			Records linkRecords = new Records();
 			try {
 				for (Map.Entry<String, Instruction> entry : this.extEntSymbols
 						.entrySet()) {
@@ -298,16 +297,15 @@ public class Module {
 						records.write(progName.getBytes());
 						
 						recordCnt++;
-						linkRecords.records = records.toByteArray();
 					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				
-				return ":Something wicked has happened:".getBytes();
+				return new RecordSet(":Something wicked has happened:".getBytes(), recordCnt);
 			}
 
-			return records.toByteArray();
+			return new RecordSet(records.toByteArray(), recordCnt);
 		}
 
 
@@ -788,31 +786,28 @@ public class Module {
 	 */
 	public void writeObjectFile(OutputStream out) throws IOException, Exception {
 		int totalRecords = 0, totalLinkRecords = 0, totalTextRecords = 0, totalModRecords = 0;
-
+		RecordSet recSet;
 		// write header record.
 		out.write(getHeaderRecord());
 
 		// write linking records.
-		//out.write(this.symbolTable.getLinkRecords(this.programName));
-		for(Instruction entExt : this.symbolTable.extEntSymbols.values()) {
-			if(entExt.usage == Usage.ENTRY) {
-				totalLinkRecords++;
-			}
-		}
-		//write text records.
+		recSet = this.symbolTable.getLinkRecords(this.programName);
+		totalLinkRecords = recSet.size;
+		out.write(recSet.records);
+		//write text records and mod records. adjust record cnts.
 		for(Instruction instr : this.assembly) {
 			out.write(instr.getTextRecord(this.programName));
-			out.write(instr.getModRecords(this.programName).records);
-			//counts number of mod records.
-			for(Operand oper : instr.operands) {
-				
-			}
+			totalTextRecords++;
+			
+			recSet = instr.getModRecords(this.programName);
+			out.write(recSet.records);
+			totalModRecords += recSet.size;
+			
 		}
-
 		
+		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords;
 		// write end record
-		getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,
-				totalModRecords);
+		getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords);
 
 	}
 
