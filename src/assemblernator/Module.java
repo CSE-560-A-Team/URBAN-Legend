@@ -763,12 +763,22 @@ public class Module {
 
 		// write linking records.
 		out.write(this.symbolTable.getLinkRecords(this.programName));
-		
+		for(Instruction entExt : this.symbolTable.extEntSymbols.values()) {
+			if(entExt.usage == Usage.ENTRY) {
+				totalLinkRecords++;
+			}
+		}
 		//write text records.
 		for(Instruction instr : this.assembly) {
 			out.write(instr.getTextRecord(this.programName));
+			out.write(instr.getModRecords(this.programName));
+			//counts number of mod records.
+			for(Operand oper : instr.operands) {
+				totalModRecords += oper.value.modRecords.size();
+			}
 		}
 
+		
 		// write end record
 		getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,
 				totalModRecords);
