@@ -761,7 +761,7 @@ public class Module {
 	 * @specRef OB1.20
 	 * @specRef OB1.21
 	 */
-	byte[] getBytes(String programName, int asmblrVersion) {
+	byte[] getHeaderrecord(String programName, int asmblrVersion) {
 		try {
 			Map.Entry<String, Instruction> entry;
 			ByteArrayOutputStream header = new ByteArrayOutputStream();
@@ -789,4 +789,60 @@ public class Module {
 		}
 		
 	}
+	
+	/**
+	 * @author user
+	 * @date May 6, 2012; 8:03:54 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param programName
+	 *            The name of the program being assembled, which must be a valid
+	 *            label.
+	 * @param totRecords
+	 * 			  The total number of records that are present.
+	 * @param totLinkRecords
+	 * 			  The total number of Linking Records that are present. 
+	 * @param totTextRecords
+	 * 			  The total number of Text Records that are present.
+	 * @param totModRecords
+	 * 			  The total number of Modification Records that are present.
+	 * @return
+	 *     		A one dimensional array of bytes. The row represents the Ending Record.
+	 * @specRef OB5.1
+	 * @specRef OB5.2
+	 * @specRef OB5.3
+	 * @specRef OB5.4
+	 * @specRef OB5.5
+	 * @specRef OB5.6
+	 * @specRef OB5.7
+	 * @specRef OB5.8
+	 * @specRef OB5.9
+	 * @specRef OB5.10
+	 * @specRef OB5.11
+	 */
+	byte[] getEndRecord(String programName,int totRecords, int totLinkRecords,  
+			int totTextRecords, int totModRecords) {
+		try {
+			ByteArrayOutputStream header = new ByteArrayOutputStream();
+			header.write((byte) 'E');//  OB5.1
+			header.write((byte) ':');//  OB5.2
+			header.write(IOFormat.formatIntegerWithRadix(totRecords, 16, 4));//  OB5.3
+			header.write((byte) ':');//  OB5.4
+			header.write(IOFormat.formatIntegerWithRadix(totLinkRecords, 16, 4));//  OB5.5
+			header.write((byte) ':');//  OB5.6
+			header.write(IOFormat.formatIntegerWithRadix(totTextRecords, 16, 4));//  OB5.7
+			header.write((byte) ':');//  OB5.8
+			header.write(IOFormat.formatIntegerWithRadix(totModRecords, 16, 4));//  OB5.9
+			header.write((byte) ':');//  OB5.10
+			header.write(programName.getBytes());//  OB5.11
+			return header.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ":Error!!!Something wrong has happened:".getBytes();
+		}
+	}
+
 }
