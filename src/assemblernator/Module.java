@@ -297,6 +297,7 @@ public class Module {
 						records.write((byte) ':');
 						// program name
 						records.write(progName.getBytes());
+						records.write((byte) ':');
 						
 						recordCnt++;
 					}
@@ -944,6 +945,7 @@ public class Module {
 			header.write("URBAN-ASM".getBytes());// OB1.19
 			header.write((byte) ':');// OB1.20
 			header.write(programName.getBytes());// OB1.21
+			header.write((byte) ':');
 			return header.toByteArray();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -998,6 +1000,7 @@ public class Module {
 			header.write(IOFormat.formatIntegerWithRadix(totModRecords, 16, 4));// OB5.9
 			header.write((byte) ':');// OB5.10
 			header.write(programName.getBytes());// OB5.11
+			header.write((byte) ':');
 			return header.toByteArray();
 		} catch (IOException e) {
 			e.printStackTrace();
