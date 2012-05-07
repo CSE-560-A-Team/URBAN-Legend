@@ -4,9 +4,9 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.OperandChecker.isValidConstant;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Module.Value;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * The KICKO instruction.

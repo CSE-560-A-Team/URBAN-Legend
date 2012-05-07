@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
+import assemblernator.Module.RecordSet;
 import assemblernator.Module.Value;
 
 
@@ -237,17 +238,20 @@ public abstract class Instruction {
 	 * @return A byte array containing all modification records.
 	 * @specRef N/A
 	 */
-	public byte[] getModRecords(String programName) {
+	public RecordSet getModRecords(String programName) {
+		int count = 0;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			for (Operand op : operands)
-				if (op.value.modRecord != null)
+				if (op.value.modRecord != null) {
 					baos.write(op.value.modRecord.getBytes(programName));
+					++count;
+				}
+		    return new RecordSet(baos.toByteArray(), count);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return new RecordSet(":something evil has happened:".getBytes(),0);
 		}
-		return baos.toByteArray();
 	}
 
 	/**

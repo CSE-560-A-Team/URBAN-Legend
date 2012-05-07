@@ -9,20 +9,20 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Date;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.Instruction.Operand;
+import assemblernator.Instruction.Operand.ModRecord;
 import assemblernator.Instruction.Operand.ModRecord.Adjustment;
 import assemblernator.Instruction.Usage;
-import assemblernator.Instruction.Operand.ModRecord;
 
 /**
  * A class representing an assembled urban module.
@@ -45,11 +45,19 @@ public class Module {
 	 * @author Noah
 	 * @date May 7, 2012; 12:50:55 AM
 	 */
-	public static class Records {
+	public static class RecordSet {
 		/** the records as an array of bytes.*/
 		public byte[] records;
 		/** number of records.*/
 		public int size;
+		/**
+		 * @param b The bytes of all contained records.
+		 * @param s The number of records enclosed.
+		 */
+		public RecordSet(byte[] b, int s) {
+			records = b;
+			size = s;
+		}
 	}
 	
 	/**
@@ -792,7 +800,7 @@ public class Module {
 		//write text records.
 		for(Instruction instr : this.assembly) {
 			out.write(instr.getTextRecord(this.programName));
-			out.write(instr.getModRecords(this.programName));
+			out.write(instr.getModRecords(this.programName).records);
 			//counts number of mod records.
 			for(Operand oper : instr.operands) {
 				
