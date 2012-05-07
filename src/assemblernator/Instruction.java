@@ -241,8 +241,8 @@ public abstract class Instruction {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			for (Operand op : operands)
-				if (op.value.modRecords != null)
-					baos.write(op.value.modRecords.get(0).getBytes(programName));
+				if (op.value.modRecord != null)
+					baos.write(op.value.modRecord.getBytes(programName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1157,13 +1157,13 @@ public abstract class Instruction {
 						Operand opr = getOperandData(op); 
 						if (opr != null)  { 
 							srcflag = opr.value.arec;
-							srcM = opr.value.modRecords.size(); break; 
+							srcM = opr.value.modRecord.adjustments.size(); break; 
 							}
 						}
 					Operand dm = getOperandData("DM");
 					if (dm != null){
 							Operand opr = getOperandData("DM"); 
-							desM = opr.value.modRecords.size();
+							desM = opr.value.modRecord.adjustments.size();
 							records.write((byte)dm.value.arec);
 							records.write((byte)':');
 							records.write((byte)srcflag);
