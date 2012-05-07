@@ -10,14 +10,19 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -65,6 +70,8 @@ public class GUIMain {
 	static JMenuItem m_saveAs;
 	/** Our Load menu item */
 	static JMenuItem m_load;
+	/** Our Parse menu item */
+	static JMenuItem m_parse;
 	/** Our Compile menu item */
 	static JMenuItem m_compile;
 	/** A menu item to export the file as an HTML document */
@@ -115,6 +122,27 @@ public class GUIMain {
 		mainWindow.setTitle("URBAN Legend");
 
 		tabPane = new JTabbedPane();
+		tabPane.addMouseListener(new MouseListener() {
+			@Override public void mouseClicked(MouseEvent event) {}
+
+			@Override public void mouseEntered(MouseEvent e) {}
+
+			@Override public void mouseExited(MouseEvent e) {}
+
+			@Override public void mousePressed(MouseEvent e) {}
+
+			@Override public void mouseReleased(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON2) {
+					System.out.println("Pressed");
+					e.consume();
+					if (e.getSource() instanceof JTabbedPane) {
+						System.out.println("Tabbed pane");
+						JTabbedPane jtp = (JTabbedPane) e.getSource();
+						jtp.remove(jtp.getSelectedComponent());
+					}
+				}
+			}
+		});
 
 		mainWindow.add(tabPane);
 		mainWindow.setSize(720, 540);
@@ -130,9 +158,14 @@ public class GUIMain {
 		m_saveAs.addActionListener(ml);
 		filemenu.add(m_load = new JMenuItem("Load"));
 		m_load.addActionListener(ml);
+		filemenu.addSeparator();
+
+		filemenu.add(m_parse = new JMenuItem("Parse"));
+		m_parse.addActionListener(ml);
 		filemenu.add(m_compile = new JMenuItem("Compile"));
 		m_compile.addActionListener(ml);
 		filemenu.addSeparator();
+
 		filemenu.add(m_writeHTML = new JMenuItem("Export as HTML"));
 		m_writeHTML.addActionListener(ml);
 		filemenu.add(m_copyFormatted = new JMenuItem(
@@ -444,16 +477,24 @@ public class GUIMain {
 	}
 
 	/**
-	 * Compiles the active code, reporting any errors.
+	 * Parses the active code, reporting any errors.
 	 * 
 	 * @author Josh Ventura
 	 * @date Apr 11, 2012; 10:41:57 PM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
-	 * @specRef N/A
+	 */
+	void parseActive() {
+		FileTab ft = (FileTab) tabPane.getSelectedComponent();
+		if (ft == null)
+			return;
+		ft.compile();
+	}
+
+	/**
+	 * Compiles the active code, reporting any errors, then builds
+	 * an object file.
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 11, 2012; 10:41:57 PM
 	 */
 	void compileActive() {
 		FileTab ft = (FileTab) tabPane.getSelectedComponent();
@@ -560,6 +601,8 @@ public class GUIMain {
 			if (e.getSource() == m_new) {
 				FileTab ft = new FileTab();
 				tabPane.addTab("Untitled", ft);
+				tabPane.setSelectedComponent(ft);
+				return;
 			}
 			if (e.getSource() == m_save || e.getSource() == m_saveAs) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
@@ -577,6 +620,32 @@ public class GUIMain {
 				} catch (IOException e2) {
 					showException(e2);
 				}
+				return;
+			}
+			if (e.getSource() == m_load) {
+				String fn = getSaveFname();
+				if (fn == null)
+						return;
+				try {
+					File n = new File(fn);
+					Scanner fw = new Scanner(n);
+					FileTab ft = new FileTab();
+					ArrayList<String> lines = new ArrayList<String>();
+					while (fw.hasNextLine())
+						lines.add(fw.nextLine());
+					ft.jt.setText(lines.toArray(new String[0]));
+					ft.fileName = n.getAbsolutePath();
+					tabPane.add(n.getName(), ft);
+					tabPane.setSelectedComponent(ft);
+					fw.close();
+				} catch (FileNotFoundException e1) {
+					showException(e1);
+				}
+				return;
+			}
+			if (e.getSource() == m_parse) {
+				parseActive();
+				return;
 			}
 			if (e.getSource() == m_compile) {
 				compileActive();
@@ -638,11 +707,13 @@ public class GUIMain {
 						}
 					}
 				}
+				return;
 			}
 			if (e.getSource() == m_copyHTMLTest) {
 				StringSelection ss = new StringSelection(getTestCase());
 				Toolkit.getDefaultToolkit().getSystemClipboard()
 						.setContents(ss, null);
+				return;
 			}
 			if (e.getSource() == m_copyFormatted) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
@@ -651,6 +722,7 @@ public class GUIMain {
 					Toolkit.getDefaultToolkit().getSystemClipboard()
 							.setContents(htmls, null);
 				}
+				return;
 			}
 			if (e.getSource() == m_exit) {
 				System.exit(0);
