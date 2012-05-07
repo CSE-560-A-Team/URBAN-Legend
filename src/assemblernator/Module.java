@@ -41,6 +41,18 @@ import assemblernator.Instruction.Operand.ModRecord;
  */
 public class Module {
 	/**
+	 * A record representing a object file record.
+	 * @author Noah
+	 * @date May 7, 2012; 12:50:55 AM
+	 */
+	public static class Records {
+		/** the records as an array of bytes.*/
+		public byte[] records;
+		/** number of records.*/
+		public int size;
+	}
+	
+	/**
 	 * <pre>
 	 * symbolTable is a sequence of entry's where an entry = (label, address, usage, string);
 	 * 	for an instruction with the label, 
@@ -256,6 +268,7 @@ public class Module {
 		 */
 		public byte[] getLinkRecords(String progName) {
 			ByteArrayOutputStream records = new ByteArrayOutputStream();
+			int recordCnt = 0;
 			try {
 				for (Map.Entry<String, Instruction> entry : this.extEntSymbols
 						.entrySet()) {
@@ -274,11 +287,13 @@ public class Module {
 						records.write((byte) ':');
 						// program name
 						records.write(progName.getBytes());
-
+						
+						recordCnt++;
 					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+				
 				return ":Something wicked has happened:".getBytes();
 			}
 
@@ -768,7 +783,7 @@ public class Module {
 		out.write(getHeaderRecord());
 
 		// write linking records.
-		out.write(this.symbolTable.getLinkRecords(this.programName));
+		//out.write(this.symbolTable.getLinkRecords(this.programName));
 		for(Instruction entExt : this.symbolTable.extEntSymbols.values()) {
 			if(entExt.usage == Usage.ENTRY) {
 				totalLinkRecords++;
@@ -780,7 +795,7 @@ public class Module {
 			out.write(instr.getModRecords(this.programName));
 			//counts number of mod records.
 			for(Operand oper : instr.operands) {
-				totalModRecords += oper.value.modRecords.size();
+				
 			}
 		}
 
