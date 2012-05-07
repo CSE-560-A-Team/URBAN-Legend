@@ -19,7 +19,9 @@ import java.util.TreeMap;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.Instruction.Operand;
+import assemblernator.Instruction.Operand.ModRecord.Adjustment;
 import assemblernator.Instruction.Usage;
+import assemblernator.Instruction.Operand.ModRecord;
 
 /**
  * A class representing an assembled urban module.
@@ -90,8 +92,7 @@ public class Module {
 		 * usage = Instruction.usage,
 		 * and string = the value of the operand in Instruction.
 		 * 
-		 * only includes Instructions extEntInstr, where instr.opID = "EXT" or
-		 * "ENT".
+		 * only includes Instructions extEntInstr, where instr.opID = "EXT" or "ENT".
 		 */
 		private Map<String, Instruction> extEntSymbols = new TreeMap<String, Instruction>();
 
@@ -507,6 +508,8 @@ public class Module {
 		public int value;
 		/** The linker AREC flag for the value. */
 		public char arec;
+		/** Any modification records generated for this value. */
+		public ArrayList<ModRecord> modRecords;
 
 		/** Default constructor; does nothing. */
 		public Value() {}
@@ -572,10 +575,12 @@ public class Module {
 	 */
 	public Value evaluate(String exp, boolean MREF, ErrorHandler hErr,
 			Instruction caller, int pos) {
-		int result = 0, i = 0;
+		int result = 0;
+		int i = 0;
 		boolean readAnything = false;
 
-		int lrefs = 0, exrefs = 0;
+		ModRecord mrec = new ModRecord();
+		ArrayList<Adjustment> lrefs = new ArrayList<Adjustment>();
 
 		int sign = 1;
 
@@ -634,10 +639,30 @@ public class Module {
 						else
 							hErr.reportError(makeError("illegalRefAmp", lbl),
 									caller.lineNum, pos);
-						if (instr.usage == Usage.EXTERNAL)
-							++exrefs;
-						else
-							lrefs += sign;
+						if (instr.usage == Usage.EXTERNAL) {
+							boolean addit = true;
+							for (int j = 0; j < mrec.adjustments.size(); ++j) {
+								final Adjustment mr = mrec.adjustments.get(j);
+								if (mr.label.equals(instr.label) && mr.sign == -sign) {
+									addit = false;
+									mrec.adjustments.remove(j--);
+									break;
+								}
+							}
+							if (addit)
+								mrec.adjustments.add(new Adjustment(sign,'E',lbl));
+						}
+						else {
+							boolean addit = true;
+							for (int j = 0; j < lrefs.size(); ++j)
+								if (lrefs.get(j).sign == -sign) {
+									addit = false;
+									lrefs.remove(j);
+									break;
+								}
+							if (addit)
+								lrefs.add(new Adjustment(sign, 'R', lbl));
+						}
 					}
 				}
 				i += lbl.length();
@@ -658,8 +683,9 @@ public class Module {
 						caller.lineNum, pos + i);
 		}
 
-		char arec = exrefs > 0 ? lrefs != 0 || exrefs > 1 ? 'C' : 'E'
-				: lrefs != 0 ? 'R' : 'A';
+		final int exrefs = mrec.adjustments.size();
+		char arec = exrefs > 0 ? !lrefs.isEmpty() || exrefs > 1 ? 'C' : 'E'
+				: !lrefs.isEmpty() ? 'R' : 'A';
 		return new Value(result, arec);
 	}
 

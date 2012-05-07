@@ -162,21 +162,12 @@ public class USI_NOISE extends AbstractInstruction {
 
 
 	/** Note Lengths. */
-	static enum Tone {
-		/** G below C */
-		GbelowC(196), /** A */
-		A(220), /** A# */
-		Asharp(233), /** B */
-		B(247), /** C */
-		C(262), /** C# */
-		Csharp(277), /** C */
-		D(294), /** D# */
-		Dsharp(311), /** E */
-		E(330), /** F */
-		F(349), /** F# */
-		Fsharp(370), /** G */
-		G(392), /** G# */
-		Gsharp(415);
+	static enum Tone {//@formatter:off
+		/** G below C */ GbelowC(196), /** A */ A(220), /** A# */ Asharp(233), /** B */ B(247),
+		/** C */ C(262), /** C# */ Csharp(277), /** C */ D(294), /** D# */ Dsharp(311),
+		/** E */ E(330), /** F */ F(349), /** F# */ Fsharp(370), /** G */ G(392),
+		/** G# */ Gsharp(415), /** F5 */ F5(698), /** A5*/ A5(880), /** C6 */ C6(1046);
+		//@formatter:on
 		/** Frequency in Hz. */
 		public int freq;
 
@@ -230,14 +221,20 @@ public class USI_NOISE extends AbstractInstruction {
 
 	/** Test audio. */
 	public static void test() {
-		byte buf[] = new byte[65536 * 10];
+		byte buf[] = new byte[48000 * 10];
 		int bpos = 0;
 
-		Note[] mhall = { new Note(Tone.D, Duration.TQ),
-				new Note(Tone.F, Duration.TQ), new Note(Tone.D, Duration.TQ),
-				new Note(Tone.C, Duration.TQ),
-				new Note(Tone.A, Duration.WHOLE),
-				new Note(Tone.A, Duration.HALF), };
+		Note[] mhall = { new Note(Tone.A5, Duration.EIGHTH),
+				new Note(Tone.A5, Duration.QUARTER),
+				new Note(Tone.A5, Duration.QUARTER),
+				new Note(Tone.F5, Duration.EIGHTH),
+				new Note(Tone.A5, Duration.QUARTER),
+				new Note(Tone.C6, Duration.HALF), };
+		/* { new Note(Tone.D, Duration.TQ),
+		 * new Note(Tone.F, Duration.TQ), new Note(Tone.D, Duration.TQ),
+		 * new Note(Tone.C, Duration.TQ),
+		 * new Note(Tone.A, Duration.WHOLE),
+		 * new Note(Tone.A, Duration.HALF), }; */
 		/* { new Note(Tone.B, Duration.QUARTER),
 		 * new Note(Tone.A, Duration.QUARTER),
 		 * new Note(Tone.GbelowC, Duration.QUARTER),
@@ -252,18 +249,18 @@ public class USI_NOISE extends AbstractInstruction {
 		 * new Note(Tone.D, Duration.QUARTER),
 		 * new Note(Tone.D, Duration.HALF) }; */
 		for (int n = 0; n < mhall.length; n++) {
-			int bend = bpos + (mhall[n].dur.ms * 65536) / 1000;
+			int bend = bpos + (mhall[n].dur.ms * 48000) / 1000;
 			int i;
 			for (i = bpos; i < bend - 1200; i++)
 				buf[i] = (byte) (Math.sin(2 * Math.PI
-						* ((i - bpos) / 65536.0 * mhall[n].tone.freq)) * 64);
+						* ((i - bpos) / 48000.0 * mhall[n].tone.freq)) * 64);
 			byte frqat = buf[i - 1];
 			while (i <= bend)
 				buf[i++] = frqat = (byte) (frqat > 0 ? frqat - 1
 						: frqat < 0 ? frqat + 1 : 0);
 			bpos = bend;
 		}
-		play(buf, 65536);
+		play(buf, 48000);
 	}
 
 	/**

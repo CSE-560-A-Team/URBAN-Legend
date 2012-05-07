@@ -68,7 +68,7 @@ public class Main {
 				"one + two + 4 + six - 5 -one+8+*+ 0 + * + *", "rlabel1",
 				"rlabel1 + rlabel3", "rlabel5-rlabel1", "exlabel1",
 				"exlabel1-rlabel1", "exlabel1-rlabel1+rlabel2",
-				"exlabel1 + exlabel2" };
+				"exlabel1 + exlabel2", "exlabel1 + exlabel2 - exlabel2", "exlabel2 + 10 - exlabel2" };
 		for (int i = 0; i < x.length; i++) {
 			Value a = m.evaluate(x[i], true, new DefaultErrorHandler(), USI_EQU
 					.getInstance().getNewInstance(), 0);
