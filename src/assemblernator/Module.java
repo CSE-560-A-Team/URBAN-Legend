@@ -761,14 +761,13 @@ public class Module {
 	}
 	
 	/**
-	 * @author ratul Khosla
+	 * @author Ratul Khosla
 	 * @date May 6, 2012; 7:19:51 PM
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param programName The program name.
 	 * @param asmblrVersion The current assembler version.
 	 * @return A one dimensional array of bytes. The row represents the Header Record.
 	 * @specRef OB1
@@ -786,9 +785,9 @@ public class Module {
 	 * @specRef OB1.20
 	 * @specRef OB1.21
 	 */
-	private byte[] getHeaderrecord(String programName, int asmblrVersion) {
+	private byte[] getHeaderRecord(int asmblrVersion) {
 		try {
-			Map.Entry<String, Instruction> entry;
+			//Map.Entry<String, Instruction> entry;
 			ByteArrayOutputStream header = new ByteArrayOutputStream();
 			header.write((byte) 'H');// OB1.1
 			header.write((byte) ':');// OB1.2
@@ -816,16 +815,13 @@ public class Module {
 	}
 	
 	/**
-	 * @author user
+	 * @author Ratul Khosla
 	 * @date May 6, 2012; 8:03:54 PM
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param programName
-	 *            The name of the program being assembled, which must be a valid
-	 *            label.
 	 * @param totRecords
 	 * 			  The total number of records that are present.
 	 * @param totLinkRecords
@@ -848,7 +844,7 @@ public class Module {
 	 * @specRef OB5.10
 	 * @specRef OB5.11
 	 */
-	private byte[] getEndRecord(String programName,int totRecords, int totLinkRecords,  
+	private byte[] getEndRecord(int totRecords, int totLinkRecords,  
 			int totTextRecords, int totModRecords) {
 		try {
 			ByteArrayOutputStream header = new ByteArrayOutputStream();
