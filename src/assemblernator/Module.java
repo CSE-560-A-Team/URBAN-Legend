@@ -763,6 +763,11 @@ public class Module {
 
 		// write linking records.
 		out.write(this.symbolTable.getLinkRecords(this.programName));
+		
+		//write text records.
+		for(Instruction instr : this.assembly) {
+			out.write(instr.getTextRecord(this.programName));
+		}
 
 		// write end record
 		getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,
