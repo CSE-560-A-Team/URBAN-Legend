@@ -1187,6 +1187,7 @@ public abstract class Instruction {
 					records.write((byte)':');
 					//program name
 					records.write(progName.getBytes());
+					records.write((byte)':');
 				}
 		} catch(IOException e) {
 			e.printStackTrace();
