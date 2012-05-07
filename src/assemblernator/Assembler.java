@@ -217,7 +217,7 @@ public class Assembler {
 	public static final Module parseFile(Scanner source, ErrorHandler hErr) {
 		int lineNum = 0, skipls = 0;
 		Module module = new Module();
-		int startAddr = 0;
+		int execStartAddr = 0;
 		int lc = 0;
 		boolean firstKICKO = false, valid = true, hasEnd = false;
 
@@ -258,25 +258,30 @@ public class Assembler {
 					hasEnd = true;
 				}
 
-				/* if start of module, record startAddr of module.
-				 * execStart of module. */
+				/* if start of module, record execStartAddr of module.*/
 				if (instr.getOpId().equalsIgnoreCase("KICKO") && !firstKICKO) {
-					module.startAddr = startAddr;
+					module.startAddr = execStartAddr;
 					//instr.immediateCheck(instr.getHErr(hErr), module);
 					module.programName = instr.label;
 					firstKICKO = true;
 				} 
-
+				
 				if (!firstKICKO) {
 					hErr.reportError(makeError("KICKOlineNum"), lineNum, -1);
 					break;
 				}
-
+				
 				instr.lc = lc;
 				// checks for operand errors in instruction.
 				valid = instr.immediateCheck(instr.getHErr(hErr), module);
 				// Get new lc for next instruction.
 				lc = instr.getNewLC(lc, module);
+				
+				//assign execStartAddr.
+				if(instr.getOpId().equalsIgnoreCase("KICKO")) {
+					module.startAddr = lc;
+				}
+
 
 				if (lc > 4095) {
 					instr.errors.add(instr.errors.size(), makeError("OOM")); //add error into list of errors.
@@ -288,9 +293,8 @@ public class Assembler {
 					module.getSymbolTable().addEntry(instr, hErr);
 				}
 
-				module.assembly.add(instr);
+				module.addInstruction(instr, hErr);
 
-				module.startAddr += lc;
 			} catch (URBANSyntaxException e) {
 				hErr.reportError(e.getMessage(), lineNum, e.index);
 				if (e.getMessage() == null || e.getMessage().length() <= 5)
@@ -304,8 +308,9 @@ public class Assembler {
 		// Pass two
 		for (Instruction i : module.assembly) {
 			valid = i.check(i.getHErr(hErr), module);
-		
+			
 			if(valid) {
+				module.startAddr = execStartAddr;
 				i.assembled = i.assemble(); //for now.  should replace all assemble w/ directly changing self's field.
 			} else {
 				i.assembled = USI_NOP.getInstance().assemble(); //if not valid replace with nop.

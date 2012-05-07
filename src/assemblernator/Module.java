@@ -477,7 +477,11 @@ public class Module {
 	 * 
 	 * @specRef OB1.3
 	 */
-	int moduleLength;
+	private int moduleLength;
+	/**
+	 * The maximum length of module.
+	 */
+	private final int MAX_LEN = 1023;
 
 	/**
 	 * Returns a reference to the symbol table.
@@ -494,6 +498,27 @@ public class Module {
 	 */
 	public SymbolTable getSymbolTable() {
 		return symbolTable;
+	}
+	
+	/**
+	 * Adds an instruction to module.
+	 * @author Noah
+	 * @date May 6, 2012; 7:14:43 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param instr instruction to add to module.
+	 * @param hErr errorhandler that will recieve problems in adding instructions.
+	 * @specRef N/A
+	 */
+	public void addInstruction(Instruction instr, ErrorHandler hErr) {
+		this.moduleLength += instr.lc;
+		if(this.moduleLength > this.MAX_LEN) {
+			hErr.reportError(makeError("ORmoduleLength", this.programName), instr.lineNum, -1);
+		}
+		this.assembly.add(instr);
 	}
 
 	/**
