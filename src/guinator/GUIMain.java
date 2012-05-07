@@ -4,13 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -522,8 +527,8 @@ public class GUIMain {
 			if (e.getSource() == copyFormatted) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
 				if (ft != null) {
-				    StringSelection ss = new StringSelection(ft.jt.getHTML());
-				    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+				    HtmlSelection htmls = new HtmlSelection(ft.jt.getHTML());
+				    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(htmls, null);
 				}
 			}
 			if (e.getSource() == exit) {
@@ -574,6 +579,61 @@ public class GUIMain {
 			message = msg;
 			line = ln;
 			pos = p;
+		}
+	}
+	
+
+	/**
+	 * @author elliotth
+	 * @date May 6, 2012; 11:55:13 PM
+	 */
+	public static class HtmlSelection implements Transferable {
+		/** Our flavors... */
+		private static ArrayList<DataFlavor> htmlFlavors = new ArrayList<DataFlavor>();
+		static {
+			try {
+				htmlFlavors.add(new DataFlavor(
+						"text/html;class=java.lang.String"));
+				htmlFlavors
+						.add(new DataFlavor("text/html;class=java.io.Reader"));
+
+			} catch (ClassNotFoundException ex) {
+				ex.printStackTrace();
+			}
+		}
+		/** Our HTML text */
+		private String html;
+
+		/**
+		 * @param html
+		 *            The HTML-formatted text to transfer.
+		 */
+		public HtmlSelection(String html) {
+			this.html = html;
+		}
+
+
+		/** @see java.awt.datatransfer.Transferable#getTransferDataFlavors() */
+		@Override public DataFlavor[] getTransferDataFlavors() {
+			return (DataFlavor[]) htmlFlavors
+					.toArray(new DataFlavor[htmlFlavors.size()]);
+		}
+
+
+		/** @see java.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.datatransfer.DataFlavor) */
+		@Override public boolean isDataFlavorSupported(DataFlavor flavor) {
+			return htmlFlavors.contains(flavor);
+		}
+
+
+		/** @see java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer.DataFlavor) */
+		@Override public Object getTransferData(DataFlavor flavor)
+				throws UnsupportedFlavorException {
+			if (String.class.equals(flavor.getRepresentationClass()))
+				return html;
+			else if (Reader.class.equals(flavor.getRepresentationClass()))
+				return new StringReader(html);
+			throw new UnsupportedFlavorException(flavor);
 		}
 	}
 }

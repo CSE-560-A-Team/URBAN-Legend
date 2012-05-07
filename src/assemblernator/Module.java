@@ -93,7 +93,8 @@ public class Module {
 		 * usage = Instruction.usage,
 		 * and string = the value of the operand in Instruction.
 		 * 
-		 * only includes Instructions extEntInstr, where instr.opID = "EXT" or "ENT".
+		 * only includes Instructions extEntInstr, where instr.opID = "EXT" or
+		 * "ENT".
 		 */
 		private Map<String, Instruction> extEntSymbols = new TreeMap<String, Instruction>();
 
@@ -234,14 +235,16 @@ public class Module {
 		 * Returns all linking records from symbol table.
 		 * 
 		 * @author Noah
-		 * @param progName program name.
+		 * @param progName
+		 *            program name.
 		 * @date May 4, 2012; 9:00:19 PM
 		 * @modified UNMODIFIED
 		 * @tested UNTESTED
 		 * @errors NO ERRORS REPORTED
 		 * @codingStandards Awaiting signature
 		 * @testingStandards Awaiting signature
-		 * @return a two dimensional array of bytes.  Each row of the array corresponds to one linking record.
+		 * @return a two dimensional array of bytes. Each row of the array
+		 *         corresponds to one linking record.
 		 * @specRef OB2
 		 * @specRef OB2.1
 		 * @specRef OB2.2
@@ -252,29 +255,32 @@ public class Module {
 		 * @specRef OB2.7
 		 */
 		public byte[] getLinkRecord(String progName) {
-			//Iterator<Map.Entry<String, Instruction>> extEntIt = this.extEntSymbols.entrySet().iterator();
-			//List<Byte> records = new ArrayList<Byte>();
+			// Iterator<Map.Entry<String, Instruction>> extEntIt =
+			// this.extEntSymbols.entrySet().iterator();
+			// List<Byte> records = new ArrayList<Byte>();
 			ByteArrayOutputStream records = new ByteArrayOutputStream();
 			try {
-				for(Map.Entry<String, Instruction> entry : this.extEntSymbols.entrySet()) {
-					//if the entry is an ENT entry.
-					if(entry.getValue().getOpId().equalsIgnoreCase("ENT")) {
-						records.write((byte)'L');
-						records.write((byte)':');
-						//add label
+				for (Map.Entry<String, Instruction> entry : this.extEntSymbols
+						.entrySet()) {
+					// if the entry is an ENT entry.
+					if (entry.getValue().getOpId().equalsIgnoreCase("ENT")) {
+						records.write((byte) 'L');
+						records.write((byte) ':');
+						// add label
 						records.write(entry.getKey().getBytes());
-						
-						records.write((byte)':');
-						//address
-						records.write(IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4));
-						
-						records.write((byte)':');
-						//program name
+
+						records.write((byte) ':');
+						// address
+						records.write(IOFormat.formatIntegerWithRadix(
+								entry.getValue().lc, 16, 4));
+
+						records.write((byte) ':');
+						// program name
 						records.write(progName.getBytes());
-	
+
 					}
 				}
-			} catch(IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 				return ":Something wicked has happened:".getBytes();
 			}
@@ -282,7 +288,6 @@ public class Module {
 			return records.toByteArray();
 		}
 
-		
 
 		/**
 		 * provides an Iterator over the elements of the symbol table.
@@ -472,6 +477,7 @@ public class Module {
 	public int execStartAddr;
 	/**
 	 * The address at which program is loaded.
+	 * 
 	 * @specRef OB1.3
 	 */
 	public int loadAddr;
@@ -508,9 +514,10 @@ public class Module {
 	public SymbolTable getSymbolTable() {
 		return symbolTable;
 	}
-	
+
 	/**
 	 * Adds an instruction to module.
+	 * 
 	 * @author Noah
 	 * @date May 6, 2012; 7:14:43 PM
 	 * @modified UNMODIFIED
@@ -518,14 +525,18 @@ public class Module {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param instr instruction to add to module.
-	 * @param hErr errorhandler that will recieve problems in adding instructions.
+	 * @param instr
+	 *            instruction to add to module.
+	 * @param hErr
+	 *            errorhandler that will recieve problems in adding
+	 *            instructions.
 	 * @specRef N/A
 	 */
 	public void addInstruction(Instruction instr, ErrorHandler hErr) {
 		this.moduleLength += instr.lc;
-		if(this.moduleLength > this.MAX_LEN) {
-			hErr.reportError(makeError("ORmoduleLength", this.programName), instr.lineNum, -1);
+		if (this.moduleLength > this.MAX_LEN) {
+			hErr.reportError(makeError("ORmoduleLength", this.programName),
+					instr.lineNum, -1);
 		}
 		this.assembly.add(instr);
 	}
@@ -676,14 +687,16 @@ public class Module {
 							boolean addit = true;
 							for (int j = 0; j < mrec.adjustments.size(); ++j) {
 								final Adjustment mr = mrec.adjustments.get(j);
-								if (mr.label.equals(instr.label) && mr.sign == -sign) {
+								if (mr.label.equals(instr.label)
+										&& mr.sign == -sign) {
 									addit = false;
 									mrec.adjustments.remove(j--);
 									break;
 								}
 							}
 							if (addit)
-								mrec.adjustments.add(new Adjustment(sign,'E',lbl));
+								mrec.adjustments.add(new Adjustment(sign, 'E',
+										lbl));
 						}
 						else {
 							boolean addit = true;
@@ -744,9 +757,15 @@ public class Module {
 	 */
 	public void writeObjectFile(OutputStream out, int execStart)
 			throws IOException, Exception {
-		// write header record.
-		
-		//write linking records.
+		getHeaderRecord();
+
+		int totRecords = 0;
+		int totLinkRecords = 0;
+		int totTextRecords = 0;
+		int totModRecords = 0;
+
+		getEndRecord(totRecords, totLinkRecords, totTextRecords, totModRecords);
+		// write linking records.
 		out.write(this.symbolTable.getLinkRecord(this.programName));
 
 	}
@@ -790,7 +809,7 @@ public class Module {
 
 		return rep;
 	}
-	
+
 	/**
 	 * @author Ratul Khosla
 	 * @date May 6, 2012; 7:19:51 PM
@@ -799,8 +818,8 @@ public class Module {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param asmblrVersion The current assembler version.
-	 * @return A one dimensional array of bytes. The row represents the Header Record.
+	 * @return A one dimensional array of bytes. The row represents the Header
+	 *         Record.
 	 * @specRef OB1
 	 * @specRef OB1.1
 	 * @specRef OB1.2
@@ -816,7 +835,7 @@ public class Module {
 	 * @specRef OB1.20
 	 * @specRef OB1.21
 	 */
-	private byte[] getHeaderRecord(int asmblrVersion) {
+	private byte[] getHeaderRecord() {
 		try {
 			ByteArrayOutputStream header = new ByteArrayOutputStream();
 			header.write((byte) 'H');// OB1.1
@@ -825,13 +844,16 @@ public class Module {
 			header.write((byte) ':');// OB1.2
 			header.write(IOFormat.formatIntegerWithRadix(this.loadAddr, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.2
-			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength, 16, 4));// OB1.3
+			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength, 16,
+					4));// OB1.3
 			header.write((byte) ':');// OB1.4
-			header.write(IOFormat.formatIntegerWithRadix(this.execStartAddr, 16, 4));// OB1.5
+			header.write(IOFormat.formatIntegerWithRadix(this.execStartAddr,
+					16, 4));// OB1.5
 			header.write((byte) ':');// OB1.6
 			header.write(IOFormat.formatDate(new Date()));// OB1.7
 			header.write((byte) ':');// OB1.8
-			header.write(IOFormat.formatIntegerWithRadix(asmblrVersion, 16, 4));// OB1.9
+			header.write(IOFormat.formatIntegerWithRadix(Assembler.VERSION, 16,
+					4));// OB1.9
 			header.write((byte) ':');// OB1.18
 			header.write("URBAN-ASM".getBytes());// OB1.19
 			header.write((byte) ':');// OB1.20
@@ -841,9 +863,9 @@ public class Module {
 			e.printStackTrace();
 			return ":Error!!!Something wrong has happened:".getBytes();
 		}
-		
+
 	}
-	
+
 	/**
 	 * @author Ratul Khosla
 	 * @date May 6, 2012; 8:03:54 PM
@@ -853,15 +875,16 @@ public class Module {
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param totRecords
-	 * 			  The total number of records that are present.
+	 *            The total number of records that are present.
 	 * @param totLinkRecords
-	 * 			  The total number of Linking Records that are present. 
+	 *            The total number of Linking Records that are present.
 	 * @param totTextRecords
-	 * 			  The total number of Text Records that are present.
+	 *            The total number of Text Records that are present.
 	 * @param totModRecords
-	 * 			  The total number of Modification Records that are present.
+	 *            The total number of Modification Records that are present.
 	 * @return
-	 *     		A one dimensional array of bytes. The row represents the Ending Record.
+	 *         A one dimensional array of bytes. The row represents the Ending
+	 *         Record.
 	 * @specRef OB5.1
 	 * @specRef OB5.2
 	 * @specRef OB5.3
@@ -874,21 +897,21 @@ public class Module {
 	 * @specRef OB5.10
 	 * @specRef OB5.11
 	 */
-	private byte[] getEndRecord(int totRecords, int totLinkRecords,  
+	private byte[] getEndRecord(int totRecords, int totLinkRecords,
 			int totTextRecords, int totModRecords) {
 		try {
 			ByteArrayOutputStream header = new ByteArrayOutputStream();
-			header.write((byte) 'E');//  OB5.1
-			header.write((byte) ':');//  OB5.2
-			header.write(IOFormat.formatIntegerWithRadix(totRecords, 16, 4));//  OB5.3
-			header.write((byte) ':');//  OB5.4
-			header.write(IOFormat.formatIntegerWithRadix(totLinkRecords, 16, 4));//  OB5.5
-			header.write((byte) ':');//  OB5.6
-			header.write(IOFormat.formatIntegerWithRadix(totTextRecords, 16, 4));//  OB5.7
-			header.write((byte) ':');//  OB5.8
-			header.write(IOFormat.formatIntegerWithRadix(totModRecords, 16, 4));//  OB5.9
-			header.write((byte) ':');//  OB5.10
-			header.write(programName.getBytes());//  OB5.11
+			header.write((byte) 'E');// OB5.1
+			header.write((byte) ':');// OB5.2
+			header.write(IOFormat.formatIntegerWithRadix(totRecords, 16, 4));// OB5.3
+			header.write((byte) ':');// OB5.4
+			header.write(IOFormat.formatIntegerWithRadix(totLinkRecords, 16, 4));// OB5.5
+			header.write((byte) ':');// OB5.6
+			header.write(IOFormat.formatIntegerWithRadix(totTextRecords, 16, 4));// OB5.7
+			header.write((byte) ':');// OB5.8
+			header.write(IOFormat.formatIntegerWithRadix(totModRecords, 16, 4));// OB5.9
+			header.write((byte) ':');// OB5.10
+			header.write(programName.getBytes());// OB5.11
 			return header.toByteArray();
 		} catch (IOException e) {
 			e.printStackTrace();
