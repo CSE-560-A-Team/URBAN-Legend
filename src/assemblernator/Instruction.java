@@ -1161,10 +1161,12 @@ public abstract class Instruction {
 					for (String op: new String[] {"FM","FC","FL","EX"} ) { 
 						Operand opr = getOperandData(op); 
 						if (opr != null)  { 
-							srcflag = opr.value.arec;
-							srcM = opr.value.modRecord.adjustments.size(); break; 
+							if(opr.value != null) {
+								srcflag = opr.value.arec;
+								srcM = opr.value.modRecord.adjustments.size(); break; 
 							}
 						}
+					}
 					Operand dm = getOperandData("DM");
 					if (dm != null){
 							Operand opr = getOperandData("DM"); 
