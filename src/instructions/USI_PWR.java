@@ -80,8 +80,10 @@ public class USI_PWR extends AbstractInstruction {
 				hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "FC", "EX"), this.lineNum, -1);
 			}
 		} else if(this.operands.size() > 2) {
+			isValid = false;
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 		} else {
+			isValid = false;
 			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 		}
 		

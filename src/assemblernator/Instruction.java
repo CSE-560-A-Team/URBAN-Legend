@@ -939,7 +939,7 @@ public abstract class Instruction {
 		if ((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM")
 				|| this.getOpId().equalsIgnoreCase("CHAR")
 				|| this.getOpId().equalsIgnoreCase("ADRC")) {
-			for(int i = 0; i < assemble().length; i++) {
+			for(int i = 0; i < this.assembled.length; i++) {
 				rep = rep + IOFormat.formatHexInteger(this.assembled[i], 8) + "\t";
 				if(i < assembled.length - 1) {
 					rep = rep + ", ";
