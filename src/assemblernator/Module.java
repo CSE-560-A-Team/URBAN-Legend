@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Date;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
@@ -281,6 +282,8 @@ public class Module {
 			return records.toByteArray();
 		}
 
+		
+
 		/**
 		 * provides an Iterator over the elements of the symbol table.
 		 * 
@@ -466,7 +469,12 @@ public class Module {
 	 * 
 	 * @specRef OB1.5
 	 */
-	int startAddr;
+	public int execStartAddr;
+	/**
+	 * The address at which program is loaded.
+	 * @specRef OB1.3
+	 */
+	public int loadAddr;
 
 	/**
 	 * The name of the module = label of KICKO directive.
@@ -478,7 +486,11 @@ public class Module {
 	 * 
 	 * @specRef OB1.3
 	 */
-	int moduleLength;
+	private int moduleLength;
+	/**
+	 * The maximum length of module.
+	 */
+	private final int MAX_LEN = 1023;
 
 	/**
 	 * Returns a reference to the symbol table.
@@ -495,6 +507,27 @@ public class Module {
 	 */
 	public SymbolTable getSymbolTable() {
 		return symbolTable;
+	}
+	
+	/**
+	 * Adds an instruction to module.
+	 * @author Noah
+	 * @date May 6, 2012; 7:14:43 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param instr instruction to add to module.
+	 * @param hErr errorhandler that will recieve problems in adding instructions.
+	 * @specRef N/A
+	 */
+	public void addInstruction(Instruction instr, ErrorHandler hErr) {
+		this.moduleLength += instr.lc;
+		if(this.moduleLength > this.MAX_LEN) {
+			hErr.reportError(makeError("ORmoduleLength", this.programName), instr.lineNum, -1);
+		}
+		this.assembly.add(instr);
 	}
 
 	/**
@@ -757,4 +790,110 @@ public class Module {
 
 		return rep;
 	}
+	
+	/**
+	 * @author Ratul Khosla
+	 * @date May 6, 2012; 7:19:51 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param asmblrVersion The current assembler version.
+	 * @return A one dimensional array of bytes. The row represents the Header Record.
+	 * @specRef OB1
+	 * @specRef OB1.1
+	 * @specRef OB1.2
+	 * @specRef OB1.3
+	 * @specRef OB1.4
+	 * @specRef OB1.5
+	 * @specRef OB1.6
+	 * @specRef OB1.7
+	 * @specRef OB1.8
+	 * @specRef OB1.9
+	 * @specRef OB1.18
+	 * @specRef OB1.19
+	 * @specRef OB1.20
+	 * @specRef OB1.21
+	 */
+	private byte[] getHeaderRecord(int asmblrVersion) {
+		try {
+			ByteArrayOutputStream header = new ByteArrayOutputStream();
+			header.write((byte) 'H');// OB1.1
+			header.write((byte) ':');// OB1.2
+			header.write(programName.getBytes());// OB1.3
+			header.write((byte) ':');// OB1.2
+			header.write(IOFormat.formatIntegerWithRadix(this.loadAddr, 16, 4));// OB1.3
+			header.write((byte) ':');// OB1.2
+			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength, 16, 4));// OB1.3
+			header.write((byte) ':');// OB1.4
+			header.write(IOFormat.formatIntegerWithRadix(this.execStartAddr, 16, 4));// OB1.5
+			header.write((byte) ':');// OB1.6
+			header.write(IOFormat.formatDate(new Date()));// OB1.7
+			header.write((byte) ':');// OB1.8
+			header.write(IOFormat.formatIntegerWithRadix(asmblrVersion, 16, 4));// OB1.9
+			header.write((byte) ':');// OB1.18
+			header.write("URBAN-ASM".getBytes());// OB1.19
+			header.write((byte) ':');// OB1.20
+			header.write(programName.getBytes());// OB1.21
+			return header.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ":Error!!!Something wrong has happened:".getBytes();
+		}
+		
+	}
+	
+	/**
+	 * @author Ratul Khosla
+	 * @date May 6, 2012; 8:03:54 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param totRecords
+	 * 			  The total number of records that are present.
+	 * @param totLinkRecords
+	 * 			  The total number of Linking Records that are present. 
+	 * @param totTextRecords
+	 * 			  The total number of Text Records that are present.
+	 * @param totModRecords
+	 * 			  The total number of Modification Records that are present.
+	 * @return
+	 *     		A one dimensional array of bytes. The row represents the Ending Record.
+	 * @specRef OB5.1
+	 * @specRef OB5.2
+	 * @specRef OB5.3
+	 * @specRef OB5.4
+	 * @specRef OB5.5
+	 * @specRef OB5.6
+	 * @specRef OB5.7
+	 * @specRef OB5.8
+	 * @specRef OB5.9
+	 * @specRef OB5.10
+	 * @specRef OB5.11
+	 */
+	private byte[] getEndRecord(int totRecords, int totLinkRecords,  
+			int totTextRecords, int totModRecords) {
+		try {
+			ByteArrayOutputStream header = new ByteArrayOutputStream();
+			header.write((byte) 'E');//  OB5.1
+			header.write((byte) ':');//  OB5.2
+			header.write(IOFormat.formatIntegerWithRadix(totRecords, 16, 4));//  OB5.3
+			header.write((byte) ':');//  OB5.4
+			header.write(IOFormat.formatIntegerWithRadix(totLinkRecords, 16, 4));//  OB5.5
+			header.write((byte) ':');//  OB5.6
+			header.write(IOFormat.formatIntegerWithRadix(totTextRecords, 16, 4));//  OB5.7
+			header.write((byte) ':');//  OB5.8
+			header.write(IOFormat.formatIntegerWithRadix(totModRecords, 16, 4));//  OB5.9
+			header.write((byte) ':');//  OB5.10
+			header.write(programName.getBytes());//  OB5.11
+			return header.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ":Error!!!Something wrong has happened:".getBytes();
+		}
+	}
+
 }
