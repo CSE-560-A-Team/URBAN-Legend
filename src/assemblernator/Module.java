@@ -555,7 +555,7 @@ public class Module {
 		/** The linker AREC flag for the value. */
 		public char arec;
 		/** Any modification records generated for this value. */
-		public ArrayList<ModRecord> modRecords;
+		public ModRecord modRecord;
 
 		/** Default constructor; does nothing. */
 		public Value() {}
@@ -734,7 +734,13 @@ public class Module {
 		final int exrefs = mrec.adjustments.size();
 		char arec = exrefs > 0 ? !lrefs.isEmpty() || exrefs > 1 ? 'C' : 'E'
 				: !lrefs.isEmpty() ? 'R' : 'A';
-		return new Value(result, arec);
+		for (int j = 0; j < lrefs.size(); ++j) {
+			mrec.adjustments.add(lrefs.get(j));
+		}
+		
+		Value res = new Value(result, arec);
+		res.modRecord = mrec;
+		return res;
 	}
 
 	/**
