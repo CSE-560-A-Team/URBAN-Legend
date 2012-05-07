@@ -322,23 +322,6 @@ public class Assembler {
 			hErr.reportWarning(makeError("NoEnd"), lineNum, -1);
 		}
 		
-		//write object file.
-		try {
-			File objFile = new File(System.getProperty("user.home"), module.programName + ".ulo");
-			OutputStream out = new FileOutputStream(objFile);
-			module.writeObjectFile(out);
-			out.close();
-		} catch(FileNotFoundException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-		} catch(IOException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-		} catch(Exception e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-		} 
-		
 		return module;
 	}
 
