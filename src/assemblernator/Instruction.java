@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
@@ -1058,4 +1059,63 @@ public abstract class Instruction {
 			wrapped = hErr;
 		}
 	}
+	
+	/**
+	 * Returns all text records from symbol table.
+	 * 
+	 * @author Eric
+	 * @param progName program name.
+	 * @date May 6, 2012; 9:00:19 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @return a two dimensional array of bytes.  Each row of the array corresponds to one linking record.
+	 */
+	public byte[] getTextRecord(String progName) {
+		ByteArrayOutputStream records = new ByteArrayOutputStream();
+		try {
+					records.write((byte)'T');
+					records.write((byte)':');
+					//program location
+					records.write(IOFormat.formatIntegerWithRadix(this.lc, 16, 4));
+					records.write((byte)':');
+					//instruction
+					for (int count=0; count<this.assembled.length; count++){
+						records.write(this.assembled[count]);
+					}
+					records.write((byte)':');
+					//gets two flags
+					char srcflag = 'A'; 
+					char desflag = 'A';
+					for (String op: new String[] {"FM","FC","FL","EX"} ) { 
+						Operand opr = getOperandData(op); 
+						if (opr != null)  { 
+							srcflag = opr.value.arec; break; 
+							}
+						}
+					Operand dm = getOperandData("DM");
+					if (dm != null){
+							records.write((byte)dm.value.arec);
+							records.write((byte)':');
+							records.write((byte)srcflag);
+					}else{
+						records.write((byte)desflag);
+						records.write((byte)':');
+						records.write((byte)srcflag);
+					}
+					records.write((byte)':');
+					//number of M adjustments
+				
+					//program name
+					records.write(progName.getBytes());
+		} catch(IOException e) {
+			e.printStackTrace();
+			return ":Something wicked has happened:".getBytes();
+		}
+
+		return records.toByteArray();
+	}
+	
 }
