@@ -765,6 +765,8 @@ public class Module {
 		}
 		
 		Value res = new Value(result, arec);
+		mrec.address = caller.lc;
+		mrec.addressField = 'S';
 		res.modRecord = mrec;
 		return res;
 	}

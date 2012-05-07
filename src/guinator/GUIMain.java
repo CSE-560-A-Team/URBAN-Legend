@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -501,6 +500,7 @@ public class GUIMain {
 			if (sec++ < 12)
 				errmsg += el.toString() + "\n";
 		JOptionPane.showMessageDialog(mainWindow, errmsg);
+		e.printStackTrace();
 	}
 
 	/**
@@ -561,9 +561,9 @@ public class GUIMain {
 				FileTab ft = new FileTab();
 				tabPane.addTab("Untitled", ft);
 			}
-			if (e.getSource() == m_save) {
+			if (e.getSource() == m_save || e.getSource() == m_saveAs) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
-				if (ft.fileName == null) {
+				if (ft.fileName == null || e.getSource() == m_saveAs) {
 					ft.fileName = getSaveFname();
 					if (ft.fileName == null)
 						return;

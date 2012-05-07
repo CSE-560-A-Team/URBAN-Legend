@@ -78,11 +78,15 @@ public abstract class Instruction {
 				char arec;
 				/** The label which created this adjustment. */
 				String label;
-				
+
 				/**
-				 * @param sign The sign multiplier for this adjustment, 1 or -1.
-				 * @param arec The AREC flag for this adjustment; must be E, R, or N.
-				 * @param label The label that generated this adjustment.
+				 * @param sign
+				 *            The sign multiplier for this adjustment, 1 or -1.
+				 * @param arec
+				 *            The AREC flag for this adjustment; must be E, R,
+				 *            or N.
+				 * @param label
+				 *            The label that generated this adjustment.
 				 */
 				public Adjustment(int sign, char arec, String label) {
 					this.sign = sign;
@@ -146,19 +150,19 @@ public abstract class Instruction {
 					baos.write(IOFormat.formatIntegerWithRadix(address, 16, 4)); // OB4.3
 					baos.write((byte) ':'); // OB4.4
 					for (Adjustment a : adjustments) { // OB4.5
-						baos.write((byte) (a.sign < 0 ? '-' : '+'));
-						baos.write((byte) ':');
-						baos.write((byte) a.arec);
-						baos.write((byte) ':');
-						baos.write(a.label.getBytes());
-						baos.write((byte) ':');
+						baos.write((byte) (a.sign < 0 ? '-' : '+')); // OB4.5.1
+						baos.write((byte) ':'); // OB4.5.2
+						baos.write((byte) a.arec); // OB4.5.3
+						baos.write((byte) ':'); // OB4.5.4
+						baos.write(a.label.getBytes()); // OB4.5.5
+						baos.write((byte) ':'); // OB4.5.6
 						break;
 					}
-					baos.write((byte) ':');
-					baos.write((byte) addressField);
-					baos.write((byte) ':');
-					baos.write(programName.getBytes());
-					baos.write((byte) ':');
+					baos.write((byte) ':'); // OB4.6
+					baos.write((byte) addressField); // OB4.7
+					baos.write((byte) ':'); // OB4.8
+					baos.write(programName.getBytes()); // OB4.9
+					baos.write((byte) ':'); // OB4.10
 
 					return baos.toByteArray();
 				} catch (IOException e) {
@@ -247,10 +251,10 @@ public abstract class Instruction {
 					baos.write(op.value.modRecord.getBytes(programName));
 					++count;
 				}
-		    return new RecordSet(baos.toByteArray(), count);
+			return new RecordSet(baos.toByteArray(), count);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new RecordSet(":something evil has happened:".getBytes(),0);
+			return new RecordSet(":something evil has happened:".getBytes(), 0);
 		}
 	}
 
@@ -993,9 +997,10 @@ public abstract class Instruction {
 		if ((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM")
 				|| this.getOpId().equalsIgnoreCase("CHAR")
 				|| this.getOpId().equalsIgnoreCase("ADRC")) {
-			for(int i = 0; i < this.assembled.length; i++) {
-				rep = rep + IOFormat.formatHexInteger(this.assembled[i], 8) + "\t";
-				if(i < assembled.length - 1) {
+			for (int i = 0; i < this.assembled.length; i++) {
+				rep = rep + IOFormat.formatHexInteger(this.assembled[i], 8)
+						+ "\t";
+				if (i < assembled.length - 1) {
 					rep = rep + ", ";
 				}
 			}
@@ -1115,19 +1120,21 @@ public abstract class Instruction {
 			wrapped = hErr;
 		}
 	}
-	
+
 	/**
 	 * Returns all text records from symbol table.
 	 * 
 	 * @author Eric
-	 * @param progName program name.
+	 * @param progName
+	 *            program name.
 	 * @date May 6, 2012; 9:00:19 PM
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @return a two dimensional array of bytes.  Each row of the array corresponds to one linking record.
+	 * @return a two dimensional array of bytes. Each row of the array
+	 *         corresponds to one linking record.
 	 * @specRef OB3
 	 * @specRef OB3.1
 	 * @specRef OB3.2
@@ -1142,59 +1149,61 @@ public abstract class Instruction {
 	public byte[] getTextRecord(String progName) {
 		ByteArrayOutputStream records = new ByteArrayOutputStream();
 		try {
-				if(this.assembled != null) {
-					records.write((byte)'T');
-					records.write((byte)':');
-					//program location
-					records.write(IOFormat.formatIntegerWithRadix(this.lc, 16, 4));
-					records.write((byte)':');
-					//instruction
-					for (int count=0; count<this.assembled.length; count++){
-						records.write(this.assembled[count]);
-					}
-					records.write((byte)':');
-					//gets two flags
-					char srcflag = 'A'; 
-					char desflag = 'A';
-					int srcM = 0;
-					int desM = 0;
-					for (String op: new String[] {"FM","FC","FL","EX"} ) { 
-						Operand opr = getOperandData(op); 
-						if (opr != null)  { 
-							if(opr.value != null) {
-								srcflag = opr.value.arec;
-								srcM = opr.value.modRecord.adjustments.size(); break; 
-							}
+			if (this.assembled != null) {
+				records.write((byte) 'T');
+				records.write((byte) ':');
+				// program location
+				records.write(IOFormat.formatIntegerWithRadix(this.lc, 16, 4));
+				records.write((byte) ':');
+				// instruction
+				for (int count = 0; count < this.assembled.length; count++) {
+					records.write(this.assembled[count]);
+				}
+				records.write((byte) ':');
+				// gets two flags
+				char srcflag = 'A';
+				char desflag = 'A';
+				int srcM = 0;
+				int desM = 0;
+				for (String op : new String[] { "FM", "FC", "FL", "EX" }) {
+					Operand opr = getOperandData(op);
+					if (opr != null) {
+						if (opr.value != null) {
+							srcflag = opr.value.arec;
+							srcM = opr.value.modRecord.adjustments.size();
+							break;
 						}
 					}
-					Operand dm = getOperandData("DM");
-					if (dm != null){
-							Operand opr = getOperandData("DM"); 
-							desM = opr.value.modRecord.adjustments.size();
-							records.write((byte)dm.value.arec);
-							records.write((byte)':');
-							records.write((byte)srcflag);
-					}else{
-						records.write((byte)desflag);
-						records.write((byte)':');
-						records.write((byte)srcflag);
-					}
-					records.write((byte)':');
-					//number of M adjustments
-					records.write((byte)desM);
-					records.write((byte)':');
-					records.write((byte)srcM);
-					records.write((byte)':');
-					//program name
-					records.write(progName.getBytes());
-					records.write((byte)':');
 				}
-		} catch(IOException e) {
+				Operand dm = getOperandData("DM");
+				if (dm != null) {
+					Operand opr = getOperandData("DM");
+					desM = opr.value.modRecord.adjustments.size();
+					records.write((byte) dm.value.arec);
+					records.write((byte) ':');
+					records.write((byte) srcflag);
+				}
+				else {
+					records.write((byte) desflag);
+					records.write((byte) ':');
+					records.write((byte) srcflag);
+				}
+				records.write((byte) ':');
+				// number of M adjustments
+				records.write(IOFormat.formatIntegerWithRadix(desM, 16, 2));
+				records.write((byte) ':');
+				records.write(IOFormat.formatIntegerWithRadix(srcM, 16, 2));
+				records.write((byte) ':');
+				// program name
+				records.write(progName.getBytes());
+				records.write((byte) ':');
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 			return ":Something wicked has happened:".getBytes();
 		}
 
 		return records.toByteArray();
 	}
-	
+
 }
