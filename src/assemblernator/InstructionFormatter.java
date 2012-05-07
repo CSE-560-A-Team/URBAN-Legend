@@ -65,7 +65,7 @@ public class InstructionFormatter {
 			if(instr.hasOperand("DR")){
 				String reg = IOFormat.formatBinInteger(instr.getOperandData("DR").value.value,3);
 				code= code+fmt+"10000"+reg+lit;
-			}else{
+			}else if(instr.hasOperand("DX")){
 				String dindex = IOFormat.formatBinInteger(instr.getOperandData("DX").value.value,3);
 				code= code+fmt+"10001"+dindex+lit;
 			}

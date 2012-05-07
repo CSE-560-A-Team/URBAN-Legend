@@ -254,10 +254,7 @@ public class Module {
 		 * @specRef OB2.6
 		 * @specRef OB2.7
 		 */
-		public byte[] getLinkRecord(String progName) {
-			// Iterator<Map.Entry<String, Instruction>> extEntIt =
-			// this.extEntSymbols.entrySet().iterator();
-			// List<Byte> records = new ArrayList<Byte>();
+		public byte[] getLinkRecords(String progName) {
 			ByteArrayOutputStream records = new ByteArrayOutputStream();
 			try {
 				for (Map.Entry<String, Instruction> entry : this.extEntSymbols
@@ -517,6 +514,11 @@ public class Module {
 
 	/**
 	 * Adds an instruction to module.
+	 * <<<<<<< HEAD
+	 * 
+	 * =======
+	 * moduleLength = moduleLength + instruction.lc.
+	 * >>>>>>> ab0e87755b6c00a0593bc7d7d193e9359c9de48a
 	 * 
 	 * @author Noah
 	 * @date May 6, 2012; 7:14:43 PM
@@ -745,8 +747,6 @@ public class Module {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param execStart
-	 *            The address at which execution of this program starts.
 	 * @param out
 	 *            The output stream of the object file.
 	 * @throws IOException
@@ -755,18 +755,18 @@ public class Module {
 	 *             Does not catch general exceptions.
 	 * @specRef N/A
 	 */
-	public void writeObjectFile(OutputStream out, int execStart)
-			throws IOException, Exception {
-		getHeaderRecord();
+	public void writeObjectFile(OutputStream out) throws IOException, Exception {
+		int totalRecords = 0, totalLinkRecords = 0, totalTextRecords = 0, totalModRecords = 0;
 
-		int totRecords = 0;
-		int totLinkRecords = 0;
-		int totTextRecords = 0;
-		int totModRecords = 0;
+		// write header record.
+		out.write(getHeaderRecord());
 
-		getEndRecord(totRecords, totLinkRecords, totTextRecords, totModRecords);
 		// write linking records.
-		out.write(this.symbolTable.getLinkRecord(this.programName));
+		out.write(this.symbolTable.getLinkRecords(this.programName));
+
+		// write end record
+		getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,
+				totalModRecords);
 
 	}
 
