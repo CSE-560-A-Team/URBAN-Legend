@@ -219,6 +219,9 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 				isValid = false;
 				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM and DX or FM and FX"), this.lineNum, -1);
 			}
+		}else{
+			isValid =false;
+			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 		}
 		
 		return isValid;
