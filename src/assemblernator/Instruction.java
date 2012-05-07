@@ -243,7 +243,7 @@ public abstract class Instruction {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			for (Operand op : operands)
-				if (op.value.modRecord != null) {
+				if (op.value != null && op.value.modRecord != null) {
 					baos.write(op.value.modRecord.getBytes(programName));
 					++count;
 				}
@@ -1142,6 +1142,7 @@ public abstract class Instruction {
 	public byte[] getTextRecord(String progName) {
 		ByteArrayOutputStream records = new ByteArrayOutputStream();
 		try {
+				if(this.assembled != null) {
 					records.write((byte)'T');
 					records.write((byte)':');
 					//program location
@@ -1184,7 +1185,7 @@ public abstract class Instruction {
 					records.write((byte)':');
 					//program name
 					records.write(progName.getBytes());
-					
+				}
 		} catch(IOException e) {
 			e.printStackTrace();
 			return ":Something wicked has happened:".getBytes();

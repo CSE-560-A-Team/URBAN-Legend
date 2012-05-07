@@ -4,6 +4,9 @@ import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -765,7 +768,50 @@ public class Module {
 		res.modRecord = mrec;
 		return res;
 	}
+	
+	/**
+	 * Writes Object File to file with fileName.
+	 * @author Noah
+	 * @date May 7, 2012; 2:07:33 AM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param fileName File to write to.
+	 * @throws IOException 
+	 * @throws Exception
+	 * @throws FileNotFoundException
+	 * @specRef N/A
+	 */
+	public void writeObjectFile(String fileName) throws IOException, Exception, FileNotFoundException {
+		OutputStream out = new FileOutputStream(fileName);
+		
+		int totalRecords = 0, totalLinkRecords = 0, totalTextRecords = 0, totalModRecords = 0;
+		RecordSet recSet;
+		// write header record.
+		out.write(getHeaderRecord());
 
+		// write linking records.
+		recSet = this.symbolTable.getLinkRecords(this.programName);
+		totalLinkRecords = recSet.size;
+		out.write(recSet.records);
+		//write text records and mod records. adjust record cnts.
+		for(Instruction instr : this.assembly) {
+			out.write(instr.getTextRecord(this.programName));
+			totalTextRecords++;
+			
+			recSet = instr.getModRecords(this.programName);
+			out.write(recSet.records);
+			totalModRecords += recSet.size;
+			
+		}
+		
+		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords;
+		// write end record
+		out.write(getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords));	
+
+	}
 	/**
 	 * Writes object file.
 	 * 
@@ -807,7 +853,7 @@ public class Module {
 		
 		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords;
 		// write end record
-		getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords);
+		out.write(getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords));
 
 	}
 

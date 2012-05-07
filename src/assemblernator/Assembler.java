@@ -56,7 +56,9 @@ import instructions.USI_TRLT;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -319,7 +321,24 @@ public class Assembler {
 		if(!hasEnd && module.assembly.size() > 0) {
 			hErr.reportWarning(makeError("NoEnd"), lineNum, -1);
 		}
-
+		
+		//write object file.
+		try {
+			File objFile = new File(System.getProperty("user.home"), module.programName + ".ulo");
+			OutputStream out = new FileOutputStream(objFile);
+			module.writeObjectFile(out);
+			out.close();
+		} catch(FileNotFoundException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		} catch(IOException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		} catch(Exception e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		} 
+		
 		return module;
 	}
 
