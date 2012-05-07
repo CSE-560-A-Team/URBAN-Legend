@@ -269,6 +269,7 @@ public class Module {
 		public byte[] getLinkRecords(String progName) {
 			ByteArrayOutputStream records = new ByteArrayOutputStream();
 			int recordCnt = 0;
+			Records linkRecords = new Records();
 			try {
 				for (Map.Entry<String, Instruction> entry : this.extEntSymbols
 						.entrySet()) {
@@ -289,6 +290,7 @@ public class Module {
 						records.write(progName.getBytes());
 						
 						recordCnt++;
+						linkRecords.records = records.toByteArray();
 					}
 				}
 			} catch (IOException e) {
