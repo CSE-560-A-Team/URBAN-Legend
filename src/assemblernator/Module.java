@@ -284,19 +284,19 @@ public class Module {
 						.entrySet()) {
 					// if the entry is an ENT entry.
 					if (entry.getValue().getOpId().equalsIgnoreCase("ENT")) {
-						records.write((byte) 'L');
-						records.write((byte) ':');
+						records.write((byte) 'L'); //OB2.1
+						records.write((byte) ':'); //OB2.2
 						// add label
-						records.write(entry.getKey().getBytes());
+						records.write(entry.getKey().getBytes()); //OB2.3
 
-						records.write((byte) ':');
+						records.write((byte) ':'); //OB2.4
 						// address
 						records.write(IOFormat.formatIntegerWithRadix(
-								entry.getValue().lc, 16, 4));
+								entry.getValue().lc, 16, 4)); //OB2.5
 
-						records.write((byte) ':');
+						records.write((byte) ':'); //OB2.6
 						// program name
-						records.write(progName.getBytes());
+						records.write(progName.getBytes()); //OB2.7
 						records.write((byte) ':');
 						
 						recordCnt++;
