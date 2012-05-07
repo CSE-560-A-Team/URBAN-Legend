@@ -3,9 +3,9 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Module.Value;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * The NEWLC instruction.
