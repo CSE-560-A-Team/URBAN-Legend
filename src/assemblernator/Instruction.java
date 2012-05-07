@@ -1072,6 +1072,16 @@ public abstract class Instruction {
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @return a two dimensional array of bytes.  Each row of the array corresponds to one linking record.
+	 * @specRef OB3
+	 * @specRef OB3.1
+	 * @specRef OB3.2
+	 * @specRef OB3.3
+	 * @specRef OB3.4
+	 * @specRef OB3.5
+	 * @specRef OB3.6
+	 * @specRef OB3.7
+	 * @specRef OB3.8
+	 * @specRef OB3.9
 	 */
 	public byte[] getTextRecord(String progName) {
 		ByteArrayOutputStream records = new ByteArrayOutputStream();
@@ -1089,14 +1099,19 @@ public abstract class Instruction {
 					//gets two flags
 					char srcflag = 'A'; 
 					char desflag = 'A';
+					int srcM = 0;
+					int desM = 0;
 					for (String op: new String[] {"FM","FC","FL","EX"} ) { 
 						Operand opr = getOperandData(op); 
 						if (opr != null)  { 
 							srcflag = opr.value.arec; break; 
+					//		srcM = opr.value.modRecords.size();
 							}
 						}
 					Operand dm = getOperandData("DM");
 					if (dm != null){
+							Operand opr = getOperandData("DM"); 
+				//			desM = opr.value.modRecords.size();
 							records.write((byte)dm.value.arec);
 							records.write((byte)':');
 							records.write((byte)srcflag);
@@ -1107,9 +1122,13 @@ public abstract class Instruction {
 					}
 					records.write((byte)':');
 					//number of M adjustments
-				
+					records.write((byte)desM);
+					records.write((byte)':');
+					records.write((byte)srcM);
+					records.write((byte)':');
 					//program name
 					records.write(progName.getBytes());
+					
 		} catch(IOException e) {
 			e.printStackTrace();
 			return ":Something wicked has happened:".getBytes();
