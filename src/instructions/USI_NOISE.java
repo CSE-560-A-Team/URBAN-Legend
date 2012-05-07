@@ -230,7 +230,7 @@ public class USI_NOISE extends AbstractInstruction {
 
 	/** Test audio. */
 	public static void test() {
-		byte buf[] = new byte[65536 * 10];
+		byte buf[] = new byte[48000 * 10];
 		int bpos = 0;
 
 		Note[] mhall = { new Note(Tone.D, Duration.TQ),
@@ -252,18 +252,18 @@ public class USI_NOISE extends AbstractInstruction {
 		 * new Note(Tone.D, Duration.QUARTER),
 		 * new Note(Tone.D, Duration.HALF) }; */
 		for (int n = 0; n < mhall.length; n++) {
-			int bend = bpos + (mhall[n].dur.ms * 65536) / 1000;
+			int bend = bpos + (mhall[n].dur.ms * 48000) / 1000;
 			int i;
 			for (i = bpos; i < bend - 1200; i++)
 				buf[i] = (byte) (Math.sin(2 * Math.PI
-						* ((i - bpos) / 65536.0 * mhall[n].tone.freq)) * 64);
+						* ((i - bpos) / 48000.0 * mhall[n].tone.freq)) * 64);
 			byte frqat = buf[i - 1];
 			while (i <= bend)
 				buf[i++] = frqat = (byte) (frqat > 0 ? frqat - 1
 						: frqat < 0 ? frqat + 1 : 0);
 			bpos = bend;
 		}
-		play(buf, 65536);
+		play(buf, 48000);
 	}
 
 	/**
