@@ -468,7 +468,7 @@ public class Module {
 	 * 
 	 * @specRef OB1.5
 	 */
-	int startAddr;
+	public int execStartAddr;
 
 	/**
 	 * The name of the module = label of KICKO directive.
@@ -786,7 +786,7 @@ public class Module {
 	 * @specRef OB1.20
 	 * @specRef OB1.21
 	 */
-	byte[] getHeaderrecord(String programName, int asmblrVersion) {
+	private byte[] getHeaderrecord(String programName, int asmblrVersion) {
 		try {
 			Map.Entry<String, Instruction> entry;
 			ByteArrayOutputStream header = new ByteArrayOutputStream();
@@ -794,11 +794,11 @@ public class Module {
 			header.write((byte) ':');// OB1.2
 			header.write(programName.getBytes());// OB1.3
 			header.write((byte) ':');// OB1.2
-			header.write(IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4));// OB1.3
+			//header.write(IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.2
 			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.4
-			header.write(IOFormat.formatIntegerWithRadix(this.execstartAddr, 16, 4));// OB1.5
+			header.write(IOFormat.formatIntegerWithRadix(this.execStartAddr, 16, 4));// OB1.5
 			header.write((byte) ':');// OB1.6
 			header.write(IOFormat.formatDate(new Date()));// OB1.7
 			header.write((byte) ':');// OB1.8
@@ -848,7 +848,7 @@ public class Module {
 	 * @specRef OB5.10
 	 * @specRef OB5.11
 	 */
-	byte[] getEndRecord(String programName,int totRecords, int totLinkRecords,  
+	private byte[] getEndRecord(String programName,int totRecords, int totLinkRecords,  
 			int totTextRecords, int totModRecords) {
 		try {
 			ByteArrayOutputStream header = new ByteArrayOutputStream();

@@ -260,7 +260,6 @@ public class Assembler {
 
 				/* if start of module, record execStartAddr of module.*/
 				if (instr.getOpId().equalsIgnoreCase("KICKO") && !firstKICKO) {
-					module.startAddr = execStartAddr;
 					//instr.immediateCheck(instr.getHErr(hErr), module);
 					module.programName = instr.label;
 					firstKICKO = true;
@@ -279,7 +278,7 @@ public class Assembler {
 				
 				//assign execStartAddr.
 				if(instr.getOpId().equalsIgnoreCase("KICKO")) {
-					module.startAddr = lc;
+					module.execStartAddr = lc;
 				}
 
 
@@ -310,7 +309,7 @@ public class Assembler {
 			valid = i.check(i.getHErr(hErr), module);
 			
 			if(valid) {
-				module.startAddr = execStartAddr;
+				module.execStartAddr = execStartAddr;
 				i.assembled = i.assemble(); //for now.  should replace all assemble w/ directly changing self's field.
 			} else {
 				i.assembled = USI_NOP.getInstance().assemble(); //if not valid replace with nop.
