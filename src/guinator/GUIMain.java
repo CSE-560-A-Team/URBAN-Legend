@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -34,6 +35,7 @@ import javax.swing.JTextArea;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -56,18 +58,26 @@ public class GUIMain {
 	// ===============================================================
 	// == MENU ITEMS =================================================
 	// ===============================================================
-	/** Our compile menu item */
-	static JMenuItem compile;
+	/** Our New menu item */
+	static JMenuItem m_new;
+	/** Our Save menu item */
+	static JMenuItem m_save;
+	/** Our Save As menu item */
+	static JMenuItem m_saveAs;
+	/** Our Load menu item */
+	static JMenuItem m_load;
+	/** Our Compile menu item */
+	static JMenuItem m_compile;
 	/** A menu item to export the file as an HTML document */
-	static JMenuItem writeHTML;
+	static JMenuItem m_writeHTML;
 	/** A menu item to copy code, with HTML highlighting. */
-	static JMenuItem copyFormatted;
+	static JMenuItem m_copyFormatted;
 	/** A menu item to export a test case as an HTML document */
-	static JMenuItem writeHTMLTest;
+	static JMenuItem m_writeHTMLTest;
 	/** A menu item to copy a test case to the clipboard as HTML */
-	static JMenuItem copyHTMLTest;
+	static JMenuItem m_copyHTMLTest;
 	/** Our exit menu item */
-	static JMenuItem exit;
+	static JMenuItem m_exit;
 
 	// ===============================================================
 	// == COMPONENTS =================================================
@@ -113,20 +123,29 @@ public class GUIMain {
 		JMenuBar mb = new JMenuBar();
 		JMenu filemenu = new JMenu("File");
 		MenuListener ml = new MenuListener();
-		filemenu.add(compile = new JMenuItem("Compile"));
-		compile.addActionListener(ml);
+		filemenu.add(m_new = new JMenuItem("New"));
+		m_new.addActionListener(ml);
+		filemenu.add(m_save = new JMenuItem("Save"));
+		m_save.addActionListener(ml);
+		filemenu.add(m_saveAs = new JMenuItem("Save As"));
+		m_saveAs.addActionListener(ml);
+		filemenu.add(m_load = new JMenuItem("Load"));
+		m_load.addActionListener(ml);
+		filemenu.add(m_compile = new JMenuItem("Compile"));
+		m_compile.addActionListener(ml);
 		filemenu.addSeparator();
-		filemenu.add(writeHTML = new JMenuItem("Export as HTML"));
-		writeHTML.addActionListener(ml);
-		filemenu.add(copyFormatted = new JMenuItem("Copy code with highlighting"));
-		copyFormatted.addActionListener(ml);
-		filemenu.add(writeHTMLTest = new JMenuItem("Write HTML Test Case"));
-		writeHTML.addActionListener(ml);
-		filemenu.add(copyHTMLTest = new JMenuItem("Copy HTML Test Case"));
-		copyHTMLTest.addActionListener(ml);
+		filemenu.add(m_writeHTML = new JMenuItem("Export as HTML"));
+		m_writeHTML.addActionListener(ml);
+		filemenu.add(m_copyFormatted = new JMenuItem(
+				"Copy code with highlighting"));
+		m_copyFormatted.addActionListener(ml);
+		filemenu.add(m_writeHTMLTest = new JMenuItem("Write HTML Test Case"));
+		m_writeHTML.addActionListener(ml);
+		filemenu.add(m_copyHTMLTest = new JMenuItem("Copy HTML Test Case"));
+		m_copyHTMLTest.addActionListener(ml);
 		filemenu.addSeparator();
-		filemenu.add(exit = new JMenuItem("Exit"));
-		exit.addActionListener(ml);
+		filemenu.add(m_exit = new JMenuItem("Exit"));
+		m_exit.addActionListener(ml);
 		mb.add(filemenu);
 		mainWindow.setJMenuBar(mb);
 
@@ -134,6 +153,40 @@ public class GUIMain {
 		tabPane.addTab("Untitled", ft);
 		mainWindow.setVisible(true);
 		ft.jt.grabFocus();
+	}
+
+	/**
+	 * Utility function to prompt for save filename.
+	 * 
+	 * @author Josh Ventura
+	 * @date May 7, 2012; 1:58:22 AM
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @return The save filename.
+	 * @specRef N/A
+	 */
+	public String getSaveFname() {
+		JFileChooser jfc = new JFileChooser();
+		jfc.setMultiSelectionEnabled(false);
+		jfc.setFileFilter(new FileFilter() {
+			@Override public String getDescription() {
+				return "URBAN Assembly files (*.s, *.uls)";
+			}
+
+			@Override public boolean accept(File f) {
+				if (f.isDirectory())
+					return true;
+				String ap = f.getAbsolutePath().toLowerCase();
+				return ap.endsWith(".s") || ap.endsWith(".uls");
+			}
+		});
+		if (jfc.showSaveDialog(mainWindow) != JFileChooser.APPROVE_OPTION)
+			return null;
+		String res = jfc.getSelectedFile().getAbsolutePath();
+		String ap = res.toLowerCase();
+		if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
+			ap += ".uls";
+		return res;
 	}
 
 	/**
@@ -154,6 +207,9 @@ public class GUIMain {
 		JTextArea userReport;
 		/** Our user report */
 		JTable errorTable;
+
+		/** The name to which this file is saved */
+		String fileName = null;
 
 		/** The tab containing our build messages. */
 		JComponent buildMessageTab;
@@ -402,8 +458,49 @@ public class GUIMain {
 	 */
 	void compileActive() {
 		FileTab ft = (FileTab) tabPane.getSelectedComponent();
-		if (ft != null)
-			ft.compile();
+		Module rm;
+		if (ft == null)
+			return;
+		rm = ft.compile();
+
+		if (ft.fileName == null) {
+			ft.fileName = getSaveFname();
+			if (ft.fileName == null)
+				return;
+		}
+
+		String ofname = ft.fileName;
+		String cofn = ofname.toLowerCase();
+		if (cofn.endsWith(".s"))
+			ofname = ofname.substring(0, ofname.length() - 1) + "ulo";
+		else if (cofn.endsWith(".uls"))
+			ofname = ofname.substring(0, ofname.length() - 3) + "ulo";
+		else
+			ofname = ofname + ".ulo";
+
+		try {
+			rm.writeObjectFile(ofname);
+		} catch (Exception e) {
+			showException(e);
+		}
+	}
+
+	/**
+	 * Display an exception to the user.
+	 * 
+	 * @author Josh Ventura
+	 * @date May 7, 2012; 2:30:11 AM
+	 * @param e
+	 *            The exception to display.
+	 */
+	private void showException(Exception e) {
+		String errmsg = "An error occurred during object file generation:\n"
+				+ e.getMessage() + "\n\n";
+		int sec = 0;
+		for (StackTraceElement el : e.getStackTrace())
+			if (sec++ < 12)
+				errmsg += el.toString() + "\n";
+		JOptionPane.showMessageDialog(mainWindow, errmsg);
 	}
 
 	/**
@@ -444,7 +541,8 @@ public class GUIMain {
 			for (int i = 1; i < table.length; i++) {
 				res += "  <tr>\n";
 				for (int j = 0; j < table[i].length; j++)
-					res += "    <td>" + JoshText.htmlSpecialChars(table[i][j]) + "</td>\n";
+					res += "    <td>" + JoshText.htmlSpecialChars(table[i][j])
+							+ "</td>\n";
 				res += "  </tr>\n";
 			}
 			res += "</table>\n<br />\n";
@@ -459,11 +557,32 @@ public class GUIMain {
 
 		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
 		@Override public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == compile) {
+			if (e.getSource() == m_new) {
+				FileTab ft = new FileTab();
+				tabPane.addTab("Untitled", ft);
+			}
+			if (e.getSource() == m_save) {
+				FileTab ft = (FileTab) tabPane.getSelectedComponent();
+				if (ft.fileName == null) {
+					ft.fileName = getSaveFname();
+					if (ft.fileName == null)
+						return;
+				}
+				try {
+					FileWriter fw = new FileWriter(ft.fileName);
+					fw.write(ft.jt.getText());
+					fw.close();
+				} catch (FileNotFoundException e1) {
+					showException(e1);
+				} catch (IOException e2) {
+					showException(e2);
+				}
+			}
+			if (e.getSource() == m_compile) {
 				compileActive();
 				return;
 			}
-			if (e.getSource() == writeHTML) {
+			if (e.getSource() == m_writeHTML) {
 				JFileChooser jfc = new JFileChooser();
 				jfc.setMultiSelectionEnabled(false);
 				if (jfc.showSaveDialog(mainWindow) == JFileChooser.APPROVE_OPTION) {
@@ -492,7 +611,7 @@ public class GUIMain {
 				}
 				return;
 			}
-			if (e.getSource() == writeHTMLTest) {
+			if (e.getSource() == m_writeHTMLTest) {
 				JFileChooser jfc = new JFileChooser();
 				jfc.setMultiSelectionEnabled(false);
 				if (jfc.showSaveDialog(mainWindow) == JFileChooser.APPROVE_OPTION) {
@@ -520,18 +639,20 @@ public class GUIMain {
 					}
 				}
 			}
-			if (e.getSource() == copyHTMLTest) {
-			    StringSelection ss = new StringSelection(getTestCase());
-			    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+			if (e.getSource() == m_copyHTMLTest) {
+				StringSelection ss = new StringSelection(getTestCase());
+				Toolkit.getDefaultToolkit().getSystemClipboard()
+						.setContents(ss, null);
 			}
-			if (e.getSource() == copyFormatted) {
+			if (e.getSource() == m_copyFormatted) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
 				if (ft != null) {
-				    HtmlSelection htmls = new HtmlSelection(ft.jt.getHTML());
-				    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(htmls, null);
+					HtmlSelection htmls = new HtmlSelection(ft.jt.getHTML());
+					Toolkit.getDefaultToolkit().getSystemClipboard()
+							.setContents(htmls, null);
 				}
 			}
-			if (e.getSource() == exit) {
+			if (e.getSource() == m_exit) {
 				System.exit(0);
 				return;
 			}
@@ -581,7 +702,7 @@ public class GUIMain {
 			pos = p;
 		}
 	}
-	
+
 
 	/**
 	 * @author elliotth

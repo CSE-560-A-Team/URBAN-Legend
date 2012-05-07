@@ -4,7 +4,6 @@ import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -779,9 +778,9 @@ public class Module {
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param fileName File to write to.
-	 * @throws IOException 
-	 * @throws Exception
-	 * @throws FileNotFoundException
+	 * @throws IOException When file write goes south.
+	 * @throws Exception In case of general mayhem.
+	 * @throws FileNotFoundException If the file couldn't be opened.
 	 * @specRef N/A
 	 */
 	public void writeObjectFile(String fileName) throws IOException, Exception, FileNotFoundException {
