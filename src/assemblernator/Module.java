@@ -792,13 +792,12 @@ public class Module {
 	 */
 	private byte[] getHeaderRecord(int asmblrVersion) {
 		try {
-			//Map.Entry<String, Instruction> entry;
 			ByteArrayOutputStream header = new ByteArrayOutputStream();
 			header.write((byte) 'H');// OB1.1
 			header.write((byte) ':');// OB1.2
 			header.write(programName.getBytes());// OB1.3
 			header.write((byte) ':');// OB1.2
-			//header.write(IOFormat.formatIntegerWithRadix(entry.getValue().lc, 16, 4));// OB1.3
+			header.write(IOFormat.formatIntegerWithRadix(this.loadAddr, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.2
 			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.4
