@@ -48,21 +48,21 @@ public class USI_PSH extends AbstractInstruction {
 			isValid = false;
 			hErr.reportError(makeError("tooFewOperands"), this.lineNum, -1);
 		} else if(this.hasOperand("FM")) {
-			value = module.evaluate(this.getOperand("FM"), true, BitLocation.Address, hErr, this, this.getOperandData("FM").keywordStartPosition);
+			value = module.evaluate(this.getOperand("FM"), true, BitLocation.Address, hErr, this, this.getOperandData("FM").valueStartPosition);
 			//range checking
 			isValid = OperandChecker.isValidMem(value.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("FM").value = value;
 		} else if(this.hasOperand("FC")) {
 			//range checking
-			value = module.evaluate(this.getOperand("FC"), false, BitLocation.Literal, hErr, this, this.getOperandData("FC").keywordStartPosition);
+			value = module.evaluate(this.getOperand("FC"), false, BitLocation.Literal, hErr, this, this.getOperandData("FC").valueStartPosition);
 			isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_ADDR);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(),
 					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 			this.getOperandData("FC").value = value;
 		} else if(this.hasOperand("FL")){
 			//range checking
-			value = module.evaluate(this.getOperand("FL"), false, BitLocation.Literal,  hErr, this, this.getOperandData("FL").keywordStartPosition);
+			value = module.evaluate(this.getOperand("FL"), false, BitLocation.Literal,  hErr, this, this.getOperandData("FL").valueStartPosition);
 			isValid = OperandChecker.isValidLiteral(value.value,ConstantRange.RANGE_ADDR);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),
 					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);

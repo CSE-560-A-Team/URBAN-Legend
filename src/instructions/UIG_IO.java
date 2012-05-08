@@ -138,21 +138,21 @@ public abstract class UIG_IO extends AbstractInstruction{
 		
 		//checks for ranges of operand values and store values in Operand..
 		if(isValid) {
-			Value value = module.evaluate(this.getOperand("NW"), false, Other, hErr, this, this.getOperandData("NW").keywordStartPosition);
+			Value value = module.evaluate(this.getOperand("NW"), false, Other, hErr, this, this.getOperandData("NW").valueStartPosition);
 			isValid = isValidNumWords(value.value);
 			if(!isValid) hErr.reportError(makeError("OORnw", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("NW").value = value;
 			
 			if(this.operandType.input) {
 				 //evaluate value of operand
-				value = module.evaluate(this.getOperand("DM"), true, Address, hErr, this, this.getOperandData("DM").keywordStartPosition);
+				value = module.evaluate(this.getOperand("DM"), true, Address, hErr, this, this.getOperandData("DM").valueStartPosition);
 				isValid = isValidMem(value.value); //check value of operand.
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DM").value = value;
 				
 				if(this.operandType.index) {
 					//evaluate value of operand.
-					value = module.evaluate(this.getOperand("DX"), false, Other, hErr, this, this.getOperandData("DX").keywordStartPosition); 
+					value = module.evaluate(this.getOperand("DX"), false, Other, hErr, this, this.getOperandData("DX").valueStartPosition); 
 					isValid = isValidIndex(value.value);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 					this.getOperandData("DX").value = value;
@@ -160,28 +160,28 @@ public abstract class UIG_IO extends AbstractInstruction{
 				}
 			} else if(this.operandType.literal){
 				//evaluate value of operand.
-				value = module.evaluate(this.getOperand("FL"), false, Literal, hErr, this, this.getOperandData("FL").keywordStartPosition); 
-				isValid = isValidLiteral(value.value, ConstantRange.RANGE_16_TC);
+				value = module.evaluate(this.getOperand("FL"), false, Address, hErr, this, this.getOperandData("FL").valueStartPosition); 
+				isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(), 
-						Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
+						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 				this.getOperandData("FL").value = value;
 			} else if(this.operandType.expression) {
 				//evaluate value of operand.
-				value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").keywordStartPosition); 
+				value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").valueStartPosition); 
 				isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
 				this.getOperandData("EX").value = value;
 			} else {
 				//evaluate value of operand.
-				value = module.evaluate(this.getOperand("FM"), true, Address, hErr, this, this.getOperandData("FM").keywordStartPosition); 
+				value = module.evaluate(this.getOperand("FM"), true, Address, hErr, this, this.getOperandData("FM").valueStartPosition); 
 				isValid = isValidMem(value.value);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("FM").value = value;
 				
 				if(this.operandType.index) {
 					//evaluate value of operand.
-					value = module.evaluate(this.getOperand("FX"), false, Other, hErr, this, this.getOperandData("FX").keywordStartPosition); 
+					value = module.evaluate(this.getOperand("FX"), false, Other, hErr, this, this.getOperandData("FX").valueStartPosition); 
 					isValid = isValidIndex(value.value);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
 					this.getOperandData("FX").value = value;

@@ -49,14 +49,14 @@ public class USI_CLR extends AbstractInstruction {
 			isValid =  false;
 		}
 		else if(this.hasOperand("DR")) {
-			value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other , hErr, this, this.getOperandData("DR").keywordStartPosition);
+			value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other , hErr, this, this.getOperandData("DR").valueStartPosition);
 			//range checking
 			isValid = OperandChecker.isValidReg(value.value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("DR").value = value;
 		} else if(this.hasOperand("DX")){
 			//range checking
-			value = module.evaluate(this.getOperand("DX"), false,BitLocation.Other , hErr, this, this.getOperandData("DX").keywordStartPosition);
+			value = module.evaluate(this.getOperand("DX"), false,BitLocation.Other , hErr, this, this.getOperandData("DX").valueStartPosition);
 			isValid = OperandChecker.isValidIndex(value.value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("DX").value = value;

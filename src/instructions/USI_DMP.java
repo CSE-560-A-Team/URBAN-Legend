@@ -50,10 +50,10 @@ public class USI_DMP extends AbstractInstruction {
 			Value value;
 			String errOperand;
 			if(this.hasOperand("FC")) {
-				value = module.evaluate(this.getOperand("FC"), false, Literal, hErr, this, this.getOperandData("FC").keywordStartPosition);
+				value = module.evaluate(this.getOperand("FC"), false, Literal, hErr, this, this.getOperandData("FC").valueStartPosition);
 				errOperand = "FC";
 			} else {
-				value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").keywordStartPosition);
+				value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").valueStartPosition);
 				errOperand = "EX";
 			}
 

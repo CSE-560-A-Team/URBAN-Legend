@@ -39,12 +39,12 @@ public class USI_ADRC extends AbstractDirective {
 		boolean isValid = true;
 		Value val;
 		if(this.hasOperand("LR")) {
-			val = module.evaluate(this.getOperand("LR"), true, BitLocation.Address, hErr, this, this.getOperandData("LR").keywordStartPosition);
+			val = module.evaluate(this.getOperand("LR"), true, BitLocation.Address, hErr, this, this.getOperandData("LR").valueStartPosition);
 			this.getOperandData("LR").value = val;
 			isValid = isValidMem(val.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "LR", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("EX")) {
-			val = module.evaluate(this.getOperand("EX"), true, BitLocation.Address, hErr, this, this.getOperandData("EX").keywordStartPosition);
+			val = module.evaluate(this.getOperand("EX"), true, BitLocation.Address, hErr, this, this.getOperandData("EX").valueStartPosition);
 			this.getOperandData("EX").value = val;
 			isValid = isValidMem(val.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "EX", this.getOpId()), this.lineNum, -1);

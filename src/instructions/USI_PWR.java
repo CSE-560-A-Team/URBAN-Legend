@@ -48,13 +48,13 @@ public class USI_PWR extends AbstractInstruction {
 		if(this.operands.size() == 2) {
 			if(this.hasOperand("FC") || this.hasOperand("EX")) {
 				if(this.hasOperand("FC")) {
-					value = module.evaluate(this.getOperand("FC"), false, Literal, hErr, this, this.getOperandData("FC").keywordStartPosition);
+					value = module.evaluate(this.getOperand("FC"), false, Literal, hErr, this, this.getOperandData("FC").valueStartPosition);
 					isValid = isValidConstant(value.value, ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(), 
 							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
 					this.getOperandData("FC").value = value;
 				} else if(this.hasOperand("EX")) {
-					value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").keywordStartPosition);
+					value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").valueStartPosition);
 					isValid = isValidConstant(value.value, ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
@@ -63,12 +63,12 @@ public class USI_PWR extends AbstractInstruction {
 				
 				if(isValid) {
 					if(this.hasOperand("DR")) {
-						value = module.evaluate(this.getOperand("DR"), false, Other, hErr, this, this.getOperandData("DR").keywordStartPosition);
+						value = module.evaluate(this.getOperand("DR"), false, Other, hErr, this, this.getOperandData("DR").valueStartPosition);
 						isValid = isValidReg(value.value);
 						if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 						this.getOperandData("DR").value = value;
 					} else if(this.hasOperand("DX")) {
-						value = module.evaluate(this.getOperand("DX"), false, Other, hErr, this, this.getOperandData("DX").keywordStartPosition); 
+						value = module.evaluate(this.getOperand("DX"), false, Other, hErr, this, this.getOperandData("DX").valueStartPosition); 
 						isValid = isValidIndex(value.value);
 						if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 						this.getOperandData("DX").value = value;
