@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatHaltDump;
 import static assemblernator.OperandChecker.isValidConstant;
+import static assemblernator.Module.Value.BitLocation.Literal;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -46,10 +47,10 @@ public class USI_HLT extends AbstractInstruction {
 			Value value;
 			String errOperand;
 			if(this.hasOperand("FC")) {
-				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition);
+				value = module.evaluate(this.getOperand("FC"), false, Literal, hErr, this, this.getOperandData("FC").keywordStartPosition);
 				errOperand = "FC";
 			} else {
-				value = module.evaluate(this.getOperand("EX"), true, hErr, this, this.getOperandData("EX").keywordStartPosition);
+				value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").keywordStartPosition);
 				errOperand = "EX";
 			}
 			if(!isValidConstant(value.value, ConstantRange.RANGE_13_TC)) {
