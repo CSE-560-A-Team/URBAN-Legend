@@ -6,6 +6,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 
 /**
  * The NEWLC instruction.
@@ -60,7 +61,7 @@ public class USI_NEWLC extends AbstractDirective {
 			}
 		}
 
-		Value tempv = module.evaluate(o.expression, false, hErr, this,
+		Value tempv = module.evaluate(o.expression, false, BitLocation.Other, hErr, this,
 				o.valueStartPosition);
 		if (tempv.arec != 'A')
 			hErr.reportError(makeError("nonConstExpr", o.expression), lineNum,

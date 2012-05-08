@@ -7,6 +7,7 @@ import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
 
 /**
@@ -54,14 +55,14 @@ public class USI_AEXS extends AbstractDirective {
 		} else if (this.operands.size() < 1) {
 			isValid = false;
 			hErr.reportError(makeError("directiveMissingOp2", opId, "FC", "LR"), lineNum, -1);
-		} else if(this.hasOperand("LR")){
-			value = module.evaluate(this.getOperand("LR"), true, hErr, this, this.getOperandData("LR").keywordStartPosition); 
+		} else if(this.hasOperand("LR")) {
+			value = module.evaluate(this.getOperand("LR"), true, BitLocation.Address, hErr, this, this.getOperandData("LR").keywordStartPosition); 
 			if(!IOFormat.isValidLabel(this.getOperand("LR", 0))){
 				hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, getOperandData("LR",0).valueStartPosition);
 				isValid = false;
 			}
 		} else if(this.hasOperand("FC")){
-			value = module.evaluate(this.getOperand("FC"), true, hErr, this, this.getOperandData("FC").keywordStartPosition); 
+			value = module.evaluate(this.getOperand("FC"), true, BitLocation.LocalQuery, hErr, this, this.getOperandData("FC").keywordStartPosition); 
 			isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_ADDR); //check if value of FC is valid.
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
 					this.getOpId(), Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);

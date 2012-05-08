@@ -10,6 +10,7 @@ import javax.sound.sampled.LineUnavailableException;
 
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -120,7 +121,7 @@ public class USI_NOISE extends AbstractInstruction {
 					lineNum, 0);
 			return false;
 		}
-		op.value = module.evaluate(op.expression, false, hErr, this,
+		op.value = module.evaluate(op.expression, false, BitLocation.Other, hErr, this,
 				op.valueStartPosition);
 		if (op.value.value < 50 || op.value.value > 20000) {
 			hErr.reportError(
@@ -136,7 +137,7 @@ public class USI_NOISE extends AbstractInstruction {
 							"Duration Millis"), lineNum, 0);
 			return false;
 		}
-		op.value = module.evaluate(op.expression, false, hErr, this,
+		op.value = module.evaluate(op.expression, false, BitLocation.Other, hErr, this,
 				op.valueStartPosition);
 		if (op.value.value < 10 || op.value.value > 10000) {
 			hErr.reportError(
