@@ -7,6 +7,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
 
 /**
@@ -56,7 +57,7 @@ public class USI_TRLK extends AbstractInstruction {
 				dest="DR";
 				//range check
 				Operand o = getOperandData("DR");
-				Value constantSize = module.evaluate(o.expression, false, hErr, this,
+				Value constantSize = module.evaluate(o.expression, false, BitLocation.Other, hErr, this,
 						o.valueStartPosition);
 				this.getOperandData("DR").value = constantSize;
 				isValid = OperandChecker.isValidReg(constantSize.value);
@@ -65,7 +66,7 @@ public class USI_TRLK extends AbstractInstruction {
 					src="DM";
 					//range check
 					Operand o1 = getOperandData("DM");
-					Value constantSize1 = module.evaluate(o1.expression, true, hErr, this,
+					Value constantSize1 = module.evaluate(o1.expression, true,BitLocation.Address,  hErr, this,
 							o1.valueStartPosition);
 					this.getOperandData("DM").value = constantSize1;
 					isValid = OperandChecker.isValidMem(constantSize1.value);
@@ -85,7 +86,7 @@ public class USI_TRLK extends AbstractInstruction {
 				dest="DR";
 				//range check
 				Operand o = getOperandData("DR");
-				Value constantSize = module.evaluate(o.expression, false, hErr, this,
+				Value constantSize = module.evaluate(o.expression, false,BitLocation.Other, hErr, this,
 						o.valueStartPosition);
 				this.getOperandData("DR").value = constantSize;
 				isValid = OperandChecker.isValidReg(constantSize.value);
@@ -94,13 +95,13 @@ public class USI_TRLK extends AbstractInstruction {
 					src="DMDX";
 					//range check
 					Operand o1 = getOperandData("DX");
-					Value constantSize1 = module.evaluate(o1.expression, false, hErr, this,
+					Value constantSize1 = module.evaluate(o1.expression, false, BitLocation.Other, hErr, this,
 							o1.valueStartPosition);
 					this.getOperandData("DX").value = constantSize1;
 					isValid = OperandChecker.isValidIndex(constantSize1.value);
 					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 					Operand o2 = getOperandData("DM");
-					Value constantSize2 = module.evaluate(o2.expression, true, hErr, this,
+					Value constantSize2 = module.evaluate(o2.expression, true, BitLocation.Address, hErr, this,
 							o2.valueStartPosition);
 					this.getOperandData("DM").value = constantSize2;
 					isValid = OperandChecker.isValidMem(constantSize2.value);
