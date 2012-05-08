@@ -1229,6 +1229,66 @@ The following tables describe the various instructions with their formats and th
     <td></td>
     <td></td>
   </tr>
+  <tr>
+		<td colspan="4" id="OB5">OB5</td>
+		<td colspan="2">Text Record</td>
+	</tr>
+	<tr>
+		<td rowspan="15" class="stripebg"></td>
+		<td colspan="3" id="OB5.1">OB5.1</td>
+		<td>Byte('E')</td>
+		<td>End record indicator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB5.2">OB5.2</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB5.3">OB5.3</td>
+		<td>Short, HHHH</td>
+		<td>total Number of Records</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB5.4">OB5.4</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB5.5">OB5.5</td>
+		<td>Short, HHHH</td>
+		<td>Total Number of Linking records</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB5.6">OB5.6</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+    <tr>
+		<td colspan="3" id="OB5.7">OB5.7</td>
+		<td>Short, HHHH</td>
+		<td>Total Number of Text records</td>
+    </tr>
+	<tr>
+		<td colspan="3" id="OB5.8">OB5.8</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB5.9">OB5.9</td>
+		<td>Short, HHHH</td>
+		<td>Total Number of Modification records</td>
+    </tr>
+    <tr>
+		<td colspan="3" id="OB5.10">OB5.10</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+    <tr>
+      <td colspan="3" id="OB5.11">OB5.11</td>
+      <td>LABEL, 1-32 bytes</td>
+      <td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+    </tr>
 </table>
 
 
