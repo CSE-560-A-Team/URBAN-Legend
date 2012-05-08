@@ -13,6 +13,7 @@ The exact specifications of this language can be seen below.
   <li><a href="#instructionspec">Instruction Specifications</a></li>
   <li><a href="#symbols">Symbol Classifications </a></li>
   <li><a href="#valtypes">Value Types</a></li>
+  <li><a href="#addrstat">Address Status Flags</a></li>
   <li><a href="#directivespec">Directive Specifications </a></li>
   <li><a href="#syntax">Syntax Specifications </a></li>
   <li><a href="#keywords">Operand Keywords</a></li>
@@ -428,6 +429,39 @@ Fields in this specification will refer to several types of value types and rang
   </tr>
 </table>
 
+<h1 id="addrstat">Address Status Flags <a href="#toc" class="backlink">Back to Top</a></h1>
+<table>
+	<tr>
+		<th colspan="3">Flag</th>
+		<th>Name</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<th colspan="3">'A'</th>
+		<th>Absolute</th>
+		<th>Value is not modified by linker.</th>
+	</tr>
+	<tr>
+		<th colspan="3">'E'</th>
+		<th>External</th>
+		<th>Address is an external reference..</th>
+	</tr>	
+	<tr>
+		<th colspan="3">'R'</th>
+		<th>Relative/Relocatable</th>
+		<th>Address is relative to program address so it is adjusted by offset.</th>
+	</tr>	
+	<tr>
+		<th colspan="3">'C'</th>
+		<th>Absolute</th>
+		<th>Multiple addresses in instruction that do not mathematically cancel out.</th>
+	</tr>	
+	<tr>
+		<th colspan="3">'N'</th>
+		<th>Negate</th>
+		<th>Negate entire value.</th>
+	</tr>
+</table>
 <h1 id="directivespec">Directive Specifications <a href="#toc" class="backlink">Back to Top</a></h1>
 <p>The following table gives the syntax for each directive and their format along with it.</p>
 
@@ -1326,56 +1360,26 @@ usage is one of the following: <br>
     </pre>
 equString is only used by instructions with the EQUATE usage.
        It is what the label is being equated to. <br>
-e.g. <br> <pre>
-        Symbol Table:
-        ALT1 0 LABEL
-        blah 18 LABEL
-        C1 26 LABEL
-        C4 27 LABEL
-        DONE 17 LABEL
-        ER 21 LABEL
-        M1 31 LABEL
-        M2 36 LABEL
-        ME 29 LABEL
-        P1 1 LABEL
-        P2 4 LABEL
-        Q1 1 LABEL
-        QQ 4 LABEL
-        TP 2 LABEL
-        XX 4 LABEL
-        YY 4 LABEL
 </pre>
 <p> 
 "Instruction breakdowns:" followed by a list of the breakdowns of each instruction in the module. <br>
 each instruction breakdown is as follows: <br>
         <pre>
-        "original source line: " origSrcLine.
-        "Line number:" lineNum " LC: " addr " Label: " label ","
-        "instruction/Directive: " inst/dir " Binary Equivalent: " binInst/dir
-        "Operand 1: " operKey ":" operVal
-        "Operand 2: " operKey ":" operVal
-        "Operand 3: " operKey ":" operVal
-        "Operand 4: " operKey ":" operVal
+        LC	Object Code	Address Status	Line Num	Source Line
+		(hex)	(hex)	src:, dest:	     (dec)
+		errors:
         </pre>
 </p>
 <p>       
-        origSrcLine is the original source line that the assembler parsed. <br>
-        lineNum is the line number in the source file that the source line appeared. <br>
-        addr is the address of the instruction i.e. lc. <br>
-        label is the label of the instruction if there is one. <br>
-        inst/dir is the type of instruction/directive e.g. MOVD or KICKO <br>
-        binInst/dir is the opcode for the instruction. if the instruction is a directive, then "------" is displayed in place of opcode. <br>
-        operKey is the keyword for the operand. <br>
-        operVal is the value of the operand. <br>
-        if there are less than 4 operands, however many operands there are in the instruction are displayed. <br>
+        Source Line is the original source line that the assembler parsed. <br>
+        lineNum is the line number in the source file that the source line appeared in decimal. <br>
+        Address Status is the address status of the instruction. source address status follows src: and destination address follows dest:. If no address status is applicable, then display '-'.<br>
+        Object Code is the assembled hexadecimal code of the instruction if there is one.  If there is not, "------" is displayed.<br>
+        LC is the address of the instruction in hexadecimal.<br>
+  
+        if there are less than 4 operands, however many operands there are in the instruction are displayed. 
+        errors is a list of errors separated by new line.<br>
 </p>
-e.g. <br><pre>
-        original source line: IWSR FM:Q1,NW:1;
-        Line number: 22 LC: 0013 Label: ,
-        instruction/Directive: IWSR Binary Equivalent: 101000
-        Operand 1: FM:Q1
-        Operand 2: NW:1
-    </pre>
 </p> 
 <p>
 <a href="#MENU">Back to Menu</a>
