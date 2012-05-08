@@ -4,7 +4,6 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.OperandChecker.isValidMem;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;
@@ -79,10 +78,14 @@ public class USI_ADRC extends AbstractDirective {
 			isValid = false;
 			hErr.reportError(makeError("tooFewOperandsDir", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("LR")) {
-			if(!IOFormat.isValidLabel(this.getOperandData("LR").expression)) {
-				isValid = false;
-				hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, -1);
-			}
+			Operand lr = getOperandData("LR");
+			lr.value = module.evaluate(lr.expression, true, BitLocation.Address, hErr, this, lr.valueStartPosition);
+		} else {
+			Operand ex = getOperandData("EX");
+			if (ex == null)
+				hErr.reportError(makeError("directiveMissingOp", opId, "EX"), lineNum, 0);
+			else
+				ex.value = module.evaluate(ex.expression, true, BitLocation.Address, hErr, this, ex.valueStartPosition);
 		}
 		return isValid;
 	}

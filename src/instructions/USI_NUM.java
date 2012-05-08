@@ -70,6 +70,7 @@ public class USI_NUM extends AbstractDirective {
 				Value constantSize = module.evaluate(o.expression, false,
 						BitLocation.Other, hErr, this, o.valueStartPosition);
 				this.getOperandData("FC").value = constantSize;
+				System.out.println(constantSize.value);
 				isValid = OperandChecker.isValidConstant(constantSize.value,
 						ConstantRange.RANGE_32_TC);
 				if (!isValid)

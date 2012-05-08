@@ -31,6 +31,9 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
+		System.out.println(IOFormat.formatHexInteger(Integer.MIN_VALUE, 8));
+		System.out.println(Integer.parseInt("-2147483648"));
+		
 		Module m = new Module();
 		String num[] = new String[] { "zero", "one", "two", "three", "four",
 				"five", "six", "seven" };

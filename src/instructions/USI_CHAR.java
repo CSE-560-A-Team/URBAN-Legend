@@ -6,6 +6,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 import assemblernator.OperandChecker;
 
 /**
@@ -60,26 +61,27 @@ public class USI_CHAR extends AbstractDirective {
 	/** The string given to us in the ST: operand. */
 	private String content;
 
-	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
-	@Override public boolean check(ErrorHandler hErr, Module module) {
-		return true;
-	}
-
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
 		byte[] resb = content.getBytes();
 		int[] res = new int[padWord(resb.length)];
 		int nw = 0;
 		for (int i = 0; i < resb.length; ++i) {
-			int tw = resb[i];
+			int tw = resb[i] << 24;
 			if (++i < resb.length) {
-				tw |= resb[i] << 8;
+				tw |= resb[i] << 16;
 				if (++i < resb.length) {
-					tw += resb[i] << 16;
+					tw += resb[i] << 8;
 					if (++i < resb.length)
-						tw |= resb[i] << 24;
+						tw |= resb[i];
+					else
+						tw |= 0x00000020;
 				}
+				else
+					tw |= 0x00002020;
 			}
+			else
+				tw |= 0x00202020;
 			res[nw++] = tw;
 		}
 		return res;
@@ -99,6 +101,7 @@ public class USI_CHAR extends AbstractDirective {
 		else {
 			content = IOFormat.escapeString(st.expression, lineNum,
 					st.valueStartPosition, hErr);
+			st.value = new Value(0,'A');
 			return true;
 		}
 		return false;

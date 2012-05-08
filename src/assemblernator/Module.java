@@ -630,37 +630,38 @@ public class Module {
 				level = lvl;
 				chr = mrecChar;
 			}
+
 			/**
 			 * @param lvl
 			 *            The level.
 			 */
 			private ARECLevel(int lvl) {
-				this(lvl,(char)0);
+				this(lvl, (char) 0);
 			}
 		}
 
 		/** The location in the instruction of this value, if pertinent. */
 		public enum BitLocation {
 			/** This is the address of a single-address instruction. */
-			Address('S', ARECLevel.R, ARECLevel.AREC),
+			Address('S', ARECLevel.R, ARECLevel.AREC, false),
 			/** This is the low-order address of a dual-address instruction. */
-			LowAddress('L', ARECLevel.R, ARECLevel.AREC),
+			LowAddress('L', ARECLevel.R, ARECLevel.AREC, false),
 			/** This is the high-order address of a dual-address instruction. */
-			HighAddress('H', ARECLevel.R, ARECLevel.AREC),
+			HighAddress('H', ARECLevel.R, ARECLevel.AREC, false),
 			/**
 			 * This is a literal stored in the high-order address of a
 			 * dual-address instruction.
 			 */
-			HighLiteral('H', ARECLevel.A, ARECLevel.AREC),
+			HighLiteral('H', ARECLevel.A, ARECLevel.AREC, true),
 			/**
 			 * This is a Word-sized literal, given the full Data section,
 			 * Meaning the 16 low-order bits..
 			 */
-			Literal('W', ARECLevel.A, ARECLevel.AREC),
+			Literal('W', ARECLevel.A, ARECLevel.AREC, true),
 			/** This is an unadjustable type, such as DR, FR, NW, etc. */
-			Other((char) 0, ARECLevel.A, ARECLevel.A),
+			Other((char) 0, ARECLevel.A, ARECLevel.A, true),
 			/** Similar to `Other`, but allows the result type to be 'R'. */
-			LocalQuery((char) 0, ARECLevel.A, ARECLevel.AR);
+			LocalQuery((char) 0, ARECLevel.A, ARECLevel.AR, true);
 
 			/** The location character for this type. */
 			char location;
@@ -668,6 +669,8 @@ public class Module {
 			ARECLevel defaultAREC;
 			/** Which AREC flags are allowed for this location. */
 			ARECLevel arecsAllowed;
+			/** Allow negative values with no record generation. */
+			boolean isSigned;
 
 			/**
 			 * @param locChar
@@ -676,11 +679,15 @@ public class Module {
 			 *            The default AREC flag for this sematic location.
 			 * @param arecSet
 			 *            Which AREC flags we allow.
+			 * @param signed
+			 *            True if this field has a sign bit.
 			 */
-			BitLocation(char locChar, ARECLevel defAREC, ARECLevel arecSet) {
+			BitLocation(char locChar, ARECLevel defAREC, ARECLevel arecSet,
+					boolean signed) {
 				location = locChar;
 				defaultAREC = defAREC;
 				arecsAllowed = arecSet;
+				isSigned = signed;
 			}
 		}
 
@@ -751,7 +758,7 @@ public class Module {
 	 */
 	public Value evaluate(String exp, boolean MREF, Value.BitLocation bitLoc,
 			ErrorHandler hErr, Instruction caller, int pos) {
-		int result = 0;
+		long result = 0;
 		int i = 0;
 		boolean readAnything = false;
 
@@ -844,7 +851,7 @@ public class Module {
 				final int si = i;
 				while (++i < exp.length() && Character.isDigit(exp.charAt(i)));
 				try {
-					result += sign * Integer.parseInt(exp.substring(si, i));
+					result += sign * Long.parseLong(exp.substring(si, i));
 				} catch (NumberFormatException nfe) {}
 			}
 			else if (exp.charAt(i) == '*') {
@@ -866,8 +873,15 @@ public class Module {
 		if (arec.level > bitLoc.arecsAllowed.level) {
 			hErr.reportError(makeError("arecNotAllowed", "" + arec.chr), caller.lineNum, pos);
 		}
+		
+		if (bitLoc.isSigned) {
+			// TODO: Error checking here
+		}
+		
+		if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE)
+			hErr.reportError(makeError("OORurbanWord", exp), caller.lineNum, pos);
 
-		Value res = new Value(result, arec.chr);
+		Value res = new Value((int)result, arec.chr);
 		mrec.address = caller.lc;
 		mrec.addressField = bitLoc.location;
 		res.modRecord = mrec;
