@@ -809,9 +809,9 @@ public class Module {
 			
 		}
 		
-		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords;
+		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords + 2;//includes end record and header record.
 		// write end record
-		out.write(getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords));	
+		out.write(getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords));
 
 	}
 	/**
