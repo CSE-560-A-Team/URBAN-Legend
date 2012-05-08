@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -591,6 +592,21 @@ public class GUIMain {
 			res += m.toString();
 			res += "</pre>\n";
 
+			res += "<h1>Object file:</h1>\n";
+			res += "<pre>";
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try {
+				m.writeObjectFile(baos);
+				res += baos.toString().replaceAll(":" + m.programName + ":",
+						":" + m.programName + ":\n");
+			} catch (IOException e) {
+				res += "<i>The object file could not be generated for this program.</i>";
+			} catch (Exception e) {
+				res += "<i>The object file could not be generated for this program.</i>";
+			}
+			res += "</pre>\n";
+
+
 			return res;
 		}
 
@@ -623,7 +639,7 @@ public class GUIMain {
 			if (e.getSource() == m_load) {
 				String fn = getSaveFname();
 				if (fn == null)
-						return;
+					return;
 				try {
 					File n = new File(fn);
 					Scanner fw = new Scanner(n);
