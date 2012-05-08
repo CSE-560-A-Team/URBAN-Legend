@@ -40,95 +40,48 @@ Label:	LC:	Usage:	EquString:
 start	 00E7	PROGNAME
 
 Instruction breakdowns:
-original source line: start kicko fc:231;
-Line number: 1 LC: 00E7 Label: start,
-instruction/Directive: KICKO Binary Equivalent: ------
-Operand 1: FC:231	Binary Equivalent: 0
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+00E7	------------	src: -,dest:-	1	start kicko fc:231;
+errors:
 
+00E7	80580144	src: -,dest:R	2	treq fr:5 ,dm:324 ;
+errors:
 
-original source line: treq fr:5 ,dm:324 ;
-Line number: 2 LC: 00E7 Label: ,
-instruction/Directive: TREQ Binary Equivalent: 100000
-Operand 1: FR:5	Binary Equivalent: 101
-Operand 2: DM:324	Binary Equivalent: 101000100
+00E8	847801B0	src: -,dest:R	3	trlt fr:7 ,dm:432;
+errors:
 
-
-original source line: trlt fr:7 ,dm:432;
-Line number: 3 LC: 00E8 Label: ,
-instruction/Directive: TRLT Binary Equivalent: 100001
-Operand 1: FR:7	Binary Equivalent: 111
-Operand 2: DM:432	Binary Equivalent: 110110000
-
-
-original source line: trgt fr:1 ,dm:2 , dx:0; error
-Line number: 4 LC: 00E9 Label: ,
-instruction/Directive: TRGT Binary Equivalent: 100010
-Operand 1: FR:1	Binary Equivalent: 1
-Operand 2: DM:2	Binary Equivalent: 10
-Operand 3: DX:0	Binary Equivalent: 0
+00E9	88180002	src: -,dest:R	4	trgt fr:1 ,dm:2 , dx:0; error
+errors:
 ERROR: 072: Operand `DX' for `TRGT' instruction must be within range: [1,7]
 
+00EA	80080FFF	src: -,dest:R	5	treq fr:0 ,dm:4095;
+errors:
 
-original source line: treq fr:0 ,dm:4095;
-Line number: 5 LC: 00EA Label: ,
-instruction/Directive: TREQ Binary Equivalent: 100000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DM:4095	Binary Equivalent: 111111111111
+00EB	F4000000	src: -,dest:R	6	trlt fr:0 ,dm:4096 , dx:1;error
+errors:
+ERROR: 071: Operand `DM' for `TRLT' instruction/directive must be within range: [-4096, 4095]
 
+00EC	88380002	src: -,dest:R	7	trgt fr:3 ,dm:2a; error
+errors:
+ERROR: 026: Operator '+' or '-' expected here
+ERROR: 022: Could not find label `a': Label not in symbol table
 
-original source line: trlt fr:0 ,dm:4096 , dx:1;error
-Line number: 6 LC: 00EB Label: ,
-instruction/Directive: TRLT Binary Equivalent: 100001
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DM:4096	Binary Equivalent: 1000000000000
-Operand 3: DX:1	Binary Equivalent: 1
-ERROR: 071: Operand `DM' for `TRLT' instruction/directive must be within range: [0, 4095]
+00ED	80585005	src: -,dest:R	8	treq fr:5 ,dm:5 , dx:5;
+errors:
 
+00EE	84380003	src: -,dest:R	9	trlt fr:3 ,dm:3;
+errors:
 
-original source line: trgt fr:3 ,dm:2a; error
-Line number: 7 LC: 00EC Label: ,
-instruction/Directive: TRGT Binary Equivalent: 100010
-Operand 1: FR:3	Binary Equivalent: 11
-Operand 2: DM:2a	Binary Equivalent: 0
-ERROR: 024: Unexpected symbol 'a' in expression
+00EF	88282002	src: -,dest:R	10	trgt fr:2 ,dm:2 , dx:2;
+errors:
 
+00F0	8438207B	src: -,dest:R	12	trlt fr:3 ,dm:123 , dx:2;
+errors:
 
-original source line: treq fr:5 ,dm:5 , dx:5;
-Line number: 8 LC: 00ED Label: ,
-instruction/Directive: TREQ Binary Equivalent: 100000
-Operand 1: FR:5	Binary Equivalent: 101
-Operand 2: DM:5	Binary Equivalent: 101
-Operand 3: DX:5	Binary Equivalent: 101
-
-
-original source line: trlt fr:3 ,dm:3;
-Line number: 9 LC: 00EE Label: ,
-instruction/Directive: TRLT Binary Equivalent: 100001
-Operand 1: FR:3	Binary Equivalent: 11
-Operand 2: DM:3	Binary Equivalent: 11
-
-
-original source line: trgt fr:2 ,dm:2 , dx:2;
-Line number: 10 LC: 00EF Label: ,
-instruction/Directive: TRGT Binary Equivalent: 100010
-Operand 1: FR:2	Binary Equivalent: 10
-Operand 2: DM:2	Binary Equivalent: 10
-Operand 3: DX:2	Binary Equivalent: 10
-
-
-original source line: trlt fr:3 ,dm:123 , dx:2;
-Line number: 12 LC: 00F0 Label: ,
-instruction/Directive: TRLT Binary Equivalent: 100001
-Operand 1: FR:3	Binary Equivalent: 11
-Operand 2: DM:123	Binary Equivalent: 1111011
-Operand 3: DX:2	Binary Equivalent: 10
-
-
-original source line: end lr:start;
-Line number: 14 LC: 00F1 Label: ,
-instruction/Directive: END Binary Equivalent: ------
-Operand 1: LR:start	Binary Equivalent: 0
-
+00F1	------------	src: -,dest:-	14	end lr:start;
+errors:
 
 </pre>
-!*/
+
+*/

@@ -69,155 +69,76 @@ y	 0012	LABEL
 z	 0013	LABEL
 
 Instruction breakdowns:
-original source line: shiftCOR	KICKO FC:0;
-Line number: 1 LC: 0000 Label: shiftCOR,
-instruction/Directive: KICKO Binary Equivalent: ------
-Operand 1: FC:0	Binary Equivalent: 0
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	------------	src: -,dest:-	1	shiftCOR	KICKO FC:0;
+errors:
 
+0000	00810011	src: R,dest:-	2			MOVD DR:1,	FM:x ;place x in register 1 
+errors:
 
-original source line: 		MOVD DR:1,	FM:x ;place x in register 1 
-Line number: 2 LC: 0000 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: DR:1	Binary Equivalent: 1
-Operand 2: FM:x	Binary Equivalent: 10001
+0001	30810012	src: R,dest:-	3			ISUB DR:1,	FM:y ;add (x+y) 
+errors:
 
+0002	00180013	src: -,dest:R	4			MOVD FR:1,	DM:z ;store x+y into z 2 
+errors:
 
-original source line: 		ISUB DR:1,	FM:y ;add (x+y) 
-Line number: 3 LC: 0001 Label: ,
-instruction/Directive: ISUB Binary Equivalent: 001100
-Operand 1: DR:1	Binary Equivalent: 1
-Operand 2: FM:y	Binary Equivalent: 10010
+0003	61810002	src: A,dest:-	5			ISHR DR:1, 	FC:2 ;
+errors:
 
+0004	65810002	src: A,dest:-	6			ISHL DR:1, 	FC:2 ;
+errors:
 
-original source line: 		MOVD FR:1,	DM:z ;store x+y into z 2 
-Line number: 4 LC: 0002 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FR:1	Binary Equivalent: 1
-Operand 2: DM:z	Binary Equivalent: 10011
+0005	71810004	src: A,dest:-	7			ROL  DR:1, 	FC:4; 
+errors:
 
+0006	75810004	src: A,dest:-	8			ROR  DR:1, 	FC:4; 
+errors:
 
-original source line: 		ISHR DR:1, 	FC:2 ;
-Line number: 5 LC: 0003 Label: ,
-instruction/Directive: ISHR Binary Equivalent: 011000
-Operand 1: DR:1	Binary Equivalent: 1
-Operand 2: FC:2	Binary Equivalent: 10
+0007	6D810002	src: A,dest:-	9			ISLA DR:1, 	FC:2 ; 
+errors:
 
+0008	69810002	src: A,dest:-	10			ISRA DR:1, 	FC:2 ; 		
+errors:
 
-original source line: 		ISHL DR:1, 	FC:2 ;
-Line number: 6 LC: 0004 Label: ,
-instruction/Directive: ISHL Binary Equivalent: 011001
-Operand 1: DR:1	Binary Equivalent: 1
-Operand 2: FC:2	Binary Equivalent: 10
+0009	61890002	src: A,dest:-	11			ISHR DX:1, 	FC:2 ;
+errors:
 
+000A	65890002	src: A,dest:-	12			ISHL DX:1, 	FC:2 ;
+errors:
 
-original source line: 		ROL  DR:1, 	FC:4; 
-Line number: 7 LC: 0005 Label: ,
-instruction/Directive: ROL Binary Equivalent: 011100
-Operand 1: DR:1	Binary Equivalent: 1
-Operand 2: FC:4	Binary Equivalent: 100
+000B	71890004	src: A,dest:-	13			ROL  DX:1, 	FC:4; 
+errors:
 
+000C	75890004	src: A,dest:-	14			ROR  DX:1, 	FC:4; 
+errors:
 
-original source line: 		ROR  DR:1, 	FC:4; 
-Line number: 8 LC: 0006 Label: ,
-instruction/Directive: ROR Binary Equivalent: 011101
-Operand 1: DR:1	Binary Equivalent: 1
-Operand 2: FC:4	Binary Equivalent: 100
+000D	6D890002	src: A,dest:-	15			ISLA DX:1, 	FC:2 ; 
+errors:
 
+000E	69890002	src: A,dest:-	16			ISRA DX:1, 	FC:2 ; 
+errors:
 
-original source line: 		ISLA DR:1, 	FC:2 ; 
-Line number: 9 LC: 0007 Label: ,
-instruction/Directive: ISLA Binary Equivalent: 011011
-Operand 1: DR:1	Binary Equivalent: 1
-Operand 2: FC:2	Binary Equivalent: 10
+000F	A0810013	src: R,dest:-	17			IWSR FM:z,	NW:1 ;
+errors:
 
+0010	FC000000	src: A,dest:-	18			HLT  FC:0 ;halt program displax code 
+errors:
 
-original source line: 		ISRA DR:1, 	FC:2 ; 		
-Line number: 10 LC: 0008 Label: ,
-instruction/Directive: ISRA Binary Equivalent: 011010
-Operand 1: DR:1	Binary Equivalent: 1
-Operand 2: FC:2	Binary Equivalent: 10
+0011	0000000A	src: A,dest:-	19	x		num  FC:10 ;define data element 
+errors:
 
+0012	0000006F	src: A,dest:-	20	y 		num  FC:111 ;define data element 
+errors:
 
-original source line: 		ISHR DX:1, 	FC:2 ;
-Line number: 11 LC: 0009 Label: ,
-instruction/Directive: ISHR Binary Equivalent: 011000
-Operand 1: DX:1	Binary Equivalent: 1
-Operand 2: FC:2	Binary Equivalent: 0
+0013	00000000	src: A,dest:-	21	z	 	num  FC:0 ;define data element 
+errors:
 
-
-original source line: 		ISHL DX:1, 	FC:2 ;
-Line number: 12 LC: 000A Label: ,
-instruction/Directive: ISHL Binary Equivalent: 011001
-Operand 1: DX:1	Binary Equivalent: 1
-Operand 2: FC:2	Binary Equivalent: 0
-
-
-original source line: 		ROL  DX:1, 	FC:4; 
-Line number: 13 LC: 000B Label: ,
-instruction/Directive: ROL Binary Equivalent: 011100
-Operand 1: DX:1	Binary Equivalent: 1
-Operand 2: FC:4	Binary Equivalent: 0
-
-
-original source line: 		ROR  DX:1, 	FC:4; 
-Line number: 14 LC: 000C Label: ,
-instruction/Directive: ROR Binary Equivalent: 011101
-Operand 1: DX:1	Binary Equivalent: 1
-Operand 2: FC:4	Binary Equivalent: 0
-
-
-original source line: 		ISLA DX:1, 	FC:2 ; 
-Line number: 15 LC: 000D Label: ,
-instruction/Directive: ISLA Binary Equivalent: 011011
-Operand 1: DX:1	Binary Equivalent: 1
-Operand 2: FC:2	Binary Equivalent: 0
-
-
-original source line: 		ISRA DX:1, 	FC:2 ; 
-Line number: 16 LC: 000E Label: ,
-instruction/Directive: ISRA Binary Equivalent: 011010
-Operand 1: DX:1	Binary Equivalent: 1
-Operand 2: FC:2	Binary Equivalent: 0
-
-
-original source line: 		IWSR FM:z,	NW:1 ;
-Line number: 17 LC: 000F Label: ,
-instruction/Directive: IWSR Binary Equivalent: 101000
-Operand 1: FM:z	Binary Equivalent: 10011
-Operand 2: NW:1	Binary Equivalent: 1
-
-
-original source line: 		HLT  FC:0 ;halt program displax code 
-Line number: 18 LC: 0010 Label: ,
-instruction/Directive: HLT Binary Equivalent: 111111
-Operand 1: FC:0	Binary Equivalent: 0
-
-
-original source line: x		num  FC:10 ;define data element 
-Line number: 19 LC: 0011 Label: x,
-instruction/Directive: NUM Binary Equivalent: ------
-Operand 1: FC:10	Binary Equivalent: 1010
-
-
-original source line: y 		num  FC:111 ;define data element 
-Line number: 20 LC: 0012 Label: y,
-instruction/Directive: NUM Binary Equivalent: ------
-Operand 1: FC:111	Binary Equivalent: 1101111
-
-
-original source line: z	 	num  FC:0 ;define data element 
-Line number: 21 LC: 0013 Label: z,
-instruction/Directive: NUM Binary Equivalent: ------
-Operand 1: FC:0	Binary Equivalent: 0
-
-
-original source line: 		END  LR:shiftCOR;end of program E
-Line number: 22 LC: 0014 Label: ,
-instruction/Directive: END Binary Equivalent: ------
-Operand 1: LR:shiftCOR	Binary Equivalent: 0
-
+0014	------------	src: -,dest:-	22			END  LR:shiftCOR;end of program E
+errors:
 
 </pre>
 
 
-!*/
+
+*/

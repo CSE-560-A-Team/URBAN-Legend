@@ -17,7 +17,6 @@
 <span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">error</span>
 <span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">455</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">start</span><span style="color:#ff0000;">;</span>
-
 </pre>
 <br />
 <h1>Symbol table</h1>
@@ -41,100 +40,56 @@ Label:	LC:	Usage:	EquString:
 start	 0000	PROGNAME
 
 Instruction breakdowns:
-original source line: start kicko FC:000;
-Line number: 1 LC: 0000 Label: start,
-instruction/Directive: KICKO Binary Equivalent: ------
-Operand 1: FC:000	Binary Equivalent: 0
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	------------	src: -,dest:-	1	start kicko FC:000;
+errors:
 
+0000	00080000	src: -,dest:-	2	MOVD FR:0, FR:0; error
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `MOVD' instruction
 
-original source line: MOVD FR:0, FR:0; error
-Line number: 2 LC: 0000 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: FR:0	Binary Equivalent: 0
-ERROR: 041: Missing `DX,DR or DM' operand to `MOVD' instruction
+0001	20800000	src: R,dest:-	3	Iadd FM:0, DR:0;
+errors:
 
+0002	F4000000	src: -,dest:R	4	movd DM:383, DR:0; error
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `MOVD' instruction
 
-original source line: Iadd FM:0, DR:0;
-Line number: 3 LC: 0001 Label: ,
-instruction/Directive: IADD Binary Equivalent: 001000
-Operand 1: FM:0	Binary Equivalent: 0
-Operand 2: DR:0	Binary Equivalent: 0
+0003	01893FFF	src: A,dest:-	5	MOVD FL:16383, DX:1;
+errors:
 
-
-original source line: movd DM:383, DR:0; error
-Line number: 4 LC: 0002 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: DM:383	Binary Equivalent: 101111111
-Operand 2: DR:0	Binary Equivalent: 0
-ERROR: 048: `MOVD' instruction requires `FR,FM, or FL' operand in addition to `DM'
-
-
-original source line: MOVD FL:16383, DX:1;
-Line number: 5 LC: 0003 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FL:16383	Binary Equivalent: 11111111111111
-Operand 2: DX:1	Binary Equivalent: 1
-
-
-original source line: iadd FR:0, DM:0, DX:; error
-Line number: 6 LC: 0004 Label: ,
-instruction/Directive: IADD Binary Equivalent: 001000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DM:0	Binary Equivalent: 0
-Operand 3: DX:	Binary Equivalent: 0
+0004	20080000	src: -,dest:R	6	iadd FR:0, DM:0, DX:; error
+errors:
 ERROR: 025: Empty expression given
 ERROR: 072: Operand `DX' for `IADD' instruction must be within range: [1,7]
 
+0005	00801000	src: R,dest:-	7	MOVD FM:0, FX:1, DR:0;
+errors:
 
-original source line: MOVD FM:0, FX:1, DR:0;
-Line number: 7 LC: 0005 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FM:0	Binary Equivalent: 0
-Operand 2: FX:1	Binary Equivalent: 1
-Operand 3: DR:0	Binary Equivalent: 0
+0006	00010000	src: -,dest:-	8	MOVD FR:0, DR:1a; error
+errors:
+ERROR: 026: Operator '+' or '-' expected here
+ERROR: 021: Could not find label `a': Must be a previously defined EQU or EQUe label
 
+0007	00090000	src: -,dest:-	9	MOVD FR:0, DX:1;
+errors:
 
-original source line: MOVD FR:0, DR:1a; error
-Line number: 8 LC: 0006 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DR:1a	Binary Equivalent: 0
-ERROR: 024: Unexpected symbol 'a' in expression
+0008	009A0000	src: -,dest:-	11	MOVD FX:1, DX:2;
+errors:
 
-
-original source line: MOVD FR:0, DX:1;
-Line number: 9 LC: 0007 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DX:1	Binary Equivalent: 1
-
-
-original source line: MOVD FX:1, DX:2;
-Line number: 11 LC: 0008 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FX:1	Binary Equivalent: 1
-Operand 2: DX:2	Binary Equivalent: 10
-
-
-original source line: MOVD ;error
-Line number: 12 LC: 0009 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
+0009	F4000000	src: -,dest:-	12	MOVD ;error
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `MOVD' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `MOVD' instruction
 ERROR: 041: Missing `' operand to `MOVD' instruction
 
+000A	031C7000	src: A,dest:R	13	MOVD FL:455, dM:0;
+errors:
 
-original source line: MOVD FL:455, dM:0;
-Line number: 13 LC: 000A Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FL:455	Binary Equivalent: 111000111
-Operand 2: DM:0	Binary Equivalent: 0
-
-
-original source line: end LR:start;
-Line number: 14 LC: 000B Label: ,
-instruction/Directive: END Binary Equivalent: ------
-Operand 1: LR:start	Binary Equivalent: 0
-
+000B	------------	src: -,dest:-	14	end LR:start;
+errors:
 
 </pre>
-!*/
+
+*/

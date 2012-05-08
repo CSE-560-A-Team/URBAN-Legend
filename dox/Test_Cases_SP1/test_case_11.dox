@@ -17,7 +17,6 @@
 <span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">MOVD</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">455</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">start</span><span style="color:#ff0000;">;</span>
-
 </pre>
 <br />
 <h1>Symbol table</h1>
@@ -41,102 +40,51 @@ Label:	LC:	Usage:	EquString:
 start	 0FA0	PROGNAME
 
 Instruction breakdowns:
-original source line: start kicko FC:4000;
-Line number: 1 LC: 0FA0 Label: start,
-instruction/Directive: KICKO Binary Equivalent: ------
-Operand 1: FC:4000	Binary Equivalent: 0
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0FA0	------------	src: -,dest:-	1	start kicko FC:4000;
+errors:
 
+0FA0	00080000	src: -,dest:R	2	MOVD FR:0, DM:0;
+errors:
 
-original source line: MOVD FR:0, DM:0;
-Line number: 2 LC: 0FA0 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DM:0	Binary Equivalent: 0
+0FA1	00800000	src: R,dest:-	3	MOVD FM:0, DR:0;
+errors:
 
+0FA2	01803FFF	src: A,dest:-	4	MOVD FL:16383, DR:0;
+errors:
 
-original source line: MOVD FM:0, DR:0;
-Line number: 3 LC: 0FA1 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FM:0	Binary Equivalent: 0
-Operand 2: DR:0	Binary Equivalent: 0
+0FA3	01893FFF	src: A,dest:-	5	MOVD FL:16383, DX:1;
+errors:
 
+0FA4	00081000	src: -,dest:R	6	MOVD FR:0, DM:0, DX:1;
+errors:
 
-original source line: MOVD FL:16383, DR:0;
-Line number: 4 LC: 0FA2 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FL:16383	Binary Equivalent: 11111111111111
-Operand 2: DR:0	Binary Equivalent: 0
+0FA5	00801000	src: R,dest:-	7	MOVD FM:0, FX:1, DR:0;
+errors:
 
+0FA6	00010000	src: -,dest:-	8	MOVD FR:0, DR:1;
+errors:
 
-original source line: MOVD FL:16383, DX:1;
-Line number: 5 LC: 0FA3 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FL:16383	Binary Equivalent: 11111111111111
-Operand 2: DX:1	Binary Equivalent: 1
+0FA7	00090000	src: -,dest:-	9	MOVD FR:0, DX:1;
+errors:
 
+0FA8	00900000	src: -,dest:-	10	MOVD FX:1, DR:0;
+errors:
 
-original source line: MOVD FR:0, DM:0, DX:1;
-Line number: 6 LC: 0FA4 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DM:0	Binary Equivalent: 0
-Operand 3: DX:1	Binary Equivalent: 1
+0FA9	009A0000	src: -,dest:-	11	MOVD FX:1, DX:2;
+errors:
 
+0FAA	02001000	src: R,dest:R	12	MOVD FM:1, DM:0;
+errors:
 
-original source line: MOVD FM:0, FX:1, DR:0;
-Line number: 7 LC: 0FA5 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FM:0	Binary Equivalent: 0
-Operand 2: FX:1	Binary Equivalent: 1
-Operand 3: DR:0	Binary Equivalent: 0
+0FAB	031C7000	src: A,dest:R	13	MOVD FL:455, DM:0;
+errors:
 
+0FAC	------------	src: -,dest:-	14	end LR:start;
+errors:
 
-original source line: MOVD FR:0, DR:1;
-Line number: 8 LC: 0FA6 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DR:1	Binary Equivalent: 1
-
-
-original source line: MOVD FR:0, DX:1;
-Line number: 9 LC: 0FA7 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FR:0	Binary Equivalent: 0
-Operand 2: DX:1	Binary Equivalent: 1
-
-
-original source line: MOVD FX:1, DR:0;
-Line number: 10 LC: 0FA8 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FX:1	Binary Equivalent: 1
-Operand 2: DR:0	Binary Equivalent: 0
-
-
-original source line: MOVD FX:1, DX:2;
-Line number: 11 LC: 0FA9 Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FX:1	Binary Equivalent: 1
-Operand 2: DX:2	Binary Equivalent: 10
-
-
-original source line: MOVD FM:1, DM:0;
-Line number: 12 LC: 0FAA Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FM:1	Binary Equivalent: 1
-Operand 2: DM:0	Binary Equivalent: 0
-
-
-original source line: MOVD FL:455, DM:0;
-Line number: 13 LC: 0FAB Label: ,
-instruction/Directive: MOVD Binary Equivalent: 000000
-Operand 1: FL:455	Binary Equivalent: 111000111
-Operand 2: DM:0	Binary Equivalent: 0
-
-
-original source line: end LR:start;
-Line number: 14 LC: 0FAC Label: ,
-instruction/Directive: END Binary Equivalent: ------
-Operand 1: LR:start	Binary Equivalent: 0
 </pre>
+
 
 */

@@ -33,6 +33,9 @@
 Label:	LC:	Usage:	EquString:
 
 Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
 </pre>
 
-!*/
+
+*/

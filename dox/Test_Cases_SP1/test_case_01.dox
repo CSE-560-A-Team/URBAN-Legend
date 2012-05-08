@@ -13,13 +13,11 @@
 <span style="font-style:italic;color:#800080;">fff</span>	<span style="font-weight:bold;color:#000080;">newlc</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">expr4</span><span style="color:#ff0000;">+</span><span style="font-style:italic;color:#800080;">neg5</span><span style="color:#ff0000;">;</span>
 <span style="font-style:italic;color:#800080;">say'lo</span>	<span style="font-weight:bold;color:#000080;">cwsr</span> <span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">h'lo!!</span><span style="color:#ff0000;">,</span>
 	     <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span> <span style="color:#00e1af;">9</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oooh, forward referencing</span>
-<span style="font-style:italic;color:#800080;">h'lo!</span>	<span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'Hello, world! It&amp;#92;'s a &amp;#92;</span>
-<span style="color:#0000ff;">great day! &amp;#92;&amp;#92;&amp;#47;&amp;#92;&amp;#92;'</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment</span>
+<span style="font-style:italic;color:#800080;">h'lo!</span>	<span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'Hello, world! It&amp;#92;'</span><span style="font-style:italic;color:#800080;">s</span> <span style="font-style:italic;color:#800080;">a</span> <span style="color:#ff0000;">&amp;</span>#<span style="color:#00e1af;">92</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">great</span> <span style="font-style:italic;color:#800080;">day!</span> <span style="color:#ff0000;">&amp;</span>#<span style="color:#00e1af;">92</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">&amp;#92;&amp;#47;&amp;#92;&amp;#92;'; Comment</span>
 <span style="font-style:italic;color:#800080;">ender</span>   <span style="font-weight:bold;color:#000080;">idiv</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">h'lo!</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Divide by a string. Neat. </span>
 <span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span> <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> oops</span>
-
 <span style="font-style:italic;color:#800080;">legend</span><span style="color:#ff0000;">;</span>
-
 </pre>
 <br />
 <h1>Symbol table</h1>
@@ -31,7 +29,7 @@
     <th>Equate</th>
   </tr>  <tr>
     <td>ender</td>
-    <td>007D</td>
+    <td>0074</td>
     <td>LABEL</td>
     <td></td>
   </tr>
@@ -66,12 +64,6 @@
     <td></td>
   </tr>
   <tr>
-    <td>h'lo!</td>
-    <td>0074</td>
-    <td>LABEL</td>
-    <td></td>
-  </tr>
-  <tr>
     <td>legend</td>
     <td>0000</td>
     <td>PROGNAME</td>
@@ -100,98 +92,60 @@
 <h1>User report</h1>
 <pre>Symbol Table:
 Label:	LC:	Usage:	EquString:
-ender	 007D	LABEL
+ender	 0074	LABEL
 expr	 0000	EQUATE	5+4+3 + 2+1
 expr2	 0000	EQUATE	expr + expr
 expr3	 0000	EQUATE	expr2 + expr2
 expr4	 0000	EQUATE	expr3 + expr3
 fff	 0073	LABEL
-h'lo!	 0074	LABEL
 legend	 0000	PROGNAME
 neg5	 0000	EQUATE	-5
 rex	 0000	EQUATE	rex + expr2
 say'lo	 0073	LABEL
 
 Instruction breakdowns:
-original source line: legend	kicko fc:0;
-Line number: 1 LC: 0000 Label: legend,
-instruction/Directive: KICKO Binary Equivalent: ------
-Operand 1: FC:0	Binary Equivalent: 0
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	------------	src: -,dest:-	1	legend	kicko fc:0;
+errors:
 
+0000	------------	src: -,dest:-	2	expr	EQU fc:5+4+3 + 2+1;
+errors:
 
-original source line: expr	EQU fc:5+4+3 + 2+1;
-Line number: 2 LC: 0000 Label: expr,
-instruction/Directive: EQU Binary Equivalent: ------
-Operand 1: FC:5+4+3 + 2+1	Binary Equivalent: 0
+0000	------------	src: -,dest:-	3	expr2	EQU fc:expr + expr;
+errors:
 
+0000	------------	src: -,dest:-	4	expr3	EQU fc:expr2 + expr2;
+errors:
 
-original source line: expr2	EQU fc:expr + expr;
-Line number: 3 LC: 0000 Label: expr2,
-instruction/Directive: EQU Binary Equivalent: ------
-Operand 1: FC:expr + expr	Binary Equivalent: 0
+0000	------------	src: -,dest:-	5	expr4	EQU fc:expr3 + expr3;
+errors:
 
-
-original source line: expr3	EQU fc:expr2 + expr2;
-Line number: 4 LC: 0000 Label: expr3,
-instruction/Directive: EQU Binary Equivalent: ------
-Operand 1: FC:expr2 + expr2	Binary Equivalent: 0
-
-
-original source line: expr4	EQU fc:expr3 + expr3;
-Line number: 5 LC: 0000 Label: expr4,
-instruction/Directive: EQU Binary Equivalent: ------
-Operand 1: FC:expr3 + expr3	Binary Equivalent: 0
-
-
-original source line: rex	EQU fc:rex + expr2;
-Line number: 6 LC: 0000 Label: rex,
-instruction/Directive: EQU Binary Equivalent: ------
-Operand 1: FC:rex + expr2	Binary Equivalent: 0
+0000	------------	src: -,dest:-	6	rex	EQU fc:rex + expr2;
+errors:
 ERROR: 021: Could not find label `rex': Must be a previously defined EQU or EQUe label
 
+0000	------------	src: -,dest:-	7	neg5	equ fc:-5;
+errors:
 
-original source line: neg5	equ fc:-5;
-Line number: 7 LC: 0000 Label: neg5,
-instruction/Directive: EQU Binary Equivalent: ------
-Operand 1: FC:-5	Binary Equivalent: 0
+0073	------------	src: -,dest:-	8	fff	newlc fc:expr4+neg5;
+errors:
 
-
-original source line: fff	newlc fc:expr4+neg5;
-Line number: 8 LC: 0073 Label: fff,
-instruction/Directive: NEWLC Binary Equivalent: ------
-Operand 1: FC:expr4+neg5	Binary Equivalent: 0
-
-
-original source line: say'lo	cwsr fm: h'lo!!,
+0073	A8890000	src: R,dest:-	9	say'lo	cwsr fm: h'lo!!,
 	     nw: 9; Oooh, forward referencing
-Line number: 9 LC: 0073 Label: say'lo,
-instruction/Directive: CWSR Binary Equivalent: 101010
-Operand 1: FM:h'lo!!	Binary Equivalent: 0
-Operand 2: NW:9	Binary Equivalent: 1001
+errors:
 ERROR: 022: Could not find label `h'lo!!': Label not in symbol table
 
+0074	38800000	src: R,dest:-	13	ender   idiv dr:0, fm: h'lo!; Divide by a string. Neat. 
+errors:
+ERROR: 022: Could not find label `h'lo!': Label not in symbol table
 
-original source line: h'lo!	char st:'Hello, world! It\'s a \
-great day! \\/\\'; Comment
-Line number: 11 LC: 0074 Label: h'lo!,
-instruction/Directive: CHAR Binary Equivalent: ------
-Operand 1: ST:'Hello, world! It\'s a \
-great day! \\/\\'	Binary Equivalent: 0
-Warning: URBAN does not require escaping newlines in strings.
-
-
-original source line: ender   idiv dr:0, fm: h'lo!; Divide by a string. Neat. 
-Line number: 13 LC: 007D Label: ender,
-instruction/Directive: IDIV Binary Equivalent: 001110
-Operand 1: DR:0	Binary Equivalent: 0
-Operand 2: FM:h'lo!	Binary Equivalent: 1110100
-
-
-original source line: end LR: ; oops
-Line number: 14 LC: 007E Label: ,
-instruction/Directive: END Binary Equivalent: ------
-Operand 1: LR:	Binary Equivalent: 0
+0075	------------	src: -,dest:-	14	end LR: ; oops
+errors:
 ERROR: 113: LR:label must match KICKO label
+
 </pre>
+
+
 
 */

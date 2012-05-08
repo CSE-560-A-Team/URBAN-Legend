@@ -49,6 +49,12 @@
     <td></td>
   </tr>
   <tr>
+    <td>IncorrectUIGIO</td>
+    <td>FFFF</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
     <td>inInt1</td>
     <td>000D</td>
     <td>LABEL</td>
@@ -134,6 +140,7 @@ Label:	LC:	Usage:	EquString:
 inChar1	 000A	LABEL
 inChar2	 000B	LABEL
 inChar3	 000C	LABEL
+IncorrectUIGIO	 FFFF	PROGNAME
 inInt1	 000D	LABEL
 inInt2	 000E	LABEL
 noMREF1	 0002	LABEL
@@ -149,149 +156,80 @@ outInt2	 0008	LABEL
 outInt3	 0009	LABEL
 
 Instruction breakdowns:
-original source line: IncorrectUIGIO	KICKO FC:-1;
-Line number: 1 LC: FFFF Label: IncorrectUIGIO,
-instruction/Directive: KICKO Binary Equivalent: ------
-Operand 1: FC:-1	Binary Equivalent: 0
-ERROR: 071: Operand `FC' for `KICKO' instruction/directive must be within range: [0, 4095]
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+FFFF	------------	src: -,dest:-	1	IncorrectUIGIO	KICKO FC:-1;
+errors:
 
-
-original source line: noOp	 	IWSR;
-Line number: 2 LC: FFFF Label: noOp,
-instruction/Directive: IWSR Binary Equivalent: 101000
+FFFF	F4000000	src: -,dest:-	2	noOp	 	IWSR;
+errors:
 ERROR: 041: Missing `NW' operand to `IWSR' instruction
 
-
-original source line: noNW		IWSR FM:0,     FX:1;
-Line number: 3 LC: 0000 Label: noNW,
-instruction/Directive: IWSR Binary Equivalent: 101000
-Operand 1: FM:0	Binary Equivalent: 0
-Operand 2: FX:1	Binary Equivalent: 0
+0000	F4000000	src: -,dest:-	3	noNW		IWSR FM:0,     FX:1;
+errors:
 ERROR: 041: Missing `NW' operand to `IWSR' instruction
 
-
-original source line: onlyNW	 	IWSR NW:2;
-Line number: 4 LC: 0001 Label: onlyNW,
-instruction/Directive: IWSR Binary Equivalent: 101000
-Operand 1: NW:2	Binary Equivalent: 0
+0001	F4000000	src: -,dest:-	4	onlyNW	 	IWSR NW:2;
+errors:
 ERROR: 049: Too many operands to `IWSR' instruction.
 
-
-original source line: noMREF1		IRKB NW:3,    DR:0;
-Line number: 5 LC: 0002 Label: noMREF1,
-instruction/Directive: IRKB Binary Equivalent: 101001
-Operand 1: NW:3	Binary Equivalent: 0
-Operand 2: DR:0	Binary Equivalent: 0
+0002	F4000000	src: -,dest:-	5	noMREF1		IRKB NW:3,    DR:0;
+errors:
 ERROR: 048: `IRKB' instruction requires `MREF' operand in addition to `NW'
 
-
-original source line: noMREF2		IRKB NW:4,    DX:2;
-Line number: 6 LC: 0003 Label: noMREF2,
-instruction/Directive: IRKB Binary Equivalent: 101001
-Operand 1: NW:4	Binary Equivalent: 0
-Operand 2: DX:2	Binary Equivalent: 0
+0003	F4000000	src: -,dest:-	6	noMREF2		IRKB NW:4,    DX:2;
+errors:
 ERROR: 048: `IRKB' instruction requires `MREF' operand in addition to `NW'
 
-
-original source line: outChar1	CWSR NW:0,    DM:64;
-Line number: 7 LC: 0004 Label: outChar1,
-instruction/Directive: CWSR Binary Equivalent: 101010
-Operand 1: NW:0	Binary Equivalent: 0
-Operand 2: DM:64	Binary Equivalent: 0
+0004	F4000000	src: -,dest:-	7	outChar1	CWSR NW:0,    DM:64;
+errors:
 ERROR: 046: Operand `DM' is inapplicable for `CWSR' instruction
 
-
-original source line: outChar2	CWSR NW:6,    FX:3;
-Line number: 8 LC: 0005 Label: outChar2,
-instruction/Directive: CWSR Binary Equivalent: 101010
-Operand 1: NW:6	Binary Equivalent: 0
-Operand 2: FX:3	Binary Equivalent: 0
+0005	F4000000	src: -,dest:-	8	outChar2	CWSR NW:6,    FX:3;
+errors:
 ERROR: 048: `CWSR' instruction requires `MREF' operand in addition to `NW'
 
-
-original source line: outChar3	CWSR NW:7,    FL:0,	FX:4;
-Line number: 9 LC: 0006 Label: outChar3,
-instruction/Directive: CWSR Binary Equivalent: 101010
-Operand 1: NW:7	Binary Equivalent: 0
-Operand 2: FL:0	Binary Equivalent: 0
-Operand 3: FX:4	Binary Equivalent: 0
+0006	F4000000	src: -,dest:-	9	outChar3	CWSR NW:7,    FL:0,	FX:4;
+errors:
 ERROR: 049: Too many operands to `CWSR' instruction.
 
-
-original source line: outInt1		IWSR NW:8,    FL:4096;
-Line number: 10 LC: 0007 Label: outInt1,
-instruction/Directive: IWSR Binary Equivalent: 101000
-Operand 1: NW:8	Binary Equivalent: 1000
-Operand 2: FL:4096	Binary Equivalent: 1000000000000
+0007	F4000000	src: R,dest:-	10	outInt1		IWSR NW:8,    FL:4096;
+errors:
 ERROR: 075: Operand `FL' for `IWSR' instruction must be within range: [-4096, 4095]
 
-
-original source line: outInt2		IWSR NW:9,    DM:1024;
-Line number: 11 LC: 0008 Label: outInt2,
-instruction/Directive: IWSR Binary Equivalent: 101000
-Operand 1: NW:9	Binary Equivalent: 0
-Operand 2: DM:1024	Binary Equivalent: 0
+0008	F4000000	src: -,dest:-	11	outInt2		IWSR NW:9,    DM:1024;
+errors:
 ERROR: 046: Operand `DM' is inapplicable for `IWSR' instruction
 
-
-original source line: outInt3		IWSR NW:10,   DM:2048,  DX:3;
-Line number: 12 LC: 0009 Label: outInt3,
-instruction/Directive: IWSR Binary Equivalent: 101000
-Operand 1: NW:10	Binary Equivalent: 0
-Operand 2: DM:2048	Binary Equivalent: 0
-Operand 3: DX:3	Binary Equivalent: 0
+0009	F4000000	src: -,dest:-	12	outInt3		IWSR NW:10,   DM:2048,  DX:3;
+errors:
 ERROR: 046: Operand `DM' is inapplicable for `IWSR' instruction
 
-
-original source line: inChar1		CRKB NW:15,   FM:512;
-Line number: 13 LC: 000A Label: inChar1,
-instruction/Directive: CRKB Binary Equivalent: 101100
-Operand 1: NW:15	Binary Equivalent: 0
-Operand 2: FM:512	Binary Equivalent: 0
+000A	F4000000	src: -,dest:-	13	inChar1		CRKB NW:15,   FM:512;
+errors:
 ERROR: 046: Operand `FM' is inapplicable for `CRKB' instruction
 
-
-original source line: inChar2		CRKB NW:4095, DM:4095, 	DX:7;
-Line number: 14 LC: 000B Label: inChar2,
-instruction/Directive: CRKB Binary Equivalent: 101100
-Operand 1: NW:4095	Binary Equivalent: 111111111111
-Operand 2: DM:4095	Binary Equivalent: 111111111111
-Operand 3: DX:7	Binary Equivalent: 111
+000B	B0F87FFF	src: -,dest:R	14	inChar2		CRKB NW:4095, DM:4095, 	DX:7;
+errors:
 ERROR: 077: Operand `NW' for `CRKB' instruction must be within range: [0, 15].
 
-
-original source line: inChar3		CRKB NW:0,    DM:0,	FX:0;
-Line number: 15 LC: 000C Label: inChar3,
-instruction/Directive: CRKB Binary Equivalent: 101100
-Operand 1: NW:0	Binary Equivalent: 0
-Operand 2: DM:0	Binary Equivalent: 0
-Operand 3: FX:0	Binary Equivalent: 0
+000C	F4000000	src: -,dest:-	15	inChar3		CRKB NW:0,    DM:0,	FX:0;
+errors:
 ERROR: 055: Operand not valid with operand combination `DM' and `NW'.
 
-
-original source line: inInt1		IRKB NW:1,    FM:2,     EX:15;
-Line number: 16 LC: 000D Label: inInt1,
-instruction/Directive: IRKB Binary Equivalent: 101001
-Operand 1: NW:1	Binary Equivalent: 0
-Operand 2: FM:2	Binary Equivalent: 0
-Operand 3: EX:15	Binary Equivalent: 0
+000D	F4000000	src: -,dest:-	16	inInt1		IRKB NW:1,    FM:2,     EX:15;
+errors:
 ERROR: 055: Operand not valid with operand combination `FM' and `NW'.
 
-
-original source line: inInt2		IRKB NW:3,    FM:0,	DR:10;
-Line number: 17 LC: 000E Label: inInt2,
-instruction/Directive: IRKB Binary Equivalent: 101001
-Operand 1: NW:3	Binary Equivalent: 0
-Operand 2: FM:0	Binary Equivalent: 0
-Operand 3: DR:10	Binary Equivalent: 0
+000E	F4000000	src: -,dest:-	17	inInt2		IRKB NW:3,    FM:0,	DR:10;
+errors:
 ERROR: 055: Operand not valid with operand combination `FM' and `NW'.
 
-
-original source line: END EX:IncorrectEnd1;
-Line number: 18 LC: 000F Label: ,
-instruction/Directive: END Binary Equivalent: ------
-Operand 1: EX:IncorrectEnd1	Binary Equivalent: 0
+000F	------------	src: -,dest:-	18	END EX:IncorrectEnd1;
+errors:
 ERROR: 047: Operand `EX' is inapplicable for `END' directive
+
 </pre>
+
 
 */

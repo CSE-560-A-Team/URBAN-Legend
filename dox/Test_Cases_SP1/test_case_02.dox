@@ -62,52 +62,33 @@ minIdx	 0001	LABEL
 minReg	 0000	LABEL
 
 Instruction breakdowns:
-original source line: CorrectCLR KICKO FC:0;
-Line number: 1 LC: 0000 Label: CorrectCLR,
-instruction/Directive: KICKO Binary Equivalent: ------
-Operand 1: FC:0	Binary Equivalent: 0
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	------------	src: -,dest:-	1	CorrectCLR KICKO FC:0;
+errors:
 
+0000	40800000	src: -,dest:-	2	minReg clr dr:0;
+errors:
 
-original source line: minReg clr dr:0;
-Line number: 2 LC: 0000 Label: minReg,
-instruction/Directive: CLR Binary Equivalent: 010000
-Operand 1: DR:0	Binary Equivalent: 0
+0001	40890000	src: -,dest:-	3	minIdx clr dx:1;
+errors:
 
+0002	40870000	src: -,dest:-	4	maxReg clr dr:7;
+errors:
 
-original source line: minIdx clr dx:1;
-Line number: 3 LC: 0001 Label: minIdx,
-instruction/Directive: CLR Binary Equivalent: 010000
-Operand 1: DX:1	Binary Equivalent: 1
+0003	408F0000	src: -,dest:-	5	maxIdx clr dx:7;
+errors:
 
+0004	44000000	src: -,dest:-	6	CLRA;
+errors:
 
-original source line: maxReg clr dr:7;
-Line number: 4 LC: 0002 Label: maxReg,
-instruction/Directive: CLR Binary Equivalent: 010000
-Operand 1: DR:7	Binary Equivalent: 111
+0005	48000000	src: -,dest:-	7	CLRX;
+errors:
 
-
-original source line: maxIdx clr dx:7;
-Line number: 5 LC: 0003 Label: maxIdx,
-instruction/Directive: CLR Binary Equivalent: 010000
-Operand 1: DX:7	Binary Equivalent: 111
-
-
-original source line: CLRA;
-Line number: 6 LC: 0004 Label: ,
-instruction/Directive: CLRA Binary Equivalent: 010001
-
-
-original source line: CLRX;
-Line number: 7 LC: 0005 Label: ,
-instruction/Directive: CLRX Binary Equivalent: 010010
-
-
-original source line: END LR:CorrectCLR;
-Line number: 8 LC: 0006 Label: ,
-instruction/Directive: END Binary Equivalent: ------
-Operand 1: LR:CorrectCLR	Binary Equivalent: 0
-
+0006	------------	src: -,dest:-	8	END LR:CorrectCLR;
+errors:
 
 </pre>
+
 
 */

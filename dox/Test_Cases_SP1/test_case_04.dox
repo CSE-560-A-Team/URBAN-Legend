@@ -124,90 +124,51 @@ fmMaxPSH	 0001	LABEL
 fmMinPSH	 0000	LABEL
 
 Instruction breakdowns:
-original source line: CorrectStack KICKO FC:0;
-Line number: 1 LC: 0000 Label: CorrectStack,
-instruction/Directive: KICKO Binary Equivalent: ------
-Operand 1: FC:0	Binary Equivalent: 0
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	------------	src: -,dest:-	1	CorrectStack KICKO FC:0;
+errors:
 
+0000	C0880000	src: R,dest:-	2	fmMinPSH PSH FM:0;
+errors:
 
-original source line: fmMinPSH PSH FM:0;
-Line number: 2 LC: 0000 Label: fmMinPSH,
-instruction/Directive: PSH Binary Equivalent: 110000
-Operand 1: FM:0	Binary Equivalent: 0
+0001	C0880FFF	src: R,dest:-	3	fmMaxPSH PSH FM:4095;
+errors:
 
+0002	00000030	src: A,dest:-	4	flMinPSH PSH FL:0;
+errors:
 
-original source line: fmMaxPSH PSH FM:4095;
-Line number: 3 LC: 0001 Label: fmMaxPSH,
-instruction/Directive: PSH Binary Equivalent: 110000
-Operand 1: FM:4095	Binary Equivalent: 111111111111
+0003	00000030	src: A,dest:-	5	flMaxPSH PSH FL:4095;
+errors:
 
+0004	00000030	src: A,dest:-	6	fcMinPSH PSH FC:0;
+errors:
 
-original source line: flMinPSH PSH FL:0;
-Line number: 4 LC: 0002 Label: flMinPSH,
-instruction/Directive: PSH Binary Equivalent: 110000
-Operand 1: FL:0	Binary Equivalent: 0
+0005	00000030	src: A,dest:-	7	fcMaxPSH PSH FC:4095;
+errors:
 
+0006	C4880000	src: -,dest:R	8	dmMinPOP POP DM:0;
+errors:
 
-original source line: flMaxPSH PSH FL:4095;
-Line number: 5 LC: 0003 Label: flMaxPSH,
-instruction/Directive: PSH Binary Equivalent: 110000
-Operand 1: FL:4095	Binary Equivalent: 111111111111
+0007	C4880FFF	src: -,dest:R	9	dmMaxPOP POP DM:4095;
+errors:
 
+0008	C4881000	src: -,dest:R	10	dxMinPOP POP DM:0, DX:1;
+errors:
 
-original source line: fcMinPSH PSH FC:0;
-Line number: 6 LC: 0004 Label: fcMinPSH,
-instruction/Directive: PSH Binary Equivalent: 110000
-Operand 1: FC:0	Binary Equivalent: 0
+0009	C4887000	src: -,dest:R	11	dxMaxPOP POP DM:0, DX:7;
+errors:
 
+000A	C4800000	src: -,dest:-	12	drMinPOP POP DR:0;
+errors:
 
-original source line: fcMaxPSH PSH FC:4095;
-Line number: 7 LC: 0005 Label: fcMaxPSH,
-instruction/Directive: PSH Binary Equivalent: 110000
-Operand 1: FC:4095	Binary Equivalent: 111111111111
+000B	C4870000	src: -,dest:-	13	drMaxPOP POP DR:7;
+errors:
 
+000C	------------	src: -,dest:-	14	END LR:CorrectStack; 
+errors:
 
-original source line: dmMinPOP POP DM:0;
-Line number: 8 LC: 0006 Label: dmMinPOP,
-instruction/Directive: POP Binary Equivalent: 110001
-Operand 1: DM:0	Binary Equivalent: 0
-
-
-original source line: dmMaxPOP POP DM:4095;
-Line number: 9 LC: 0007 Label: dmMaxPOP,
-instruction/Directive: POP Binary Equivalent: 110001
-Operand 1: DM:4095	Binary Equivalent: 111111111111
-
-
-original source line: dxMinPOP POP DM:0, DX:1;
-Line number: 10 LC: 0008 Label: dxMinPOP,
-instruction/Directive: POP Binary Equivalent: 110001
-Operand 1: DM:0	Binary Equivalent: 0
-Operand 2: DX:1	Binary Equivalent: 1
-
-
-original source line: dxMaxPOP POP DM:0, DX:7;
-Line number: 11 LC: 0009 Label: dxMaxPOP,
-instruction/Directive: POP Binary Equivalent: 110001
-Operand 1: DM:0	Binary Equivalent: 0
-Operand 2: DX:7	Binary Equivalent: 111
-
-
-original source line: drMinPOP POP DR:0;
-Line number: 12 LC: 000A Label: drMinPOP,
-instruction/Directive: POP Binary Equivalent: 110001
-Operand 1: DR:0	Binary Equivalent: 0
-
-
-original source line: drMaxPOP POP DR:7;
-Line number: 13 LC: 000B Label: drMaxPOP,
-instruction/Directive: POP Binary Equivalent: 110001
-Operand 1: DR:7	Binary Equivalent: 111
-
-
-original source line: END LR:CorrectStack; 
-Line number: 14 LC: 000C Label: ,
-instruction/Directive: END Binary Equivalent: ------
-Operand 1: LR:CorrectStack	Binary Equivalent: 0
 </pre>
+
 
 */
