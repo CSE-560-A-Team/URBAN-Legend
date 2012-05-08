@@ -112,10 +112,9 @@ wrongOper	 0007	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	IncorrectHLTDMP KICKO FC:0;
-errors:
+0000	--------	src: -,dest:-	1	IncorrectHLTDMP KICKO FC:0;
 
-0000	------------	src: -,dest:-	2	newstart KICKO FC:10;
+0000	--------	src: -,dest:-	2	newstart KICKO FC:10;
 errors:
 ERROR: 151: Directive `KICKO' must be placed at the first line of the source file
 
@@ -163,10 +162,26 @@ ERROR: 043: Missing `FC' or `EX' operand to `DMP' instruction
 errors:
 ERROR: 049: Too many operands to `NOP' instruction.
 
-000B	------------	src: -,dest:-	14	END LR:correctHLTDMP; deliberately incorrect lr.
+000B	--------	src: -,dest:-	14	END LR:correctHLTDMP; deliberately incorrect lr.
 errors:
 ERROR: 113: LR:label must match KICKO label
 
+</pre>
+<h1>Object file:</h1>
+<pre>H:IncorrectHLTDMP:
+0000:000B:0000:2012129,16:39:58:0001:URBAN-ASM:IncorrectHLTDMP:
+T:0000:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0001:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0002:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0003:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0004:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0005:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0006:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0007:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0008:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:0009:F4000000:A:A:00:00:IncorrectHLTDMP:
+T:000A:F4000000:A:A:00:00:IncorrectHLTDMP:
+E:0011:0000:000B:0004:IncorrectHLTDMP:
 </pre>
 
 

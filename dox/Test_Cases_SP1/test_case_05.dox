@@ -110,42 +110,45 @@ outInt3	 0006	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0004	------------	src: -,dest:-	1	CorrectUIGIO	KICKO FC:4;
-errors:
+0004	--------	src: -,dest:-	1	CorrectUIGIO	KICKO FC:4;
 
 0004	A0800FFF	src: R,dest:-	2	outInt1 	IWSR NW:0,    FM:4095;
-errors:
 
 0005	A0811000	src: R,dest:-	3	outInt2 	IWSR NW:1,    FM:0,     FX:1;
-errors:
 
 0006	A1820FFF	src: R,dest:-	4	outInt3 	IWSR NW:2,    FL:4095;
-errors:
 
 0007	A4380000	src: -,dest:R	5	inInt1		IRKB NW:3,    DM:0;
-errors:
 
 0008	A4482020	src: -,dest:R	6	inInt2		IRKB NW:4,    DM:32,	DX:2;
-errors:
 
 0009	A8850040	src: R,dest:-	7	outChar1	CWSR NW:5,    FM:64;
-errors:
 
 000A	A8863080	src: R,dest:-	8	outChar2	CWSR NW:6,    FM:128,	FX:3;
-errors:
 
 000B	A9870000	src: R,dest:-	9	outChar3	CWSR NW:7,    FL:0;
-errors:
 
 000C	B0880200	src: -,dest:R	10	inChar1		CRKB NW:8,    DM:512;
-errors:
 
 000D	B0F87FFF	src: -,dest:R	11	inChar2		CRKB NW:15, DM:4095, 	DX:7;
-errors:
 
-000E	------------	src: -,dest:-	12	END  		LR:CorrectUIGIO;
-errors:
+000E	--------	src: -,dest:-	12	END  		LR:CorrectUIGIO;
 
+</pre>
+<h1>Object file:</h1>
+<pre>H:CorrectUIGIO:
+0004:000E:0000:2012129,16:41:23:0001:URBAN-ASM:CorrectUIGIO:
+T:0004:A0800FFF:A:R:00:00:CorrectUIGIO:
+T:0005:A0811000:A:R:00:00:CorrectUIGIO:
+T:0006:A1820FFF:A:R:00:00:CorrectUIGIO:
+T:0007:A4380000:R:A:00:00:CorrectUIGIO:
+T:0008:A4482020:R:A:00:00:CorrectUIGIO:
+T:0009:A8850040:A:R:00:00:CorrectUIGIO:
+T:000A:A8863080:A:R:00:00:CorrectUIGIO:
+T:000B:A9870000:A:R:00:00:CorrectUIGIO:
+T:000C:B0880200:R:A:00:00:CorrectUIGIO:
+T:000D:B0F87FFF:R:A:00:00:CorrectUIGIO:
+E:0024:0000:000A:0018:CorrectUIGIO:
 </pre>
 
 

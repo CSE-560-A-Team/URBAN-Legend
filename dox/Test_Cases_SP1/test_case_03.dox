@@ -71,30 +71,33 @@ min	 0004	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	CorrectDMPHLT KICKO FC:0;
-errors:
+0000	--------	src: -,dest:-	1	CorrectDMPHLT KICKO FC:0;
 
 0000	F8000001	src: A,dest:-	2	lvl1 DMP FC:1;
-errors:
 
 0001	F8000002	src: A,dest:-	3	lvl2 DMP FC:2;
-errors:
 
 0002	F8000003	src: A,dest:-	4	lvl3 DMP FC:3;
-errors:
 
 0003	FC000FFF	src: A,dest:-	5	max HLT FC:4095;
-errors:
 
 0004	FC00F000	src: A,dest:-	6	min HLT FC:-4096;
-errors:
 
 0005	F4000000	src: -,dest:-	7	NOP;
-errors:
 
-0006	------------	src: -,dest:-	8	END LR:CorrectDMPHLT;
-errors:
+0006	--------	src: -,dest:-	8	END LR:CorrectDMPHLT;
 
+</pre>
+<h1>Object file:</h1>
+<pre>H:CorrectDMPHLT:
+0000:0006:0000:2012129,16:42:16:0001:URBAN-ASM:CorrectDMPHLT:
+T:0000:F8000001:A:A:00:00:CorrectDMPHLT:
+T:0001:F8000002:A:A:00:00:CorrectDMPHLT:
+T:0002:F8000003:A:A:00:00:CorrectDMPHLT:
+T:0003:FC000FFF:A:A:00:00:CorrectDMPHLT:
+T:0004:FC00F000:A:A:00:00:CorrectDMPHLT:
+T:0005:F4000000:A:A:00:00:CorrectDMPHLT:
+E:000D:0000:0006:0005:CorrectDMPHLT:
 </pre>
 
 

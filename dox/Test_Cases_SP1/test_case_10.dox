@@ -158,8 +158,7 @@ outInt3	 0009	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-FFFF	------------	src: -,dest:-	1	IncorrectUIGIO	KICKO FC:-1;
-errors:
+FFFF	--------	src: -,dest:-	1	IncorrectUIGIO	KICKO FC:-1;
 
 FFFF	F4000000	src: -,dest:-	2	noOp	 	IWSR;
 errors:
@@ -225,11 +224,12 @@ ERROR: 055: Operand not valid with operand combination `FM' and `NW'.
 errors:
 ERROR: 055: Operand not valid with operand combination `FM' and `NW'.
 
-000F	------------	src: -,dest:-	18	END EX:IncorrectEnd1;
+000F	--------	src: -,dest:-	18	END EX:IncorrectEnd1;
 errors:
 ERROR: 047: Operand `EX' is inapplicable for `END' directive
 
 </pre>
-
+<h1>Object file:</h1>
+<pre><i>The object file could not be generated for this program.</i></pre>
 
 */
