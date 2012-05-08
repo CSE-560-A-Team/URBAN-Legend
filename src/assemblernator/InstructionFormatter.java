@@ -53,12 +53,22 @@ public class InstructionFormatter {
 			String lit;
 			//gets value for literal part of format
 			if(instr.hasOperand("FL")){
+				System.err.println("INTERNAL ERROR: Instruction "
+						+ instr.getOpId()
+						+ ": FL operand does not cache value returned by evaluate().");
 				lit = IOFormat.formatBinInteger(instr.getOperandData("FL").value.value,16);
 			}
 			else if(instr.hasOperand("EX")){
+				System.err.println("INTERNAL ERROR: Instruction "
+						+ instr.getOpId()
+						+ ": EX operand does not cache value returned by evaluate().");
 				lit = IOFormat.formatBinInteger(instr.getOperandData("EX").value.value,16);
 			}
 			else{
+				if (instr.getOperandData("FC").value == null)
+					System.err.println("INTERNAL ERROR: Instruction "
+							+ instr.getOpId()
+							+ ": FC operand does not cache value returned by evaluate().");
 				lit = IOFormat.formatBinInteger(instr.getOperandData("FC").value.value,16);
 			}	
 			//gets value for dest part of format
