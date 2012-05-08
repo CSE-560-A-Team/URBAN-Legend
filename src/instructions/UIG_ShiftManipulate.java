@@ -54,14 +54,13 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			//if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId()), this.lineNum, -1);
 			//now there are 2 operands, one of which is FC
 		} else if(this.hasOperand("FC")){
+			//check FC
+			value = module.evaluate(this.getOperand("FC"), false,BitLocation.Literal ,  hErr, this, this.getOperandData("FC").valueStartPosition); //value of FC
+			isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_SHIFT); //check if value of FC is valid.
+			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
+					this.getOpId(), Integer.toString(ConstantRange.RANGE_SHIFT.min), Integer.toString(ConstantRange.RANGE_SHIFT.max)), this.lineNum, -1);
+			this.getOperandData("FC").value = value;
 			if(this.hasOperand("DR")){
-				//check FC
-				value = module.evaluate(this.getOperand("FC"), false,BitLocation.Literal ,  hErr, this, this.getOperandData("FC").valueStartPosition); //value of FC
-				isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_SHIFT); //check if value of FC is valid.
-				if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
-						this.getOpId(), Integer.toString(ConstantRange.RANGE_SHIFT.min), Integer.toString(ConstantRange.RANGE_SHIFT.max)), this.lineNum, -1);
-				this.getOperandData("FC").value = value;
-				
 				dest = "DR";
 				//range checking
 				value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").valueStartPosition);
@@ -80,14 +79,13 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 				hErr.reportError(makeError("operandWrongWith", "EX", "FC"), this.lineNum, -1);		
 			} 
 		} else if(this.hasOperand("EX")) {
+			//check EX
+			value = module.evaluate(this.getOperand("EX"), false,BitLocation.Literal, hErr, this, this.getOperandData("EX").valueStartPosition); 
+			isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
+			if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
+					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+			this.getOperandData("EX").value = value;
 			if(this.hasOperand("DR")){
-				//check EX
-				value = module.evaluate(this.getOperand("EX"), false,BitLocation.Literal, hErr, this, this.getOperandData("EX").valueStartPosition); 
-				isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
-				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
-						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
-				this.getOperandData("EX").value = value;
-				
 				dest = "DR";
 				//range checking
 				value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").valueStartPosition);
