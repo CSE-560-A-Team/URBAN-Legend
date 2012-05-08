@@ -946,34 +946,14 @@ The following tables describe the various instructions with their formats and th
 		<td>Program Name</td>
 	</tr>
 	<tr>
-		<td colspan="3" id="OB1.2">OB1.2</td>
-		<td>Byte(':')</td>
-		<td>Standard separator</td>
-	</tr>
-	<tr>
-		<td colspan="3" id="OB1.3">OB1.3</td>
-		<td>Short, HHHH</td>
-		<td>Assembler Assigned Program Load Address (4 hex nybbles)</td>
-	</tr>
-	<tr>
-		<td colspan="3" id="OB1.2">OB1.2</td>
-		<td>Byte(':')</td>
-		<td>Standard separator</td>
-	</tr>
-	<tr>
-		<td colspan="3" id="OB1.3">OB1.3</td>
-		<td>Long, HHHH</td>
-		<td>Total Module Length (0 to 03FF)</td>
-	</tr>
-	<tr>
 		<td colspan="3" id="OB1.4">OB1.4</td>
 		<td>Byte(':')</td>
 		<td>Standard separator</td>
 	</tr>
 	<tr>
 		<td colspan="3" id="OB1.5">OB1.5</td>
-		<td>Long, HHHH</td>
-		<td>Execution Start Address (0 to 03FF)</td>
+		<td>Short, HHHH</td>
+		<td>Assembler Assigned Program Load Address (4 hex nybbles)</td>
 	</tr>
 	<tr>
 		<td colspan="3" id="OB1.6">OB1.6</td>
@@ -982,8 +962,8 @@ The following tables describe the various instructions with their formats and th
 	</tr>
 	<tr>
 		<td colspan="3" id="OB1.7">OB1.7</td>
-		<td>yearda,hh:mm:ss</td>
-		<td>Date and Time of Assembly. Example Jan 3, 2011 3AM would be 2011003,03:00:00 </td>
+		<td>Long, HHHH</td>
+		<td>Total Module Length (0 to 03FF)</td>
 	</tr>
 	<tr>
 		<td colspan="3" id="OB1.8">OB1.8</td>
@@ -992,28 +972,48 @@ The following tables describe the various instructions with their formats and th
 	</tr>
 	<tr>
 		<td colspan="3" id="OB1.9">OB1.9</td>
+		<td>Long, HHHH</td>
+		<td>Execution Start Address (0 to 03FF)</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.10">OB1.10</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.11">OB1.11</td>
+		<td>yearda,hh:mm:ss</td>
+		<td>Date and Time of Assembly. Example Jan 3, 2011 3AM would be 2011003,03:00:00 </td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.12">OB1.12</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.13">OB1.13</td>
 		<td>4 digit Integer value</td>
 		<td>Version Number of Assembler</td>
 	</tr>
 	<tr>
-		<td colspan="3" id="OB1.18">OB1.18</td>
+		<td colspan="3" id="OB1.14">OB1.14</td>
 		<td>Byte(':')</td>
 		<td>Standard separator</td>
 	</tr>
 	<tr>
-		<td colspan="3" id="OB1.19">OB1.19</td>
+		<td colspan="3" id="OB1.15">OB1.15</td>
 		<td>9 character String</td>
 		<td>URBAN-ASM </td>
 	</tr>
 	<tr>
-		<td colspan="3" id="OB1.20">OB1.20</td>
+		<td colspan="3" id="OB1.16">OB1.16</td>
 		<td>Byte(':')</td>
 		<td>Standard separator</td>
 	</tr>
 	<tr>
-		<td colspan="3" id="OB1.21">OB1.21</td>
+		<td colspan="3" id="OB1.17">OB1.17</td>
 		<td>LABEL, 1-32 bytes</td>
-		<td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+		<td>Program Name, same as <a href="#OB1.3">OB1.3</a></td>
     </tr>
   	<tr>
 		<td colspan="4" id="OB2">OB2</td>
@@ -1053,7 +1053,7 @@ The following tables describe the various instructions with their formats and th
     <tr>
 		<td colspan="3" id="OB2.7">OB2.7</td>
 		<td>LABEL, 1-32 bytes</td>
-		<td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+		<td>Program Name, same as <a href="#OB1.3">OB1.3</a></td>
     </tr>
 	<tr>
 		<td colspan="4" id="OB3">OB3</td>
@@ -1133,7 +1133,7 @@ The following tables describe the various instructions with their formats and th
     <tr>
 		<td colspan="3" id="OB3.15">OB3.15</td>
 		<td>LABEL, 1-32 bytes</td>
-		<td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+		<td>Program Name, same as <a href="#OB1.3">OB1.3</a></td>
     </tr>
     <tr>
       <td colspan="4" id="OB4">OB4</td>
@@ -1217,7 +1217,7 @@ The following tables describe the various instructions with their formats and th
     <tr>
       <td colspan="3" id="OB4.9">OB4.9</td>
       <td>LABEL, 1-32 bytes</td>
-      <td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+      <td>Program Name, same as <a href="#OB1.3">OB1.3</a></td>
     </tr>
     <tr>
       <td colspan="3" id="OB4.10">OB4.10</td>
@@ -1225,16 +1225,11 @@ The following tables describe the various instructions with their formats and th
       <td>Standard separator</td>
     </tr>
   <tr>
-    <td colspan="4" id=""></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
 		<td colspan="4" id="OB5">OB5</td>
 		<td colspan="2">Text Record</td>
 	</tr>
 	<tr>
-		<td rowspan="15" class="stripebg"></td>
+		<td rowspan="11" class="stripebg"></td>
 		<td colspan="3" id="OB5.1">OB5.1</td>
 		<td>Byte('E')</td>
 		<td>End record indicator</td>
@@ -1287,7 +1282,7 @@ The following tables describe the various instructions with their formats and th
     <tr>
       <td colspan="3" id="OB5.11">OB5.11</td>
       <td>LABEL, 1-32 bytes</td>
-      <td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+      <td>Program Name, same as <a href="#OB1.3">OB1.3</a></td>
     </tr>
 </table>
 
