@@ -42,21 +42,17 @@ start	 00E7	PROGNAME
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-00E7	------------	src: -,dest:-	1	start kicko fc:231;
-errors:
+00E7	--------	src: -,dest:-	1	start kicko fc:231;
 
 00E7	80580144	src: -,dest:R	2	treq fr:5 ,dm:324 ;
-errors:
 
 00E8	847801B0	src: -,dest:R	3	trlt fr:7 ,dm:432;
-errors:
 
 00E9	88180002	src: -,dest:R	4	trgt fr:1 ,dm:2 , dx:0; error
 errors:
 ERROR: 072: Operand `DX' for `TRGT' instruction must be within range: [1,7]
 
 00EA	80080FFF	src: -,dest:R	5	treq fr:0 ,dm:4095;
-errors:
 
 00EB	F4000000	src: -,dest:R	6	trlt fr:0 ,dm:4096 , dx:1;error
 errors:
@@ -68,20 +64,31 @@ ERROR: 026: Operator '+' or '-' expected here
 ERROR: 022: Could not find label `a': Label not in symbol table
 
 00ED	80585005	src: -,dest:R	8	treq fr:5 ,dm:5 , dx:5;
-errors:
 
 00EE	84380003	src: -,dest:R	9	trlt fr:3 ,dm:3;
-errors:
 
 00EF	88282002	src: -,dest:R	10	trgt fr:2 ,dm:2 , dx:2;
-errors:
 
 00F0	8438207B	src: -,dest:R	12	trlt fr:3 ,dm:123 , dx:2;
-errors:
 
-00F1	------------	src: -,dest:-	14	end lr:start;
-errors:
+00F1	--------	src: -,dest:-	14	end lr:start;
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:start:
+00E7:00F1:0000:2012129,16:27:19:0001:URBAN-ASM:start:
+T:00E7:80580144:R:A:00:00:start:
+T:00E8:847801B0:R:A:00:00:start:
+T:00E9:88180002:R:A:00:00:start:
+T:00EA:80080FFF:R:A:00:00:start:
+T:00EB:F4000000:R:A:00:00:start:
+T:00EC:88380002:R:A:00:00:start:
+T:00ED:80585005:R:A:00:00:start:
+T:00EE:84380003:R:A:00:00:start:
+T:00EF:88282002:R:A:00:00:start:
+T:00F0:8438207B:R:A:00:00:start:
+E:0025:0000:000A:0019:start:
+</pre>
+
 
 */

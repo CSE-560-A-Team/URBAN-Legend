@@ -42,33 +42,25 @@ start	 0FA0	PROGNAME
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0FA0	------------	src: -,dest:-	1	start kicko FC:4000;
-errors:
+0FA0	--------	src: -,dest:-	1	start kicko FC:4000;
 
 0FA0	00580FFF	src: -,dest:R	2	MOVD FR:5, DM:4095;
-errors:
 
 0FA1	00800FFF	src: R,dest:-	3	MOVD FM:4095, DR:0;
-errors:
 
 0FA2	01807FFF	src: A,dest:-	4	MOVD FL:32767, DR:0;
-errors:
 
 0FA3	01898000	src: A,dest:-	5	MOVD FL:-32768, DX:1;
-errors:
 
 0FA4	00081000	src: -,dest:R	6	MOVD FR:0, DM:4096, DX:1;error
 errors:
 ERROR: 071: Operand `DM' for `MOVD' instruction/directive must be within range: [-4096, 4095]
 
 0FA5	00801000	src: R,dest:-	7	MOVD FM:0, FX:1, DR:0;
-errors:
 
 0FA6	00010000	src: -,dest:-	8	MOVD FR:0, DR:1;
-errors:
 
 0FA7	00090000	src: -,dest:-	9	MOVD FR:0, DX:1;
-errors:
 
 0FA8	F4000000	src: -,dest:-	10	MOVD FX:0, DR:0;error
 errors:
@@ -79,15 +71,31 @@ errors:
 ERROR: 072: Operand `DX' for `MOVD' instruction must be within range: [1,7]
 
 0FAA	02001FFF	src: R,dest:R	12	MOVD FM:1, DM:-1;error
-errors:
 
 0FAB	F4000000	src: A,dest:R	13	MOVD FL:32768, DM:0;error
 errors:
 ERROR: 075: Operand `FL' for `MOVD' instruction must be within range: [-2^11, 2^11-1]
 
-0FAC	------------	src: -,dest:-	14	end LR:start;
-errors:
+0FAC	--------	src: -,dest:-	14	end LR:start;
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:start:
+0FA0:0FAC:0000:2012129,16:36:55:0001:URBAN-ASM:start:
+T:0FA0:00580FFF:R:A:00:00:start:
+T:0FA1:00800FFF:A:R:00:00:start:
+T:0FA2:01807FFF:A:A:00:00:start:
+T:0FA3:01898000:A:A:00:00:start:
+T:0FA4:00081000:R:A:00:00:start:
+T:0FA5:00801000:A:R:00:00:start:
+T:0FA6:00010000:A:A:00:00:start:
+T:0FA7:00090000:A:A:00:00:start:
+T:0FA8:F4000000:A:A:00:00:start:
+T:0FA9:00980000:A:A:00:00:start:
+T:0FAA:02001FFF:R:R:00:00:start:
+T:0FAB:F4000000:R:A:00:00:start:
+E:0028:0000:000C:001A:start:
+</pre>
+
 
 */

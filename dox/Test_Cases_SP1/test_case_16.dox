@@ -48,66 +48,70 @@ start	 0004	PROGNAME
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0004	------------	src: -,dest:-	1	start kicko fc:4;
-errors:
+0004	--------	src: -,dest:-	1	start kicko fc:4;
 
 0004	8C880005	src: -,dest:R	2	tr dm:5;
-errors:
 
 0005	8C884003	src: -,dest:R	3	tr dm:3 ,dx:4;
-errors:
 
 0006	90483004	src: -,dest:R	4	trdr dx:3 ,dm:4 ,Fr:4;
-errors:
 
 0007	90B83003	src: -,dest:R	5	trdr dx:3 ,dm:3 ,Fx:3;
-errors:
 
 0008	90580003	src: -,dest:R	6	trdr dm:3 ,Fr:5;
-errors:
 
 0009	90D80005	src: -,dest:R	7	trdr dm: 5,fx:5;
-errors:
 
 000A	94585005	src: -,dest:R	8	trlk dr:5 ,dm: 5,dx:5;
-errors:
 
 000B	94580005	src: -,dest:R	9	trlk dr:5 ,dm:5;
-errors:
 
 000C	98880005	src: -,dest:R	10	ret dm:5;
-errors:
 
 000D	9C850000	src: -,dest:-	11	skt dr:5;
-errors:
 
 000E	8C880005	src: -,dest:R	12	tr dm:5;
-errors:
 
 000F	8C885005	src: -,dest:R	13	tr dm: 5,dx:5;
-errors:
 
 0010	90585005	src: -,dest:R	14	trdr dx: 5,dm: 5,Fr:5;
-errors:
 
 0011	90D85005	src: -,dest:R	15	trdr dx: 5,dm:5 ,Fx:5;
-errors:
 
 0012	90580005	src: -,dest:R	16	trdr dm: 5,Fr:5;
-errors:
 
 0013	90D80005	src: -,dest:R	17	trdr dm: 5,fx:5;
-errors:
 
 0014	98880005	src: -,dest:R	18	ret dm:5;
-errors:
 
 0015	9C850000	src: -,dest:-	19	skt dr:5;
-errors:
 
-0016	------------	src: -,dest:-	20	 end lr:start;
-errors:
+0016	--------	src: -,dest:-	20	 end lr:start;
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:start:
+0004:0016:0000:2012129,16:26:45:0001:URBAN-ASM:start:
+T:0004:8C880005:R:A:00:00:start:
+T:0005:8C884003:R:A:00:00:start:
+T:0006:90483004:R:A:00:00:start:
+T:0007:90B83003:R:A:00:00:start:
+T:0008:90580003:R:A:00:00:start:
+T:0009:90D80005:R:A:00:00:start:
+T:000A:94585005:R:A:00:00:start:
+T:000B:94580005:R:A:00:00:start:
+T:000C:98880005:R:A:00:00:start:
+T:000D:9C850000:A:A:00:00:start:
+T:000E:8C880005:R:A:00:00:start:
+T:000F:8C885005:R:A:00:00:start:
+T:0010:90585005:R:A:00:00:start:
+T:0011:90D85005:R:A:00:00:start:
+T:0012:90580005:R:A:00:00:start:
+T:0013:90D80005:R:A:00:00:start:
+T:0014:98880005:R:A:00:00:start:
+T:0015:9C850000:A:A:00:00:start:
+E:0037:0000:0012:0023:start:
+</pre>
+
 
 */
