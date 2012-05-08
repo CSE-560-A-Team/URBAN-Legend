@@ -925,6 +925,46 @@ The following tables describe the various instructions with their formats and th
     <th width="15%">Format</th>
     <th>Description</th>
   </tr>
+  	<tr>
+		<td colspan="4" id="OB2">OB2</td>
+		<td colspan="2">Linking Record</td>
+	</tr>
+	<tr>
+		<td rowspan="7" class="stripebg"></td>
+		<td colspan="3" id="OB2.1">OB2.1</td>
+		<td>Byte('L')</td>
+		<td>Linking record indicator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB2.2">OB2.2</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB2.3">OB2.3</td>
+		<td>LABEL, 1-32 Bytes</td>
+		<td>Entry Label</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB2.4">OB2.4</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB2.5">OB2.5</td>
+		<td>Short, HHHH</td>
+		<td>Entry Address (4 hex nybbles)</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB2.6">OB2.6</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+    <tr>
+		<td colspan="3" id="OB2.7">OB2.7</td>
+		<td>LABEL, 1-32 bytes</td>
+		<td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+    </tr>
     <tr>
       <td colspan="4" id="OB4">OB4</td>
       <td colspan="2">Modification Record</td>
