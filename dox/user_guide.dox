@@ -966,6 +966,86 @@ The following tables describe the various instructions with their formats and th
 		<td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
     </tr>
     <tr>
+		<td colspan="4" id="OB3">OB3</td>
+		<td colspan="2">Text Record</td>
+	</tr>
+	<tr>
+		<td rowspan="7" class="stripebg"></td>
+		<td colspan="3" id="OB3.1">OB3.1</td>
+		<td>Byte('T')</td>
+		<td>Text record indicator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB3.2">OB3.2</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB3.3">OB3.3</td>
+		<td>Short, HHHH</td>
+		<td>Entry Address (4 hex nybbles),program assigned location</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB3.4">OB3.4</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB3.5">OB3.5</td>
+		<td>8N</td>
+		<td>Assembled instruction/data word in 8N digit hex code</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB3.6">OB3.6</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+    <tr>
+		<td colspan="3" id="OB3.7">OB3.7</td>
+		<td>A, R, E, or C</td>
+		<td>Address status flag for low order bits</td>
+    </tr>
+	<tr>
+		<td colspan="3" id="OB3.8">OB3.8</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB3.9">OB3.9</td>
+		<td>A, R, E, or C</td>
+		<td>Address status flag for high order bits</td>
+    </tr>
+    <tr>
+		<td colspan="3" id="OB3.10">OB3.10</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+    <tr>
+		<td colspan="3" id="OB3.11">OB3.11</td>
+		<td>1 digit hex number</td>
+		<td>Number of modifications of low order bits</td>
+    </tr>
+    <tr>
+		<td colspan="3" id="OB3.12">OB3.12</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+    <tr>
+		<td colspan="3" id="OB3.13">OB3.13</td>
+		<td>1 digit hex number</td>
+		<td>Number of modifications of high order bits</td>
+    </tr>
+   	<tr>
+		<td colspan="3" id="OB3.14">OB3.14</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+    <tr>
+		<td colspan="3" id="OB3.15">OB3.15</td>
+		<td>LABEL, 1-32 bytes</td>
+		<td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+    </tr>
+    <tr>
       <td colspan="4" id="OB4">OB4</td>
       <td colspan="2">Modification Record</td>
     </tr>
