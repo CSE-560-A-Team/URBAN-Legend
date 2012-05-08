@@ -270,7 +270,12 @@ public class Assembler {
 					break;
 				}
 				
-				instr.lc = lc;
+				if(!instr.getOpId().equalsIgnoreCase("EXT")) {
+					instr.lc = lc;
+				} else {
+					instr.lc = 0;
+				}
+
 				// checks for operand errors in instruction.
 				valid = instr.immediateCheck(instr.getHErr(hErr), module);
 				// Get new lc for next instruction.
