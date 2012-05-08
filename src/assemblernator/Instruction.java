@@ -1145,6 +1145,12 @@ public abstract class Instruction {
 	 * @specRef OB3.7
 	 * @specRef OB3.8
 	 * @specRef OB3.9
+	 * @specRef OB3.10
+	 * @specRef OB3.11
+	 * @specRef OB3.12
+	 * @specRef OB3.13
+	 * @specRef OB3.14
+	 * @specRef OB3.15
 	 */
 	public byte[] getTextRecord(String progName) {
 		ByteArrayOutputStream records = new ByteArrayOutputStream();

@@ -597,17 +597,17 @@ public class Module {
 			 * Only the 'A' flag is allowed when used as a set, or represents
 			 * the 'A' flag in general.
 			 */
-			A(0),
+			A(0, 'A'),
 			/** Represents the 'R' flag. */
-			R(1),
+			R(1, 'R'),
 			/** Only the 'A' and 'R' flags are allowed. */
 			AR(1),
 			/** Represents the 'E' flag. */
-			E(2),
+			E(2, 'E'),
 			/** Flags 'A', 'R', and 'E' are allowed, but not 'C'. */
 			ARE(2),
 			/** Represents the 'C' flag. */
-			C(3),
+			C(3, 'C'),
 			/** All AREC flags are permitted. */
 			AREC(3);
 
@@ -616,13 +616,25 @@ public class Module {
 			 * against other levels mathematically.
 			 */
 			int level;
+			/** The character of this flag, if applicable. */
+			char chr;
 
 			/**
 			 * @param lvl
 			 *            The level.
+			 * @param mrecChar
+			 *            The character representation of this flag.
 			 */
-			ARECLevel(int lvl) {
+			ARECLevel(int lvl, char mrecChar) {
 				level = lvl;
+				chr = mrecChar;
+			}
+			/**
+			 * @param lvl
+			 *            The level.
+			 */
+			private ARECLevel(int lvl) {
+				this(lvl,(char)0);
 			}
 		}
 
@@ -794,8 +806,23 @@ public class Module {
 							makeError((MREF ? "undefLabel" : "undefEqLabel"),
 									lbl), caller.lineNum, pos);
 				else {
-					if (instr.usage == Usage.EQUATE)
-						result += sign * ((UIG_Equated) instr).value.value;
+					if (instr.usage == Usage.EQUATE) {
+						UIG_Equated eq = (UIG_Equated) instr;
+						result += sign * eq.value.value;
+						if (eq.value.modRecord != null)
+							for (Adjustment m : eq.value.modRecord.adjustments) {
+								if (m.arec == 'E')
+									mergeInERecord(mrec, sign, lbl);
+								else if (m.arec == 'A')
+									mergeInARecord(lrefs, m.sign, m.label);
+								else
+									hErr.reportError(
+											"COMPILER ERROR: Unexpected flag '"
+													+ m.arec + "' in eqlabel `"
+													+ lbl + "'",
+											caller.lineNum, pos + i);
+							}
+					}
 					else {
 						if (MREF)
 							result += sign * instr.lc;
@@ -803,30 +830,10 @@ public class Module {
 							hErr.reportError(makeError("illegalRefAmp", lbl),
 									caller.lineNum, pos);
 						if (instr.usage == Usage.EXTERNAL) {
-							boolean addit = true;
-							for (int j = 0; j < mrec.adjustments.size(); ++j) {
-								final Adjustment mr = mrec.adjustments.get(j);
-								if (mr.label.equals(instr.label)
-										&& mr.sign == -sign) {
-									addit = false;
-									mrec.adjustments.remove(j--);
-									break;
-								}
-							}
-							if (addit)
-								mrec.adjustments.add(new Adjustment(sign, 'E',
-										lbl));
+							mergeInERecord(mrec, sign, lbl);
 						}
 						else {
-							boolean addit = true;
-							for (int j = 0; j < lrefs.size(); ++j)
-								if (lrefs.get(j).sign == -sign) {
-									addit = false;
-									lrefs.remove(j);
-									break;
-								}
-							if (addit)
-								lrefs.add(new Adjustment(sign, 'R', lbl));
+							mergeInARecord(lrefs, sign, lbl);
 						}
 					}
 				}
@@ -850,16 +857,65 @@ public class Module {
 
 		final int exrefs = mrec.adjustments.size();
 		char arec = exrefs > 0 ? !lrefs.isEmpty() || exrefs > 1 ? 'C' : 'E'
-				: !lrefs.isEmpty() ? 'R' : 'A';
+				: !lrefs.isEmpty() ? 'R' : bitLoc.defaultAREC.chr;
 		for (int j = 0; j < lrefs.size(); ++j) {
 			mrec.adjustments.add(lrefs.get(j));
 		}
 
 		Value res = new Value(result, arec);
 		mrec.address = caller.lc;
-		mrec.addressField = 'S';
+		mrec.addressField = bitLoc.location;
 		res.modRecord = mrec;
 		return res;
+	}
+
+	/**
+	 * @author Josh Ventura
+	 * @date May 8, 2012; 1:11:28 AM
+	 * @param mrec
+	 *            Modification record to which to add the new record.
+	 * @param sign
+	 *            The sign for the new adjustment.
+	 * @param lbl
+	 *            THe label for the new adjustment.
+	 * @specRef N/A
+	 */
+	private void mergeInERecord(ModRecord mrec, int sign, String lbl) {
+		boolean addit = true;
+		for (int j = 0; j < mrec.adjustments.size(); ++j) {
+			final Adjustment mr = mrec.adjustments.get(j);
+			if (mr.label.equals(lbl) && mr.sign == -sign) {
+				addit = false;
+				mrec.adjustments.remove(j--);
+				break;
+			}
+		}
+		if (addit)
+			mrec.adjustments.add(new Adjustment(sign, 'E', lbl));
+	}
+
+	/**
+	 * @author Josh Ventura
+	 * @date May 8, 2012; 1:11:28 AM
+	 * @param lrefs
+	 *            List of local adjustments.
+	 * @param sign
+	 *            The sign for the new adjustment.
+	 * @param lbl
+	 *            THe label for the new adjustment.
+	 * @specRef N/A
+	 */
+	private void mergeInARecord(ArrayList<Adjustment> lrefs, int sign,
+			String lbl) {
+		boolean addit = true;
+		for (int j = 0; j < lrefs.size(); ++j)
+			if (lrefs.get(j).sign == -sign) {
+				addit = false;
+				lrefs.remove(j);
+				break;
+			}
+		if (addit)
+			lrefs.add(new Adjustment(sign, 'R', lbl));
 	}
 
 	/**
