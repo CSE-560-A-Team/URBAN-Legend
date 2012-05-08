@@ -588,36 +588,86 @@ public class Module {
 		/** Any modification records generated for this value. */
 		public ModRecord modRecord;
 
+		/**
+		 * @author Josh Ventura
+		 * @date May 7, 2012; 11:37:33 PM
+		 */
+		public enum ARECLevel {
+			/**
+			 * Only the 'A' flag is allowed when used as a set, or represents
+			 * the 'A' flag in general.
+			 */
+			A(0),
+			/** Represents the 'R' flag. */
+			R(1),
+			/** Only the 'A' and 'R' flags are allowed. */
+			AR(1),
+			/** Represents the 'E' flag. */
+			E(2),
+			/** Flags 'A', 'R', and 'E' are allowed, but not 'C'. */
+			ARE(2),
+			/** Represents the 'C' flag. */
+			C(3),
+			/** All AREC flags are permitted. */
+			AREC(3);
+
+			/**
+			 * An integer value for this level which can be compared
+			 * against other levels mathematically.
+			 */
+			int level;
+
+			/**
+			 * @param lvl
+			 *            The level.
+			 */
+			ARECLevel(int lvl) {
+				level = lvl;
+			}
+		}
+
 		/** The location in the instruction of this value, if pertinent. */
 		public enum BitLocation {
 			/** This is the address of a single-address instruction. */
-			Address('S'),
+			Address('S', ARECLevel.R, ARECLevel.AREC),
 			/** This is the low-order address of a dual-address instruction. */
-			LowAddress('L'),
+			LowAddress('L', ARECLevel.R, ARECLevel.AREC),
 			/** This is the high-order address of a dual-address instruction. */
-			HighAddress('H'),
+			HighAddress('H', ARECLevel.R, ARECLevel.AREC),
 			/**
 			 * This is a literal stored in the high-order address of a
 			 * dual-address instruction.
 			 */
-			HighLiteral('H'),
+			HighLiteral('H', ARECLevel.A, ARECLevel.AREC),
 			/**
 			 * This is a Word-sized literal, given the full Data section,
 			 * Meaning the 16 low-order bits..
 			 */
-			Literal('W'),
+			Literal('W', ARECLevel.A, ARECLevel.AREC),
 			/** This is an unadjustable type, such as DR, FR, NW, etc. */
-			Other((char) 0);
+			Other((char) 0, ARECLevel.A, ARECLevel.A),
+			/** Similar to `Other`, but allows the result type to be 'R'. */
+			LocalQuery((char) 0, ARECLevel.A, ARECLevel.AR);
 
 			/** The location character for this type. */
 			char location;
+			/** The default flag given to this semantic location. */
+			ARECLevel defaultAREC;
+			/** Which AREC flags are allowed for this location. */
+			ARECLevel arecsAllowed;
 
 			/**
 			 * @param locChar
 			 *            The location character for this type.
+			 * @param defAREC
+			 *            The default AREC flag for this sematic location.
+			 * @param arecSet
+			 *            Which AREC flags we allow.
 			 */
-			BitLocation(char locChar) {
+			BitLocation(char locChar, ARECLevel defAREC, ARECLevel arecSet) {
 				location = locChar;
+				defaultAREC = defAREC;
+				arecsAllowed = arecSet;
 			}
 		}
 

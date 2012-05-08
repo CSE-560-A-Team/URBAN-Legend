@@ -925,12 +925,12 @@ The following tables describe the various instructions with their formats and th
     <th width="15%">Format</th>
     <th>Description</th>
   </tr>
-    <tr>
+	<tr>
 		<td colspan="4" id="OB1">OB1</td>
 		<td colspan="2">Header Record</td>
 	</tr>
 	<tr>
-		<td rowspan="7" class="stripebg"></td>
+		<td rowspan="17" class="stripebg"></td>
 		<td colspan="3" id="OB1.1">OB1.1</td>
 		<td>Byte('H')</td>
 		<td>Header record indicator</td>
@@ -941,10 +941,10 @@ The following tables describe the various instructions with their formats and th
 		<td>Standard separator</td>
 	</tr>
 	<tr>
-		<td colspan="3" id="OB1.3"><a href="#OB1.3">OB1.3</a></td>
+		<td colspan="3" id="OB1.3">OB1.3</td>
 		<td>LABEL, 1-32 bytes</td>
 		<td>Program Name</td>
-    </tr>
+	</tr>
 	<tr>
 		<td colspan="3" id="OB1.2">OB1.2</td>
 		<td>Byte(':')</td>

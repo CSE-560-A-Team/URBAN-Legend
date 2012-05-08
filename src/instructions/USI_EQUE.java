@@ -2,6 +2,7 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -44,7 +45,7 @@ public class USI_EQUE extends UIG_Equated {
 			hErr.reportError(makeError("directiveMissingOp", opId, "EX"), lineNum, -1);
 			return false;
 		}
-		value = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
+		value = module.evaluate(operands.get(0).expression, false, BitLocation.Literal, hErr, this, operands.get(0).valueStartPosition);
 		return isValid;
 	}
 

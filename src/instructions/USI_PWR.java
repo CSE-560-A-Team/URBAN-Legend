@@ -2,11 +2,11 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
+import static assemblernator.Module.Value.BitLocation.Literal;
+import static assemblernator.Module.Value.BitLocation.Other;
 import static assemblernator.OperandChecker.isValidConstant;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidReg;
-import static assemblernator.Module.Value.BitLocation.Literal;
-import static assemblernator.Module.Value.BitLocation.Other;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
