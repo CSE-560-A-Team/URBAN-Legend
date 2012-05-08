@@ -1,0 +1,80 @@
+/*!
+
+\page testcase20 Correct Power Operand Tests
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">CORPWR</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">x</span>		<span style="font-weight:bold;color:#000080;">NUM</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5000</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">y</span>		<span style="font-weight:bold;color:#000080;">NUM</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4000</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">PWR</span>	<span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">32767</span><span style="color:#ff0000;">;</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">3257</span><span style="color:#ff0000;">;</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">x</span><span style="color:#ff0000;">+</span><span style="font-style:italic;color:#800080;">y</span><span style="color:#ff0000;">;</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">x</span><span style="color:#ff0000;">-</span><span style="font-style:italic;color:#800080;">y</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">END</span>  <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">CORPWR</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>CORPWR</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>y</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+CORPWR	 0000	PROGNAME
+x	 0000	LABEL
+y	 0001	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	------------	src: -,dest:-	1	CORPWR	KICKO FC:0;
+errors:
+
+0000	00001388	src: A,dest:-	2	x		NUM FC:5000;
+errors:
+
+0001	00000FA0	src: A,dest:-	3	y		NUM FC:4000; 
+errors:
+
+0002	3D897FFF	src: A,dest:-	4			PWR	DX:1, FC:32767;
+errors:
+
+0003	3D82F347	src: A,dest:-	5			PWR DR:2, FC:-3257;
+errors:
+
+0004	3D8B0001	src: R,dest:-	6			PWR DX:3, EX:x+y;
+errors:
+
+0005	3D84FFFF	src: A,dest:-	7			PWR DR:4, EX:x-y;
+errors:
+
+0006	------------	src: -,dest:-	8	END  LR:CORPWR;
+errors:
+
+</pre>
+
+
+*/

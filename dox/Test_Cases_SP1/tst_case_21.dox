@@ -1,0 +1,113 @@
+/*!
+
+\page testcase21 Incorrect Power Operand Tests
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">INCORPWR</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">x</span>		<span style="font-weight:bold;color:#000080;">NUM</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5000</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">y</span>		<span style="font-weight:bold;color:#000080;">NUM</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4000</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+		<span style="font-weight:bold;color:#000080;">PWR</span>	<span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">8</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">32767</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> incorrect DX value</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">325755</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> incorrect FC value</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">12</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">321</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> incorrect DR value</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> 2 DX's</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">300</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> 2 FC's</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">x</span><span style="color:#ff0000;">+</span><span style="font-style:italic;color:#800080;">y</span> <span style="color:#ff0000;">,</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">x</span><span style="color:#ff0000;">-</span><span style="font-style:italic;color:#800080;">y</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> 2 EX's</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> No operand</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">6</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Missing operand</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Missing operand</span>
+		<span style="font-weight:bold;color:#000080;">PWR</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">x</span><span style="color:#ff0000;">+</span><span style="font-style:italic;color:#800080;">y</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Missing operand</span>
+<span style="font-weight:bold;color:#000080;">END</span>  <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">INCORPWR</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>INCORPWR</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>y</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+INCORPWR	 0000	PROGNAME
+x	 0000	LABEL
+y	 0001	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	------------	src: -,dest:-	1	INCORPWR	KICKO FC:0;
+errors:
+
+0000	00001388	src: A,dest:-	2	x		NUM FC:5000;
+errors:
+
+0001	00000FA0	src: A,dest:-	3	y		NUM FC:4000; 
+errors:
+
+0002	F4000000	src: A,dest:-	4			PWR	DX:8, FC:32767; incorrect DX value
+errors:
+ERROR: 072: Operand `DX' for `PWR' instruction must be within range: [1,7]
+
+0003	F4000000	src: A,dest:-	5			PWR DX:2, FC:-325755; incorrect FC value
+errors:
+ERROR: 075: Operand `FC' for `PWR' instruction must be within range: [-32768, 32767]
+
+0004	F4000000	src: A,dest:-	6			PWR DR:12, FC:321; incorrect DR value
+errors:
+ERROR: 074: Operand `DR' for `PWR' instruction must be within range: [0,7]
+
+0005	F4000000	src: -,dest:-	7			PWR DX:5, DX:7; 2 DX's
+errors:
+ERROR: 043: Missing `FC' or `EX' operand to `PWR' instruction
+
+0006	F4000000	src: A,dest:-	8			PWR FC:10, FC:300; 2 FC's
+errors:
+ERROR: 043: Missing `DR' or `DX' operand to `PWR' instruction
+
+0007	F4000000	src: R,dest:-	9			PWR EX: x+y , EX: x-y; 2 EX's
+errors:
+ERROR: 043: Missing `DR' or `DX' operand to `PWR' instruction
+
+0008	F4000000	src: -,dest:-	10			PWR; No operand
+errors:
+ERROR: 052: Too few operands to `PWR' instruction
+
+0009	F4000000	src: -,dest:-	11			PWR DR:6; Missing operand
+errors:
+ERROR: 052: Too few operands to `PWR' instruction
+
+000A	F4000000	src: -,dest:-	12			PWR DX:7; Missing operand
+errors:
+ERROR: 052: Too few operands to `PWR' instruction
+
+000B	F4000000	src: -,dest:-	13			PWR EX:x+y; Missing operand
+errors:
+ERROR: 052: Too few operands to `PWR' instruction
+
+000C	------------	src: -,dest:-	14	END  LR:INCORPWR;
+errors:
+
+</pre>
+
+*/
