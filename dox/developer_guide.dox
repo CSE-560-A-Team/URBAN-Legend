@@ -123,15 +123,18 @@
   </tr>
   <tr>
     <td>USI_*</th>
-    <td>Some instructions are limited to hard-coded values because they call the string() version of OperandChecker.isValid*. Replacing the string operand with an integer could fix this.</td>
+    <td>We can not be sure at this point whether <em>all</em> instructions are accurately caching their evaluated values.
+        Those which do not may cause a Null Pointer Exception.</td>
   </tr>
   <tr>
-    <td>ErrorHandler</th>
-    <td>Errors are divided into two severities, warning and error. There is no fatal error, which likely violates specification.</td>
+    <td>USI_RET</th>
+    <td>RET is the same as TR in the specification, so we added a DR operand to it in the specification.
+        This is not yet implemented in the program.</td>
   </tr>
   <tr>
-  	<td>Arithmetic Instructions</th>
-  	<td>Arithmetic doesn't support FC operands.</td>
+    <td>USI_*</th>
+    <td>The specification is unclear about the behavior of FM:1 vs FC:1 vs EX:1 vs FL:1, in way of AREC flags.
+        The assembler presently treats them as R,R,R,A, respectively. The correct flags may instead be R,R,A,A.</td>
   </tr>
 </table>
   

@@ -21,12 +21,6 @@ import assemblernator.Module.Value.BitLocation;
  */
 
 /**
- * @mainpage
- *           <img src="custom/logo.svg" style="clear:both" /><br/>
- *           <center><h1>An assembler for the URBAN Architecture</h1></center>
- */
-
-/**
  * Main class to handle command line arguments and call subsystems.
  */
 public class Main {

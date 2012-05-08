@@ -143,8 +143,11 @@ public abstract class Instruction {
 			 * @specRef OB4.10
 			 */
 			byte[] getBytes(String programName) {
+				if (adjustments.isEmpty())
+					return new byte[0];
 				try {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					
 					baos.write((byte) 'M'); // OB4.1
 					baos.write((byte) ':'); // OB4.2
 					baos.write(IOFormat.formatIntegerWithRadix(address, 16, 4)); // OB4.3
@@ -156,7 +159,6 @@ public abstract class Instruction {
 						baos.write((byte) ':'); // OB4.5.4
 						baos.write(a.label.getBytes()); // OB4.5.5
 						baos.write((byte) ':'); // OB4.5.6
-						break;
 					}
 					baos.write((byte) ':'); // OB4.6
 					baos.write((byte) addressField); // OB4.7
@@ -1006,7 +1008,7 @@ public abstract class Instruction {
 			}
 		}
 		else {
-			rep = rep + "------------\t";
+			rep = rep + "--------\t";
 			// rep = rep + String.format("%1$-" + pad + "s", "________");
 		}
 
@@ -1034,9 +1036,11 @@ public abstract class Instruction {
 			opPos++;
 		}
 		*/
-		rep = rep + "errors:\n";
-		for (String error : errors) {
-			rep = rep + error + "\n";
+		if (!errors.isEmpty()) {
+			rep = rep + "errors:\n";
+			for (String error : errors) {
+				rep = rep + error + "\n";
+			}
 		}
 
 		return rep;
@@ -1153,6 +1157,9 @@ public abstract class Instruction {
 	 * @specRef OB3.15
 	 */
 	public byte[] getTextRecord(String progName) {
+		if (assembled == null || assembled.length == 0)
+			return new byte[0];
+		
 		ByteArrayOutputStream records = new ByteArrayOutputStream();
 		try {
 			if (this.assembled != null) {

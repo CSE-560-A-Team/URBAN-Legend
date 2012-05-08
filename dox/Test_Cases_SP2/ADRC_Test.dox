@@ -1,0 +1,131 @@
+/*!
+
+\page testcase20 Legend Test
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">prog1</span>    <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">rlabel1</span>  <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span> <span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">rlabel2</span>  <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span> <span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">rlabel3</span>  <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span> <span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">EXT</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">exlabel1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">exlabel2</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">exlabel3</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">ADRC</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">ADRC</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">rlabel2</span> <span style="color:#ff0000;">-</span> <span style="font-style:italic;color:#800080;">rlabel1</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">ADRC</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">exlabel2</span> <span style="color:#ff0000;">-</span> <span style="font-style:italic;color:#800080;">exlabel2</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">ADRC</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">rlabel2</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">ADRC</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">exlabel1</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">ADRC</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">exlabel1</span><span style="color:#ff0000;">-</span><span style="font-style:italic;color:#800080;">rlabel1</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">ADRC</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">exlabel1</span> <span style="color:#ff0000;">-</span> <span style="font-style:italic;color:#800080;">exlabel2</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">ADRC</span> <span style="color:#0000ff;">EX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">exlabel1</span> <span style="color:#ff0000;">-</span> <span style="font-style:italic;color:#800080;">rlabel1</span> <span style="color:#ff0000;">+</span> <span style="font-style:italic;color:#800080;">exlabel2</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">prog1</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>exlabel1</td>
+    <td>000D</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>exlabel2</td>
+    <td>000D</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>exlabel3</td>
+    <td>000D</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>prog1</td>
+    <td>000A</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>rlabel1</td>
+    <td>000A</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>rlabel2</td>
+    <td>000B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>rlabel3</td>
+    <td>000C</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+exlabel1	 000D	EXTERNAL
+exlabel2	 000D	EXTERNAL
+exlabel3	 000D	EXTERNAL
+prog1	 000A	PROGNAME
+rlabel1	 000A	LABEL
+rlabel2	 000B	LABEL
+rlabel3	 000C	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+000A	------------	src: -,dest:-	1	prog1    kicko fc:10;
+errors:
+
+000A	00000000	src: A,dest:-	2	rlabel1  num fc: 0;
+errors:
+
+000B	00000000	src: A,dest:-	3	rlabel2  num fc: 0;
+errors:
+
+000C	00000000	src: A,dest:-	4	rlabel3  num fc: 0;
+errors:
+
+000D	------------	src: -,dest:-	5	         EXT lr: exlabel1, lr:exlabel2, lr:exlabel3;
+errors:
+
+000D	F4000000	src: R,dest:-	6	         ADRC EX:1;
+errors:
+
+000E	F4000000	src: R,dest:-	7	         ADRC EX:rlabel2 - rlabel1;
+errors:
+
+000F	F4000000	src: R,dest:-	8	         ADRC EX:exlabel2 - exlabel2;
+errors:
+
+0010	F4000000	src: R,dest:-	9	         ADRC EX:rlabel2;
+errors:
+
+0011	F4000000	src: E,dest:-	10	         ADRC EX:exlabel1;
+errors:
+
+0012	F4000000	src: C,dest:-	11	         ADRC EX:exlabel1-rlabel1;
+errors:
+
+0013	F4000000	src: C,dest:-	12	         ADRC EX:exlabel1 - exlabel2;
+errors:
+
+0014	F4000000	src: C,dest:-	13	         ADRC EX:exlabel1 - rlabel1 + exlabel2;
+errors:
+
+0015	------------	src: -,dest:-	14	         end lr:prog1;
+errors:
+
+</pre>
+
+*/

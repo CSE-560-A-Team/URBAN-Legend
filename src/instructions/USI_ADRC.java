@@ -58,11 +58,12 @@ public class USI_ADRC extends AbstractDirective {
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
 		int [] assembled = new int[1];
-		if(this.hasOperand("LR")) {
+		if(this.hasOperand("LR"))
 			assembled[0] = this.getOperandData("LR").value.value;
-		} else if(this.hasOperand("EX")){
+		else if(this.hasOperand("EX"))
 			assembled[0] = this.getOperandData("EX").value.value;
-		}
+		else
+			assembled[0] = 0xDEADBEEF;
 		
 		return assembled;
 	}

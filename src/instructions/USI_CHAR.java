@@ -23,10 +23,10 @@ public class USI_CHAR extends AbstractDirective {
 	 * instruction ID.
 	 */
 	private static final String opId = "CHAR";
-	
+
 	/** The static instance for this instruction. */
 	static USI_CHAR staticInstance = new USI_CHAR(true);
-	
+
 
 	/**
 	 * @author Josh Ventura
@@ -37,21 +37,23 @@ public class USI_CHAR extends AbstractDirective {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param byteCount The number of bytes to pad to words.
+	 * @param byteCount
+	 *            The number of bytes to pad to words.
 	 * @return The number of words needed to hold byteCount bytes.
 	 * @specRef N/A
 	 */
 	int padWord(int byteCount) {
 		return Math.max(1, (byteCount + 3) / 4);
 	}
-	
+
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
 		String st = getOperand("ST");
 		if (st == null)
 			return lc;
-		int stringWordSize = padWord(IOFormat.escapeString(st, 0, 0, null).getBytes().length);
+		int stringWordSize = padWord(IOFormat.escapeString(st, 0, 0, null)
+				.getBytes().length);
 		return lc + Math.max(1, stringWordSize);
 	}
 
@@ -67,13 +69,26 @@ public class USI_CHAR extends AbstractDirective {
 	@Override public int[] assemble() {
 		byte[] resb = content.getBytes();
 		int[] res = new int[padWord(resb.length)];
-		for (int i = 0; i < res.length; i++)
-			res[i] = resb[i] | (resb[i + 1] << 8) | (resb[i + 2] << 16)
-					| (resb[i + 3] << 24);
+		int nw = 0;
+		for (int i = 0; i < resb.length; ++i) {
+			int tw = resb[i];
+			if (++i < resb.length) {
+				tw |= resb[i] << 8;
+				if (++i < resb.length) {
+					tw += resb[i] << 16;
+					if (++i < resb.length)
+						tw |= resb[i] << 24;
+				}
+			}
+			res[nw++] = tw;
+		}
 		return res;
 	}
 
-	/** @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, Module) */
+	/**
+	 * @see assemblernator.Instruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler,
+	 *      Module)
+	 */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		Operand st = getOperandData("ST");
 		if (st == null)
@@ -82,12 +97,13 @@ public class USI_CHAR extends AbstractDirective {
 		else if (!OperandChecker.isValidString(st.expression))
 			hErr.reportError(makeError("STstringCount"), lineNum, -1);
 		else {
-			content = IOFormat.escapeString(st.expression, lineNum, st.valueStartPosition, hErr);
+			content = IOFormat.escapeString(st.expression, lineNum,
+					st.valueStartPosition, hErr);
 			return true;
 		}
 		return false;
 	}
-	
+
 	// =========================================================
 	// === Redundant code ======================================
 	// =========================================================
