@@ -51,7 +51,7 @@ public class USI_ADRC extends AbstractDirective {
 			isValid = false;
 			hErr.reportError(makeError("directiveMissingOp2", this.getOpId(), "LR", "EX"), this.lineNum, -1);
 		}
-		return false; 
+		return isValid; 
 	}
 
 	/** @see assemblernator.Instruction#assemble() */
