@@ -991,7 +991,7 @@ public abstract class Instruction {
 		 * rep = rep + instrBreak;
 		 * 
 		 * return rep; */
-		int opPos = 0;
+		//int opPos = 0;
 		char srcAddrStat = '-', destAddrStat = '-';
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
 		if ((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM")
@@ -1028,12 +1028,12 @@ public abstract class Instruction {
 		rep = rep + "src: " + srcAddrStat + "," + "dest:" + destAddrStat + "\t"
 				+ this.lineNum + "\t" + this.origSrcLine + "\n";
 
-
+		/*
 		for (Operand o : operands) {
 			rep = rep + "Operand " + opPos + ": " + o.toString() + "\n";
 			opPos++;
 		}
-
+		*/
 		rep = rep + "errors:\n";
 		for (String error : errors) {
 			rep = rep + error + "\n";
