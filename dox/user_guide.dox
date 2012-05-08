@@ -1226,7 +1226,7 @@ The following tables describe the various instructions with their formats and th
     </tr>
   <tr>
 		<td colspan="4" id="OB5">OB5</td>
-		<td colspan="2">Text Record</td>
+		<td colspan="2">End Record</td>
 	</tr>
 	<tr>
 		<td rowspan="11" class="stripebg"></td>
