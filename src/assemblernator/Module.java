@@ -25,6 +25,7 @@ import assemblernator.Instruction.Operand;
 import assemblernator.Instruction.Operand.ModRecord;
 import assemblernator.Instruction.Operand.ModRecord.Adjustment;
 import assemblernator.Instruction.Usage;
+import assemblernator.Module.Value.ARECLevel;
 
 /**
  * A class representing an assembled urban module.
@@ -856,8 +857,8 @@ public class Module {
 		}
 
 		final int exrefs = mrec.adjustments.size();
-		char arec = exrefs > 0 ? !lrefs.isEmpty() || exrefs > 1 ? 'C' : 'E'
-				: !lrefs.isEmpty() ? 'R' : bitLoc.defaultAREC.chr;
+		ARECLevel arec = exrefs > 0 ? !lrefs.isEmpty() || exrefs > 1 ? ARECLevel.C : ARECLevel.E
+				: !lrefs.isEmpty() ? ARECLevel.R : bitLoc.defaultAREC;
 		for (int j = 0; j < lrefs.size(); ++j) {
 			mrec.adjustments.add(lrefs.get(j));
 		}
