@@ -6,6 +6,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
 
 /**
@@ -65,7 +66,7 @@ public class USI_SKIPS extends AbstractDirective {
 			if (o != null) {
 				src = "FC";
 
-				 Value tempv = module.evaluate(o.expression, false, hErr, this,
+				 Value tempv = module.evaluate(o.expression, false, BitLocation.Other, hErr, this,
 						o.valueStartPosition);
 				 if (tempv.arec != 'A')
 					 hErr.reportError(makeError("nonConstExpr", o.expression), lineNum, o.valueStartPosition);

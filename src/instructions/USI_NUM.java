@@ -6,6 +6,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
 
 /**
@@ -66,8 +67,8 @@ public class USI_NUM extends AbstractDirective {
 			if (this.hasOperand("FC")) {
 				src = "FC";
 				Operand o = getOperandData("FC");
-				Value constantSize = module.evaluate(o.expression, false, hErr,
-						this, o.valueStartPosition);
+				Value constantSize = module.evaluate(o.expression, false,
+						BitLocation.Other, hErr, this, o.valueStartPosition);
 				this.getOperandData("FC").value = constantSize;
 				isValid = OperandChecker.isValidConstant(constantSize.value,
 						ConstantRange.RANGE_32_TC);

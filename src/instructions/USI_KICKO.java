@@ -7,6 +7,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 
 /**
  * The KICKO instruction.
@@ -60,7 +61,7 @@ public class USI_KICKO extends AbstractDirective {
 			hErr.reportError(makeError("extraOperandsDir", this.getOpId()), this.lineNum, -1);
 		} else {
 			// We know at this point that operands.get(0) is our one and only operand, FC.
-			 Value tempv = module.evaluate(operands.get(0).expression, false, hErr, this, operands.get(0).valueStartPosition);
+			 Value tempv = module.evaluate(operands.get(0).expression, false, BitLocation.Other, hErr, this, operands.get(0).valueStartPosition);
 			 if (tempv.arec != 'A')
 				 hErr.reportError(makeError("nonConstExpr", operands.get(0).expression), lineNum, operands.get(0).valueStartPosition);
 			 ownLC = tempv.value;
