@@ -965,12 +965,12 @@ The following tables describe the various instructions with their formats and th
 		<td>LABEL, 1-32 bytes</td>
 		<td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
     </tr>
-    <tr>
+	<tr>
 		<td colspan="4" id="OB3">OB3</td>
 		<td colspan="2">Text Record</td>
 	</tr>
 	<tr>
-		<td rowspan="7" class="stripebg"></td>
+		<td rowspan="15" class="stripebg"></td>
 		<td colspan="3" id="OB3.1">OB3.1</td>
 		<td>Byte('T')</td>
 		<td>Text record indicator</td>

@@ -13,6 +13,7 @@ import assemblernator.ErrorReporting.DefaultErrorHandler;
 import assemblernator.Instruction.Operand;
 import assemblernator.Instruction.Usage;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 
 /**
  * @file Main.java
@@ -71,7 +72,7 @@ public class Main {
 				"exlabel1 + exlabel2", "exlabel1 + exlabel2 - exlabel2",
 				"exlabel2 + 10 - exlabel2" };
 		for (int i = 0; i < x.length; i++) {
-			Value a = m.evaluate(x[i], true, new DefaultErrorHandler(), USI_EQU
+			Value a = m.evaluate(x[i], true, BitLocation.Literal, new DefaultErrorHandler(), USI_EQU
 					.getInstance().getNewInstance(), 0);
 			System.out.println(x[i] + " = " + a.value + ", flag = " + a.arec);
 		}

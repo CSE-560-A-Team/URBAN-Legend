@@ -44,24 +44,28 @@ import assemblernator.Instruction.Usage;
 public class Module {
 	/**
 	 * A record representing a object file record.
+	 * 
 	 * @author Noah
 	 * @date May 7, 2012; 12:50:55 AM
 	 */
 	public static class RecordSet {
-		/** the records as an array of bytes.*/
+		/** the records as an array of bytes. */
 		public byte[] records;
-		/** number of records.*/
+		/** number of records. */
 		public int size;
+
 		/**
-		 * @param b The bytes of all contained records.
-		 * @param s The number of records enclosed.
+		 * @param b
+		 *            The bytes of all contained records.
+		 * @param s
+		 *            The number of records enclosed.
 		 */
 		public RecordSet(byte[] b, int s) {
 			records = b;
 			size = s;
 		}
 	}
-	
+
 	/**
 	 * <pre>
 	 * symbolTable is a sequence of entry's where an entry = (label, address, usage, string);
@@ -284,28 +288,29 @@ public class Module {
 						.entrySet()) {
 					// if the entry is an ENT entry.
 					if (entry.getValue().getOpId().equalsIgnoreCase("ENT")) {
-						records.write((byte) 'L'); //OB2.1
-						records.write((byte) ':'); //OB2.2
+						records.write((byte) 'L'); // OB2.1
+						records.write((byte) ':'); // OB2.2
 						// add label
-						records.write(entry.getKey().getBytes()); //OB2.3
+						records.write(entry.getKey().getBytes()); // OB2.3
 
-						records.write((byte) ':'); //OB2.4
+						records.write((byte) ':'); // OB2.4
 						// address
 						records.write(IOFormat.formatIntegerWithRadix(
-								entry.getValue().lc, 16, 4)); //OB2.5
+								entry.getValue().lc, 16, 4)); // OB2.5
 
-						records.write((byte) ':'); //OB2.6
+						records.write((byte) ':'); // OB2.6
 						// program name
-						records.write(progName.getBytes()); //OB2.7
+						records.write(progName.getBytes()); // OB2.7
 						records.write((byte) ':');
-						
+
 						recordCnt++;
 					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				
-				return new RecordSet(":Something wicked has happened:".getBytes(), recordCnt);
+
+				return new RecordSet(
+						":Something wicked has happened:".getBytes(), recordCnt);
 			}
 
 			return new RecordSet(records.toByteArray(), recordCnt);
@@ -583,6 +588,39 @@ public class Module {
 		/** Any modification records generated for this value. */
 		public ModRecord modRecord;
 
+		/** The location in the instruction of this value, if pertinent. */
+		public enum BitLocation {
+			/** This is the address of a single-address instruction. */
+			Address('S'),
+			/** This is the low-order address of a dual-address instruction. */
+			LowAddress('L'),
+			/** This is the high-order address of a dual-address instruction. */
+			HighAddress('H'),
+			/**
+			 * This is a literal stored in the high-order address of a
+			 * dual-address instruction.
+			 */
+			HighLiteral('H'),
+			/**
+			 * This is a Word-sized literal, given the full Data section,
+			 * Meaning the 16 low-order bits..
+			 */
+			Literal('W'),
+			/** This is an unadjustable type, such as DR, FR, NW, etc. */
+			Other((char) 0);
+
+			/** The location character for this type. */
+			char location;
+
+			/**
+			 * @param locChar
+			 *            The location character for this type.
+			 */
+			BitLocation(char locChar) {
+				location = locChar;
+			}
+		}
+
 		/** Default constructor; does nothing. */
 		public Value() {}
 
@@ -635,6 +673,9 @@ public class Module {
 	 *            True if this expression is a memory reference. Enabling this
 	 *            parameter enables address referencing for regular labels
 	 *            without warning.
+	 * @param bitLoc
+	 *            The bit location of this parameter, as one of the
+	 *            Value.BitLocation constants.
 	 * @param hErr
 	 *            The error handler which will receive problems in evaluation.
 	 * @param caller
@@ -645,8 +686,8 @@ public class Module {
 	 * @return The value of the expression.
 	 * @specRef N/A
 	 */
-	public Value evaluate(String exp, boolean MREF, ErrorHandler hErr,
-			Instruction caller, int pos) {
+	public Value evaluate(String exp, boolean MREF, Value.BitLocation bitLoc,
+			ErrorHandler hErr, Instruction caller, int pos) {
 		int result = 0;
 		int i = 0;
 		boolean readAnything = false;
@@ -763,16 +804,17 @@ public class Module {
 		for (int j = 0; j < lrefs.size(); ++j) {
 			mrec.adjustments.add(lrefs.get(j));
 		}
-		
+
 		Value res = new Value(result, arec);
 		mrec.address = caller.lc;
 		mrec.addressField = 'S';
 		res.modRecord = mrec;
 		return res;
 	}
-	
+
 	/**
 	 * Writes Object File to file with fileName.
+	 * 
 	 * @author Noah
 	 * @date May 7, 2012; 2:07:33 AM
 	 * @modified UNMODIFIED
@@ -780,15 +822,20 @@ public class Module {
 	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param fileName File to write to.
-	 * @throws IOException When file write goes south.
-	 * @throws Exception In case of general mayhem.
-	 * @throws FileNotFoundException If the file couldn't be opened.
+	 * @param fileName
+	 *            File to write to.
+	 * @throws IOException
+	 *             When file write goes south.
+	 * @throws Exception
+	 *             In case of general mayhem.
+	 * @throws FileNotFoundException
+	 *             If the file couldn't be opened.
 	 * @specRef N/A
 	 */
-	public void writeObjectFile(String fileName) throws IOException, Exception, FileNotFoundException {
+	public void writeObjectFile(String fileName) throws IOException, Exception,
+			FileNotFoundException {
 		OutputStream out = new FileOutputStream(fileName);
-		
+
 		int totalRecords = 0, totalLinkRecords = 0, totalTextRecords = 0, totalModRecords = 0;
 		RecordSet recSet;
 		// write header record.
@@ -798,24 +845,27 @@ public class Module {
 		recSet = this.symbolTable.getLinkRecords(this.programName);
 		totalLinkRecords = recSet.size;
 		out.write(recSet.records);
-		//write text records and mod records. adjust record cnts.
-		for(Instruction instr : this.assembly) {
+		// write text records and mod records. adjust record cnts.
+		for (Instruction instr : this.assembly) {
 			out.write(instr.getTextRecord(this.programName));
-			if(instr.assembled != null) {
+			if (instr.assembled != null) {
 				totalTextRecords++;
 			}
-			
+
 			recSet = instr.getModRecords(this.programName);
 			out.write(recSet.records);
 			totalModRecords += recSet.size;
-			
+
 		}
-		
-		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords + 2;//includes end record and header record.
+
+		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords
+				+ 2;// includes end record and header record.
 		// write end record
-		out.write(getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords));
+		out.write(getEndRecord(totalRecords, totalLinkRecords,
+				totalTextRecords, totalModRecords));
 
 	}
+
 	/**
 	 * Writes object file.
 	 * 
@@ -844,21 +894,23 @@ public class Module {
 		recSet = this.symbolTable.getLinkRecords(this.programName);
 		totalLinkRecords = recSet.size;
 		out.write(recSet.records);
-		//write text records and mod records. adjust record cnts.
-		for(Instruction instr : this.assembly) {
+		// write text records and mod records. adjust record cnts.
+		for (Instruction instr : this.assembly) {
 			out.write(instr.getTextRecord(this.programName));
-			if(instr.assembled != null) {
+			if (instr.assembled != null) {
 				totalTextRecords++;
 			}
-			
+
 			recSet = instr.getModRecords(this.programName);
 			out.write(recSet.records);
 			totalModRecords += recSet.size;
-			
+
 		}
-		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords + 2;
+		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords
+				+ 2;
 		// write end record
-		out.write(getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords));
+		out.write(getEndRecord(totalRecords, totalLinkRecords,
+				totalTextRecords, totalModRecords));
 
 	}
 
