@@ -77,7 +77,10 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			} else if(this.hasOperand("EX")){
 				isValid = false;
 				hErr.reportError(makeError("operandWrongWith", "EX", "FC"), this.lineNum, -1);		
-			} 
+			}else{
+				isValid = false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "{DR}, or {DX}"), this.lineNum, -1);
+			}
 		} else if(this.hasOperand("EX")) {
 			//check EX
 			value = module.evaluate(this.getOperand("EX"), false,BitLocation.Literal, hErr, this, this.getOperandData("EX").valueStartPosition); 
@@ -102,7 +105,10 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			} else if(this.hasOperand("FC")){
 					isValid = false;
 					hErr.reportError(makeError("operandWrongWith", "FC", "EX"), this.lineNum, -1);		
-			} 	
+			}else{
+				isValid = false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "{DR}, or {DX}"), this.lineNum, -1);
+			}
 		} else {
 			isValid = false;
 			if(this.hasOperand("FR")){
