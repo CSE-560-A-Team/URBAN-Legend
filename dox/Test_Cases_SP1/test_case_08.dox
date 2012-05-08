@@ -8,7 +8,6 @@
 <span style="font-style:italic;color:#800080;">notEnd</span>		<span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
 <span style="font-style:italic;color:#800080;">notEndYet</span>	<span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
 <span style="font-style:italic;color:#800080;">nope</span>		<span style="font-weight:bold;color:#000080;">DMP</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
-
 </pre>
 <br />
 <h1>Symbol table</h1>
@@ -55,11 +54,9 @@ notEndYet	 0001	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	LinePastEnd	KICKO FC:0;
-errors:
+0000	--------	src: -,dest:-	1	LinePastEnd	KICKO FC:0;
 
-0000	------------	src: -,dest:-	2	END  		LR:LinePastEnd;
-errors:
+0000	--------	src: -,dest:-	2	END  		LR:LinePastEnd;
 
 0000	F8000001	src: A,dest:-	3	notEnd		DMP FC:1;
 errors:
@@ -74,6 +71,15 @@ errors:
 152: Out of Memory.
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:LinePastEnd:
+0000:0002:0000:2012129,16:39:26:0001:URBAN-ASM:LinePastEnd:
+T:0000:F8000001:A:A:00:00:LinePastEnd:
+T:0001:F8000001:A:A:00:00:LinePastEnd:
+T:0002:F8000001:A:A:00:00:LinePastEnd:
+E:0008:0000:0003:0003:LinePastEnd:
+</pre>
+
 
 
 */

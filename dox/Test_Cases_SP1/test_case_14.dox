@@ -42,22 +42,19 @@ start	 0000	PROGNAME
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	start kicko FC:000;
-errors:
+0000	--------	src: -,dest:-	1	start kicko FC:000;
 
 0000	00080000	src: -,dest:-	2	MOVD FR:0, FR:0; error
 errors:
 ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `MOVD' instruction
 
 0001	20800000	src: R,dest:-	3	Iadd FM:0, DR:0;
-errors:
 
 0002	F4000000	src: -,dest:R	4	movd DM:383, DR:0; error
 errors:
 ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `MOVD' instruction
 
 0003	01893FFF	src: A,dest:-	5	MOVD FL:16383, DX:1;
-errors:
 
 0004	20080000	src: -,dest:R	6	iadd FR:0, DM:0, DX:; error
 errors:
@@ -65,7 +62,6 @@ ERROR: 025: Empty expression given
 ERROR: 072: Operand `DX' for `IADD' instruction must be within range: [1,7]
 
 0005	00801000	src: R,dest:-	7	MOVD FM:0, FX:1, DR:0;
-errors:
 
 0006	00010000	src: -,dest:-	8	MOVD FR:0, DR:1a; error
 errors:
@@ -73,10 +69,8 @@ ERROR: 026: Operator '+' or '-' expected here
 ERROR: 021: Could not find label `a': Must be a previously defined EQU or EQUe label
 
 0007	00090000	src: -,dest:-	9	MOVD FR:0, DX:1;
-errors:
 
 0008	009A0000	src: -,dest:-	11	MOVD FX:1, DX:2;
-errors:
 
 0009	F4000000	src: -,dest:-	12	MOVD ;error
 errors:
@@ -85,11 +79,26 @@ ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `MOVD' instruction
 ERROR: 041: Missing `' operand to `MOVD' instruction
 
 000A	031C7000	src: A,dest:R	13	MOVD FL:455, dM:0;
-errors:
 
-000B	------------	src: -,dest:-	14	end LR:start;
-errors:
+000B	--------	src: -,dest:-	14	end LR:start;
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:start:
+0000:000B:0000:2012129,16:28:34:0001:URBAN-ASM:start:
+T:0000:00080000:A:A:00:00:start:
+T:0001:20800000:A:R:00:00:start:
+T:0002:F4000000:R:A:00:00:start:
+T:0003:01893FFF:A:A:00:00:start:
+T:0004:20080000:R:A:00:00:start:
+T:0005:00801000:A:R:00:00:start:
+T:0006:00010000:A:A:00:00:start:
+T:0007:00090000:A:A:00:00:start:
+T:0008:009A0000:A:A:00:00:start:
+T:0009:F4000000:A:A:00:00:start:
+T:000A:031C7000:R:A:00:00:start:
+E:0021:0000:000B:0014:start:
+</pre>
+
 
 */

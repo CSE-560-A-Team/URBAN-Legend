@@ -126,49 +126,53 @@ fmMinPSH	 0000	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	CorrectStack KICKO FC:0;
-errors:
+0000	--------	src: -,dest:-	1	CorrectStack KICKO FC:0;
 
 0000	C0880000	src: R,dest:-	2	fmMinPSH PSH FM:0;
-errors:
 
 0001	C0880FFF	src: R,dest:-	3	fmMaxPSH PSH FM:4095;
-errors:
 
 0002	00000030	src: A,dest:-	4	flMinPSH PSH FL:0;
-errors:
 
 0003	00000030	src: A,dest:-	5	flMaxPSH PSH FL:4095;
-errors:
 
 0004	00000030	src: A,dest:-	6	fcMinPSH PSH FC:0;
-errors:
 
 0005	00000030	src: A,dest:-	7	fcMaxPSH PSH FC:4095;
-errors:
 
 0006	C4880000	src: -,dest:R	8	dmMinPOP POP DM:0;
-errors:
 
 0007	C4880FFF	src: -,dest:R	9	dmMaxPOP POP DM:4095;
-errors:
 
 0008	C4881000	src: -,dest:R	10	dxMinPOP POP DM:0, DX:1;
-errors:
 
 0009	C4887000	src: -,dest:R	11	dxMaxPOP POP DM:0, DX:7;
-errors:
 
 000A	C4800000	src: -,dest:-	12	drMinPOP POP DR:0;
-errors:
 
 000B	C4870000	src: -,dest:-	13	drMaxPOP POP DR:7;
-errors:
 
-000C	------------	src: -,dest:-	14	END LR:CorrectStack; 
-errors:
+000C	--------	src: -,dest:-	14	END LR:CorrectStack; 
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:CorrectStack:
+0000:000C:0000:2012129,16:41:54:0001:URBAN-ASM:CorrectStack:
+T:0000:C0880000:A:R:00:00:CorrectStack:
+T:0001:C0880FFF:A:R:00:00:CorrectStack:
+T:0002:00000030:A:A:00:00:CorrectStack:
+T:0003:00000030:A:A:00:00:CorrectStack:
+T:0004:00000030:A:A:00:00:CorrectStack:
+T:0005:00000030:A:A:00:00:CorrectStack:
+T:0006:C4880000:R:A:00:00:CorrectStack:
+T:0007:C4880FFF:R:A:00:00:CorrectStack:
+T:0008:C4881000:R:A:00:00:CorrectStack:
+T:0009:C4887000:R:A:00:00:CorrectStack:
+T:000A:C4800000:A:A:00:00:CorrectStack:
+T:000B:C4870000:A:A:00:00:CorrectStack:
+E:001C:0000:000C:000E:CorrectStack:
+</pre>
+
 
 
 */

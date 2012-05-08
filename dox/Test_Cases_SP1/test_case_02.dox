@@ -64,31 +64,35 @@ minReg	 0000	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	CorrectCLR KICKO FC:0;
-errors:
+0000	--------	src: -,dest:-	1	CorrectCLR KICKO FC:0;
 
 0000	40800000	src: -,dest:-	2	minReg clr dr:0;
-errors:
 
 0001	40890000	src: -,dest:-	3	minIdx clr dx:1;
-errors:
 
 0002	40870000	src: -,dest:-	4	maxReg clr dr:7;
-errors:
 
 0003	408F0000	src: -,dest:-	5	maxIdx clr dx:7;
-errors:
 
 0004	44000000	src: -,dest:-	6	CLRA;
-errors:
 
 0005	48000000	src: -,dest:-	7	CLRX;
-errors:
 
-0006	------------	src: -,dest:-	8	END LR:CorrectCLR;
-errors:
+0006	--------	src: -,dest:-	8	END LR:CorrectCLR;
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:CorrectCLR:
+0000:0006:0000:2012129,16:42:44:0001:URBAN-ASM:CorrectCLR:
+T:0000:40800000:A:A:00:00:CorrectCLR:
+T:0001:40890000:A:A:00:00:CorrectCLR:
+T:0002:40870000:A:A:00:00:CorrectCLR:
+T:0003:408F0000:A:A:00:00:CorrectCLR:
+T:0004:44000000:A:A:00:00:CorrectCLR:
+T:0005:48000000:A:A:00:00:CorrectCLR:
+E:000C:0000:0006:0004:CorrectCLR:
+</pre>
+
 
 
 */

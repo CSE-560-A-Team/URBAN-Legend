@@ -95,7 +95,7 @@ wrongOper	 0006	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	IncorrectCLR KICKO FL:0;
+0000	--------	src: -,dest:-	1	IncorrectCLR KICKO FL:0;
 errors:
 ERROR: 040: Missing `FC' operand to `KICKO' directive
 
@@ -135,10 +135,25 @@ ERROR: 049: Too many operands to `CLRA' instruction.
 errors:
 ERROR: 049: Too many operands to `CLRX' instruction.
 
-0009	------------	src: -,dest:-	11	END; deliberately incorrect.
+0009	--------	src: -,dest:-	11	END; deliberately incorrect.
 errors:
 ERROR: 040: Missing `LR' operand to `END' directive
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:IncorrectCLR:
+0000:0009:0000:2012129,16:40:34:0001:URBAN-ASM:IncorrectCLR:
+T:0000:F4000000:A:A:00:00:IncorrectCLR:
+T:0001:F4000000:A:A:00:00:IncorrectCLR:
+T:0002:F4000000:A:A:00:00:IncorrectCLR:
+T:0003:F4000000:A:A:00:00:IncorrectCLR:
+T:0004:F4000000:A:A:00:00:IncorrectCLR:
+T:0005:F4000000:A:A:00:00:IncorrectCLR:
+T:0006:F4000000:A:A:00:00:IncorrectCLR:
+T:0007:F4000000:A:A:00:00:IncorrectCLR:
+T:0008:F4000000:A:A:00:00:IncorrectCLR:
+E:000F:0000:0009:0004:IncorrectCLR:
+</pre>
+
 
 */

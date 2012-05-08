@@ -68,17 +68,13 @@ z	 0010	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	shiftROL	KICKO FC:0;
-errors:
+0000	--------	src: -,dest:-	1	shiftROL	KICKO FC:0;
 
 0000	0087000E	src: R,dest:-	2			MOVD DR:7,	FM:x ;place x in register 1 
-errors:
 
 0001	3081000F	src: R,dest:-	3			ISUB DR:1,	FM:y ;add (x+y) 
-errors:
 
 0002	00180010	src: -,dest:R	4			MOVD FR:1,	DM:z ;store x+y into z 2 
-errors:
 
 0003	F4000000	src: A,dest:-	5			ROL  FR:1, 	FC:4; 
 errors:
@@ -117,23 +113,20 @@ errors:
 ERROR: 041: Missing `{DR}, or {DX}' operand to `ROL' instruction
 
 000C	A0810010	src: R,dest:-	14			IWSR FM:z,NW:1 ;
-errors:
 
 000D	FC000000	src: A,dest:-	15			HLT  FC:0 ;halt program displax code 
-errors:
 
 000E	0000000A	src: A,dest:-	16	x		num  FC:10 ;define data element 
-errors:
 
 000F	0000006F	src: A,dest:-	17	y 		num  FC:111 ;define data element 
-errors:
 
 0010	00000000	src: A,dest:-	18	z	 	num  FC:0 ;define data element 
-errors:
 
-0011	------------	src: -,dest:-	19			END  LR:shiftROL;end of program E
-errors:
+0011	--------	src: -,dest:-	19			END  LR:shiftROL;end of program E
 
 </pre>
+<h1>Object file:</h1>
+<pre><i>The object file could not be generated for this program.</i></pre>
+
 
 */

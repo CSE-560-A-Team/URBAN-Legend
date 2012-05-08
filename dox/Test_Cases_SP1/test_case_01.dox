@@ -106,30 +106,23 @@ say'lo	 0073	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	legend	kicko fc:0;
-errors:
+0000	--------	src: -,dest:-	1	legend	kicko fc:0;
 
-0000	------------	src: -,dest:-	2	expr	EQU fc:5+4+3 + 2+1;
-errors:
+0000	--------	src: -,dest:-	2	expr	EQU fc:5+4+3 + 2+1;
 
-0000	------------	src: -,dest:-	3	expr2	EQU fc:expr + expr;
-errors:
+0000	--------	src: -,dest:-	3	expr2	EQU fc:expr + expr;
 
-0000	------------	src: -,dest:-	4	expr3	EQU fc:expr2 + expr2;
-errors:
+0000	--------	src: -,dest:-	4	expr3	EQU fc:expr2 + expr2;
 
-0000	------------	src: -,dest:-	5	expr4	EQU fc:expr3 + expr3;
-errors:
+0000	--------	src: -,dest:-	5	expr4	EQU fc:expr3 + expr3;
 
-0000	------------	src: -,dest:-	6	rex	EQU fc:rex + expr2;
+0000	--------	src: -,dest:-	6	rex	EQU fc:rex + expr2;
 errors:
 ERROR: 021: Could not find label `rex': Must be a previously defined EQU or EQUe label
 
-0000	------------	src: -,dest:-	7	neg5	equ fc:-5;
-errors:
+0000	--------	src: -,dest:-	7	neg5	equ fc:-5;
 
-0073	------------	src: -,dest:-	8	fff	newlc fc:expr4+neg5;
-errors:
+0073	--------	src: -,dest:-	8	fff	newlc fc:expr4+neg5;
 
 0073	A8890000	src: R,dest:-	9	say'lo	cwsr fm: h'lo!!,
 	     nw: 9; Oooh, forward referencing
@@ -140,12 +133,18 @@ ERROR: 022: Could not find label `h'lo!!': Label not in symbol table
 errors:
 ERROR: 022: Could not find label `h'lo!': Label not in symbol table
 
-0075	------------	src: -,dest:-	14	end LR: ; oops
+0075	--------	src: -,dest:-	14	end LR: ; oops
 errors:
 ERROR: 113: LR:label must match KICKO label
 
 </pre>
-
+<h1>Object file:</h1>
+<pre>H:legend:
+0000:0075:0000:2012129,16:43:08:0001:URBAN-ASM:legend:
+T:0073:A8890000:A:R:00:00:legend:
+T:0074:38800000:A:R:00:00:legend:
+E:000F:0000:0009:0004:legend:
+</pre>
 
 
 */
