@@ -862,6 +862,10 @@ public class Module {
 		for (int j = 0; j < lrefs.size(); ++j) {
 			mrec.adjustments.add(lrefs.get(j));
 		}
+		
+		if (arec.level > bitLoc.arecsAllowed.level) {
+			hErr.reportError(makeError("arecNotAllowed", "" + arec.chr), caller.lineNum, pos);
+		}
 
 		Value res = new Value(result, arec.chr);
 		mrec.address = caller.lc;

@@ -53,12 +53,14 @@ public class InstructionFormatter {
 			String lit;
 			//gets value for literal part of format
 			if(instr.hasOperand("FL")){
+				if (instr.getOperandData("FL").value == null)
 				System.err.println("INTERNAL ERROR: Instruction "
 						+ instr.getOpId()
 						+ ": FL operand does not cache value returned by evaluate().");
 				lit = IOFormat.formatBinInteger(instr.getOperandData("FL").value.value,16);
 			}
 			else if(instr.hasOperand("EX")){
+				if (instr.getOperandData("EX").value == null)
 				System.err.println("INTERNAL ERROR: Instruction "
 						+ instr.getOpId()
 						+ ": EX operand does not cache value returned by evaluate().");
@@ -84,6 +86,10 @@ public class InstructionFormatter {
 			fmt = "00";
 			//gets destReg, mem , and ixr
 			if(instr.hasOperand("DM")){
+				if (instr.getOperandData("DM").value == null)
+					System.err.println("INTERNAL ERROR: Instruction "
+							+ instr.getOpId()
+							+ ": DM operand does not cache value returned by evaluate().");
 				mem = IOFormat.formatBinInteger(instr.getOperandData("DM").value.value,12);
 				if(instr.hasOperand("DX")){
 					ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value.value,4);
@@ -92,15 +98,27 @@ public class InstructionFormatter {
 					srcReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value.value,4);
 				}
 			}else if(instr.hasOperand("DX")){
+				if (instr.getOperandData("DX").value == null)
+					System.err.println("INTERNAL ERROR: Instruction "
+							+ instr.getOpId()
+							+ ": DX operand does not cache value returned by evaluate().");
 				destReg = IOFormat.formatBinInteger(instr.getOperandData("DX").value.value,3);
 				destReg="1"+destReg;
 			}else if(instr.hasOperand("DR")){
+				if (instr.getOperandData("DR").value == null)
+					System.err.println("INTERNAL ERROR: Instruction "
+							+ instr.getOpId()
+							+ ": DR operand does not cache value returned by evaluate().");
 				destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value.value,3);
 				destReg="0"+destReg;
 			}
 			
 			//gets srcReg, mem, and ixr
 			if(instr.hasOperand("FM")){
+				if (instr.getOperandData("FM").value == null)
+					System.err.println("INTERNAL ERROR: Instruction "
+							+ instr.getOpId()
+							+ ": FM operand does not cache value returned by evaluate().");
 				mem = IOFormat.formatBinInteger(instr.getOperandData("FM").value.value,12);
 				if(instr.hasOperand("FX")){
 					ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value.value,4);
