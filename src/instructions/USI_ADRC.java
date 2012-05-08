@@ -77,15 +77,9 @@ public class USI_ADRC extends AbstractDirective {
 		} else if(this.operands.size() < 1){
 			isValid = false;
 			hErr.reportError(makeError("tooFewOperandsDir", this.getOpId()), this.lineNum, -1);
-		} else if(this.hasOperand("LR")) {
-			Operand lr = getOperandData("LR");
-			lr.value = module.evaluate(lr.expression, true, BitLocation.Address, hErr, this, lr.valueStartPosition);
-		} else {
-			Operand ex = getOperandData("EX");
-			if (ex == null)
-				hErr.reportError(makeError("directiveMissingOp", opId, "EX"), lineNum, 0);
-			else
-				ex.value = module.evaluate(ex.expression, true, BitLocation.Address, hErr, this, ex.valueStartPosition);
+		} else if(!this.hasOperand("LR") && !this.hasOperand("EX")) {
+			isValid = false;
+			hErr.reportError(makeError("directiveMissingOp", opId, "EX"), lineNum, 0);
 		}
 		return isValid;
 	}
