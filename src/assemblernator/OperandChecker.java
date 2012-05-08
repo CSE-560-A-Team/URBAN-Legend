@@ -114,7 +114,7 @@ public class OperandChecker {
 	 * @specRef N/A
 	 */
 	public static boolean isValidMem(int addr) {
-		return (addr <= 4095 && addr >= 0);
+		return (addr <= 4095 && addr >= -4096);
 	}
 
 	/**
