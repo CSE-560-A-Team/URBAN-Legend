@@ -1157,7 +1157,7 @@ public abstract class Instruction {
 				records.write((byte) ':');
 				// instruction
 				for (int count = 0; count < this.assembled.length; count++) {
-					records.write(this.assembled[count]);
+					records.write(IOFormat.formatIntegerWithRadix(this.assembled[count], 16, 8));
 				}
 				records.write((byte) ':');
 				// gets two flags

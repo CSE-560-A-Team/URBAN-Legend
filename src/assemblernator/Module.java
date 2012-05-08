@@ -519,7 +519,7 @@ public class Module {
 	/**
 	 * The maximum length of module.
 	 */
-	private final int MAX_LEN = 1023;
+	private final int MAX_LEN = 4095;
 
 	/**
 	 * Returns a reference to the symbol table.
@@ -561,7 +561,7 @@ public class Module {
 	 * @specRef N/A
 	 */
 	public void addInstruction(Instruction instr, ErrorHandler hErr) {
-		this.moduleLength += instr.lc;
+		this.moduleLength = instr.lc;
 		if (this.moduleLength > this.MAX_LEN) {
 			hErr.reportError(makeError("ORmoduleLength", this.programName),
 					instr.lineNum, -1);
@@ -801,7 +801,9 @@ public class Module {
 		//write text records and mod records. adjust record cnts.
 		for(Instruction instr : this.assembly) {
 			out.write(instr.getTextRecord(this.programName));
-			totalTextRecords++;
+			if(instr.assembled != null) {
+				totalTextRecords++;
+			}
 			
 			recSet = instr.getModRecords(this.programName);
 			out.write(recSet.records);
@@ -845,15 +847,16 @@ public class Module {
 		//write text records and mod records. adjust record cnts.
 		for(Instruction instr : this.assembly) {
 			out.write(instr.getTextRecord(this.programName));
-			totalTextRecords++;
+			if(instr.assembled != null) {
+				totalTextRecords++;
+			}
 			
 			recSet = instr.getModRecords(this.programName);
 			out.write(recSet.records);
 			totalModRecords += recSet.size;
 			
 		}
-		
-		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords;
+		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords + 2;
 		// write end record
 		out.write(getEndRecord(totalRecords, totalLinkRecords, totalTextRecords,totalModRecords));
 
