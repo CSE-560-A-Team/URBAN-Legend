@@ -863,7 +863,7 @@ public class Module {
 			mrec.adjustments.add(lrefs.get(j));
 		}
 
-		Value res = new Value(result, arec);
+		Value res = new Value(result, arec.chr);
 		mrec.address = caller.lc;
 		mrec.addressField = bitLoc.location;
 		res.modRecord = mrec;
