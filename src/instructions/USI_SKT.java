@@ -2,6 +2,7 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
+import static assemblernator.Module.Value.BitLocation.Other;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -52,7 +53,7 @@ public class USI_SKT extends AbstractInstruction {
 						dest = "DR";
 						//range check
 						Operand o = getOperandData("DR");
-						Value constantSize = module.evaluate(o.expression, false, hErr, this,
+						Value constantSize = module.evaluate(o.expression, false, Other, hErr, this,
 								o.valueStartPosition);
 						this.getOperandData("DR").value = constantSize;
 						isValid = OperandChecker.isValidReg(constantSize.value);

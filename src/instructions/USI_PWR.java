@@ -6,7 +6,6 @@ import static assemblernator.OperandChecker.isValidConstant;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidReg;
 import static assemblernator.Module.Value.BitLocation.Literal;
-import static assemblernator.Module.Value.BitLocation.Address;
 import static assemblernator.Module.Value.BitLocation.Other;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
