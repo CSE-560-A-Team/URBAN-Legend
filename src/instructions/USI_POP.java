@@ -7,6 +7,7 @@ import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
 
 /**
@@ -46,37 +47,37 @@ public class USI_POP extends AbstractInstruction {
 		} else if(this.operands.size() < 1) {
 			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 		} else if(this.hasOperand("DR")) {
-			value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
+			value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").keywordStartPosition);
 			//range checking
 			isValid = OperandChecker.isValidReg(value.value);
 			if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("DR").value = value;
 		} else if(this.hasOperand("DM") && this.hasOperand("DX")){
 			//range checking
-			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			value = module.evaluate(this.getOperand("DM"), false, BitLocation.Address, hErr, this, this.getOperandData("DM").keywordStartPosition);
 			isValid = OperandChecker.isValidMem(value.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("DM").value = value;
-			value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
+			value = module.evaluate(this.getOperand("DX"), false, BitLocation.Other, hErr, this, this.getOperandData("DX").keywordStartPosition);
 			isValid = OperandChecker.isValidIndex(value.value);
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("DX").value = value;
 		} else if(this.hasOperand("DM") && !this.hasOperand("DX") && this.operands.size() == 2){
 			//range checking
-			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			value = module.evaluate(this.getOperand("DM"), false, BitLocation.Address, hErr, this, this.getOperandData("DM").keywordStartPosition);
 			isValid = OperandChecker.isValidMem(value.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 
 			hErr.reportError(makeError("operandInsBeWith", "DM", "DX",this.getOpId()), this.lineNum, -1);	
 			
 		} else if(this.hasOperand("DM") && this.operands.size() == 1) {
-			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			value = module.evaluate(this.getOperand("DM"), false, BitLocation.Address, hErr, this, this.getOperandData("DM").keywordStartPosition);
 			isValid = OperandChecker.isValidMem(value.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("DM").value = value;
 		} else if(this.hasOperand("DM")){
 			//range checking
-			value = module.evaluate(this.getOperand("DM"), false, hErr, this, this.getOperandData("DM").keywordStartPosition);
+			value = module.evaluate(this.getOperand("DM"), false, BitLocation.Address, hErr, this, this.getOperandData("DM").keywordStartPosition);
 			isValid = OperandChecker.isValidMem(value.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 			

@@ -7,6 +7,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Module;
 import assemblernator.Module.Value;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
 
 /**
@@ -55,7 +56,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 		} else if(this.hasOperand("FC")){
 			if(this.hasOperand("DR")){
 				//check FC
-				value = module.evaluate(this.getOperand("FC"), false, hErr, this, this.getOperandData("FC").keywordStartPosition); //value of FC
+				value = module.evaluate(this.getOperand("FC"), false,BitLocation.Literal ,  hErr, this, this.getOperandData("FC").keywordStartPosition); //value of FC
 				isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_SHIFT); //check if value of FC is valid.
 				if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
 						this.getOpId(), Integer.toString(ConstantRange.RANGE_SHIFT.min), Integer.toString(ConstantRange.RANGE_SHIFT.max)), this.lineNum, -1);
@@ -63,14 +64,14 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 				
 				dest = "DR";
 				//range checking
-				value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
+				value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").keywordStartPosition);
 				isValid = OperandChecker.isValidReg(value.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DR").value = value;
 			} else if(this.hasOperand("DX")){
 				dest = "DX";
 				//range checking
-				value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
+				value = module.evaluate(this.getOperand("DX"), false,BitLocation.Other, hErr, this, this.getOperandData("DX").keywordStartPosition);
 				isValid = OperandChecker.isValidIndex(value.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DX").value = value;
@@ -81,7 +82,7 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 		} else if(this.hasOperand("EX")) {
 			if(this.hasOperand("DR")){
 				//check EX
-				value = module.evaluate(this.getOperand("EX"), false, hErr, this, this.getOperandData("EX").keywordStartPosition); 
+				value = module.evaluate(this.getOperand("EX"), false,BitLocation.Literal, hErr, this, this.getOperandData("EX").keywordStartPosition); 
 				isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 				if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
 						Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
@@ -89,14 +90,14 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 				
 				dest = "DR";
 				//range checking
-				value = module.evaluate(this.getOperand("DR"), false, hErr, this, this.getOperandData("DR").keywordStartPosition);
+				value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").keywordStartPosition);
 				isValid = OperandChecker.isValidReg(value.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DR").value = value;
 			} else if(this.hasOperand("DX")){
 				dest = "DX";
 				//range checking
-				value = module.evaluate(this.getOperand("DX"), false, hErr, this, this.getOperandData("DX").keywordStartPosition);
+				value = module.evaluate(this.getOperand("DX"), false,BitLocation.Other, hErr, this, this.getOperandData("DX").keywordStartPosition);
 				isValid = OperandChecker.isValidIndex(value.value);
 				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 				this.getOperandData("DX").value = value;

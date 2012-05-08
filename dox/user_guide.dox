@@ -925,6 +925,96 @@ The following tables describe the various instructions with their formats and th
     <th width="15%">Format</th>
     <th>Description</th>
   </tr>
+    <tr>
+		<td colspan="4" id="OB1">OB1</td>
+		<td colspan="2">Header Record</td>
+	</tr>
+	<tr>
+		<td rowspan="7" class="stripebg"></td>
+		<td colspan="3" id="OB1.1">OB1.1</td>
+		<td>Byte('H')</td>
+		<td>Header record indicator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.2">OB1.2</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.3"><a href="#OB1.3">OB1.3</a></td>
+		<td>LABEL, 1-32 bytes</td>
+		<td>Program Name</td>
+    </tr>
+	<tr>
+		<td colspan="3" id="OB1.2">OB1.2</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.3">OB1.3</td>
+		<td>Short, HHHH</td>
+		<td>Assembler Assigned Program Load Address (4 hex nybbles)</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.2">OB1.2</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.3">OB1.3</td>
+		<td>Long, HHHH</td>
+		<td>Total Module Length (0 to 03FF)</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.4">OB1.4</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.5">OB1.5</td>
+		<td>Long, HHHH</td>
+		<td>Execution Start Address (0 to 03FF)</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.6">OB1.6</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.7">OB1.7</td>
+		<td>yearda,hh:mm:ss</td>
+		<td>Date and Time of Assembly. Example Jan 3, 2011 3AM would be 2011003,03:00:00 </td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.8">OB1.8</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.9">OB1.9</td>
+		<td>4 digit Integer value</td>
+		<td>Version Number of Assembler</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.18">OB1.18</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.19">OB1.19</td>
+		<td>9 character String</td>
+		<td>URBAN-ASM </td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.20">OB1.20</td>
+		<td>Byte(':')</td>
+		<td>Standard separator</td>
+	</tr>
+	<tr>
+		<td colspan="3" id="OB1.21">OB1.21</td>
+		<td>LABEL, 1-32 bytes</td>
+		<td>Program Name, same as <a href="OB1.3">OB1.3</a></td>
+    </tr>
   	<tr>
 		<td colspan="4" id="OB2">OB2</td>
 		<td colspan="2">Linking Record</td>
