@@ -302,12 +302,13 @@ public class Assembler {
 				if(valid) {
 					module.addInstruction(instr, hErr);
 				} else {
-					Instruction temp = USI_NOP.getInstance();
+					Instruction temp = USI_NOP.getInstance().getNewInstance();
 					temp.lc = instr.lc;
 					temp.errors = instr.errors;
 					temp.lineNum = instr.lineNum;
 					temp.origSrcLine = instr.origSrcLine;
 					module.addInstruction(temp, hErr);
+					
 				}
 				
 

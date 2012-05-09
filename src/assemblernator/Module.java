@@ -1068,15 +1068,12 @@ public class Module {
 	@Override public String toString() {
 		String rep = "Symbol Table:\n" + symbolTable.toString()
 				+ "\nInstruction breakdowns:\n";
-		Iterator<Instruction> assemblyIt = assembly.iterator();
 
 		rep = rep + "LC\tObject Code\tAddress Status\tLine Num\tSource Line\n";
 		rep = rep + "(hex)\t(hex)\tsrc:, dest:\t(dec)\n";
-		while (assemblyIt.hasNext()) {
-			Instruction instr = assemblyIt.next();
 
+		for(Instruction instr : assembly) {
 			rep = rep + instr.toString() + "\n";
-
 		}
 
 		return rep;
