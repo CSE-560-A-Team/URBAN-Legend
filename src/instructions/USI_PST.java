@@ -56,7 +56,10 @@ public class USI_PST extends AbstractInstruction {
 							o.valueStartPosition);
 					this.getOperandData("DR").value = constantSize;
 					isValid = OperandChecker.isValidReg(constantSize.value);
-					if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+					if(!isValid){
+						hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+						return isValid;
+					}
 					if(this.hasOperand("FL")){
 						//error checking
 						Operand o1 = getOperandData("FL");
@@ -91,7 +94,10 @@ public class USI_PST extends AbstractInstruction {
 							o.valueStartPosition);
 					this.getOperandData("DR").value = constantSize;
 					isValid = OperandChecker.isValidReg(constantSize.value);
-					if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+					if(!isValid){
+						hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+						return isValid;
+					}
 					if (this.hasOperand("FM") && this.hasOperand("FX")){
 						//error checking
 						Operand o1 = getOperandData("FX");
@@ -99,7 +105,10 @@ public class USI_PST extends AbstractInstruction {
 								o1.valueStartPosition);
 						this.getOperandData("FX").value = constantSize1;
 						isValid = OperandChecker.isValidIndex(constantSize1.value);
-						if(!isValid) hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+						if(!isValid){
+							hErr.reportError(makeError("OORidxReg", "FX", this.getOpId()), this.lineNum, -1);
+							return isValid;
+						}
 						Operand o2 = getOperandData("FM");
 						Value constantSize2 = module.evaluate(o2.expression, true, BitLocation.Address,  hErr, this,
 								o2.valueStartPosition);
