@@ -61,15 +61,25 @@ public class USI_AEXS extends AbstractDirective {
 				hErr.reportError(makeError("OORlabel", "LR", this.getOpId()), this.lineNum, getOperandData("LR",0).valueStartPosition);
 				isValid = false;
 			}
+			if(!isValid){
+				hErr.reportError(makeError(this.getOpId(), Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+			}  else {
+			module.execStartAddr = value.value;
+			}
 		} else if(this.hasOperand("FC")){
 			value = module.evaluate(this.getOperand("FC"), true, BitLocation.LocalQuery, hErr, this, this.getOperandData("FC").valueStartPosition); 
 			isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_ADDR); //check if value of FC is valid.
-			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
-					this.getOpId(), Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+
+			if(!isValid){
+					hErr.reportError(makeError(this.getOpId(), Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+			}  else {
+				module.execStartAddr = value.value;
+			}
 		} else {
 			isValid = false;
 			if(!isValid) hErr.reportError(makeError("directiveMissingOp", this.getOpId(), "FC' or `LR"), this.lineNum, -1);
 		}
+		
 		return isValid;
 	}
 
