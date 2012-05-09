@@ -251,7 +251,8 @@ public abstract class Instruction {
 			for (Operand op : operands)
 				if (op.value != null && op.value.modRecord != null) {
 					baos.write(op.value.modRecord.getBytes(programName));
-					++count;
+					if (op.value.modRecord.adjustments.size() > 0)
+						++count;
 				}
 			return new RecordSet(baos.toByteArray(), count);
 		} catch (IOException e) {
