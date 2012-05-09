@@ -45,8 +45,8 @@ public class USI_RET extends AbstractInstruction {
 		boolean isValid = true;
 		//less than 1 operand error
 		if(this.operands.size() < 1){
-			isValid=false;
-			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM"), this.lineNum, -1);
+			isValid = false;
+			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 			//checks for DM
 		}else if (this.operands.size() == 1){
 			if(this.hasOperand("DM")){

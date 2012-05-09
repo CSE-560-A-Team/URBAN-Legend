@@ -1,0 +1,109 @@
+/*!
+\page testcase26 Correct CHAR/NUM
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">CorrectCharNum</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">oneWord</span> <span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'abcd'</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">thrFrthWord</span> <span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'abcdef'</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">twoWords</span> <span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'abcdefgh'</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">alphabet</span> <span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'abcdefghijklmnopqrstuvwxyz'</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">maxNum</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2147483647</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">minNum</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">2147483648</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">CorrectCharNum</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>alphabet</td>
+    <td>0005</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>CorrectCharNum</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>maxNum</td>
+    <td>000C</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>minNum</td>
+    <td>000D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>oneWord</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>thrFrthWord</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>twoWords</td>
+    <td>0003</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+alphabet	 0005	LABEL
+CorrectCharNum	 0000	PROGNAME
+maxNum	 000C	LABEL
+minNum	 000D	LABEL
+oneWord	 0000	LABEL
+thrFrthWord	 0001	LABEL
+twoWords	 0003	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	--------	src: -,dest:-	1	CorrectCharNum kicko fc:0;
+
+0000	61626364	src: A,dest:-	2	oneWord char st:'abcd';
+
+0001	61626364	, 65662020	src: A,dest:-	3	thrFrthWord char st:'abcdef';
+
+0003	61626364	, 65666768	src: A,dest:-	4	twoWords char st:'abcdefgh';
+
+0005	61626364	, 65666768	, 696A6B6C	, 6D6E6F70	, 71727374	, 75767778	, 797A2020	src: A,dest:-	5	alphabet char st:'abcdefghijklmnopqrstuvwxyz';
+
+000C	7FFFFFFF	src: A,dest:-	6	maxNum num fc:2147483647;
+
+000D	80000000	src: A,dest:-	7	minNum num fc:-2147483648;
+
+000E	--------	src: -,dest:-	8	end lr:CorrectCharNum;
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:CorrectCharNum:
+0000:000E:0000:2012130,03:03:07:0001:URBAN-ASM:CorrectCharNum:
+T:0000:61626364:A:A:00:00:CorrectCharNum:
+T:0001:6162636465662020:A:A:00:00:CorrectCharNum:
+T:0003:6162636465666768:A:A:00:00:CorrectCharNum:
+T:0005:6162636465666768696A6B6C6D6E6F707172737475767778797A2020:A:A:00:00:CorrectCharNum:
+T:000C:7FFFFFFF:A:A:00:00:CorrectCharNum:
+T:000D:80000000:A:A:00:00:CorrectCharNum:
+E:000A:0000:0006:0002:CorrectCharNum:
+</pre>
+
+*/

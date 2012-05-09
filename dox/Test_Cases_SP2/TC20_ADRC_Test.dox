@@ -104,18 +104,18 @@ LC	Object Code	Address Status	Line Num	Source Line
 
 0011	00000000	src: E,dest:-	10	         ADRC EX:exlabel1;
 
-0012	FFFFFFF6	src: C,dest:-	11	         ADRC EX:exlabel1-rlabel1;
+0012	0000000A	src: C,dest:-	11	         ADRC EX:exlabel1-rlabel1;
 
 0013	00000000	src: C,dest:-	12	         ADRC EX:exlabel1 - exlabel2;
 
-0014	FFFFFFF6	src: C,dest:-	13	         ADRC EX:exlabel1 - rlabel1 + exlabel2;
+0014	0000000A	src: C,dest:-	13	         ADRC EX:exlabel1 - rlabel1 + exlabel2;
 
 0015	--------	src: -,dest:-	14	         end lr:prog1;
 
 </pre>
 <h1>Object file:</h1>
 <pre>H:prog1:
-000A:0015:0000:2012129,17:38:29:0001:URBAN-ASM:prog1:
+000A:0015:0000:2012130,03:04:14:0001:URBAN-ASM:prog1:
 T:000A:00000000:A:A:00:00:prog1:
 T:000B:00000000:A:A:00:00:prog1:
 T:000C:00000000:A:A:00:00:prog1:
@@ -126,12 +126,12 @@ T:0010:0000000B:A:R:00:01:prog1:
 M:0010:+:R:rlabel2::S:prog1:
 T:0011:00000000:A:E:00:01:prog1:
 M:0011:+:E:exlabel1::S:prog1:
-T:0012:FFFFFFF6:A:C:00:02:prog1:
-M:0012:+:E:exlabel1:-:R:rlabel1::S:prog1:
+T:0012:0000000A:A:C:00:03:prog1:
+M:0012:+:N:NEGATE:+:E:exlabel1:-:R:rlabel1::S:prog1:
 T:0013:00000000:A:C:00:02:prog1:
 M:0013:+:E:exlabel1:-:E:exlabel2::S:prog1:
-T:0014:FFFFFFF6:A:C:00:03:prog1:
-M:0014:+:E:exlabel1:+:E:exlabel2:-:R:rlabel1::S:prog1:
+T:0014:0000000A:A:C:00:04:prog1:
+M:0014:+:N:NEGATE:+:E:exlabel1:+:E:exlabel2:-:R:rlabel1::S:prog1:
 E:0019:0000:000C:000B:prog1:
 </pre>
 

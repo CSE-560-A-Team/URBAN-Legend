@@ -45,7 +45,7 @@ public class USI_TR extends AbstractInstruction {
 		boolean isValid = true;
 		//size check
 		if(this.operands.size() < 1){
-			isValid=false;
+			isValid = false;
 			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 			//checks for dm
 		}else if(this.operands.size() == 1){

@@ -49,8 +49,8 @@ public class USI_TRLK extends AbstractInstruction {
 		boolean isValid = true;
 		//operands less than two error
 		if (this.operands.size() < 2){
-			isValid=false;
-			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+			isValid = false;
+			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 			//checks combos for 2 operands
 		}else if(this.operands.size() == 2){
 			if(this.hasOperand("DR")){

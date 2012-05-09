@@ -826,8 +826,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
         <a href="#olabel">olabel</a> adrc LR:<a href="#exlabel">exlabel</a>;<br/>
         <a href="#olabel">olabel</a> adrc EX:<a href="#expression">expression</a>;</td>
     <td><b>Ad</b>d<b>r</b>ess <b>C</b>onstant. Included for compatibility with other URBAN
-        assemblers. Originally intended to allow storing address computations in memory;
-        behavior is identical to NUM.</td>
+        assemblers. ADRC is not required to do complex expressions in URBAN Legend.</td>
     <td>Yes</td>
   </tr>
 </table>
@@ -1361,7 +1360,7 @@ usage is one of the following: <br>
     </pre>
 equString is only used by instructions with the EQUATE usage.
        It is what the label is being equated to. <br>
-</pre>
+</p>
 <p> 
 "Instruction breakdowns:" followed by a list of the breakdowns of each instruction in the module. <br>
 each instruction breakdown is as follows: <br>

@@ -1,0 +1,605 @@
+/*!
+\page testcase29 All Given None
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">lbl38</span> <span style="font-weight:bold;color:#000080;">KICKO</span>  <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl01</span> <span style="font-weight:bold;color:#000080;">MOVD</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl02</span> <span style="font-weight:bold;color:#000080;">MOVDN</span>  <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl03</span> <span style="font-weight:bold;color:#000080;">IADD</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl04</span> <span style="font-weight:bold;color:#000080;">IMAD</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl05</span> <span style="font-weight:bold;color:#000080;">IAA</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl06</span> <span style="font-weight:bold;color:#000080;">ISRG</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl07</span> <span style="font-weight:bold;color:#000080;">ISUB</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl08</span> <span style="font-weight:bold;color:#000080;">IMUL</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl09</span> <span style="font-weight:bold;color:#000080;">IDIV</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl10</span> <span style="font-weight:bold;color:#000080;">PWR</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl11</span> <span style="font-weight:bold;color:#000080;">CLR</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl12</span> <span style="font-weight:bold;color:#000080;">CLRA</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Meh</span>
+<span style="font-style:italic;color:#800080;">lbl13</span> <span style="font-weight:bold;color:#000080;">CLRX</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Meh</span>
+<span style="font-style:italic;color:#800080;">lbl14</span> <span style="font-weight:bold;color:#000080;">ISHR</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl15</span> <span style="font-weight:bold;color:#000080;">ISHL</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl16</span> <span style="font-weight:bold;color:#000080;">ROL</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl17</span> <span style="font-weight:bold;color:#000080;">ROR</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl18</span> <span style="font-weight:bold;color:#000080;">AND</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl19</span> <span style="font-weight:bold;color:#000080;">OR</span>     <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl20</span> <span style="font-weight:bold;color:#000080;">TREQ</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl21</span> <span style="font-weight:bold;color:#000080;">TRLT</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl22</span> <span style="font-weight:bold;color:#000080;">TRGT</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl23</span> <span style="font-weight:bold;color:#000080;">TR</span>     <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl24</span> <span style="font-weight:bold;color:#000080;">TRDR</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl25</span> <span style="font-weight:bold;color:#000080;">TRLK</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl26</span> <span style="font-weight:bold;color:#000080;">RET</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl27</span> <span style="font-weight:bold;color:#000080;">SKT</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl28</span> <span style="font-weight:bold;color:#000080;">IWSR</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl29</span> <span style="font-weight:bold;color:#000080;">IRKB</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl30</span> <span style="font-weight:bold;color:#000080;">CWSR</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl31</span> <span style="font-weight:bold;color:#000080;">CRKB</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl32</span> <span style="font-weight:bold;color:#000080;">PSH</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl33</span> <span style="font-weight:bold;color:#000080;">POP</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl34</span> <span style="font-weight:bold;color:#000080;">PST</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl35</span> <span style="font-weight:bold;color:#000080;">NOP</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Meh</span>
+<span style="font-style:italic;color:#800080;">lbl36</span> <span style="font-weight:bold;color:#000080;">DMP</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl37</span> <span style="font-weight:bold;color:#000080;">HLT</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl39</span> <span style="font-weight:bold;color:#000080;">NEWLC</span>  <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl40</span> <span style="font-weight:bold;color:#000080;">EQU</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl41</span> <span style="font-weight:bold;color:#000080;">EQUe</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+      <span style="font-weight:bold;color:#000080;">ENT</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl43</span> <span style="font-weight:bold;color:#000080;">EXT</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl45</span> <span style="font-weight:bold;color:#000080;">AEXS</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl46</span> <span style="font-weight:bold;color:#000080;">SKIPS</span>  <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl47</span> <span style="font-weight:bold;color:#000080;">char</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl48</span> <span style="font-weight:bold;color:#000080;">num</span>    <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl49</span> <span style="font-weight:bold;color:#000080;">adrc</span>   <span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Oops.</span>
+<span style="font-style:italic;color:#800080;">lbl50</span> <span style="font-weight:bold;color:#000080;">NOP</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> No, seriously. Why are there two NOPs on yor checklist, Al?</span>
+      <span style="font-weight:bold;color:#000080;">end</span>    <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">lbl38</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>lbl01</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl02</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl03</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl04</td>
+    <td>0003</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl05</td>
+    <td>0004</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl06</td>
+    <td>0005</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl07</td>
+    <td>0006</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl08</td>
+    <td>0007</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl09</td>
+    <td>0008</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl10</td>
+    <td>0009</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl11</td>
+    <td>000A</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl12</td>
+    <td>000B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl13</td>
+    <td>000C</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl14</td>
+    <td>000D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl15</td>
+    <td>000E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl16</td>
+    <td>000F</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl17</td>
+    <td>0010</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl18</td>
+    <td>0011</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl19</td>
+    <td>0012</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl20</td>
+    <td>0013</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl21</td>
+    <td>0014</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl22</td>
+    <td>0015</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl23</td>
+    <td>0016</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl24</td>
+    <td>0017</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl25</td>
+    <td>0018</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl26</td>
+    <td>0019</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl27</td>
+    <td>001A</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl28</td>
+    <td>001B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl29</td>
+    <td>001C</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl30</td>
+    <td>001D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl31</td>
+    <td>001E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl32</td>
+    <td>001F</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl33</td>
+    <td>0020</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl34</td>
+    <td>0021</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl35</td>
+    <td>0022</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl36</td>
+    <td>0023</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl37</td>
+    <td>0024</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl50</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+lbl01	 0000	LABEL
+lbl02	 0001	LABEL
+lbl03	 0002	LABEL
+lbl04	 0003	LABEL
+lbl05	 0004	LABEL
+lbl06	 0005	LABEL
+lbl07	 0006	LABEL
+lbl08	 0007	LABEL
+lbl09	 0008	LABEL
+lbl10	 0009	LABEL
+lbl11	 000A	LABEL
+lbl12	 000B	LABEL
+lbl13	 000C	LABEL
+lbl14	 000D	LABEL
+lbl15	 000E	LABEL
+lbl16	 000F	LABEL
+lbl17	 0010	LABEL
+lbl18	 0011	LABEL
+lbl19	 0012	LABEL
+lbl20	 0013	LABEL
+lbl21	 0014	LABEL
+lbl22	 0015	LABEL
+lbl23	 0016	LABEL
+lbl24	 0017	LABEL
+lbl25	 0018	LABEL
+lbl26	 0019	LABEL
+lbl27	 001A	LABEL
+lbl28	 001B	LABEL
+lbl29	 001C	LABEL
+lbl30	 001D	LABEL
+lbl31	 001E	LABEL
+lbl32	 001F	LABEL
+lbl33	 0020	LABEL
+lbl34	 0021	LABEL
+lbl35	 0022	LABEL
+lbl36	 0023	LABEL
+lbl37	 0024	LABEL
+lbl50	 0002	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	F4000000	src: -,dest:-	1	lbl38 KICKO  ; Oops.
+errors:
+ERROR: 040: Missing `FC' operand to `KICKO' directive
+
+0000	F4000000	src: -,dest:-	2	lbl01 MOVD   ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `MOVD' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `MOVD' instruction
+ERROR: 041: Missing `' operand to `MOVD' instruction
+
+0001	F4000000	src: -,dest:-	3	lbl02 MOVDN  ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `MOVDN' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `MOVDN' instruction
+ERROR: 041: Missing `' operand to `MOVDN' instruction
+
+0002	F4000000	src: -,dest:-	4	lbl03 IADD   ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `IADD' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IADD' instruction
+ERROR: 041: Missing `' operand to `IADD' instruction
+
+0003	F4000000	src: -,dest:-	5	lbl04 IMAD   ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `IMAD' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IMAD' instruction
+ERROR: 041: Missing `' operand to `IMAD' instruction
+
+0004	F4000000	src: -,dest:-	6	lbl05 IAA    ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `IAA' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IAA' instruction
+ERROR: 041: Missing `' operand to `IAA' instruction
+
+0005	F4000000	src: -,dest:-	7	lbl06 ISRG   ; Oops.
+errors:
+ERROR: 041: Missing `NW' operand to `ISRG' instruction
+
+0006	F4000000	src: -,dest:-	8	lbl07 ISUB   ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `ISUB' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `ISUB' instruction
+ERROR: 041: Missing `' operand to `ISUB' instruction
+
+0007	F4000000	src: -,dest:-	9	lbl08 IMUL   ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `IMUL' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IMUL' instruction
+ERROR: 041: Missing `' operand to `IMUL' instruction
+
+0008	F4000000	src: -,dest:-	10	lbl09 IDIV   ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `IDIV' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IDIV' instruction
+ERROR: 041: Missing `' operand to `IDIV' instruction
+
+0009	F4000000	src: -,dest:-	11	lbl10 PWR    ; Oops.
+errors:
+ERROR: 052: Too few operands to `PWR' instruction
+
+000A	F4000000	src: -,dest:-	12	lbl11 CLR    ; Oops.
+errors:
+ERROR: 054: Too few operands provided[EUUP:0]
+
+000B	44000000	src: -,dest:-	13	lbl12 CLRA; Meh
+
+000C	48000000	src: -,dest:-	14	lbl13 CLRX; Meh
+
+000D	F4000000	src: -,dest:-	15	lbl14 ISHR   ; Oops.
+errors:
+ERROR: 052: Too few operands to `ISHR' instruction
+
+000E	F4000000	src: -,dest:-	16	lbl15 ISHL   ; Oops.
+errors:
+ERROR: 052: Too few operands to `ISHL' instruction
+
+000F	F4000000	src: -,dest:-	17	lbl16 ROL    ; Oops.
+errors:
+ERROR: 052: Too few operands to `ROL' instruction
+
+0010	F4000000	src: -,dest:-	18	lbl17 ROR    ; Oops.
+errors:
+ERROR: 052: Too few operands to `ROR' instruction
+
+0011	F4000000	src: -,dest:-	19	lbl18 AND    ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `AND' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `AND' instruction
+ERROR: 041: Missing `' operand to `AND' instruction
+
+0012	F4000000	src: -,dest:-	20	lbl19 OR     ; Oops.
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DX}' operand to `OR' instruction
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `OR' instruction
+ERROR: 041: Missing `' operand to `OR' instruction
+
+0013	F4000000	src: -,dest:-	21	lbl20 TREQ   ; Oops.
+errors:
+ERROR: 041: Missing `' operand to `TREQ' instruction
+
+0014	F4000000	src: -,dest:-	22	lbl21 TRLT   ; Oops.
+errors:
+ERROR: 041: Missing `' operand to `TRLT' instruction
+
+0015	F4000000	src: -,dest:-	23	lbl22 TRGT   ; Oops.
+errors:
+ERROR: 041: Missing `' operand to `TRGT' instruction
+
+0016	F4000000	src: -,dest:-	24	lbl23 TR     ; Oops.
+errors:
+ERROR: 041: Missing `' operand to `TR' instruction
+
+0017	F4000000	src: -,dest:-	25	lbl24 TRDR   ; Oops.
+errors:
+ERROR: 041: Missing `' operand to `TRDR' instruction
+
+0018	F4000000	src: -,dest:-	26	lbl25 TRLK   ; Oops.
+errors:
+ERROR: 041: Missing `' operand to `TRLK' instruction
+
+0019	F4000000	src: -,dest:-	27	lbl26 RET    ; Oops.
+errors:
+ERROR: 041: Missing `DM' operand to `RET' instruction
+
+001A	F4000000	src: -,dest:-	28	lbl27 SKT    ; Oops.
+errors:
+ERROR: 041: Missing `' operand to `SKT' instruction
+
+001B	F4000000	src: -,dest:-	29	lbl28 IWSR   ; Oops.
+errors:
+ERROR: 041: Missing `NW' operand to `IWSR' instruction
+
+001C	F4000000	src: -,dest:-	30	lbl29 IRKB   ; Oops.
+errors:
+ERROR: 041: Missing `NW' operand to `IRKB' instruction
+
+001D	F4000000	src: -,dest:-	31	lbl30 CWSR   ; Oops.
+errors:
+ERROR: 041: Missing `NW' operand to `CWSR' instruction
+
+001E	F4000000	src: -,dest:-	32	lbl31 CRKB   ; Oops.
+errors:
+ERROR: 041: Missing `NW' operand to `CRKB' instruction
+
+001F	F4000000	src: -,dest:-	33	lbl32 PSH    ; Oops.
+errors:
+ERROR: 054: Too few operands provided
+
+0020	C4880000	src: -,dest:-	34	lbl33 POP    ; Oops.
+errors:
+ERROR: 052: Too few operands to `POP' instruction
+
+0021	F4000000	src: -,dest:-	35	lbl34 PST    ; Oops.
+errors:
+ERROR: 052: Too few operands to `PST' instruction
+
+0022	F4000000	src: -,dest:-	36	lbl35 NOP; Meh
+
+0023	F4000000	src: -,dest:-	37	lbl36 DMP    ; Oops.
+errors:
+ERROR: 043: Missing `FC' or `EX' operand to `DMP' instruction
+
+0024	F4000000	src: -,dest:-	38	lbl37 HLT    ; Oops.
+errors:
+ERROR: 043: Missing `FC' or `EX' operand to `HLT' instruction
+
+0000	F4000000	src: -,dest:-	39	lbl39 NEWLC  ; Oops.
+errors:
+ERROR: 042: Missing `FC' or `LR' operand to `NEWLC' directive
+
+0000	F4000000	src: -,dest:-	40	lbl40 EQU    ; Oops.
+errors:
+ERROR: 044: Missing `FC', `FL', or `LR' operand to `EQU' directive
+
+0000	F4000000	src: -,dest:-	41	lbl41 EQUe   ; Oops.
+errors:
+ERROR: 040: Missing `EX' operand to `EQUE' directive
+
+0000	F4000000	src: -,dest:-	42	      ENT    ; Oops.
+errors:
+ERROR: 040: Missing `LR' operand to `ENT' directive
+
+0000	F4000000	src: -,dest:-	43	lbl43 EXT    ; Oops.
+errors:
+ERROR: 040: Missing `LR' operand to `EXT' directive
+
+0000	F4000000	src: -,dest:-	44	lbl45 AEXS   ; Oops.
+errors:
+ERROR: 042: Missing `FC' or `LR' operand to `AEXS' directive
+
+0000	F4000000	src: -,dest:-	45	lbl46 SKIPS  ; Oops.
+errors:
+ERROR: 040: Missing `FC' operand to `SKIPS' directive
+
+0000	F4000000	src: -,dest:-	46	lbl47 char   ; Oops.
+errors:
+ERROR: 040: Missing `ST' operand to `CHAR' directive
+
+0000	F4000000	src: -,dest:-	47	lbl48 num    ; Oops.
+errors:
+ERROR: 040: Missing `FC' operand to `NUM' directive
+
+0001	F4000000	src: -,dest:-	48	lbl49 adrc   ; Oops.
+errors:
+ERROR: 053: Too few operands to `ADRC' directive
+
+0002	F4000000	src: -,dest:-	49	lbl50 NOP; No, seriously. Why are there two NOPs on yor checklist, Al?
+
+0003	--------	src: -,dest:-	50	      end    LR: lbl38; Comment!
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:lbl38:
+0000:0003:0000:2012130,03:12:08:0001:URBAN-ASM:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0001:F4000000:A:A:00:00:lbl38:
+T:0002:F4000000:A:A:00:00:lbl38:
+T:0003:F4000000:A:A:00:00:lbl38:
+T:0004:F4000000:A:A:00:00:lbl38:
+T:0005:F4000000:A:A:00:00:lbl38:
+T:0006:F4000000:A:A:00:00:lbl38:
+T:0007:F4000000:A:A:00:00:lbl38:
+T:0008:F4000000:A:A:00:00:lbl38:
+T:0009:F4000000:A:A:00:00:lbl38:
+T:000A:F4000000:A:A:00:00:lbl38:
+T:000B:44000000:A:A:00:00:lbl38:
+T:000C:48000000:A:A:00:00:lbl38:
+T:000D:F4000000:A:A:00:00:lbl38:
+T:000E:F4000000:A:A:00:00:lbl38:
+T:000F:F4000000:A:A:00:00:lbl38:
+T:0010:F4000000:A:A:00:00:lbl38:
+T:0011:F4000000:A:A:00:00:lbl38:
+T:0012:F4000000:A:A:00:00:lbl38:
+T:0013:F4000000:A:A:00:00:lbl38:
+T:0014:F4000000:A:A:00:00:lbl38:
+T:0015:F4000000:A:A:00:00:lbl38:
+T:0016:F4000000:A:A:00:00:lbl38:
+T:0017:F4000000:A:A:00:00:lbl38:
+T:0018:F4000000:A:A:00:00:lbl38:
+T:0019:F4000000:A:A:00:00:lbl38:
+T:001A:F4000000:A:A:00:00:lbl38:
+T:001B:F4000000:A:A:00:00:lbl38:
+T:001C:F4000000:A:A:00:00:lbl38:
+T:001D:F4000000:A:A:00:00:lbl38:
+T:001E:F4000000:A:A:00:00:lbl38:
+T:001F:F4000000:A:A:00:00:lbl38:
+T:0020:C4880000:A:A:00:00:lbl38:
+T:0021:F4000000:A:A:00:00:lbl38:
+T:0022:F4000000:A:A:00:00:lbl38:
+T:0023:F4000000:A:A:00:00:lbl38:
+T:0024:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0000:F4000000:A:A:00:00:lbl38:
+T:0001:F4000000:A:A:00:00:lbl38:
+T:0002:F4000000:A:A:00:00:lbl38:
+E:0033:0000:0031:0000:lbl38:
+</pre>
+
+*/
