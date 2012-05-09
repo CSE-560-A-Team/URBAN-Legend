@@ -56,7 +56,10 @@ public class USI_POP extends AbstractInstruction {
 			//range checking
 			value = module.evaluate(this.getOperand("DM"), false, BitLocation.Address, hErr, this, this.getOperandData("DM").valueStartPosition);
 			isValid = OperandChecker.isValidMem(value.value);
-			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			if(!isValid){
+				hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				return isValid;
+			}
 			this.getOperandData("DM").value = value;
 			value = module.evaluate(this.getOperand("DX"), false, BitLocation.Other, hErr, this, this.getOperandData("DX").valueStartPosition);
 			isValid = OperandChecker.isValidIndex(value.value);

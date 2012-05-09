@@ -61,7 +61,10 @@ public class USI_TRLK extends AbstractInstruction {
 						o.valueStartPosition);
 				this.getOperandData("DR").value = constantSize;
 				isValid = OperandChecker.isValidReg(constantSize.value);
-				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				if(this.hasOperand("DM")){
 					src="DM";
 					//range check

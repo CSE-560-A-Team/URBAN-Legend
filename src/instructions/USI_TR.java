@@ -72,7 +72,10 @@ public class USI_TR extends AbstractInstruction {
 						o1.valueStartPosition);
 				this.getOperandData("DX").value = constantSize1;
 				isValid = OperandChecker.isValidIndex(constantSize1.value);
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				Operand o2 = getOperandData("DM");
 				Value constantSize2 = module.evaluate(o2.expression, true, BitLocation.Address, hErr, this,
 						o2.valueStartPosition);
