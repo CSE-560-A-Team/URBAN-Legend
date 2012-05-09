@@ -1,0 +1,168 @@
+/*!
+\page altest2 ALT2
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">ALT2</span> <span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">NUM</span>   <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">17</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">NUM</span>   <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">9</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">xc</span>   <span style="font-weight:bold;color:#000080;">newlc</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">20</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">IMUL</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">9</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">13</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVDN</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">IDIV</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">9</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">17</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">iADD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">9</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">18</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">OR</span>    <span style="color:#0000ff;">Dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">9</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">19</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">ISUB</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">9</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">20</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">ISLA</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">100</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">21</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">6</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">PWR</span>   <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">6</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">6</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">22</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">AND</span>   <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">9</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">7</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">23</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">DMP</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">HLT</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+   <span style="font-weight:bold;color:#000080;">END</span>   <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ALT2</span><span style="color:#ff0000;">;</span>
+
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>ALT2</td>
+    <td>0004</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>xc</td>
+    <td>0014</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+ALT2	 0004	PROGNAME
+xc	 0014	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0004	--------	src: -,dest:-	1	ALT2 KICKO FC:4;
+
+0004	00000011	src: A,dest:-	2	   NUM   fc:17;
+
+0005	00000009	src: A,dest:-	3	   NUM   fc:9;
+
+0014	--------	src: -,dest:-	4	xc   newlc fc:20;
+
+0014	00800005	src: R,dest:-	5	   MOVD  DR:0,FM:5;
+
+0015	34800009	src: R,dest:-	6	   IMUL  DR:0,FM:9;
+
+0016	0008000D	src: -,dest:R	7	   MOVD  FR:0,DM:13;
+
+0017	04810005	src: R,dest:-	8	   MOVDN DR:1,FM:5;
+
+0018	38810009	src: R,dest:-	9	   IDIV  DR:1,FM:9;
+
+0019	00180011	src: -,dest:R	10	   MOVD  FR:1,DM:17;
+
+001A	00820005	src: R,dest:-	11	   MOVD  DR:2,FM:5;
+
+001B	20820009	src: R,dest:-	12	   iADD  DR:2,FM:9;
+
+001C	00280012	src: -,dest:R	13	   MOVD  FR:2,DM:18;
+
+001D	00830005	src: R,dest:-	14	   MOVD  DR:3,FM:5;
+
+001E	7C830009	src: R,dest:-	15	   OR    Dr:3,FM:9;
+
+001F	00380013	src: -,dest:R	16	   MOVD  FR:3,DM:19;
+
+0020	00840005	src: R,dest:-	17	   MOVD  DR:4,FM:5;
+
+0021	30840009	src: R,dest:-	18	   ISUB  DR:4,FM:9;
+
+0022	00480014	src: -,dest:R	19	   MOVD  FR:4,DM:20;
+
+0023	00850005	src: R,dest:-	20	   MOVD  DR:5,FM:5;
+
+0024	F4000000	src: -,dest:-	21	   ISLA  DR:5,FC:100;
+errors:
+ERROR: 075: Operand `FC' for `ISLA' instruction must be within range: [0, 31]
+
+0025	00580015	src: -,dest:R	22	   MOVD  FR:5,DM:21;
+
+0026	00860005	src: R,dest:-	23	   MOVD  DR:6,FM:5;
+
+0027	3D860002	src: A,dest:-	24	   PWR   DR:6,FC:2;
+
+0028	00680016	src: -,dest:R	25	   MOVD  FR:6,DM:22;
+
+0029	00870005	src: R,dest:-	26	   MOVD  DR:7,FM:5;
+
+002A	78870009	src: R,dest:-	27	   AND   DR:7,FM:9;
+
+002B	00780017	src: -,dest:R	28	   MOVD  FR:7,DM:23;
+
+002C	F8000003	src: A,dest:-	29	   DMP   FC:3;
+
+002D	FC000000	src: A,dest:-	30	   HLT   FC:0;
+
+002E	--------	src: -,dest:-	31	   END   LR:ALT2;
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:ALT2:
+0004:002E:0000:2012130,12:24:23:0001:URBAN-ASM:ALT2:
+T:0004:00000011:A:A:00:00:ALT2:
+T:0005:00000009:A:A:00:00:ALT2:
+T:0014:00800005:A:R:00:00:ALT2:
+T:0015:34800009:A:R:00:00:ALT2:
+T:0016:0008000D:R:A:00:00:ALT2:
+T:0017:04810005:A:R:00:00:ALT2:
+T:0018:38810009:A:R:00:00:ALT2:
+T:0019:00180011:R:A:00:00:ALT2:
+T:001A:00820005:A:R:00:00:ALT2:
+T:001B:20820009:A:R:00:00:ALT2:
+T:001C:00280012:R:A:00:00:ALT2:
+T:001D:00830005:A:R:00:00:ALT2:
+T:001E:7C830009:A:R:00:00:ALT2:
+T:001F:00380013:R:A:00:00:ALT2:
+T:0020:00840005:A:R:00:00:ALT2:
+T:0021:30840009:A:R:00:00:ALT2:
+T:0022:00480014:R:A:00:00:ALT2:
+T:0023:00850005:A:R:00:00:ALT2:
+T:0024:F4000000:A:A:00:00:ALT2:
+T:0025:00580015:R:A:00:00:ALT2:
+T:0026:00860005:A:R:00:00:ALT2:
+T:0027:3D860002:A:A:00:00:ALT2:
+T:0028:00680016:R:A:00:00:ALT2:
+T:0029:00870005:A:R:00:00:ALT2:
+T:002A:78870009:A:R:00:00:ALT2:
+T:002B:00780017:R:A:00:00:ALT2:
+T:002C:F8000003:A:A:00:00:ALT2:
+T:002D:FC000000:A:A:00:00:ALT2:
+E:0051:0000:001D:0032:ALT2:
+</pre>
+
+*/

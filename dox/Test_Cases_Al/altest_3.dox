@@ -1,0 +1,101 @@
+/*!
+\page altest3 ALT3
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">ALT3</span>	<span style="font-weight:bold;color:#000080;">KICKO</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">AB</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">IADD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">CD</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RES</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">IWSR</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RES</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">HLT</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">AB</span>	<span style="font-weight:bold;color:#000080;">num</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">CD</span>	<span style="font-weight:bold;color:#000080;">num</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">111</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">RES</span>	<span style="font-weight:bold;color:#000080;">num</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">END</span>	<span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ALT3</span><span style="color:#ff0000;">;</span>
+
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>AB</td>
+    <td>0005</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ALT3</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>CD</td>
+    <td>0006</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>RES</td>
+    <td>0007</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+AB	 0005	LABEL
+ALT3	 0000	PROGNAME
+CD	 0006	LABEL
+RES	 0007	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	--------	src: -,dest:-	1	ALT3	KICKO	FC:0;
+
+0000	00810005	src: R,dest:-	2		MOVD	DR:1,FM:AB;
+
+0001	20810006	src: R,dest:-	3		IADD	DR:1,FM:CD;
+
+0002	00180007	src: -,dest:R	4		MOVD	FR:1,DM:RES;
+
+0003	A0810007	src: R,dest:-	5		IWSR	FM:RES,NW:1;
+
+0004	FC000000	src: A,dest:-	6		HLT	FC:0;
+
+0005	0000000A	src: A,dest:-	7	AB	num	FC:10;
+
+0006	0000006F	src: A,dest:-	8	CD	num	FC:111;
+
+0007	00000000	src: A,dest:-	9	RES	num	FC:0;
+
+0008	--------	src: -,dest:-	10		END	LR:ALT3;
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:ALT3:
+0000:0008:0000:2012130,12:27:34:0001:URBAN-ASM:ALT3:
+T:0000:00810005:A:R:00:01:ALT3:
+M:0000:+:R:AB::S:ALT3:
+T:0001:20810006:A:R:00:01:ALT3:
+M:0001:+:R:CD::S:ALT3:
+T:0002:00180007:R:A:01:00:ALT3:
+M:0002:+:R:RES::S:ALT3:
+T:0003:A0810007:A:R:00:01:ALT3:
+M:0003:+:R:RES::S:ALT3:
+T:0004:FC000000:A:A:00:00:ALT3:
+T:0005:0000000A:A:A:00:00:ALT3:
+T:0006:0000006F:A:A:00:00:ALT3:
+T:0007:00000000:A:A:00:00:ALT3:
+E:0016:0000:0008:000C:ALT3:
+</pre>
+
+*/

@@ -1,0 +1,128 @@
+/*!
+\page altest4 ALT4
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">ALT4</span>		<span style="font-weight:bold;color:#000080;">KICKO</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">100</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">RX345678901234567890123456789012</span>  <span style="font-weight:bold;color:#000080;">equ</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>						<span style="color:#ff0000;">;</span>
+		<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">A2345678901234567890123456789012</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	    lc=64</span>
+		<span style="font-weight:bold;color:#000080;">IADD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">B2345678901234567890123456789012</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">      lc=65	</span>
+		<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RES</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">DX:0  ;                             lc=66          </span>
+		<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RES</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">DX:RX345678901234567890123456789012; lc=67	</span>
+		<span style="font-weight:bold;color:#000080;">IWSR</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RES</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	                                     lc=68</span>
+ <span style="font-weight:bold;color:#000080;">iadd</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RX345678901234567890123456789012</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RX345678901234567890123456789012</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RX345678901234567890123456789012</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">HLT</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">			LC=6A	FC000000 	A;</span>
+<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">   Largest possible label 32 characters	</span>
+<span style="font-style:italic;color:#800080;">A2345678901234567890123456789012</span>	<span style="font-weight:bold;color:#000080;">num</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2147483647</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	 lc=6B	7FFFFFFF  A</span>
+<span style="font-style:italic;color:#800080;">RX345678901234567890123456789012</span>	<span style="font-weight:bold;color:#000080;">num</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">2147483648</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">     LC=6c	80000000  A	</span>
+<span style="font-style:italic;color:#800080;">RES</span>	<span style="font-weight:bold;color:#000080;">num</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">		:                  LC=6D  	00000000 	A</span>
+<span style="font-style:italic;color:#800080;">B2345678901234567890123456789012</span>  <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span> <span style="color:#ff0000;">-</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Program length is 10 base 11	</span>
+	<span style="font-weight:bold;color:#000080;">END</span>	<span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ALT4</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	:end of program	</span>
+
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>A2345678901234567890123456789012</td>
+    <td>006B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ALT4</td>
+    <td>0064</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>B2345678901234567890123456789012</td>
+    <td>006E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>RES</td>
+    <td>006D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>RX345678901234567890123456789012</td>
+    <td>0064</td>
+    <td>EQUATE</td>
+    <td>1</td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+A2345678901234567890123456789012	 006B	LABEL
+ALT4	 0064	PROGNAME
+B2345678901234567890123456789012	 006E	LABEL
+RES	 006D	LABEL
+RX345678901234567890123456789012	 0064	EQUATE	1
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0064	--------	src: -,dest:-	1	ALT4		KICKO	FC:100;
+
+0064	--------	src: -,dest:-	2	RX345678901234567890123456789012  equ fc:1						;
+
+0064	0081006B	src: R,dest:-	3			MOVD	DR:1,FM:A2345678901234567890123456789012;	    lc=64
+
+0065	2081006E	src: R,dest:-	4			IADD	DR:1,FM: B2345678901234567890123456789012;      lc=65	
+
+0066	0018006D	src: -,dest:R	5			MOVD	FR:1,DM:RES;DX:0  ;                             lc=66          
+
+0067	0018006D	src: -,dest:R	6			MOVD	FR:1,DM:RES;DX:RX345678901234567890123456789012; lc=67	
+
+0068	A081006D	src: R,dest:-	7			IWSR	FM:RES,NW:1;	                                     lc=68
+
+0069	20811001	src: R,dest:-	8	 iadd DR:RX345678901234567890123456789012,fm:RX345678901234567890123456789012,FX:RX345678901234567890123456789012;
+
+006A	FC000000	src: A,dest:-	9		HLT	FC:0;			LC=6A	FC000000 	A;
+
+;    Largest possible label 32 characters	
+006B	7FFFFFFF	src: A,dest:-	11	A2345678901234567890123456789012	num	FC:2147483647;	 lc=6B	7FFFFFFF  A
+
+006C	80000000	src: A,dest:-	12	RX345678901234567890123456789012	num	FC:-2147483648;     LC=6c	80000000  A	
+
+006D	00000000	src: A,dest:-	13	RES	num	FC:0;		:                  LC=6D  	00000000 	A
+
+006E	00000000	src: A,dest:-	14	B2345678901234567890123456789012  num fc: -0;
+
+;  Program length is 10 base 11	
+006F	--------	src: -,dest:-	16		END	LR:ALT4;	:end of program	
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:ALT4:
+0064:006F:0000:2012130,12:28:44:0001:URBAN-ASM:ALT4:
+T:0064:0081006B:A:R:00:01:ALT4:
+M:0064:+:R:A2345678901234567890123456789012::S:ALT4:
+T:0065:2081006E:A:R:00:01:ALT4:
+M:0065:+:R:B2345678901234567890123456789012::S:ALT4:
+T:0066:0018006D:R:A:01:00:ALT4:
+M:0066:+:R:RES::S:ALT4:
+T:0067:0018006D:R:A:01:00:ALT4:
+M:0067:+:R:RES::S:ALT4:
+T:0068:A081006D:A:R:00:01:ALT4:
+M:0068:+:R:RES::S:ALT4:
+T:0069:20811001:A:R:00:00:ALT4:
+T:006A:FC000000:A:A:00:00:ALT4:
+T:006B:7FFFFFFF:A:A:00:00:ALT4:
+T:006C:80000000:A:A:00:00:ALT4:
+T:006D:00000000:A:A:00:00:ALT4:
+T:006E:00000000:A:A:00:00:ALT4:
+E:0022:0000:000E:0012:ALT4:
+</pre>
+
+*/

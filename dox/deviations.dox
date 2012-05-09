@@ -48,6 +48,15 @@ Several of URBAN's operand specifications are overly restrictive.
         structures and indirect jumps.
     </td>
   </tr>
+  <tr>
+    <td>&lt;unspecified&gt;</td>
+    <td>
+        Instruction lines which are not well-formed are replaced in the user report and in the object
+        file by NOPs. Instruction lines containing errors which do not distrupt the execution of the
+        function (such as the use of undefined labels in expressions) will generate an error but will
+        be salvaged.
+    </td>
+  </tr>
 </table>
 
 \section expressions Expressions
@@ -88,87 +97,6 @@ URBAN's expression syntax was also somewhat limiting, but only minor changes wer
 \section formats Formats
 
 Due to collisions and other issues in byte codes in the URBAN specification, versions 1.1 and 1.2, the
-following instruction formats were added to URBAN Legend:
-
-<tt>
-<b><span style="color:#ff0000">OPCODE</span> <span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X
-REG</span> <span style="color:#cc33cc">IXR&nbsp;
-MEMORY(12bit)</span></b><br>
- 000000 00&nbsp; 0 000 1 000 0000 000000000000&nbsp; ; MOVD FR:0, DM:0<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
- 000000 00&nbsp; 1 000 0 000 0000 000000000000&nbsp; ; MOVD FM:0, DR:0<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
- 000000 00&nbsp; 1 001 1 000 0000 000000000000&nbsp; ; MOVD FX:1, DM:0<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
- 000000 00&nbsp; 1 000 1 001 0000 000000000000&nbsp; ; MOVD FM:0, DX:1<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
- 000000 00&nbsp; 0 000 1 000 0001 000000000000&nbsp; ; MOVD FR:0, DM:0, DX:1<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span> <span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
- 000000 00&nbsp; 1 001 1 000 0001 000000000000&nbsp; ; MOVD FX:1, DM:0, DX:1<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b><br>
- 000000 00&nbsp; 1 000 0 000 0001 000000000000&nbsp; ; MOVD FM:0, FX:1, DR:0<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span> <span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span></b><b> <span style="color:#cc33cc">IXR&nbsp; MEMORY(12bit)</span></b> <br>
-000000 00&nbsp; 1 000 1 001 0011 000000000000&nbsp; ; MOVD FM:0, FX:3, DX:1<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">UNUSED (16 bit)</span></b><br>
- 000000 00&nbsp; 0 000 0 000 0000000000000000&nbsp; ; MOVD FR:0, DR:1<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">UNUSED (16 bit)</span></b><br>
- 000000 00&nbsp; 0 000 1 001 0000000000000000&nbsp; ; MOVD FR:0, DX:1<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">UNUSED (16 bit)</span></b><br>
- 000000 00&nbsp; 1 001 0 000 0000000000000000&nbsp; ; MOVD FX:1, DR:0<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span></b><b> <span style="color:#cc33cc">UNUSED (16 bit) </span></b><br>
-000000 00&nbsp; 1 001 1 010 0000000000000000&nbsp; ; MOVD FX:1, DX:2<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span> <span style="color:#cc33cc">LITERAL (16 bit)</span></b><br>
- 000000 01&nbsp; 1 000 0 000 0111111111111111&nbsp; ; MOVD FL:32767,
-DR:0<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span>
-<span style="color:#339999">X REG</span> <span style="color:#3333ff">X REG</span></b><b> <span style="color:#cc33cc">LITERAL (16 bit) </span></b><br>
-000000 01&nbsp; 1 000 1 001 0111111111111111&nbsp; ; MOVD FL:32767, DX:1<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span>
-<span style="color:#ff6600">FM</span><span style="color:#009900">T</span></b><b>
-<span style="color:#339999">ADDRESS1(12)</span> <span style="color:#3333ff">ADDRESS2(12)</span></b><br>
-000000 10&nbsp; 000000000000 000000000001&nbsp;&nbsp;&nbsp;&nbsp; ; MOVD FM:0, DM:1<br>
-<b><br>
-<span style="color:#ff0000">OPCODE</span> <span style="color:#ff6600">FM</span><span style="color:#009900">T</span></b><b>
-<span style="color:#339999">LITERAL (12)</span> <span style="color:#3333ff">ADDRESS2(12)</span></b><br>
-000000 11&nbsp; 011111111111 000000000001&nbsp;&nbsp;&nbsp;&nbsp; ; MOVD FL:2047, DM:1<br>
-</tt>
+instruction formats employed in URBAN Legend have been revised. These are documented further in the \ref userGuide.
 
 */

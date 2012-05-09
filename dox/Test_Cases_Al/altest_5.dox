@@ -1,0 +1,83 @@
+/*!
+\page altest5 ALT5
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">ALT5</span> <span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+      <span style="font-weight:bold;color:#000080;">ext</span>   <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">external</span><span style="color:#ff0000;">;</span>
+      <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">        0000 | 0040200A | 000000 0 001 000 0000 0 1 0000000001010</span>
+      <span style="font-weight:bold;color:#000080;">ISUB</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">external</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">  0001 | 30400000 | 001100 0 001 000 0000 0 0 0000000000000</span>
+      <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RES</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">       0002 | 02400004 | 000000 1 001 000 0000 0 0 0000000000100</span>
+      <span style="font-weight:bold;color:#000080;">HLT</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">200</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">            0003 | FC0000C8 | 111111 0000 0000 0000 0 0000011001000          </span>
+<span style="font-style:italic;color:#800080;">RES</span>   <span style="font-weight:bold;color:#000080;">num</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">              0004 | 00000000 | 00000000000000000000000000000000     </span>
+      <span style="font-weight:bold;color:#000080;">END</span>   <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ALT5</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>ALT5</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>external</td>
+    <td>0000</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>RES</td>
+    <td>0004</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+ALT5	 0000	PROGNAME
+external	 0000	EXTERNAL
+RES	 0004	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	--------	src: -,dest:-	1	ALT5 KICKO FC:0;
+
+0000	--------	src: -,dest:-	2	      ext   lr:external;
+
+0000	0181000A	src: A,dest:-	3	      MOVD  DR:1,FL:10;        0000 | 0040200A | 000000 0 001 000 0000 0 1 0000000001010
+
+0001	30810000	src: E,dest:-	4	      ISUB  DR:1,FM:external;  0001 | 30400000 | 001100 0 001 000 0000 0 0 0000000000000
+
+0002	00180004	src: -,dest:R	5	      MOVD  FR:1,DM:RES;       0002 | 02400004 | 000000 1 001 000 0000 0 0 0000000000100
+
+0003	FC0000C8	src: A,dest:-	6	      HLT   FC:200;            0003 | FC0000C8 | 111111 0000 0000 0000 0 0000011001000          
+
+0004	00000000	src: A,dest:-	7	RES   num   FC:0;              0004 | 00000000 | 00000000000000000000000000000000     
+
+0005	--------	src: -,dest:-	8	      END   LR:ALT5; 
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:ALT5:
+0000:0005:0000:2012130,12:31:41:0001:URBAN-ASM:ALT5:
+T:0000:0181000A:A:A:00:00:ALT5:
+T:0001:30810000:A:E:00:01:ALT5:
+M:0001:+:E:external::S:ALT5:
+T:0002:00180004:R:A:01:00:ALT5:
+M:0002:+:R:RES::S:ALT5:
+T:0003:FC0000C8:A:A:00:00:ALT5:
+T:0004:00000000:A:A:00:00:ALT5:
+E:0010:0000:0006:0008:ALT5:
+</pre>
+
+*/

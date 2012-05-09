@@ -1,0 +1,106 @@
+/*!
+\page altest6 ALT6
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">ALT6</span> <span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+      <span style="font-weight:bold;color:#000080;">ext</span>   <span style="font-style:italic;color:#800080;">external#</span><span style="color:#ff0000;">;</span>
+      <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">9</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">999999999999999</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">        </span>
+      <span style="font-weight:bold;color:#000080;">ISUB</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">external#</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">  </span>
+      <span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#ff0000;">,</span><span style="color:#ff0000;">,</span><span style="color:#ff0000;">,</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">RES</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">xxx</span>   <span style="font-weight:bold;color:#000080;">ISHR</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span>
+      <span style="font-weight:bold;color:#000080;">ISHR</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">50</span><span style="color:#ff0000;">;</span>
+      <span style="font-weight:bold;color:#000080;">IDIV</span>  <span style="font-style:italic;color:#800080;">DXX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">+</span><span style="color:#00e1af;">000</span><span style="color:#ff0000;">;</span>
+      <span style="font-weight:bold;color:#000080;">IDIV</span>  <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">8</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">20</span><span style="color:#ff0000;">;</span>
+      <span style="font-weight:bold;color:#000080;">ImuL</span>  <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">+</span><span style="color:#00e1af;">20</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">       </span>
+      <span style="font-weight:bold;color:#000080;">HLT</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">200</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">             </span>
+<span style="font-style:italic;color:#800080;">RES</span>   <span style="font-weight:bold;color:#000080;">num</span>   <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">              </span>
+      <span style="font-weight:bold;color:#000080;">END</span>   <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">AlT6</span><span style="color:#ff0000;">;</span>
+
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>ALT6</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>RES</td>
+    <td>0007</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>xxx</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+ALT6	 0000	PROGNAME
+RES	 0007	LABEL
+xxx	 0002	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	--------	src: -,dest:-	1	ALT6 KICKO FC:0;
+
+0000	F4000000	src: -,dest:-	3	      MOVD  DR:9,FL:999999999999999;        
+errors:
+ERROR: 078: Value of expression `999999999999999` does not fit in URBAN word
+ERROR: 075: Operand `FL' for `MOVD' instruction must be within range: [-2^15, 2^15-1]
+ERROR: 074: Operand `DR' for `MOVD' instruction must be within range: [0,7]
+
+0001	30810000	src: R,dest:-	4	      ISUB  DR:1,FM:external#;  
+errors:
+ERROR: 022: Could not find label `external#': Label not in symbol table
+
+0002	6182000A	src: A,dest:-	6	xxx   ISHR  DR:2,FC:10;
+
+0003	F4000000	src: -,dest:-	7	      ISHR  DR:2,FC:50;
+errors:
+ERROR: 075: Operand `FC' for `ISHR' instruction must be within range: [0, 31]
+
+0004	F4000000	src: -,dest:-	9	      IDIV  dr:8,FL:-20;
+errors:
+ERROR: 074: Operand `DR' for `IDIV' instruction must be within range: [0,7]
+
+0005	35820014	src: A,dest:-	10	      ImuL  DR:2,FL:+20;       
+
+0006	FC0000C8	src: A,dest:-	11	      HLT   FC:200;             
+
+0007	00000000	src: A,dest:-	12	RES   num   FC:0;              
+
+0008	F4000000	src: -,dest:-	13	      END   LR:AlT6;
+errors:
+ERROR: 113: LR:label must match KICKO label
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:ALT6:
+0000:0008:0000:2012130,12:32:43:0001:URBAN-ASM:ALT6:
+T:0000:F4000000:A:A:00:00:ALT6:
+T:0001:30810000:A:R:00:00:ALT6:
+T:0002:6182000A:A:A:00:00:ALT6:
+T:0003:F4000000:A:A:00:00:ALT6:
+T:0004:F4000000:A:A:00:00:ALT6:
+T:0005:35820014:A:A:00:00:ALT6:
+T:0006:FC0000C8:A:A:00:00:ALT6:
+T:0007:00000000:A:A:00:00:ALT6:
+T:0008:F4000000:A:A:00:00:ALT6:
+E:0013:0000:0009:0008:ALT6:
+</pre>
+
+*/

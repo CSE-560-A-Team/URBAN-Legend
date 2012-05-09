@@ -1,6 +1,8 @@
 /*!
 \page testCases Test Cases
-This is a collection of test cases.
+This is a collection of test cases used during the development phase of URBAN Legend.
+
+Test cases used in the SP1 benchmark:
 
 <table>
   <tr>
@@ -108,6 +110,17 @@ This is a collection of test cases.
     <td>Ratul</td>
     <td>Tests invalid operands for Shift/Manipulate.</td>
   </tr>
+</table>
+
+
+
+Test cases used in the SP2 benchmark:
+<table>
+  <tr>
+    <th>Test case</th>
+    <th>Author</th>
+    <th>Description</th>
+  </tr>
   <tr>
     <td>\subpage testcase20</td>
     <td>Josh</td>
@@ -162,6 +175,47 @@ This is a collection of test cases.
     <td>\subpage testcase30</td>
     <td>Josh</td>
     <td>Tests all canonical instructions and directives when passed the same, very wrong parameters.</td>
+  </tr>
+</table>
+
+
+Test cases developed by third parties:
+
+<table>
+  <tr>
+    <th>Test case</th>
+    <th>Author</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>\subpage altest1</td>
+    <td>Alvin E. Stutz</td>
+    <td>A large test case that apparently does something.</td>
+  </tr>
+  <tr>
+    <td>\subpage altest2</td>
+    <td>Alvin E. Stutz</td>
+    <td>Seems to test movement and arithmetic.</td>
+  </tr>
+  <tr>
+    <td>\subpage altest3</td>
+    <td>Alvin E. Stutz</td>
+    <td>Tests very basic arithmetic.</td>
+  </tr>
+  <tr>
+    <td>\subpage altest4</td>
+    <td>Alvin E. Stutz</td>
+    <td>Tests URBAN extremes. Pushes it a little too far.</td>
+  </tr>
+  <tr>
+    <td>\subpage altest5</td>
+    <td>Alvin E. Stutz</td>
+    <td>Subtracts an external value from a constant and stores it in memory.</td>
+  </tr>
+  <tr>
+    <td>\subpage altest6</td>
+    <td>Alvin E. Stutz</td>
+    <td>Tests many miscellaneous error cases.</td>
   </tr>
 </table>
 

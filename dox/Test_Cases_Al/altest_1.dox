@@ -1,0 +1,352 @@
+/*!
+\page altest1 ALT1
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">ALT1</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> </span>
+	<span style="font-weight:bold;color:#000080;">EXT</span>	<span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ZX</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">P1</span>	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">CLEAR SUM TO ZERO</span>
+	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">CLEAR SUM TO ZERO</span>
+	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">SET INDEX TO ZERO</span>
+<span style="font-style:italic;color:#800080;">P2</span>	<span style="font-weight:bold;color:#000080;">IRKB</span>	<span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">XX</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">READ NEXT XX</span>
+	<span style="font-weight:bold;color:#000080;">IWSR</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">XX</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">ECHO XX</span>
+	<span style="font-weight:bold;color:#000080;">IRKB</span>	<span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">YY</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">READ IN NEXT YY</span>
+	<span style="font-weight:bold;color:#000080;">IWSR</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">YY</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">ECHO YY</span>
+	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">XX</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">FORM XX&amp;#47;YY</span>
+	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">YY</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	</span>
+	<span style="font-weight:bold;color:#000080;">TREQ</span>	<span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ER</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">    IF DIVIDE BY 0, GO PRT MSG AND HALT</span>
+	<span style="font-weight:bold;color:#000080;">IDIV</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">YY</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">OTHERWISE  DIVIDE</span>
+	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">QQ</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">STORE RESULT</span>
+	<span style="font-weight:bold;color:#000080;">IADD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">QQ</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">Add to total in reg 0</span>
+	<span style="font-weight:bold;color:#000080;">Isub</span>	<span style="color:#0000ff;">DX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">DECREMENT INDEX REGISTER</span>
+	<span style="font-weight:bold;color:#000080;">TRDR</span>	<span style="color:#0000ff;">FX</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">DONE</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">Test if Done</span>
+	<span style="font-weight:bold;color:#000080;">TR</span>	<span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">P2</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">IF NOT DONE, LOOP BACK</span>
+<span style="font-style:italic;color:#800080;">DONE</span>	<span style="font-weight:bold;color:#000080;">MOVD</span>  <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">Q1</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">CWSR</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">M1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">IWSR</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">Q1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">TR</span>	<span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">E1</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">THEN GO TO THE EXIT ROUTINE</span>
+<span style="font-style:italic;color:#800080;">ER</span>	<span style="font-weight:bold;color:#000080;">CWSR</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ME</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">ZERO DIVISOR, PRINT 'Y IS 0  '</span>
+	<span style="font-weight:bold;color:#000080;">DMP</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span>	<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">DUMP registers and active memory </span>
+	<span style="font-weight:bold;color:#000080;">HLT</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">100</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	;HALT</span>
+<span style="font-style:italic;color:#800080;">E1</span>	<span style="font-weight:bold;color:#000080;">CWSR</span>	<span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">M2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">NW</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">MOVD</span>	<span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">FM</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ZX</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">HLT</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">200</span><span style="color:#ff0000;">;</span>
+<span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> CONSTANTS AND TEMPORARIES</span>
+<span style="font-style:italic;color:#800080;">A1</span>	<span style="font-weight:bold;color:#000080;">ADRC</span>	<span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ZX</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	;ADDRESS OF External Reference</span>
+<span style="font-style:italic;color:#800080;">C1</span>	<span style="font-weight:bold;color:#000080;">NUM</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">C4</span>	<span style="font-weight:bold;color:#000080;">NUM</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">ME</span> 	<span style="font-weight:bold;color:#000080;">CHAR</span>	<span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'Y IS'</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	;MESSAGE IS 'Y IS 0  '</span>
+	<span style="font-weight:bold;color:#000080;">CHAR</span>	<span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">' 0'</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">M1</span>	<span style="font-weight:bold;color:#000080;">CHAR</span>	<span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'    '</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;">	MESSAGE IS '      Q='</span>
+	<span style="font-weight:bold;color:#000080;">CHAR</span>	<span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'    '</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">CHAR</span>	<span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">' Q='</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">M2</span>	<span style="font-weight:bold;color:#000080;">CHAR</span>	<span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'END '</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">CHAR</span>	<span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'PROG'</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">CHAR</span>	<span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'    '</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">QQ</span>	<span style="font-weight:bold;color:#000080;">SKIPS</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">Q1</span>	<span style="font-weight:bold;color:#000080;">SKIPS</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">TP</span>	<span style="font-weight:bold;color:#000080;">NUM</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">XX</span> 	<span style="font-weight:bold;color:#000080;">SKIPS</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">YY</span>	<span style="font-weight:bold;color:#000080;">SKIPS</span>	<span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span>
+	<span style="font-weight:bold;color:#000080;">END</span>	<span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">ALT1</span><span style="color:#ff0000;">;</span>
+
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>A1</td>
+    <td>001E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ALT1</td>
+    <td>0004</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>C1</td>
+    <td>001F</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>C4</td>
+    <td>0020</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>DONE</td>
+    <td>0014</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>E1</td>
+    <td>001B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ER</td>
+    <td>0018</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>M1</td>
+    <td>0023</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>M2</td>
+    <td>0026</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ME</td>
+    <td>0021</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>P1</td>
+    <td>0004</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>P2</td>
+    <td>0007</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Q1</td>
+    <td>002D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>QQ</td>
+    <td>0029</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>TP</td>
+    <td>002E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>XX</td>
+    <td>002F</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>YY</td>
+    <td>0033</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ZX</td>
+    <td>0000</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+A1	 001E	LABEL
+ALT1	 0004	PROGNAME
+C1	 001F	LABEL
+C4	 0020	LABEL
+DONE	 0014	LABEL
+E1	 001B	LABEL
+ER	 0018	LABEL
+M1	 0023	LABEL
+M2	 0026	LABEL
+ME	 0021	LABEL
+P1	 0004	LABEL
+P2	 0007	LABEL
+Q1	 002D	LABEL
+QQ	 0029	LABEL
+TP	 002E	LABEL
+XX	 002F	LABEL
+YY	 0033	LABEL
+ZX	 0000	EXTERNAL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0004	--------	src: -,dest:-	1	ALT1	KICKO FC:4	; 
+
+0000	--------	src: -,dest:-	2		EXT	LR:ZX;
+
+0004	01800000	src: A,dest:-	3	P1	MOVD	DR:0,FL:0	;CLEAR SUM TO ZERO
+
+0005	01820000	src: A,dest:-	4		MOVD	DR:2,FL:0	;CLEAR SUM TO ZERO
+
+0006	01890004	src: A,dest:-	5		MOVD	DX:1,FL:4	;SET INDEX TO ZERO
+
+0007	A418102F	src: -,dest:R	6	P2	IRKB	DM:XX,DX:1,NW:1	;READ NEXT XX
+
+0008	A081102F	src: R,dest:-	7		IWSR	FM:XX,FX:1,NW:1	;ECHO XX
+
+0009	A4181033	src: -,dest:R	8		IRKB	DM:YY,DX:1,NW:1	;READ IN NEXT YY
+
+000A	A0811033	src: R,dest:-	9		IWSR	FM:YY,FX:1,NW:1	;ECHO YY
+
+000B	0082102F	src: R,dest:-	10		MOVD	DR:2,FM:XX,FX:1	;FORM XX/YY
+
+000C	00831033	src: R,dest:-	11		MOVD	DR:3,FM:YY,FX:1;	
+
+000D	80380018	src: -,dest:R	12		TREQ	FR:3,DM:ER;    IF DIVIDE BY 0, GO PRT MSG AND HALT
+
+000E	38821033	src: R,dest:-	13		IDIV	DR:2,FM:YY,FX:1	;OTHERWISE  DIVIDE
+
+000F	00281029	src: -,dest:R	14		MOVD	FR:2,DM:QQ,DX:1	;STORE RESULT
+
+0010	20801029	src: R,dest:-	15		IADD	DR:0,FM:QQ,FX:1	;Add to total in reg 0
+
+0011	3189FFFF	src: A,dest:-	16		Isub	DX:1,FL:-1	;DECREMENT INDEX REGISTER
+
+0012	90980014	src: -,dest:R	17		TRDR	FX:1,DM:DONE	;Test if Done
+
+0013	8C880007	src: -,dest:R	18		TR	DM:P2	;IF NOT DONE, LOOP BACK
+
+0014	0008002D	src: -,dest:R	19	DONE	MOVD  FR:0,DM:Q1;
+
+0015	A8830023	src: R,dest:-	20		CWSR	FM:M1,NW:3;
+
+0016	A081002D	src: R,dest:-	21		IWSR	FM:Q1,NW:1;
+
+0017	8C88001B	src: -,dest:R	22		TR	DM:E1	;THEN GO TO THE EXIT ROUTINE
+
+0018	A8820021	src: R,dest:-	23	ER	CWSR	FM:ME,NW:2	;ZERO DIVISOR, PRINT 'Y IS 0  '
+
+0019	F8000003	src: A,dest:-	24		DMP	FC:3	;DUMP registers and active memory 
+
+001A	FC000064	src: A,dest:-	25		HLT	FC:100;	;HALT
+
+001B	A8830026	src: R,dest:-	26	E1	CWSR	FM:M2,NW:3;
+
+001C	00810000	src: E,dest:-	27		MOVD	DR:1,FM:ZX;
+
+001D	FC0000C8	src: A,dest:-	28		HLT	FC:200;
+
+;  CONSTANTS AND TEMPORARIES
+001E	00000000	src: -,dest:-	30	A1	ADRC	lr:ZX;	;ADDRESS OF External Reference
+
+001F	00000001	src: A,dest:-	31	C1	NUM	FC:1;
+
+0020	00000004	src: A,dest:-	32	C4	NUM	FC:4;
+
+0021	59204953	src: A,dest:-	33	ME 	CHAR	ST:'Y IS';	;MESSAGE IS 'Y IS 0  '
+
+0022	20302020	src: A,dest:-	34		CHAR	ST:' 0';
+
+0023	20202020	src: A,dest:-	35	M1	CHAR	ST:'    ';	MESSAGE IS '      Q='
+
+0024	20202020	src: A,dest:-	36		CHAR	ST:'    ';
+
+0025	20513D20	src: A,dest:-	37		CHAR	ST:' Q=';
+
+0026	454E4420	src: A,dest:-	38	M2	CHAR	ST:'END ';
+
+0027	50524F47	src: A,dest:-	39		CHAR	ST:'PROG';
+
+0028	20202020	src: A,dest:-	40		CHAR	ST:'    ';
+
+0029	--------	src: -,dest:-	41	QQ	SKIPS	FC:4;
+
+002D	--------	src: -,dest:-	42	Q1	SKIPS	FC:1;
+
+002E	00000000	src: A,dest:-	43	TP	NUM	FC:0;
+
+002F	--------	src: -,dest:-	44	XX 	SKIPS	FC:4;
+
+0033	--------	src: -,dest:-	45	YY	SKIPS	FC:4;
+
+0037	--------	src: -,dest:-	46		END	LR:ALT1;
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:ALT1:
+0004:0037:0000:2012130,12:22:37:0001:URBAN-ASM:ALT1:
+T:0004:01800000:A:A:00:00:ALT1:
+T:0005:01820000:A:A:00:00:ALT1:
+T:0006:01890004:A:A:00:00:ALT1:
+T:0007:A418102F:R:A:01:00:ALT1:
+M:0007:+:R:XX::S:ALT1:
+T:0008:A081102F:A:R:00:01:ALT1:
+M:0008:+:R:XX::S:ALT1:
+T:0009:A4181033:R:A:01:00:ALT1:
+M:0009:+:R:YY::S:ALT1:
+T:000A:A0811033:A:R:00:01:ALT1:
+M:000A:+:R:YY::S:ALT1:
+T:000B:0082102F:A:R:00:01:ALT1:
+M:000B:+:R:XX::S:ALT1:
+T:000C:00831033:A:R:00:01:ALT1:
+M:000C:+:R:YY::S:ALT1:
+T:000D:80380018:R:A:01:00:ALT1:
+M:000D:+:R:ER::S:ALT1:
+T:000E:38821033:A:R:00:01:ALT1:
+M:000E:+:R:YY::S:ALT1:
+T:000F:00281029:R:A:01:00:ALT1:
+M:000F:+:R:QQ::S:ALT1:
+T:0010:20801029:A:R:00:01:ALT1:
+M:0010:+:R:QQ::S:ALT1:
+T:0011:3189FFFF:A:A:00:00:ALT1:
+T:0012:90980014:R:A:01:00:ALT1:
+M:0012:+:R:DONE::S:ALT1:
+T:0013:8C880007:R:A:01:00:ALT1:
+M:0013:+:R:P2::S:ALT1:
+T:0014:0008002D:R:A:01:00:ALT1:
+M:0014:+:R:Q1::S:ALT1:
+T:0015:A8830023:A:R:00:01:ALT1:
+M:0015:+:R:M1::S:ALT1:
+T:0016:A081002D:A:R:00:01:ALT1:
+M:0016:+:R:Q1::S:ALT1:
+T:0017:8C88001B:R:A:01:00:ALT1:
+M:0017:+:R:E1::S:ALT1:
+T:0018:A8820021:A:R:00:01:ALT1:
+M:0018:+:R:ME::S:ALT1:
+T:0019:F8000003:A:A:00:00:ALT1:
+T:001A:FC000064:A:A:00:00:ALT1:
+T:001B:A8830026:A:R:00:01:ALT1:
+M:001B:+:R:M2::S:ALT1:
+T:001C:00810000:A:E:00:01:ALT1:
+M:001C:+:E:ZX::S:ALT1:
+T:001D:FC0000C8:A:A:00:00:ALT1:
+T:001E:00000000:A:A:00:00:ALT1:
+M:001E:+:E:ZX::S:ALT1:
+T:001F:00000001:A:A:00:00:ALT1:
+T:0020:00000004:A:A:00:00:ALT1:
+T:0021:59204953:A:A:00:00:ALT1:
+T:0022:20302020:A:A:00:00:ALT1:
+T:0023:20202020:A:A:00:00:ALT1:
+T:0024:20202020:A:A:00:00:ALT1:
+T:0025:20513D20:A:A:00:00:ALT1:
+T:0026:454E4420:A:A:00:00:ALT1:
+T:0027:50524F47:A:A:00:00:ALT1:
+T:0028:20202020:A:A:00:00:ALT1:
+T:002E:00000000:A:A:00:00:ALT1:
+E:0066:0000:0028:003C:ALT1:
+</pre>
+
+*/
