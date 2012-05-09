@@ -46,7 +46,7 @@ public class USI_PST extends AbstractInstruction {
 			if(this.operands.size() < 2){
 				//error
 				isValid = false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+				hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 				//checks combo for 2 operands if no DR error if dr and no FL or FM error
 			}else if(this.operands.size() == 2){
 				if(this.hasOperand("DR")){

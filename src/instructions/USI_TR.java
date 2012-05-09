@@ -79,9 +79,15 @@ public class USI_TR extends AbstractInstruction {
 				this.getOperandData("DM").value = constantSize2;
 				isValid = OperandChecker.isValidMem(constantSize2.value);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
-			}else{
+			} else if(this.hasOperand("DM")){
 				isValid=false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM or DX"), this.lineNum, -1);
+				hErr.reportError(makeError("operandInsMayWith", "DM", "DX", this.getOpId()), this.lineNum, -1);
+			} else if(this.hasOperand("DX")) {
+				isValid=false;
+				hErr.reportError(makeError("operandInsMayWith", "DX", "DM", this.getOpId()), this.lineNum, -1);
+			} else {
+				isValid=false;
+				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM"), this.lineNum, -1);
 			}
 			//to many operands
 		}else{
