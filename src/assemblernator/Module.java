@@ -874,8 +874,11 @@ public class Module {
 			hErr.reportError(makeError("arecNotAllowed", "" + arec.chr), caller.lineNum, pos);
 		}
 		
-		if (bitLoc.isSigned) {
-			// TODO: Error checking here
+		if (!bitLoc.isSigned) {
+			if (result < 0) {
+				mrec.adjustments.add(0,new Adjustment('-', 'N', "NEGATE"));
+				result *= -1;
+			}
 		}
 		
 		if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE)

@@ -102,6 +102,8 @@ public class USI_CHAR extends AbstractDirective {
 			content = IOFormat.escapeString(st.expression, lineNum,
 					st.valueStartPosition, hErr);
 			st.value = new Value(0,'A');
+			if (operands.size() != 1)
+				hErr.reportWarning(makeError("extraParamsIgF", opId, "ST"), lineNum, 0);
 			return true;
 		}
 		return false;
