@@ -319,7 +319,8 @@ public class Assembler {
 					e.printStackTrace();
 				
 				Instruction temp = USI_NOP.getInstance().getNewInstance();
-				temp.lc = lc+1;
+				lc = lc+1;
+				temp.lc = lc;
 				temp.errors.add(e.getMessage());
 				temp.lineNum = lineNum;
 				temp.origSrcLine = line;
