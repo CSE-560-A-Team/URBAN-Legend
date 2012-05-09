@@ -45,7 +45,7 @@ public class USI_CLR extends AbstractInstruction {
 			hErr.reportError(makeError("extraOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
 		} else if(this.operands.size() < 1) {
-			hErr.reportError(makeError("tooFewOperands", this.getOpId()), this.lineNum, -1);
+			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 			isValid =  false;
 		}
 		else if(this.hasOperand("DR")) {

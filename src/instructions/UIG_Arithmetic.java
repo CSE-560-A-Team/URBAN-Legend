@@ -209,7 +209,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 			}else if(this.operands.size() < 2){
 				//error missing operands
 				isValid = false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+				hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 			}
 
 		}
