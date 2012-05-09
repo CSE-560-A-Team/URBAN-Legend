@@ -864,27 +864,32 @@ public class Module {
 		}
 
 		final int exrefs = mrec.adjustments.size();
-		ARECLevel arec = exrefs > 0 ? !lrefs.isEmpty() || exrefs > 1 ? ARECLevel.C : ARECLevel.E
+		ARECLevel arec = exrefs > 0 ? !lrefs.isEmpty() || exrefs > 1 ? ARECLevel.C
+				: ARECLevel.E
 				: !lrefs.isEmpty() ? ARECLevel.R : bitLoc.defaultAREC;
-		for (int j = 0; j < lrefs.size(); ++j) {
-			mrec.adjustments.add(lrefs.get(j));
-		}
-		
+
 		if (arec.level > bitLoc.arecsAllowed.level) {
-			hErr.reportError(makeError("arecNotAllowed", "" + arec.chr), caller.lineNum, pos);
+			hErr.reportError(makeError("arecNotAllowed", "" + arec.chr),
+					caller.lineNum, pos);
 		}
-		
+
 		if (!bitLoc.isSigned) {
 			if (result < 0) {
-				mrec.adjustments.add(0,new Adjustment('-', 'N', "NEGATE"));
+				mrec.adjustments.add(0, new Adjustment('-', 'N', "NEGATE"));
 				result *= -1;
 			}
 		}
-		
-		if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE)
-			hErr.reportError(makeError("OORurbanWord", exp), caller.lineNum, pos);
 
-		Value res = new Value((int)result, arec.chr);
+		if (arec != ARECLevel.R && arec != ARECLevel.A)
+			for (int j = 0; j < lrefs.size(); ++j) {
+				mrec.adjustments.add(lrefs.get(j));
+			}
+
+		if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE)
+			hErr.reportError(makeError("OORurbanWord", exp), caller.lineNum,
+					pos);
+
+		Value res = new Value((int) result, arec.chr);
 		mrec.address = caller.lc;
 		mrec.addressField = bitLoc.location;
 		res.modRecord = mrec;
@@ -976,7 +981,7 @@ public class Module {
 		// write text records and mod records. adjust record cnts.
 		for (Instruction instr : this.assembly) {
 			out.write(instr.getTextRecord(this.programName));
-			if (instr.assembled != null) {
+			if (instr.assembled != null && instr.assembled.length > 0) {
 				totalTextRecords++;
 			}
 
@@ -1072,7 +1077,7 @@ public class Module {
 		rep = rep + "LC\tObject Code\tAddress Status\tLine Num\tSource Line\n";
 		rep = rep + "(hex)\t(hex)\tsrc:, dest:\t(dec)\n";
 
-		for(Instruction instr : assembly) {
+		for (Instruction instr : assembly) {
 			rep = rep + instr.toString() + "\n";
 		}
 
@@ -1113,8 +1118,8 @@ public class Module {
 			header.write((byte) ':');// OB1.2
 			header.write(IOFormat.formatIntegerWithRadix(this.loadAddr, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.2
-			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength, 16,
-					4));// OB1.3
+			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength
+					- this.loadAddr + 1, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.4
 			header.write(IOFormat.formatIntegerWithRadix(this.execStartAddr,
 					16, 4));// OB1.5

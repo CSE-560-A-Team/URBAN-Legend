@@ -289,7 +289,7 @@ public class Assembler {
 					module.loadAddr = lc;
 				}
 
-				if (lc > 4095) {
+				if (instr.lc > 4095 && lc > instr.lc) {
 					instr.errors.add(instr.errors.size(), makeError("OOM")); //add error into list of errors.
 					hErr.reportError(makeError("OOM"), lineNum, -1);
 				}
