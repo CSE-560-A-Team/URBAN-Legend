@@ -16,8 +16,8 @@ The exact specifications of this language can be seen below.
   <li><a href="#addrstat">Address Status Flags</a></li>
   <li><a href="#directivespec">Directive Specifications </a></li>
   <li><a href="#syntax">Syntax Specifications </a></li>
-  <li><a href="#keywords">Operand Keywords</a></li>
   <li><a href="#directives">Directives</a></li>
+  <li><a href="#keywords">Operand Keywords</a></li>
   <li><a href="#instructions">Instructions</a></li>
   <li><a href="#objfile">Object File Specification</a></li>
   <li><a href="#sampleio">URBAN Legend Input and Output Description and Format</a></li>
