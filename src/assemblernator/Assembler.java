@@ -220,13 +220,14 @@ public class Assembler {
 		int execStartAddr = 0;
 		int lc = 0;
 		boolean firstKICKO = false, valid = true, hasEnd = false;
+		String line = new String();
 
 		hasNextLineLoop: while (source.hasNextLine()) {
 			try {
 				lineNum += skipls + 1;
 				skipls = 0;
 
-				String line = source.nextLine();
+				line = source.nextLine();
 
 				Instruction instr = null;
 				for (;;) {
@@ -316,6 +317,13 @@ public class Assembler {
 				hErr.reportError(e.getMessage(), lineNum, e.index);
 				if (e.getMessage() == null || e.getMessage().length() <= 5)
 					e.printStackTrace();
+				
+				Instruction temp = USI_NOP.getInstance().getNewInstance();
+				temp.lc = lc;
+				temp.errors.add(e.getMessage());
+				temp.lineNum = lineNum;
+				temp.origSrcLine = line;
+				module.addInstruction(temp, hErr);
 
 				continue;
 
