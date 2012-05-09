@@ -324,7 +324,6 @@ public class Assembler {
 		// Pass two
 		for (Instruction i : module.assembly) {
 			valid = i.check(i.getHErr(hErr), module);
-			System.err.println(i.getOpId() + "valid?: " + valid + "ln: " + i.lineNum);
 			if(valid) {
 				module.execStartAddr = execStartAddr;
 				i.assembled = i.assemble(); //for now.  should replace all assemble w/ directly changing self's field.
