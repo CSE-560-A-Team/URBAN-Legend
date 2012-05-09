@@ -46,7 +46,7 @@ public class USI_TR extends AbstractInstruction {
 		//size check
 		if(this.operands.size() < 1){
 			isValid=false;
-			hErr.reportError(makeError("instructionMissingOp", this.getOpId(), ""), this.lineNum, -1);
+			hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 			//checks for dm
 		}else if(this.operands.size() == 1){
 			if(this.hasOperand("DM")){
