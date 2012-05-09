@@ -52,7 +52,7 @@ public class USI_CHAR extends AbstractDirective {
 	@Override public int getNewLC(int lc, Module mod) {
 		String st = getOperand("ST");
 		if (st == null)
-			return lc;
+			return lc+1;
 		int stringWordSize = padWord(IOFormat.escapeString(st, 0, 0, null)
 				.getBytes().length);
 		return lc + Math.max(1, stringWordSize);
