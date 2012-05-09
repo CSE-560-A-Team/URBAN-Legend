@@ -274,6 +274,7 @@ public class Assembler {
 				if(!instr.getOpId().equalsIgnoreCase("EXT")) {
 					instr.lc = lc;
 				} else {
+					instr = USI_NOP.getInstance().getNewInstance();
 					instr.lc = 0;
 				}
 
@@ -319,7 +320,7 @@ public class Assembler {
 					e.printStackTrace();
 				
 				Instruction temp = USI_NOP.getInstance().getNewInstance();
-				temp.lc = lc;
+				temp.lc = lc+1;
 				temp.errors.add(e.getMessage());
 				temp.lineNum = lineNum;
 				temp.origSrcLine = line;

@@ -525,7 +525,7 @@ public class Module {
 	/**
 	 * The maximum length of module.
 	 */
-	private final int MAX_LEN = 4095;
+	private final int MAX_LEN = 4096;
 
 	/**
 	 * Returns a reference to the symbol table.
