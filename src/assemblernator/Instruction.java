@@ -994,7 +994,7 @@ public abstract class Instruction {
 		 * 
 		 * return rep; */
 		//int opPos = 0;
-		char srcAddrStat = '-', destAddrStat = '-';
+		char srcAddrStat = 'A', destAddrStat = '-';
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
 		if ((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM")
 				|| this.getOpId().equalsIgnoreCase("CHAR")
