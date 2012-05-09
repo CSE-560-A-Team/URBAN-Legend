@@ -1013,8 +1013,6 @@ public abstract class Instruction {
 		}
 
 		for (Operand o : this.operands) {
-			System.err.println(o.operand);
-			System.err.println(o.value);
 			if (o.value != null) {
 				String opId = o.operand;
 				if (opId.equalsIgnoreCase("DM")) {
@@ -1024,7 +1022,6 @@ public abstract class Instruction {
 						|| opId.equalsIgnoreCase("FC")
 						|| opId.equalsIgnoreCase("EX")
 						|| opId.equalsIgnoreCase("ST")) {
-					System.err.println("here");
 					srcAddrStat = o.value.arec;
 				}
 			}

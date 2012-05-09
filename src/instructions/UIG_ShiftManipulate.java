@@ -84,9 +84,9 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 		} else if(this.hasOperand("EX")) {
 			//check EX
 			value = module.evaluate(this.getOperand("EX"), false,BitLocation.Literal, hErr, this, this.getOperandData("EX").valueStartPosition); 
-			isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
+			isValid = isValidLiteral(value.value, ConstantRange.RANGE_SHIFT);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
-					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+					Integer.toString(ConstantRange.RANGE_SHIFT.min), Integer.toString(ConstantRange.RANGE_SHIFT.max)), this.lineNum, -1);
 			this.getOperandData("EX").value = value;
 			if(this.hasOperand("DR")){
 				dest = "DR";
