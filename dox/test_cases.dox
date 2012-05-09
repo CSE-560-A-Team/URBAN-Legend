@@ -108,6 +108,31 @@ This is a collection of test cases.
     <td>Ratul</td>
     <td>Tests invalid operands for Shift/Manipulate.</td>
   </tr>
+  <tr>
+    <td>\subpage testcase20</td>
+    <td>Josh</td>
+    <td>Tests expression types used by ADRC.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase21</td>
+    <td>Ratul</td>
+    <td>Tests correct uses of PWR.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase22</td>
+    <td>Ratul</td>
+    <td>Tests incorrect operands for PWR.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase23</td>
+    <td>Eric</td>
+    <td>Tests correct usages of ISRG.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase24</td>
+    <td>Eric</td>
+    <td>Tests incorrect usages of ISRG.</td>
+  </tr>
 </table>
 
 */

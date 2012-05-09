@@ -12,21 +12,35 @@
     <center><img src="custom/Screenshots/Step0.png" alt="Step 1"  /></center>
   </li>
   <li>
-    The screen above should pop up if you completed step one correctly.
+    If all goes well, the following screen should pop up.
     If this window does not appear go back to step one.
     <center><img src="custom/Screenshots/Step1.png" alt="Step 2" /></center>
   </li>
   <li>
-    Type a valid program into the upper left box of the window.
+    Type your program into the upper left box of the window. You can also choose to save or load your program from the "File" menu, pictured below.
     <center><img src="custom/Screenshots/Step2.png" alt="Step 3" /></center>
   </li>
   <li>
-    Click file than click compile if you want your program to be compiled or click exit if you want to exit out of the program.
+    When you are done entering your program, choose "Parse" from the "File" menu, as shown:
     <center><img src="custom/Screenshots/Step3.png" alt="Step 4" /></center>
   </li>
   <li>
-    The symbol table will be produced in the right most text box. And the user report will be produced at the bottom most text box.
+    The symbol table will be produced in the right most text box. The user report will be produced at the bottom most text box.
+    If your code contains errors, they will be highlighted for you; simply correct them before proceeding.
     <center><img src="custom/Screenshots/Step4.png" alt="Step 5" /></center>
+  </li>
+  <li>
+    When your code is completely correct, choose "compile" from the menu to build the object file.
+    <center><img src="custom/Screenshots/Step5.png" alt="Step 6" /></center>
+  </li>
+  <li>
+    If you have not saved your file previously, you will be prompted to choose a filename for it.
+    Pick a filename to which to save your program itself.
+    <center><img src="custom/Screenshots/Step6.png" alt="Step 7" /></center>
+  </li>
+  <li>
+    The object file will be generated alongside your program, using the program's filename and the
+    URBAN Legend Object (.ULO) extension.
   </li>
 </ol>
 <p>Congratulations! You now know how to run URBAN.</p>
