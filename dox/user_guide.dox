@@ -19,6 +19,7 @@ The exact specifications of this language can be seen below.
   <li><a href="#keywords">Operand Keywords</a></li>
   <li><a href="#directives">Directives</a></li>
   <li><a href="#instructions">Instructions</a></li>
+  <li><a href="#objfile">Object File Specification</a></li>
   <li><a href="#sampleio">URBAN Legend Input and Output Description and Format</a></li>
 </ol>
 
@@ -437,29 +438,29 @@ Fields in this specification will refer to several types of value types and rang
 		<th>Description</th>
 	</tr>
 	<tr>
-		<th colspan="3">'A'</th>
-		<th>Absolute</th>
-		<th>Value is not modified by linker.</th>
+		<td colspan="3">'A'</td>
+		<td>Absolute</td>
+		<td>Value is not modified by linker.</td>
 	</tr>
 	<tr>
-		<th colspan="3">'E'</th>
-		<th>External</th>
-		<th>Address is an external reference..</th>
+		<td colspan="3">'E'</td>
+		<td>External</td>
+		<td>Address is an external reference..</td>
 	</tr>	
 	<tr>
-		<th colspan="3">'R'</th>
-		<th>Relative/Relocatable</th>
-		<th>Address is relative to program address so it is adjusted by offset.</th>
+		<td colspan="3">'R'</td>
+		<td>Relative/Relocatable</td>
+		<td>Address is relative to program address so it is adjusted by offset.</td>
 	</tr>	
 	<tr>
-		<th colspan="3">'C'</th>
-		<th>Absolute</th>
-		<th>Multiple addresses in instruction that do not mathematically cancel out.</th>
+		<td colspan="3">'C'</td>
+		<td>Absolute</td>
+		<td>Multiple addresses in instruction that do not mathematically cancel out.</td>
 	</tr>	
 	<tr>
-		<th colspan="3">'N'</th>
-		<th>Negate</th>
-		<th>Negate entire value.</th>
+		<td colspan="3">'N'</td>
+		<td>Negate</td>
+		<td>Negate entire value.</td>
 	</tr>
 </table>
 <h1 id="directivespec">Directive Specifications <a href="#toc" class="backlink">Back to Top</a></h1>
@@ -1382,7 +1383,7 @@ each instruction breakdown is as follows: <br>
 </p>
 </p> 
 <p>
-<a href="#MENU">Back to Menu</a>
+<a href="#toc">Back to Menu</a>
 </p> 
 
 */

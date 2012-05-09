@@ -1,6 +1,6 @@
 /*!
 
-\page testcase20 Legend Test
+\page testcase20 ADRC Expression Flag Test
 
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">prog1</span>    <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span>
@@ -28,19 +28,19 @@
     <th>Equate</th>
   </tr>  <tr>
     <td>exlabel1</td>
-    <td>000D</td>
+    <td>0000</td>
     <td>EXTERNAL</td>
     <td></td>
   </tr>
   <tr>
     <td>exlabel2</td>
-    <td>000D</td>
+    <td>0000</td>
     <td>EXTERNAL</td>
     <td></td>
   </tr>
   <tr>
     <td>exlabel3</td>
-    <td>000D</td>
+    <td>0000</td>
     <td>EXTERNAL</td>
     <td></td>
   </tr>
@@ -73,9 +73,9 @@
 <h1>User report</h1>
 <pre>Symbol Table:
 Label:	LC:	Usage:	EquString:
-exlabel1	 000D	EXTERNAL
-exlabel2	 000D	EXTERNAL
-exlabel3	 000D	EXTERNAL
+exlabel1	 0000	EXTERNAL
+exlabel2	 0000	EXTERNAL
+exlabel3	 0000	EXTERNAL
 prog1	 000A	PROGNAME
 rlabel1	 000A	LABEL
 rlabel2	 000B	LABEL
@@ -84,48 +84,55 @@ rlabel3	 000C	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-000A	------------	src: -,dest:-	1	prog1    kicko fc:10;
-errors:
+000A	--------	src: -,dest:-	1	prog1    kicko fc:10;
 
 000A	00000000	src: A,dest:-	2	rlabel1  num fc: 0;
-errors:
 
 000B	00000000	src: A,dest:-	3	rlabel2  num fc: 0;
-errors:
 
 000C	00000000	src: A,dest:-	4	rlabel3  num fc: 0;
-errors:
 
-000D	------------	src: -,dest:-	5	         EXT lr: exlabel1, lr:exlabel2, lr:exlabel3;
-errors:
+0000	--------	src: -,dest:-	5	         EXT lr: exlabel1, lr:exlabel2, lr:exlabel3;
 
-000D	F4000000	src: R,dest:-	6	         ADRC EX:1;
-errors:
+000D	00000001	src: R,dest:-	6	         ADRC EX:1;
 
-000E	F4000000	src: R,dest:-	7	         ADRC EX:rlabel2 - rlabel1;
-errors:
+000E	00000001	src: R,dest:-	7	         ADRC EX:rlabel2 - rlabel1;
 
-000F	F4000000	src: R,dest:-	8	         ADRC EX:exlabel2 - exlabel2;
-errors:
+000F	00000000	src: R,dest:-	8	         ADRC EX:exlabel2 - exlabel2;
 
-0010	F4000000	src: R,dest:-	9	         ADRC EX:rlabel2;
-errors:
+0010	0000000B	src: R,dest:-	9	         ADRC EX:rlabel2;
 
-0011	F4000000	src: E,dest:-	10	         ADRC EX:exlabel1;
-errors:
+0011	00000000	src: E,dest:-	10	         ADRC EX:exlabel1;
 
-0012	F4000000	src: C,dest:-	11	         ADRC EX:exlabel1-rlabel1;
-errors:
+0012	FFFFFFF6	src: C,dest:-	11	         ADRC EX:exlabel1-rlabel1;
 
-0013	F4000000	src: C,dest:-	12	         ADRC EX:exlabel1 - exlabel2;
-errors:
+0013	00000000	src: C,dest:-	12	         ADRC EX:exlabel1 - exlabel2;
 
-0014	F4000000	src: C,dest:-	13	         ADRC EX:exlabel1 - rlabel1 + exlabel2;
-errors:
+0014	FFFFFFF6	src: C,dest:-	13	         ADRC EX:exlabel1 - rlabel1 + exlabel2;
 
-0015	------------	src: -,dest:-	14	         end lr:prog1;
-errors:
+0015	--------	src: -,dest:-	14	         end lr:prog1;
 
+</pre>
+<h1>Object file:</h1>
+<pre>H:prog1:
+000A:0015:0000:2012129,17:38:29:0001:URBAN-ASM:prog1:
+T:000A:00000000:A:A:00:00:prog1:
+T:000B:00000000:A:A:00:00:prog1:
+T:000C:00000000:A:A:00:00:prog1:
+T:000D:00000001:A:R:00:00:prog1:
+T:000E:00000001:A:R:00:00:prog1:
+T:000F:00000000:A:R:00:00:prog1:
+T:0010:0000000B:A:R:00:01:prog1:
+M:0010:+:R:rlabel2::S:prog1:
+T:0011:00000000:A:E:00:01:prog1:
+M:0011:+:E:exlabel1::S:prog1:
+T:0012:FFFFFFF6:A:C:00:02:prog1:
+M:0012:+:E:exlabel1:-:R:rlabel1::S:prog1:
+T:0013:00000000:A:C:00:02:prog1:
+M:0013:+:E:exlabel1:-:E:exlabel2::S:prog1:
+T:0014:FFFFFFF6:A:C:00:03:prog1:
+M:0014:+:E:exlabel1:+:E:exlabel2:-:R:rlabel1::S:prog1:
+E:0019:0000:000C:000B:prog1:
 </pre>
 
 */

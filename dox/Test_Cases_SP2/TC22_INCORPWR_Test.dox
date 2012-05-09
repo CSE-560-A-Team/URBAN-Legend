@@ -1,6 +1,6 @@
 /*!
 
-\page testcase21 Incorrect Power Operand Tests
+\page testcase22 Incorrect Power Operand Tests
 
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">INCORPWR</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
@@ -56,14 +56,11 @@ y	 0001	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	INCORPWR	KICKO FC:0;
-errors:
+0000	--------	src: -,dest:-	1	INCORPWR	KICKO FC:0;
 
 0000	00001388	src: A,dest:-	2	x		NUM FC:5000;
-errors:
 
 0001	00000FA0	src: A,dest:-	3	y		NUM FC:4000; 
-errors:
 
 0002	F4000000	src: A,dest:-	4			PWR	DX:8, FC:32767; incorrect DX value
 errors:
@@ -105,9 +102,27 @@ ERROR: 052: Too few operands to `PWR' instruction
 errors:
 ERROR: 052: Too few operands to `PWR' instruction
 
-000C	------------	src: -,dest:-	14	END  LR:INCORPWR;
-errors:
+000C	--------	src: -,dest:-	14	END  LR:INCORPWR;
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:INCORPWR:
+0000:000C:0000:2012129,16:24:22:0001:URBAN-ASM:INCORPWR:
+T:0000:00001388:A:A:00:00:INCORPWR:
+T:0001:00000FA0:A:A:00:00:INCORPWR:
+T:0002:F4000000:A:A:00:00:INCORPWR:
+T:0003:F4000000:A:A:00:00:INCORPWR:
+T:0004:F4000000:A:A:00:00:INCORPWR:
+T:0005:F4000000:A:A:00:00:INCORPWR:
+T:0006:F4000000:A:A:00:00:INCORPWR:
+T:0007:F4000000:A:R:00:02:INCORPWR:
+M:0007:+:R:x:+:R:y::W:INCORPWR:
+T:0008:F4000000:A:A:00:00:INCORPWR:
+T:0009:F4000000:A:A:00:00:INCORPWR:
+T:000A:F4000000:A:A:00:00:INCORPWR:
+T:000B:F4000000:A:A:00:00:INCORPWR:
+E:0017:0000:000C:0009:INCORPWR:
+</pre>
+
 
 */

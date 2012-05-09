@@ -216,7 +216,7 @@ public class GUIMain {
 		String res = jfc.getSelectedFile().getAbsolutePath();
 		String ap = res.toLowerCase();
 		if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
-			ap += ".uls";
+			res += ".uls";
 		return res;
 	}
 
@@ -240,7 +240,24 @@ public class GUIMain {
 		JTable errorTable;
 
 		/** The name to which this file is saved */
-		String fileName = null;
+		private String mahFileName = null;
+
+		/**
+		 * @return The absolute path and filename of the file open in this tab,
+		 *         or null if no name is set.
+		 */
+		String getFileName() {
+			return mahFileName;
+		}
+
+		/**
+		 * @param fn
+		 *            The new filename.
+		 */
+		void setFileName(String fn) {
+			mahFileName = fn;
+			tabPane.setTitleAt(tabPane.getComponentZOrder(this), new File(fn).getName());
+		}
 
 		/** The tab containing our build messages. */
 		JComponent buildMessageTab;
@@ -502,13 +519,14 @@ public class GUIMain {
 			return;
 		rm = ft.compile();
 
-		if (ft.fileName == null) {
-			ft.fileName = getSaveFname();
-			if (ft.fileName == null)
+		if (ft.getFileName() == null) {
+			String fn = getSaveFname();
+			if (fn == null)
 				return;
+			ft.setFileName(fn);
 		}
 
-		String ofname = ft.fileName;
+		String ofname = ft.getFileName();
 		String cofn = ofname.toLowerCase();
 		if (cofn.endsWith(".s"))
 			ofname = ofname.substring(0, ofname.length() - 1) + "ulo";
@@ -620,13 +638,14 @@ public class GUIMain {
 			}
 			if (e.getSource() == m_save || e.getSource() == m_saveAs) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
-				if (ft.fileName == null || e.getSource() == m_saveAs) {
-					ft.fileName = getSaveFname();
-					if (ft.fileName == null)
+				if (ft.getFileName() == null || e.getSource() == m_saveAs) {
+					String n = getSaveFname();
+					if (n == null)
 						return;
+					ft.setFileName(n);
 				}
 				try {
-					FileWriter fw = new FileWriter(ft.fileName);
+					FileWriter fw = new FileWriter(ft.getFileName());
 					fw.write(ft.jt.getText());
 					fw.close();
 				} catch (FileNotFoundException e1) {
@@ -648,7 +667,7 @@ public class GUIMain {
 					while (fw.hasNextLine())
 						lines.add(fw.nextLine());
 					ft.jt.setText(lines.toArray(new String[0]));
-					ft.fileName = n.getAbsolutePath();
+					ft.setFileName(n.getAbsolutePath());
 					tabPane.add(n.getName(), ft);
 					tabPane.setSelectedComponent(ft);
 					fw.close();

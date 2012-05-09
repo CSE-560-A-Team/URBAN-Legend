@@ -1,0 +1,69 @@
+/*!
+
+\page testcase23 Correct ISRG
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">poop</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">isrg</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">23</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">isrg</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">23</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">isrg</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fl</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">23</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">isrg</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fl</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">23</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">isrg</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">ex</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">+</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">isrg</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">ex</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">*</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dx</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">poop</span><span style="color:#ff0000;">;</span>
+
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>poop</td>
+    <td>000A</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+poop	 000A	PROGNAME
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+000A	--------	src: -,dest:-	1	poop kicko fc:10;
+
+000A	2C820017	src: R,dest:-	2	isrg nw:2,fm:23,dr:1;
+
+000B	2C820017	src: R,dest:-	3	isrg nw:2,fm:23,dx:1;
+
+000C	2D820017	src: A,dest:-	4	isrg nw:2,fl:23,dr:1;
+
+000D	2D820017	src: A,dest:-	5	isrg nw:2,fl:23,dx:1;
+
+000E	2D820004	src: A,dest:-	6	isrg nw:2,ex:2+2,dr:1;
+
+000F	2D82000D	src: A,dest:-	7	isrg nw:2,ex:*-2,dx:1;
+
+0010	--------	src: -,dest:-	8	end lr:poop;
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:poop:
+000A:0010:0000:2012129,17:43:43:0001:URBAN-ASM:poop:
+T:000A:2C820017:A:R:00:00:poop:
+T:000B:2C820017:A:R:00:00:poop:
+T:000C:2D820017:A:A:00:00:poop:
+T:000D:2D820017:A:A:00:00:poop:
+T:000E:2D820004:A:A:00:00:poop:
+T:000F:2D82000D:A:A:00:00:poop:
+E:001A:0000:0006:0012:poop:
+</pre>
+
+*/

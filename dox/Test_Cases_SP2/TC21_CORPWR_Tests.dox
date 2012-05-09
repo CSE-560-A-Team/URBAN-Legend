@@ -1,6 +1,6 @@
 /*!
 
-\page testcase20 Correct Power Operand Tests
+\page testcase21 Correct Power Operand Tests
 
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">CORPWR</span>	<span style="font-weight:bold;color:#000080;">KICKO</span> <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
@@ -50,31 +50,36 @@ y	 0001	LABEL
 Instruction breakdowns:
 LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
-0000	------------	src: -,dest:-	1	CORPWR	KICKO FC:0;
-errors:
+0000	--------	src: -,dest:-	1	CORPWR	KICKO FC:0;
 
 0000	00001388	src: A,dest:-	2	x		NUM FC:5000;
-errors:
 
 0001	00000FA0	src: A,dest:-	3	y		NUM FC:4000; 
-errors:
 
 0002	3D897FFF	src: A,dest:-	4			PWR	DX:1, FC:32767;
-errors:
 
 0003	3D82F347	src: A,dest:-	5			PWR DR:2, FC:-3257;
-errors:
 
 0004	3D8B0001	src: R,dest:-	6			PWR DX:3, EX:x+y;
-errors:
 
 0005	3D84FFFF	src: A,dest:-	7			PWR DR:4, EX:x-y;
-errors:
 
-0006	------------	src: -,dest:-	8	END  LR:CORPWR;
-errors:
+0006	--------	src: -,dest:-	8	END  LR:CORPWR;
 
 </pre>
+<h1>Object file:</h1>
+<pre>H:CORPWR:
+0000:0006:0000:2012129,16:22:50:0001:URBAN-ASM:CORPWR:
+T:0000:00001388:A:A:00:00:CORPWR:
+T:0001:00000FA0:A:A:00:00:CORPWR:
+T:0002:3D897FFF:A:A:00:00:CORPWR:
+T:0003:3D82F347:A:A:00:00:CORPWR:
+T:0004:3D8B0001:A:R:00:02:CORPWR:
+M:0004:+:R:x:+:R:y::W:CORPWR:
+T:0005:3D84FFFF:A:A:00:00:CORPWR:
+E:0012:0000:0006:000A:CORPWR:
+</pre>
+
 
 
 */
