@@ -133,6 +133,36 @@ This is a collection of test cases.
     <td>Eric</td>
     <td>Tests incorrect usages of ISRG.</td>
   </tr>
+  <tr>
+    <td>\subpage testcase25</td>
+    <td>Noah</td>
+    <td>Tests incorrect usages of the ADRC directive.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase26</td>
+    <td>Noah</td>
+    <td>Tests incorrect usages of the CHAR and NUM directives.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase27</td>
+    <td>Noah</td>
+    <td>Tests incorrect usages of the CHAR and NUM directives.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase28</td>
+    <td>Josh</td>
+    <td>Tests correct usages of all canonical instructions and directives.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase29</td>
+    <td>Josh</td>
+    <td>Tests all canonical instructions and directives when passed no parameters.</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase30</td>
+    <td>Josh</td>
+    <td>Tests all canonical instructions and directives when passed the same, very wrong parameters.</td>
+  </tr>
 </table>
 
 */

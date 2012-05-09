@@ -1,0 +1,149 @@
+/*!
+\page testcase27 Incorrect CHAR/NUM
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">incorrectCharNum</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">noop</span> <span style="font-weight:bold;color:#000080;">char</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extraop1</span> <span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'abcd'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'abcd'</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extraop2</span> <span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'abcd'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">invalidOp1</span> <span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">noop</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">invalidOp2</span> <span style="font-weight:bold;color:#000080;">char</span> <span style="color:#0000ff;">ex</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'abcd'</span> <span style="color:#ff0000;">+</span> <span style="color:#0000ff;">'abcd'</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">numNoop</span> <span style="font-weight:bold;color:#000080;">num</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">numExtraOp1</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">numExtraOp2</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">fl</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">numInvalidOp1</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">numInvalidOp2</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fl</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">numInvalidOp3</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">numOORMinM1</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#ff0000;">-</span><span style="color:#00e1af;">2147483649</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">numOORMaxP1</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2147483648</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">incorrectCharNum</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>extraop1</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>extraop2</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>incorrectCharNum</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>numOORMaxP1</td>
+    <td>0009</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>numOORMinM1</td>
+    <td>0008</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+extraop1	 0000	LABEL
+extraop2	 0001	LABEL
+incorrectCharNum	 0000	PROGNAME
+numOORMaxP1	 0009	LABEL
+numOORMinM1	 0008	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	--------	src: -,dest:-	1	incorrectCharNum kicko fc:0;
+
+0000	F4000000	src: -,dest:-	2	noop char;
+errors:
+ERROR: 040: Missing `ST' operand to `CHAR' directive
+
+0000	61626364	src: A,dest:-	3	extraop1 char st:'abcd', st:'abcd';
+errors:
+Warning: 302: Extra parameters to `CHAR' ignored; only first `ST' considered
+
+0001	61626364	src: A,dest:-	4	extraop2 char st:'abcd', fm:0;
+errors:
+Warning: 302: Extra parameters to `CHAR' ignored; only first `ST' considered
+
+0002	F4000000	src: -,dest:-	5	invalidOp1 char lr:noop;
+errors:
+ERROR: 040: Missing `ST' operand to `CHAR' directive
+
+0002	F4000000	src: -,dest:-	6	invalidOp2 char ex:'abcd' + 'abcd';
+errors:
+ERROR: 040: Missing `ST' operand to `CHAR' directive
+
+0002	F4000000	src: -,dest:-	7	numNoop num;
+errors:
+ERROR: 040: Missing `FC' operand to `NUM' directive
+
+0003	F4000000	src: -,dest:-	8	numExtraOp1 num fc:1, fc:2;
+errors:
+ERROR: 050: Too many operands to `NUM' directive
+
+0004	F4000000	src: -,dest:-	9	numExtraOp2 num fc:1, fl:2;
+errors:
+ERROR: 050: Too many operands to `NUM' directive
+
+0005	F4000000	src: -,dest:-	10	numInvalidOp1 num fr:1;
+errors:
+ERROR: 040: Missing `FC' operand to `NUM' directive
+
+0006	F4000000	src: -,dest:-	11	numInvalidOp2 num fl:1;
+errors:
+ERROR: 040: Missing `FC' operand to `NUM' directive
+
+0007	F4000000	src: -,dest:-	12	numInvalidOp3 num dr:2;
+errors:
+ERROR: 040: Missing `FC' operand to `NUM' directive
+
+0008	7FFFFFFF	src: A,dest:-	13	numOORMinM1 num fc:-2147483649;
+errors:
+ERROR: 078: Value of expression `-2147483649` does not fit in URBAN word
+
+0009	80000000	src: A,dest:-	14	numOORMaxP1 num fc:2147483648;
+errors:
+ERROR: 078: Value of expression `2147483648` does not fit in URBAN word
+
+000A	--------	src: -,dest:-	15	end lr:incorrectCharNum;
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:incorrectCharNum:
+0000:000A:0000:2012130,03:02:35:0001:URBAN-ASM:incorrectCharNum:
+T:0000:F4000000:A:A:00:00:incorrectCharNum:
+T:0000:61626364:A:A:00:00:incorrectCharNum:
+T:0001:61626364:A:A:00:00:incorrectCharNum:
+T:0002:F4000000:A:A:00:00:incorrectCharNum:
+T:0002:F4000000:A:A:00:00:incorrectCharNum:
+T:0002:F4000000:A:A:00:00:incorrectCharNum:
+T:0003:F4000000:A:A:00:00:incorrectCharNum:
+T:0004:F4000000:A:A:00:00:incorrectCharNum:
+T:0005:F4000000:A:A:00:00:incorrectCharNum:
+T:0006:F4000000:A:A:00:00:incorrectCharNum:
+T:0007:F4000000:A:A:00:00:incorrectCharNum:
+T:0008:7FFFFFFF:A:A:00:00:incorrectCharNum:
+T:0009:80000000:A:A:00:00:incorrectCharNum:
+E:0011:0000:000D:0002:incorrectCharNum:
+</pre>
+
+*/

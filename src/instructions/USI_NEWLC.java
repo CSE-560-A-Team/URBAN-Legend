@@ -46,7 +46,6 @@ public class USI_NEWLC extends AbstractDirective {
 	 *      Module)
 	 */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
-		boolean isValid = true;
 		Operand o = this.getOperandData("FC");
 		if (o == null) {
 			o = this.getOperandData("LR");
@@ -56,7 +55,7 @@ public class USI_NEWLC extends AbstractDirective {
 					hErr.reportError(
 							makeError("directiveMissingOp2", this.getOpId(),
 									"FC", "LR"), lineNum, -1);
-					isValid = false;
+					return false;
 				}
 			}
 		}
@@ -68,11 +67,12 @@ public class USI_NEWLC extends AbstractDirective {
 					o.valueStartPosition);
 		ownLC = tempv.value;
 
-		if (isValid && ownLC < lc) {
+		if (ownLC < lc) {
 			hErr.reportError(makeError("lcBackward"), lineNum, -1);
-			isValid = false;
+			return false;
 		}
-		return isValid;
+		
+		return true;
 	}
 
 	// =========================================================

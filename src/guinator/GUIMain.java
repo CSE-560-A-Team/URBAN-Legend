@@ -294,11 +294,12 @@ public class GUIMain {
 
 			TableRowSorter<TableModel> trs;
 			trs = new TableRowSorter<TableModel>(errorTable.getModel());
-			trs.setComparator(1, new Comparator<Integer>() {
+			Comparator<Integer> cmp = new Comparator<Integer>() {
 				@Override public int compare(Integer o1, Integer o2) {
 					return o1 - o2;
 				}
-			});
+			};
+			trs.setComparator(1, cmp);
 			errorTable.setRowSorter(trs);
 
 			dispTabs = new JTabbedPane();

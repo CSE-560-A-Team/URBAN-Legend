@@ -1,0 +1,208 @@
+/*!
+\page testcase25 Incorrect ADRC
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">incorrectADRC</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">ext</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">external1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">external2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">local1</span> <span style="font-weight:bold;color:#000080;">equ</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">local2</span> <span style="font-weight:bold;color:#000080;">nop</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">localMaxPlusOne</span> <span style="font-weight:bold;color:#000080;">equ</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4096</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">ent</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">local1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">local2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">anExternal1</span> <span style="font-weight:bold;color:#000080;">adrc</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="font-style:italic;color:#800080;">external1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">anExternal2</span> <span style="font-weight:bold;color:#000080;">adrc</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">external2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">aLocal1</span> <span style="font-weight:bold;color:#000080;">adrc</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">local1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">aLocalMax</span> <span style="font-weight:bold;color:#000080;">adrc</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">localMaxPlusOne</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">localAndLocal</span> <span style="font-weight:bold;color:#000080;">adrc</span> <span style="color:#0000ff;">ex</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">local1</span> <span style="color:#ff0000;">+</span> <span style="font-style:italic;color:#800080;">localOff</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extAndExt</span> <span style="font-weight:bold;color:#000080;">adrc</span> <span style="color:#0000ff;">ex</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">external1</span> <span style="color:#ff0000;">+</span> <span style="font-style:italic;color:#800080;">external2</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">localAndExt</span> <span style="font-weight:bold;color:#000080;">adrc</span> <span style="color:#0000ff;">ex</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">external1</span> <span style="color:#ff0000;">+</span> <span style="color:#00e1af;">1l</span><span style="font-style:italic;color:#800080;">ocal1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">noOpadrc</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">wrongOpadrc</span> <span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">100</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">extraOp</span> <span style="font-weight:bold;color:#000080;">adrc</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">local1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">local2</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">incorrectADRC</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>aLocal1</td>
+    <td>0003</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>aLocalMax</td>
+    <td>0004</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>anExternal1</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>anExternal2</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>extAndExt</td>
+    <td>0006</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>external1</td>
+    <td>0000</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>external2</td>
+    <td>0000</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>incorrectADRC</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>local1</td>
+    <td>0000</td>
+    <td>EQUATE</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>local1</td>
+    <td>0001</td>
+    <td>ENTRY</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>local2</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>local2</td>
+    <td>0001</td>
+    <td>ENTRY</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>localAndExt</td>
+    <td>0007</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>localAndLocal</td>
+    <td>0005</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>localMaxPlusOne</td>
+    <td>0001</td>
+    <td>EQUATE</td>
+    <td>4096</td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+aLocal1	 0003	LABEL
+aLocalMax	 0004	LABEL
+anExternal1	 0001	LABEL
+anExternal2	 0002	LABEL
+extAndExt	 0006	LABEL
+external1	 0000	EXTERNAL
+external2	 0000	EXTERNAL
+incorrectADRC	 0000	PROGNAME
+local1	 0000	EQUATE	1
+local1	 0001	ENTRY
+local2	 0000	LABEL
+local2	 0001	ENTRY
+localAndExt	 0007	LABEL
+localAndLocal	 0005	LABEL
+localMaxPlusOne	 0001	EQUATE	4096
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	--------	src: -,dest:-	1	incorrectADRC kicko fc:0;
+
+0000	--------	src: -,dest:-	2	ext lr:external1, lr:external2;
+
+0000	--------	src: -,dest:-	3	local1 equ fc:1;
+
+0000	F4000000	src: -,dest:-	4	local2 nop;
+
+0001	--------	src: -,dest:-	5	localMaxPlusOne equ fc:4096;
+
+0001	--------	src: -,dest:-	6	ent lr:local1, lr:local2;
+
+0001	00000001	src: -,dest:-	7	anExternal1 adrc lr:1external1;
+errors:
+ERROR: 026: Operator '+' or '-' expected here
+
+0002	00000000	src: -,dest:-	8	anExternal2 adrc lr:external2;
+
+0003	00000001	src: -,dest:-	9	aLocal1 adrc lr:local1;
+
+0004	F4000000	src: -,dest:-	10	aLocalMax adrc lr:localMaxPlusOne;
+errors:
+ERROR: 071: Operand `LR' for `ADRC' instruction/directive must be within range: [-4096, 4095]
+
+0005	00000001	src: R,dest:-	11	localAndLocal adrc ex:local1 + localOff;
+errors:
+ERROR: 022: Could not find label `localOff': Label not in symbol table
+
+0006	00000000	src: C,dest:-	12	extAndExt adrc ex:external1 + external2;
+
+0007	00000001	src: E,dest:-	13	localAndExt adrc ex:external1 + 1local1;
+errors:
+ERROR: 026: Operator '+' or '-' expected here
+
+0008	F4000000	src: -,dest:-	16	extraOp adrc lr:local1, lr:local2;
+errors:
+ERROR: 050: Too many operands to `ADRC' directive
+
+0009	--------	src: -,dest:-	17	end lr:incorrectADRC;
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:incorrectADRC:
+0000:0009:0000:2012130,03:01:47:0001:URBAN-ASM:incorrectADRC:
+L:local1:0001:incorrectADRC:
+L:local2:0001:incorrectADRC:
+T:0000:F4000000:A:A:00:00:incorrectADRC:
+T:0001:00000001:A:A:00:00:incorrectADRC:
+M:0001:+:E:external1::S:incorrectADRC:
+T:0002:00000000:A:A:00:00:incorrectADRC:
+M:0002:+:E:external2::S:incorrectADRC:
+T:0003:00000001:A:A:00:00:incorrectADRC:
+T:0004:F4000000:A:A:00:00:incorrectADRC:
+T:0005:00000001:A:R:00:00:incorrectADRC:
+T:0006:00000000:A:C:00:02:incorrectADRC:
+M:0006:+:E:external1:+:E:external2::S:incorrectADRC:
+T:0007:00000001:A:E:00:01:incorrectADRC:
+M:0007:+:E:external1::S:incorrectADRC:
+T:0008:F4000000:A:A:00:00:incorrectADRC:
+E:0016:0002:000C:0006:incorrectADRC:
+</pre>
+
+
+*/

@@ -1,0 +1,559 @@
+/*!
+
+\page testcase30 All Wrong
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">lbl38</span> <span style="font-weight:bold;color:#000080;">KICKO</span>  <span style="color:#0000ff;">FC</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">100</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl01</span> <span style="font-weight:bold;color:#000080;">MOVD</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl02</span> <span style="font-weight:bold;color:#000080;">MOVDN</span>  <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl03</span> <span style="font-weight:bold;color:#000080;">IADD</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl04</span> <span style="font-weight:bold;color:#000080;">IMAD</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl05</span> <span style="font-weight:bold;color:#000080;">IAA</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl06</span> <span style="font-weight:bold;color:#000080;">ISRG</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl07</span> <span style="font-weight:bold;color:#000080;">ISUB</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl08</span> <span style="font-weight:bold;color:#000080;">IMUL</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl09</span> <span style="font-weight:bold;color:#000080;">IDIV</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl10</span> <span style="font-weight:bold;color:#000080;">PWR</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl11</span> <span style="font-weight:bold;color:#000080;">CLR</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl12</span> <span style="font-weight:bold;color:#000080;">CLRA</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl13</span> <span style="font-weight:bold;color:#000080;">CLRX</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl14</span> <span style="font-weight:bold;color:#000080;">ISHR</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl15</span> <span style="font-weight:bold;color:#000080;">ISHL</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl16</span> <span style="font-weight:bold;color:#000080;">ROL</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl17</span> <span style="font-weight:bold;color:#000080;">ROR</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl18</span> <span style="font-weight:bold;color:#000080;">AND</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl19</span> <span style="font-weight:bold;color:#000080;">OR</span>     <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl20</span> <span style="font-weight:bold;color:#000080;">TREQ</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl21</span> <span style="font-weight:bold;color:#000080;">TRLT</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl22</span> <span style="font-weight:bold;color:#000080;">TRGT</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl23</span> <span style="font-weight:bold;color:#000080;">TR</span>     <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl24</span> <span style="font-weight:bold;color:#000080;">TRDR</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl25</span> <span style="font-weight:bold;color:#000080;">TRLK</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl26</span> <span style="font-weight:bold;color:#000080;">RET</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl27</span> <span style="font-weight:bold;color:#000080;">SKT</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl28</span> <span style="font-weight:bold;color:#000080;">IWSR</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl29</span> <span style="font-weight:bold;color:#000080;">IRKB</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl30</span> <span style="font-weight:bold;color:#000080;">CWSR</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl31</span> <span style="font-weight:bold;color:#000080;">CRKB</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl32</span> <span style="font-weight:bold;color:#000080;">PSH</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl33</span> <span style="font-weight:bold;color:#000080;">POP</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl34</span> <span style="font-weight:bold;color:#000080;">PST</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl35</span> <span style="font-weight:bold;color:#000080;">NOP</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl36</span> <span style="font-weight:bold;color:#000080;">DMP</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl37</span> <span style="font-weight:bold;color:#000080;">HLT</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl39</span> <span style="font-weight:bold;color:#000080;">NEWLC</span>  <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl40</span> <span style="font-weight:bold;color:#000080;">EQU</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl41</span> <span style="font-weight:bold;color:#000080;">EQUe</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl42</span> <span style="font-weight:bold;color:#000080;">ENT</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl43</span> <span style="font-weight:bold;color:#000080;">EXT</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl45</span> <span style="font-weight:bold;color:#000080;">AEXS</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl46</span> <span style="font-weight:bold;color:#000080;">SKIPS</span>  <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl47</span> <span style="font-weight:bold;color:#000080;">char</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Heh. This one's too kind.</span>
+<span style="font-style:italic;color:#800080;">lbl48</span> <span style="font-weight:bold;color:#000080;">num</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl49</span> <span style="font-weight:bold;color:#000080;">adrc</span>   <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+<span style="font-style:italic;color:#800080;">lbl50</span> <span style="font-weight:bold;color:#000080;">NOP</span>    <span style="color:#0000ff;">ST</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'wut'</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">10</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Yeah, it's still here.</span>
+<span style="font-style:italic;color:#800080;">lbl44</span> <span style="font-weight:bold;color:#000080;">end</span>    <span style="color:#0000ff;">LR</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">lbl38</span><span style="color:#ff0000;">;</span><span style="font-style:italic;color:#a5a5a5;"> Comment!</span>
+
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>lbl01</td>
+    <td>0064</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl02</td>
+    <td>0065</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl03</td>
+    <td>0066</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl04</td>
+    <td>0067</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl05</td>
+    <td>0068</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl06</td>
+    <td>0069</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl07</td>
+    <td>006A</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl08</td>
+    <td>006B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl09</td>
+    <td>006C</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl10</td>
+    <td>006D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl11</td>
+    <td>006E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl12</td>
+    <td>006F</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl13</td>
+    <td>0070</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl14</td>
+    <td>0071</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl15</td>
+    <td>0072</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl16</td>
+    <td>0073</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl17</td>
+    <td>0074</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl18</td>
+    <td>0075</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl19</td>
+    <td>0076</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl20</td>
+    <td>0077</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl21</td>
+    <td>0078</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl22</td>
+    <td>0079</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl23</td>
+    <td>007A</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl24</td>
+    <td>007B</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl25</td>
+    <td>007C</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl26</td>
+    <td>007D</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl27</td>
+    <td>007E</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl28</td>
+    <td>007F</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl29</td>
+    <td>0080</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl30</td>
+    <td>0081</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl31</td>
+    <td>0082</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl32</td>
+    <td>0083</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl33</td>
+    <td>0084</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl34</td>
+    <td>0085</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl35</td>
+    <td>0086</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl36</td>
+    <td>0087</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl37</td>
+    <td>0088</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl38</td>
+    <td>0064</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl47</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl50</td>
+    <td>0003</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+lbl01	 0064	LABEL
+lbl02	 0065	LABEL
+lbl03	 0066	LABEL
+lbl04	 0067	LABEL
+lbl05	 0068	LABEL
+lbl06	 0069	LABEL
+lbl07	 006A	LABEL
+lbl08	 006B	LABEL
+lbl09	 006C	LABEL
+lbl10	 006D	LABEL
+lbl11	 006E	LABEL
+lbl12	 006F	LABEL
+lbl13	 0070	LABEL
+lbl14	 0071	LABEL
+lbl15	 0072	LABEL
+lbl16	 0073	LABEL
+lbl17	 0074	LABEL
+lbl18	 0075	LABEL
+lbl19	 0076	LABEL
+lbl20	 0077	LABEL
+lbl21	 0078	LABEL
+lbl22	 0079	LABEL
+lbl23	 007A	LABEL
+lbl24	 007B	LABEL
+lbl25	 007C	LABEL
+lbl26	 007D	LABEL
+lbl27	 007E	LABEL
+lbl28	 007F	LABEL
+lbl29	 0080	LABEL
+lbl30	 0081	LABEL
+lbl31	 0082	LABEL
+lbl32	 0083	LABEL
+lbl33	 0084	LABEL
+lbl34	 0085	LABEL
+lbl35	 0086	LABEL
+lbl36	 0087	LABEL
+lbl37	 0088	LABEL
+lbl38	 0064	PROGNAME
+lbl47	 0000	LABEL
+lbl50	 0003	LABEL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0064	--------	src: -,dest:-	1	lbl38 KICKO  FC:100; Comment!
+
+0064	F4000000	src: -,dest:-	2	lbl01 MOVD   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `MOVD' instruction
+
+0065	F4000000	src: -,dest:-	3	lbl02 MOVDN  ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `MOVDN' instruction
+
+0066	F4000000	src: -,dest:-	4	lbl03 IADD   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IADD' instruction
+
+0067	F4000000	src: -,dest:-	5	lbl04 IMAD   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IMAD' instruction
+
+0068	F4000000	src: -,dest:-	6	lbl05 IAA    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IAA' instruction
+
+0069	F4000000	src: -,dest:-	7	lbl06 ISRG   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `NW' operand to `ISRG' instruction
+
+006A	F4000000	src: -,dest:-	8	lbl07 ISUB   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `ISUB' instruction
+
+006B	F4000000	src: -,dest:-	9	lbl08 IMUL   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IMUL' instruction
+
+006C	F4000000	src: -,dest:-	10	lbl09 IDIV   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `IDIV' instruction
+
+006D	F4000000	src: -,dest:-	11	lbl10 PWR    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 043: Missing `FC' or `EX' operand to `PWR' instruction
+
+006E	F4000000	src: -,dest:-	12	lbl11 CLR    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 049: Too many operands to `CLR' instruction.
+
+006F	F4000000	src: -,dest:-	13	lbl12 CLRA   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 049: Too many operands to `CLRA' instruction.
+
+0070	F4000000	src: -,dest:-	14	lbl13 CLRX   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 049: Too many operands to `CLRX' instruction.
+
+0071	F4000000	src: -,dest:-	15	lbl14 ISHR   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `FC' operand to `ISHR' instruction
+
+0072	F4000000	src: -,dest:-	16	lbl15 ISHL   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `FC' operand to `ISHL' instruction
+
+0073	F4000000	src: -,dest:-	17	lbl16 ROL    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `FC' operand to `ROL' instruction
+
+0074	F4000000	src: -,dest:-	18	lbl17 ROR    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `FC' operand to `ROR' instruction
+
+0075	F4000000	src: -,dest:-	19	lbl18 AND    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `AND' instruction
+
+0076	F4000000	src: -,dest:-	20	lbl19 OR     ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{FM,FX}, {FR}, or {FX}' operand to `OR' instruction
+
+0077	F4000000	src: -,dest:-	21	lbl20 TREQ   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `TREQ' operand to `FR' instruction
+
+0078	F4000000	src: -,dest:-	22	lbl21 TRLT   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `TRLT' operand to `FR' instruction
+
+0079	F4000000	src: -,dest:-	23	lbl22 TRGT   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `TRGT' operand to `FR' instruction
+
+007A	F4000000	src: -,dest:-	24	lbl23 TR     ST:'wut', DM:10; Comment!
+errors:
+ERROR: 057: Operand `DM' may only be paired with operand `DX' for instruction `TR'.
+
+007B	F4000000	src: -,dest:-	25	lbl24 TRDR   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `FR or FX' operand to `TRDR' instruction
+
+007C	F4000000	src: -,dest:-	26	lbl25 TRLK   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `DR' operand to `TRLK' instruction
+
+007D	F4000000	src: -,dest:-	27	lbl26 RET    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `DM or DX' operand to `RET' instruction
+
+007E	F4000000	src: -,dest:-	28	lbl27 SKT    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 049: Too many operands to `SKT' instruction.
+
+007F	F4000000	src: -,dest:-	29	lbl28 IWSR   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `NW' operand to `IWSR' instruction
+
+0080	F4000000	src: -,dest:-	30	lbl29 IRKB   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `NW' operand to `IRKB' instruction
+
+0081	F4000000	src: -,dest:-	31	lbl30 CWSR   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `NW' operand to `CWSR' instruction
+
+0082	F4000000	src: -,dest:-	32	lbl31 CRKB   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `NW' operand to `CRKB' instruction
+
+0083	F4000000	src: -,dest:-	33	lbl32 PSH    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 049: Too many operands to `PSH' instruction.
+
+0084	F4000000	src: -,dest:-	34	lbl33 POP    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `{DM,DX}, {DR}, or {DM}' operand to `POP' instruction
+ERROR: 046: Operand `ST' is inapplicable for `POP' instruction
+
+0085	F4000000	src: -,dest:-	35	lbl34 PST    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 041: Missing `DR' operand to `PST' instruction
+
+0086	F4000000	src: -,dest:-	36	lbl35 NOP    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 049: Too many operands to `NOP' instruction.
+
+0087	F4000000	src: -,dest:-	37	lbl36 DMP    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 043: Missing `FC' or `EX' operand to `DMP' instruction
+
+0088	F4000000	src: -,dest:-	38	lbl37 HLT    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 043: Missing `FC' or `EX' operand to `HLT' instruction
+
+0000	F4000000	src: -,dest:-	39	lbl39 NEWLC  ST:'wut', DM:10; Comment!
+errors:
+ERROR: 042: Missing `FC' or `LR' operand to `NEWLC' directive
+
+0000	F4000000	src: -,dest:-	40	lbl40 EQU    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 050: Too many operands to `EQU' directive
+
+0000	F4000000	src: -,dest:-	41	lbl41 EQUe   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 050: Too many operands to `EQUE' directive
+
+0000	F4000000	src: -,dest:-	42	lbl42 ENT    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 111: Remove label from `ENT' directive
+ERROR: 047: Operand `any operand other than LR' is inapplicable for `ENT' directive
+
+0000	F4000000	src: -,dest:-	43	lbl43 EXT    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 047: Operand `ST' is inapplicable for `EXT' directive
+
+0000	F4000000	src: -,dest:-	44	lbl45 AEXS   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 050: Too many operands to `AEXS' directive
+
+0000	F4000000	src: -,dest:-	45	lbl46 SKIPS  ST:'wut', DM:10; Comment!
+errors:
+ERROR: 050: Too many operands to `SKIPS' directive
+
+0000	77757420	src: A,dest:-	46	lbl47 char   ST:'wut', DM:10; Heh. This one's too kind.
+errors:
+Warning: 302: Extra parameters to `CHAR' ignored; only first `ST' considered
+
+0001	F4000000	src: -,dest:-	47	lbl48 num    ST:'wut', DM:10; Comment!
+errors:
+ERROR: 050: Too many operands to `NUM' directive
+
+0002	F4000000	src: -,dest:-	48	lbl49 adrc   ST:'wut', DM:10; Comment!
+errors:
+ERROR: 050: Too many operands to `ADRC' directive
+
+0003	F4000000	src: -,dest:-	49	lbl50 NOP    ST:'wut', DM:10; Yeah, it's still here.
+errors:
+ERROR: 049: Too many operands to `NOP' instruction.
+
+0004	F4000000	src: -,dest:-	50	lbl44 end    LR: lbl38; Comment!
+errors:
+ERROR: 111: Remove label from `END' directive
+
+</pre>
+<h1>Object file:</h1>
+<pre><i>The object file could not be generated for this program.</i></pre>
+
+*/
