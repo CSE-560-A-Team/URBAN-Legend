@@ -60,54 +60,59 @@ public abstract class UIG_ShiftManipulate extends AbstractInstruction {
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", 
 					this.getOpId(), Integer.toString(ConstantRange.RANGE_SHIFT.min), Integer.toString(ConstantRange.RANGE_SHIFT.max)), this.lineNum, -1);
 			this.getOperandData("FC").value = value;
-			if(this.hasOperand("DR")){
-				dest = "DR";
-				//range checking
-				value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").valueStartPosition);
-				isValid = OperandChecker.isValidReg(value.value);
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
-				this.getOperandData("DR").value = value;
-			} else if(this.hasOperand("DX")){
-				dest = "DX";
-				//range checking
-				value = module.evaluate(this.getOperand("DX"), false,BitLocation.Other, hErr, this, this.getOperandData("DX").valueStartPosition);
-				isValid = OperandChecker.isValidIndex(value.value);
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
-				this.getOperandData("DX").value = value;
-			} else if(this.hasOperand("EX")){
-				isValid = false;
-				hErr.reportError(makeError("operandWrongWith", "EX", "FC"), this.lineNum, -1);		
-			}else{
-				isValid = false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "{DR}, or {DX}"), this.lineNum, -1);
+			if(isValid) {
+				if(this.hasOperand("DR")){
+					dest = "DR";
+					//range checking
+					value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").valueStartPosition);
+					isValid = OperandChecker.isValidReg(value.value);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+					this.getOperandData("DR").value = value;
+				} else if(this.hasOperand("DX")){
+					dest = "DX";
+					//range checking
+					value = module.evaluate(this.getOperand("DX"), false,BitLocation.Other, hErr, this, this.getOperandData("DX").valueStartPosition);
+					isValid = OperandChecker.isValidIndex(value.value);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+					this.getOperandData("DX").value = value;
+				} else if(this.hasOperand("EX")){
+					isValid = false;
+					hErr.reportError(makeError("operandWrongWith", "EX", "FC"), this.lineNum, -1);		
+				}else{
+					isValid = false;
+					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "{DR}, or {DX}"), this.lineNum, -1);
+				}
 			}
 		} else if(this.hasOperand("EX")) {
 			//check EX
 			value = module.evaluate(this.getOperand("EX"), false,BitLocation.Literal, hErr, this, this.getOperandData("EX").valueStartPosition); 
-			isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
+			isValid = isValidLiteral(value.value, ConstantRange.RANGE_SHIFT);
+			System.err.println("Source line: " + this.lineNum + "EX: " + isValid);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
-					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+					Integer.toString(ConstantRange.RANGE_SHIFT.min), Integer.toString(ConstantRange.RANGE_SHIFT.max)), this.lineNum, -1);
 			this.getOperandData("EX").value = value;
-			if(this.hasOperand("DR")){
-				dest = "DR";
-				//range checking
-				value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").valueStartPosition);
-				isValid = OperandChecker.isValidReg(value.value);
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
-				this.getOperandData("DR").value = value;
-			} else if(this.hasOperand("DX")){
-				dest = "DX";
-				//range checking
-				value = module.evaluate(this.getOperand("DX"), false,BitLocation.Other, hErr, this, this.getOperandData("DX").valueStartPosition);
-				isValid = OperandChecker.isValidIndex(value.value);
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
-				this.getOperandData("DX").value = value;
-			} else if(this.hasOperand("FC")){
+			if(isValid) {
+				if(this.hasOperand("DR")){
+					dest = "DR";
+					//range checking
+					value = module.evaluate(this.getOperand("DR"), false,BitLocation.Other, hErr, this, this.getOperandData("DR").valueStartPosition);
+					isValid = OperandChecker.isValidReg(value.value);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "DR", this.getOpId()), this.lineNum, -1);
+					this.getOperandData("DR").value = value;
+				} else if(this.hasOperand("DX")){
+					dest = "DX";
+					//range checking
+					value = module.evaluate(this.getOperand("DX"), false,BitLocation.Other, hErr, this, this.getOperandData("DX").valueStartPosition);
+					isValid = OperandChecker.isValidIndex(value.value);
+					if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+					this.getOperandData("DX").value = value;
+				} else if(this.hasOperand("FC")){
+						isValid = false;
+						hErr.reportError(makeError("operandWrongWith", "FC", "EX"), this.lineNum, -1);		
+				}else{
 					isValid = false;
-					hErr.reportError(makeError("operandWrongWith", "FC", "EX"), this.lineNum, -1);		
-			}else{
-				isValid = false;
-				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "{DR}, or {DX}"), this.lineNum, -1);
+					hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "{DR}, or {DX}"), this.lineNum, -1);
+				}
 			}
 		} else {
 			isValid = false;

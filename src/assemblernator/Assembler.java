@@ -298,7 +298,16 @@ public class Assembler {
 					module.getSymbolTable().addEntry(instr, hErr);
 				}
 
-				module.addInstruction(instr, hErr);
+				if(valid) {
+					module.addInstruction(instr, hErr);
+				} else {
+					Instruction temp = USI_NOP.getInstance();
+					temp.lc = instr.lc;
+					temp.errors = instr.errors;
+					temp.lineNum = instr.lineNum;
+					temp.origSrcLine = instr.origSrcLine;
+					module.addInstruction(temp, hErr);
+				}
 
 			} catch (URBANSyntaxException e) {
 				hErr.reportError(e.getMessage(), lineNum, e.index);
@@ -312,7 +321,8 @@ public class Assembler {
 
 		// Pass two
 		for (Instruction i : module.assembly) {
-			valid = i.check(i.getHErr(hErr), module);
+			if(valid) valid = i.check(i.getHErr(hErr), module);
+			System.err.println(i.getOpId() + "valid?: " + valid);
 			if(valid) {
 				module.execStartAddr = execStartAddr;
 				i.assembled = i.assemble(); //for now.  should replace all assemble w/ directly changing self's field.
