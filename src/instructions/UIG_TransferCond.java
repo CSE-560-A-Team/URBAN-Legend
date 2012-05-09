@@ -46,7 +46,10 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 						o.valueStartPosition);
 				this.getOperandData("FR").value = constantSize;
 				isValid = OperandChecker.isValidReg(constantSize.value);
-				if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				if(this.hasOperand("DM")){
 					dest="DM";
 					//range checking
@@ -76,7 +79,10 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 					o.valueStartPosition);
 			this.getOperandData("FR").value = constantSize;
 			isValid = OperandChecker.isValidReg(constantSize.value);
-			if(!isValid) hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
+			if(!isValid){
+				hErr.reportError(makeError("OORarithReg", "FR", this.getOpId()), this.lineNum, -1);
+				return isValid;
+			}
 				if (this.hasOperand("DM") && this.hasOperand("DX")) {
 				dest = "DMDX";
 				//range checking
@@ -85,7 +91,10 @@ public abstract class UIG_TransferCond extends AbstractInstruction {
 						o1.valueStartPosition);
 				this.getOperandData("DX").value = constantSize1;
 				isValid = OperandChecker.isValidIndex(constantSize1.value);
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				Operand o2 = getOperandData("DM");
 				Value constantSize2 = module.evaluate(o2.expression, true,BitLocation.Address ,hErr, this,
 						o2.valueStartPosition);

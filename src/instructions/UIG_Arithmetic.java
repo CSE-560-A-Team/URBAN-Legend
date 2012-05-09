@@ -39,7 +39,10 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					o.valueStartPosition);
 			this.getOperandData("DM").value = constantSize;
 			isValid = OperandChecker.isValidMem(constantSize.value);
-			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			if(!isValid){
+				hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				return isValid;
+			}
 			if(this.hasOperand("FL")){
 				Operand o1 = getOperandData("FL");
 				Value constantSize1 = module.evaluate(o1.expression, false,BitLocation.HighLiteral, hErr, this,
@@ -68,7 +71,10 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 					o.valueStartPosition);
 			this.getOperandData("DM").value = constantSize;
 			isValid = OperandChecker.isValidMem(constantSize.value);
-			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+			if(!isValid){
+				hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				return isValid;
+			}
 			Operand o2 = getOperandData("FM");
 			Value constantSize2 = module.evaluate(o2.expression, true,BitLocation.HighAddress ,hErr, this,
 					o2.valueStartPosition);
@@ -137,7 +143,10 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 							o2.valueStartPosition);
 				this.getOperandData("DM").value = constantSize2;
 				isValid = OperandChecker.isValidMem(constantSize2.value);
-				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				if(this.hasOperand("DX")){
 					Operand o = getOperandData("DX");
 					Value constantSize = module.evaluate(o.expression, false,BitLocation.Other ,hErr, this,
@@ -174,7 +183,10 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 						o2.valueStartPosition);
 				this.getOperandData("FM").value = constantSize2;
 				isValid = OperandChecker.isValidMem(constantSize2.value);
-				if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				if(this.hasOperand("FX")){
 					Operand o1 = getOperandData("FX");
 					Value constantSize1 = module.evaluate(o1.expression, false,BitLocation.Other ,hErr, this,

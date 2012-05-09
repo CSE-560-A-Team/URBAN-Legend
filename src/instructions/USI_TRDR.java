@@ -61,7 +61,10 @@ public class USI_TRDR extends AbstractInstruction {
 						o.valueStartPosition);
 				this.getOperandData("DM").value = constantSize;
 				isValid = OperandChecker.isValidMem(constantSize.value);
-				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				if(this.hasOperand("FR")){
 					src="FR";
 					//range checking
@@ -98,13 +101,19 @@ public class USI_TRDR extends AbstractInstruction {
 						o1.valueStartPosition);
 				this.getOperandData("DX").value = constantSize1;
 				isValid = OperandChecker.isValidIndex(constantSize1.value);
-				if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				Operand o2 = getOperandData("DM");
 				Value constantSize2 = module.evaluate(o2.expression, true, BitLocation.Address,  hErr, this,
 						o2.valueStartPosition);
 				this.getOperandData("DM").value = constantSize2;
 				isValid = OperandChecker.isValidMem(constantSize2.value);
-				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+				if(!isValid){
+					hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
+					return isValid;
+				}
 				if(this.hasOperand("FR")){
 					src="FR";
 					//range checking
