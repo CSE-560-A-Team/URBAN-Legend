@@ -522,10 +522,12 @@ public class Module {
 	 * @specRef OB1.3
 	 */
 	private int moduleLength;
-	/**
-	 * The maximum length of module.
-	 */
-	private final int MAX_LEN = 4096;
+	/** The highest LC contained in this program. */
+	public int highLC = 0;
+	
+	/** The maximum length of module. */
+	private static final int MAX_LEN = 4096;
+
 
 	/**
 	 * Returns a reference to the symbol table.
@@ -567,8 +569,9 @@ public class Module {
 	 * @specRef N/A
 	 */
 	public void addInstruction(Instruction instr, ErrorHandler hErr) {
-		this.moduleLength = instr.lc;
-		if (this.moduleLength > this.MAX_LEN) {
+		this.moduleLength = this.highLC - this.loadAddr;
+		System.out.println("this.moduleLength = " + this.highLC + " - " + this.loadAddr + ";");
+		if (this.moduleLength > MAX_LEN) {
 			hErr.reportError(makeError("ORmoduleLength", this.programName),
 					instr.lineNum, -1);
 		}
@@ -1116,8 +1119,7 @@ public class Module {
 			header.write((byte) ':');// OB1.2
 			header.write(IOFormat.formatIntegerWithRadix(this.loadAddr, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.2
-			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength
-					- this.loadAddr, 16, 4));// OB1.3
+			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.4
 			header.write(IOFormat.formatIntegerWithRadix(this.execStartAddr,
 					16, 4));// OB1.5

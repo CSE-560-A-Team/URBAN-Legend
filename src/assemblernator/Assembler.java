@@ -217,7 +217,6 @@ public class Assembler {
 	public static final Module parseFile(Scanner source, ErrorHandler hErr) {
 		int lineNum = 0, skipls = 0;
 		Module module = new Module();
-		int lc = 0;
 		boolean firstKICKO = false, valid = true, hasEnd = false;
 		String line = new String();
 
@@ -271,7 +270,7 @@ public class Assembler {
 				}
 				
 				if(!instr.getOpId().equalsIgnoreCase("EXT")) {
-					instr.lc = lc;
+					instr.lc = module.highLC;
 				} else {
 					instr = USI_NOP.getInstance().getNewInstance();
 					instr.lc = 0;
@@ -280,16 +279,16 @@ public class Assembler {
 				// checks for operand errors in instruction.
 				valid = instr.immediateCheck(instr.getHErr(hErr), module);
 				// Get new lc for next instruction.
-				lc = instr.getNewLC(lc, module);
+				module.highLC = instr.getNewLC(module.highLC, module);
 				
 				//assign execStartAddr.
 				if(instr.getOpId().equalsIgnoreCase("KICKO")) {
-					module.execStartAddr = lc;
-					module.loadAddr = lc;
+					module.execStartAddr = module.highLC;
+					module.loadAddr = module.highLC;
 				}
 
 				System.err.println(module.execStartAddr);
-				if (instr.lc > 4095 && lc > instr.lc) {
+				if (instr.lc > 4095 && module.highLC > instr.lc) {
 					instr.errors.add(instr.errors.size(), makeError("OOM")); //add error into list of errors.
 					hErr.reportError(makeError("OOM"), lineNum, -1);
 				}
@@ -319,8 +318,7 @@ public class Assembler {
 					e.printStackTrace();
 				
 				Instruction temp = USI_NOP.getInstance().getNewInstance();
-				lc = lc+1;
-				temp.lc = lc;
+				temp.lc = ++module.highLC;
 				temp.errors.add(e.getMessage());
 				temp.lineNum = lineNum;
 				temp.origSrcLine = line;
