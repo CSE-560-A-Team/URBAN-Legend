@@ -289,6 +289,7 @@ public class Assembler {
 					module.loadAddr = lc;
 				}
 
+				System.err.println(module.execStartAddr);
 				if (instr.lc > 4095 && lc > instr.lc) {
 					instr.errors.add(instr.errors.size(), makeError("OOM")); //add error into list of errors.
 					hErr.reportError(makeError("OOM"), lineNum, -1);
@@ -335,7 +336,7 @@ public class Assembler {
 		for (Instruction i : module.assembly) {
 			valid = i.check(i.getHErr(hErr), module);
 			if(valid) {
-				module.execStartAddr = execStartAddr;
+				//module.execStartAddr = execStartAddr;
 				i.assembled = i.assemble(); //for now.  should replace all assemble w/ directly changing self's field.
 			} else {
 				i.assembled = USI_NOP.getInstance().assemble();
