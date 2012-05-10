@@ -735,8 +735,7 @@ There are 12 directives in the URBAN language.They are given in the following ta
     <td><a href="#rqlabel">rqlabel</a> newlc FC:<a href="#mlit">mlit</a>;<br/>
         <a href="#rqlabel">rqlabel</a> newlc LR:<a href="#eqlabel">eqlabel</a>;</td>
     <td>Sets a <b>new</b> relocatable address to the <b>L</b>ocation <b>C</b>ounter. 
-        Multiple newlc directives can appear in one program. Each newlc generates a
-        Linking record in the object file, but does not generate bitcode.</td>
+        Multiple newlc directives can appear in one program.</td>
     <td>Yes</td>
   </tr>
   <tr>

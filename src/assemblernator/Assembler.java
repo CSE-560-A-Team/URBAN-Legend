@@ -217,7 +217,6 @@ public class Assembler {
 	public static final Module parseFile(Scanner source, ErrorHandler hErr) {
 		int lineNum = 0, skipls = 0;
 		Module module = new Module();
-		int execStartAddr = 0;
 		int lc = 0;
 		boolean firstKICKO = false, valid = true, hasEnd = false;
 		String line = new String();

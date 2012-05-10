@@ -1157,9 +1157,9 @@ public abstract class Instruction {
 	 * @specRef OB3.14
 	 * @specRef OB3.15
 	 */
-	public byte[] getTextRecord(String progName) {
+	public RecordSet getTextRecord(String progName) {
 		if (assembled == null || assembled.length == 0)
-			return new byte[0];
+			return new RecordSet(new byte[0], 0);
 		
 		ByteArrayOutputStream records = new ByteArrayOutputStream();
 		try {
@@ -1214,10 +1214,10 @@ public abstract class Instruction {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return ":Something wicked has happened:".getBytes();
+			return new RecordSet(":Something wicked has happened:".getBytes(), 1);
 		}
 
-		return records.toByteArray();
+		return new RecordSet(records.toByteArray(),1);
 	}
 
 }

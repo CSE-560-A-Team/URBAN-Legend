@@ -980,10 +980,9 @@ public class Module {
 		out.write(recSet.records);
 		// write text records and mod records. adjust record cnts.
 		for (Instruction instr : this.assembly) {
-			out.write(instr.getTextRecord(this.programName));
-			if (instr.assembled != null && instr.assembled.length > 0) {
-				totalTextRecords++;
-			}
+			RecordSet rs = instr.getTextRecord(this.programName); 
+			out.write(rs.records);
+			totalTextRecords += rs.size;
 
 			recSet = instr.getModRecords(this.programName);
 			out.write(recSet.records);
@@ -1029,10 +1028,9 @@ public class Module {
 		out.write(recSet.records);
 		// write text records and mod records. adjust record cnts.
 		for (Instruction instr : this.assembly) {
-			out.write(instr.getTextRecord(this.programName));
-			if (instr.assembled != null) {
-				totalTextRecords++;
-			}
+			RecordSet rs = instr.getTextRecord(this.programName); 
+			out.write(rs.records);
+			totalTextRecords += rs.size;
 
 			recSet = instr.getModRecords(this.programName);
 			out.write(recSet.records);
@@ -1119,7 +1117,7 @@ public class Module {
 			header.write(IOFormat.formatIntegerWithRadix(this.loadAddr, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.2
 			header.write(IOFormat.formatIntegerWithRadix(this.moduleLength
-					- this.loadAddr + 1, 16, 4));// OB1.3
+					- this.loadAddr, 16, 4));// OB1.3
 			header.write((byte) ':');// OB1.4
 			header.write(IOFormat.formatIntegerWithRadix(this.execStartAddr,
 					16, 4));// OB1.5
