@@ -1,5 +1,6 @@
 package instructions;
 
+import simulanator.Machine;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -32,8 +33,8 @@ public class USI_ISHL extends UIG_ShiftManipulate {
 
 
 
-	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	@Override public void execute(int instruction, Machine machine) {
 		// TODO: IMPLEMENT
 	}
 

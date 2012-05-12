@@ -2,6 +2,7 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
+import simulanator.Machine;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -111,8 +112,8 @@ public class USI_POP extends AbstractInstruction {
 		return formatOther(this);
 	}
 
-	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	@Override public void execute(int instruction, Machine machine) {
 		// TODO: IMPLEMENT
 	}
 

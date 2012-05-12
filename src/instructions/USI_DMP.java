@@ -4,6 +4,7 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatHaltDump;
 import static assemblernator.OperandChecker.isValidConstant;
 import static assemblernator.Module.Value.BitLocation.Literal;
+import simulanator.Machine;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -75,8 +76,8 @@ public class USI_DMP extends AbstractInstruction {
 		return formatHaltDump(this);
 	}
 
-	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	@Override public void execute(int instruction, Machine machine) {
 		// TODO: IMPLEMENT
 	}
 

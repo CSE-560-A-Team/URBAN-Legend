@@ -1,5 +1,6 @@
 package instructions;
 
+import simulanator.Machine;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -31,9 +32,9 @@ public class USI_IWSR extends UIG_IO {
 		return lc+1;
 	}
 
-	/** @see assemblernator.Instruction#execute(int) */
+	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override 
-	public void execute(int instruction) {
+	public void execute(int instruction, Machine machine) {
 		// TODO: IMPLEMENT
 	}
 

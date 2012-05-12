@@ -1,5 +1,6 @@
 package assemblernator;
 
+import simulanator.Machine;
 import assemblernator.ErrorReporting.ErrorHandler;
 
 /**
@@ -52,9 +53,9 @@ public abstract class AbstractDirective extends Instruction {
 	/**
 	 * Throws an error message. No directives should be executed at runtime.
 	 * 
-	 * @see assemblernator.Instruction#execute(int)
+	 * @see assemblernator.Instruction#execute(int, Machine)
 	 */
-	@Override public final void execute(int opcode) {
+	@Override public final void execute(int opcode, Machine machine) {
 		System.err.println("Attempt to invoke directive `" + getOpId()
 				+ "' for execute!");
 	}

@@ -10,6 +10,7 @@ import static assemblernator.OperandChecker.isValidReg;
 import static assemblernator.Module.Value.BitLocation.Literal;
 import static assemblernator.Module.Value.BitLocation.Address;
 import static assemblernator.Module.Value.BitLocation.Other;
+import simulanator.Machine;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -115,8 +116,8 @@ public class USI_ISRG extends AbstractInstruction {
 		return formatSrcRange(this);
 	}
 
-	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	@Override public void execute(int instruction, Machine machine) {
 		// TODO: IMPLEMENT
 	}
 

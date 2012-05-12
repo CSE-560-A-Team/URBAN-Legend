@@ -8,6 +8,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 
+import simulanator.Machine;
+
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Module.Value.BitLocation;
@@ -156,8 +158,8 @@ public class USI_NOISE extends AbstractInstruction {
 				| (getOperandData("DM").value.value / 10) };
 	}
 
-	/** @see assemblernator.Instruction#execute(int) */
-	@Override public void execute(int instruction) {
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	@Override public void execute(int instruction, Machine machine) {
 		// TODO: IMPLEMENT
 	}
 

@@ -1,4 +1,6 @@
-package assemblernator;
+package simulanator;
+
+import assemblernator.IOFormat;
 
 /**
  * A class representing an entire machine state.

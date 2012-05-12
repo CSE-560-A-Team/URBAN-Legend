@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import simulanator.Machine;
+
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.ErrorReporting.URBANSyntaxException;
 import assemblernator.Module.RecordSet;
@@ -895,8 +897,9 @@ public abstract class Instruction {
 	 * @testingStandards This method is abstract.
 	 * @param instruction
 	 *            The byte code of the instruction to be executed.
+	 * @param machine TODO
 	 */
-	public abstract void execute(int instruction);
+	public abstract void execute(int instruction, Machine machine);
 
 	/**
 	 * Returns a string representation of Instruction:
