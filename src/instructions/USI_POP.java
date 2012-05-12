@@ -1,6 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+
 import static assemblernator.InstructionFormatter.formatOther;
 import simulanator.Machine;
 import assemblernator.AbstractInstruction;
@@ -10,6 +11,7 @@ import assemblernator.Module;
 import assemblernator.Module.Value;
 import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
+import simulanator.Deformatter;
 
 /**
  * The POP instruction.
@@ -114,6 +116,18 @@ public class USI_POP extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
+		
+		int s= 0;
+		s = machine.stack.pop();
+		
+		if(this.hasOperand("DM")) {
+			machine.memory[machine.instruction] = s;
+		} else if(this.hasOperand("DX")) {
+			
+		} else if(this.hasOperand("DR")) {
+			
+		}
+		
 		// TODO: IMPLEMENT
 	}
 

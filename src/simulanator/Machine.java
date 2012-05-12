@@ -1,6 +1,7 @@
 package simulanator;
 
 import assemblernator.IOFormat;
+import java.util.Stack;
 
 /**
  * A class representing an entire machine state.
@@ -13,15 +14,18 @@ public class Machine {
 	public static final int memorySizeInWords = 4096;
 
 	/** Our eight machine registers. */
-	int[] registers = new int[8];
+	public int[] registers = new int[8];
 	/** Our seven index registers: Index register 0 is unused. */
-	int[] indexRegisters = new int[8];
+	public int[] indexRegisters = new int[8];
 	/** Our entire memory; all 16 kibibytes of it. */
-	int[] memory = new int[memorySizeInWords];
+	public int[] memory = new int[memorySizeInWords];
 	/** The current program counter. */
-	int lc;
+	public int lc;
 	/** The current instruction. */
-	int instruction;
+	public int instruction;
+	
+	/** Stack of integers.*/
+	public Stack<Integer> stack;
 
 	/**
 	 * Creates a string dump of this machine state, according to spec.
