@@ -185,6 +185,23 @@ public class IOFormat {
 	public static int parseBin32Int(String rep) {
 		return (int) Long.parseLong(rep, 2);
 	}
+	
+	/**
+	 * Parses 32 bit hex integer string representation into an int obejct.
+	 * @author Noah
+	 * @date May 13, 2012; 5:46:33 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param rep string rep of 32 bit hex integer.
+	 * @return int that rep represents as a 32 bit hex integer.
+	 * @specRef N/A
+	 */
+	public static int parseHex32Int(String rep) {
+		return (int) Long.parseLong(rep, 16);
+	}
 	/**
 	 * Format an integer to a zero-padded decimal representation.
 	 * 
