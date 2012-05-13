@@ -38,7 +38,7 @@ public class USI_TRGT extends UIG_TransferCond {
 		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
 		int reg = brkDwn.readFromSource(machine);
 		
-		int addr = brkDwn.readFromDest(machine);
+		int addr = brkDwn.destination;
 		if(reg > 0) {
 			machine.lc = addr;
 		}

@@ -160,7 +160,7 @@ public class USI_TRDR extends AbstractInstruction {
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
 		int reg = brkDwn.readFromSource(machine);
-		int addr = brkDwn.readFromDest(machine);
+		int addr = brkDwn.destination;
 		reg--;
 		brkDwn.putToDest(reg, machine);
 		machine.lc = addr;
