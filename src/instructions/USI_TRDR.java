@@ -2,7 +2,9 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -156,7 +158,12 @@ public class USI_TRDR extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		int reg = brkDwn.readFromSource(machine);
+		int addr = brkDwn.readFromDest(machine);
+		reg--;
+		brkDwn.putToDest(reg, machine);
+		machine.lc = addr;
 	}
 
 	// =========================================================

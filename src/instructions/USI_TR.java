@@ -111,7 +111,8 @@ public class USI_TR extends AbstractInstruction {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
-		
+		int addr = brkDwn.readFromDest(machine);
+		machine.lc = addr;
 	}
 
 	// =========================================================
