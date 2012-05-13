@@ -7,16 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import assemblernator.LinkerModule.linkerRecord;
-
 /**
  * 
  * @author Eric
  * @date May 12, 2012; 3:59:15 PM
  */
 public class LinkerModule {
-	Map<textRecord,modRecord[]> textMod = new TreeMap<textRecord,modRecord[]>();
-	List<linkerRecord> link = new ArrayList<linkerRecord>();
+	Map<TextRecord, ModRecord[]> textMod = new TreeMap<TextRecord, ModRecord[]>();
+	List<LinkerRecord> link = new ArrayList<LinkerRecord>();
 	String prgname;
 	int prgLoadadd;
 	int prgTotalLen;
@@ -26,7 +24,7 @@ public class LinkerModule {
 	int endText;
 	int endMod;
 	
-	public static class textRecord{
+	public static class TextRecord{
 	int assignedLC;
 	int instrData;
 	char flagHigh;
@@ -34,22 +32,22 @@ public class LinkerModule {
 	int modHigh;
 	int modLow;
 	}
-	public static class modRecord{
+	public static class ModRecord{
 	int hex;
 	char plusMin;
 	char flagAE;
 	String linkerLabel;
 	char HLS;
 	}
-	public static class linkerRecord{
+	public static class LinkerRecord{
 	String entryLabel;
 	int entryAddr;
 	}
 	
 	public LinkerModule(InputStream in){
-		textRecord ttemp = new textRecord();
-		modRecord mtemp = new modRecord();
-		linkerRecord ltemp = new linkerRecord();
+		TextRecord ttemp = new TextRecord();
+		ModRecord mtemp = new ModRecord();
+		LinkerRecord ltemp = new LinkerRecord();
 
 		//dont know if i need to error check but just in case
 		try {

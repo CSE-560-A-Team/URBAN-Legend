@@ -38,7 +38,7 @@ public class USI_ISLA extends UIG_ShiftManipulate {
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromDest(machine);
-		wordOrig <<= brkdwn.readFromSource(machine);
+		wordOrig <<= brkdwn.readFromSource(machine); //left shift and assign.
 		brkdwn.putToDest(wordOrig, machine);
 	}
 
