@@ -1,10 +1,10 @@
 package instructions;
 
+import simulanator.Deformatter.OpcodeBreakdownOther;
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
 import assemblernator.Instruction;
 import assemblernator.Module;
-import simulanator.Deformatter;
-import simulanator.Deformatter.OpcodeBreakdownOther;
 
 /**
  * The ISLA instruction.
@@ -36,17 +36,10 @@ public class USI_ISLA extends UIG_ShiftManipulate {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		
-		OpcodeBreakdownOther res = breakDownOther(machine.instruction);
-		//wtf is ^^ error?
-		
-			
-			if(this.hasOperand("DR")) {
-				//shift the data in DR whatever to the left by amount given in FC times.
-			} else if(this.hasOperand("DX")) {
-				//shift the data in DX whatever to the left by amount given in FC times. 
-			}
-			// TODO: IMPLEMENT
+		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
+		int wordOrig = brkdwn.readFromDest(machine);
+		wordOrig <<= brkdwn.readFromSource(machine);
+		brkdwn.putToDest(wordOrig, machine);
 	}
 
 	// =========================================================

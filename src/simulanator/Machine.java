@@ -1,5 +1,6 @@
 package simulanator;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import java.util.Stack;
 
@@ -23,9 +24,12 @@ public class Machine {
 	public int lc;
 	/** The current instruction. */
 	public int instruction;
-	
-	/** Stack of integers.*/
+
+	/** Stack of integers. */
 	public Stack<Integer> stack;
+
+	/** An error channel to which any access violations can be reported. */
+	ErrorHandler hErr;
 
 	/**
 	 * Creates a string dump of this machine state, according to spec.
@@ -48,7 +52,8 @@ public class Machine {
 	public String dump(int level) {
 		String res = "";
 		if ((level & 1) != 0) {
-			res += "LC " + lc + "  WORD=" + IOFormat.formatHexInteger(instruction, 8) + "\n";
+			res += "LC " + lc + "  WORD="
+					+ IOFormat.formatHexInteger(instruction, 8) + "\n";
 			for (int i = 0; i < 8; ++i)
 				res += "R" + i + "="
 						+ IOFormat.formatHexInteger(registers[i], 8)

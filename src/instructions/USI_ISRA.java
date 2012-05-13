@@ -2,8 +2,8 @@ package instructions;
 
 import simulanator.Machine;
 
-import simulanator.Deformatter;
 import simulanator.Deformatter.OpcodeBreakdownOther;
+import static simulanator.Deformatter.breakDownOther;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -37,8 +37,7 @@ public class USI_ISRA extends UIG_ShiftManipulate {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		
-		OpcodeBreakdownOther res = breakDownOther(machine.instruction);
-		//wtf is ^^ error?
+		OpcodeBreakdownOther bkdwn = breakDownOther(machine.instruction);
 		
 		if(this.hasOperand("DR")) {
 			//shift the data in DR whatever to the right by amount given in FC times.
