@@ -19,6 +19,8 @@ public class LinkerModule {
 	int prgLoadadd;
 	int prgTotalLen;
 	int prgStart;
+	String date;
+	int version;
 	int endRec;
 	int endLink;
 	int endText;
@@ -26,7 +28,7 @@ public class LinkerModule {
 	
 	public static class TextRecord{
 	int assignedLC;
-	int instrData;
+	String instrData;
 	char flagHigh;
 	char flagLow;
 	int modHigh;
@@ -54,21 +56,143 @@ public class LinkerModule {
 			char header = (char)in.read();
 			//header info 
 			if(header == 'H'){
-				String temp = "";
+				String pName = "";
 				boolean run = true;
+				in.read();
 				while(run){
 					char ch = (char)in.read();
 					if(ch == ':'){
 						run=false;
 					}else{
-						temp = temp+ch;
+						pName = pName+ch;
 					}
 				}
-				this.prgname = temp;
-				
+				this.prgname = pName;
+				run=true;
+				String lc = "";
+				while(run){
+					char ch = (char)in.read();
+					if(ch == ':'){
+						run=false;
+					}else{
+						lc = lc+ch;
+					}
+				}
+				this.prgLoadadd = Integer.parseInt(lc, 16);
+				run=true;
+				String totalLength = "";
+				while(run){
+					char ch = (char)in.read();
+					if(ch == ':'){
+						run=false;
+					}else{
+						totalLength = totalLength+ch;
+					}
+				}
+				this.prgTotalLen = Integer.parseInt(totalLength, 16);
+				run=true;
+				String start = "";
+				while(run){
+					char ch = (char)in.read();
+					if(ch == ':'){
+						run=false;
+					}else{
+						start = start+ch;
+					}
+				}
+				this.prgStart=Integer.parseInt(start, 16);
+				run=true;
+				String date = "";
+				int counter = 0;
+				while(run){
+					char ch = (char)in.read();
+					if(ch == ':' && counter == 2){
+						run=false;
+					}else{
+						if(ch == ':'){
+							counter++;
+						}
+						date= date+ch;
+					}
+				}
 			}
 			
-			
+			char record = (char)in.read();
+			while(record != 'E'){
+				if(record == 'T'){
+					String tLC = "";
+					boolean run = true;
+					in.read();
+					while(run){
+						char ch = (char)in.read();
+						if(ch == ':'){
+							run=false;
+						}else{
+							tLC = tLC+ch;
+						}
+					}
+					ttemp.assignedLC = Integer.parseInt(tLC, 16);
+					run = true;
+					String data = "";
+					while(run){
+						char ch = (char)in.read();
+						if(ch == ':'){
+							run=false;
+						}else{
+							data = data+ch;
+						}
+					}
+					ttemp.instrData = data;
+					run = true;
+					char highFlag = 0;
+					while(run){
+						char ch = (char)in.read();
+						if(ch == ':'){
+							run=false;
+						}else{
+							highFlag = ch;
+						}
+					}
+					ttemp.flagHigh=highFlag;
+					run = true;
+					char lowFlag = 0;
+					while(run){
+						char ch = (char)in.read();
+						if(ch == ':'){
+							run=false;
+						}else{
+							lowFlag = ch;
+						}
+					}
+					ttemp.flagLow = lowFlag;
+					run = true;
+					String modHigh = "";
+					while(run){
+						char ch = (char)in.read();
+						if(ch == ':'){
+							run=false;
+						}else{
+							modHigh = modHigh+ch;
+						}
+					}
+					ttemp.modHigh = Integer.parseInt(modHigh, 16);
+					run = true;
+					String modLow = "";
+					while(run){
+						char ch = (char)in.read();
+						if(ch == ':'){
+							run=false;
+						}else{
+							modLow = modLow+ch;
+						}
+					}
+					ttemp.modLow = Integer.parseInt(modLow, 16);
+					
+					
+				}else if(record == 'L'){
+					
+				}
+			}
 			//while loop till the end record is hit
 				//check for t record or l record
 				//if t record check for m record
