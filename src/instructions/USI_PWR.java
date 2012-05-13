@@ -105,9 +105,13 @@ public class USI_PWR extends AbstractInstruction {
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdownOther brkDwn = breakDownOther(machine.instruction);
 		int power = brkDwn.readFromSource(machine);
-		int regVal = brkDwn.readFromDest(machine);
-		regVal = (int)pow((double) regVal, (double) power);
-		brkDwn.putToDest(regVal, machine);
+		double regVal = brkDwn.readFromDest(machine);
+		regVal = pow(regVal, (double) power);
+		if(regVal > Integer.MAX_VALUE || regVal < Integer.MIN_VALUE) {
+			//warning overflow.
+		}
+		
+		brkDwn.putToDest((int)regVal, machine);
 	}
 
 	// =========================================================

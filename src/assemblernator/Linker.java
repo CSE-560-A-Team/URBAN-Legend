@@ -202,7 +202,7 @@ public class Linker {
 				//write header record.
 				out.write(LoaderHeader(modules[0].prgname, modules[0].prgLoadadd, execStartAddr, totalLen, modules[0].date, modules[0].version));
 				for(OffsetModule offMod : offsetModules) {
-					for(Map.Entry<LinkerModule.TextRecord, LinkerModule.ModRecord[]> textMod 
+					for(Map.Entry<LinkerModule.TextRecord, List<LinkerModule.ModRecord>> textMod 
 							: offMod.module.textMod.entrySet()) {
 						//if both high and low flags are 'A', no adjustments is necessary.
 						if(!(textMod.getKey().flagHigh == 'A' && textMod.getKey().flagLow == 'A')) {
