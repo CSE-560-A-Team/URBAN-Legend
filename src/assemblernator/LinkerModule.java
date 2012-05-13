@@ -384,6 +384,7 @@ public class LinkerModule {
 						mtemp.linkerLabel = linkerUse;
 						run = true;
 						char HLS = 0;
+						in.read();
 						// H, L, or S
 						while (run) {
 							char ch = (char) in.read();
