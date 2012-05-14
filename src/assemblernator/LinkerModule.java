@@ -61,6 +61,10 @@ public class LinkerModule {
 	 * Total number of mod records
 	 */
 	int endMod;
+	/**
+	 * the offset amount from program address.
+	 */
+	int offset;
 
 	/**
 	 * @author Eric

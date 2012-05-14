@@ -151,22 +151,7 @@ public class Linker {
 	 * @specRef N/A
 	 */
 	public static void link(LinkerModule[] modules, OutputStream out) {
-		/**
-		 * 
-		 * @author Noah
-		 * @date May 12, 2012; 11:05:06 PM
-		 */
-		final class OffsetModule {
-			LinkerModule module;
-			int offset;
-			
-			OffsetModule(LinkerModule module, int offset) {
-				this.module = module;
-				this.offset = offset;
-			}
-		}
-		
-		List<OffsetModule> offsetModules = new ArrayList<OffsetModule>();
+		//List<LinkerModule> offsetModules = new ArrayList<LinkerModule>();
 		Map<String, Integer> linkerTable = new HashMap<String, Integer>();
 		boolean isValid = true;
 		//sort the modules by order of address of modules.
@@ -178,7 +163,7 @@ public class Linker {
 			int totalTextRecords = 0;
 			int execStartAddr = modules[0].prgStart;
 			int offset = 0;
-			offsetModules.add(new OffsetModule(modules[0], offset)); //add first LinkerModule.
+			modules[0].offset = offset;
 			//calc offset and adjust prog, linker record addr, and text record addr by offset.
 			//add LinkerModule with adjusted addresses to offsetModules.
 			for(int i = 0; i < modules.length - 1; ++i) {
@@ -195,15 +180,15 @@ public class Linker {
 					}
 				}
 				
-				offsetModules.add(new OffsetModule(modules[i+1], offset));
+				modules[i+1].offset = offset;
 			}
 			
 			try {
 				//write header record.
 				out.write(LoaderHeader(modules[0].prgname, modules[0].prgLoadadd, execStartAddr, totalLen, modules[0].date, modules[0].version));
-				for(OffsetModule offMod : offsetModules) {
+				for(LinkerModule offMod : modules) {
 					for(Map.Entry<LinkerModule.TextRecord, List<LinkerModule.ModRecord>> textMod 
-							: offMod.module.textMod.entrySet()) {
+							: offMod.textMod.entrySet()) {
 						//if both high and low flags are 'A', no adjustments is necessary.
 						if(!(textMod.getKey().flagHigh == 'A' && textMod.getKey().flagLow == 'A')) {
 							char litBit = textMod.getKey().instrData.charAt(7);
@@ -225,16 +210,16 @@ public class Linker {
 								} else { //'R'
 									adjustVal = offMod.offset;
 								}
-								
+
 								if((mRec.HLS == 'S' && litBit == '0') || (mRec.HLS == 'L')) {
-									mask = 0x00000111;
-									opcode &= 0x11111000; //zero out mem bits.
+									mask = 0x00000FFF;
+									opcode &= 0xFFFFF000; //zero out mem bits.
 								} else if(mRec.HLS == 'S') {
-									mask = 0x00001111;
-									opcode &= 0x11110000; //zero out mem bits.
+									mask = 0x0000FFFF;
+									opcode &= 0xFFFF0000; //zero out mem bits.
 								} else { //'H's
-									mask = 0x00111000;
-									opcode &= 0x11000111; //zero out mem bits.
+									mask = 0x00FFF000;
+									opcode &= 0xFF000FFF; //zero out mem bits.
 								}
 								
 								mem = IOFormat.parseHex32Int(textMod.getKey().instrData) & mask; //unaltered opcode & mask to get mem bits.
