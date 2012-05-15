@@ -13,57 +13,31 @@ import java.util.TreeMap;
  * @date May 12, 2012; 3:59:15 PM
  */
 public class LinkerModule {
-	/**
-	 * TextRecord with all ModRecords associated with that text Record.
-	 */
+	/** TextRecord with all ModRecords associated with that text Record. */
 	Map<TextRecord, List<ModRecord>> textMod = new TreeMap<TextRecord, List<ModRecord>>();
-	/**
-	 * List of all link records in file.
-	 */
+	/** List of all link records in file. */
 	List<LinkerRecord> link = new ArrayList<LinkerRecord>();
-	/**
-	 * Name of program.
-	 */
+	/** Name of program. */
 	String prgname;
-	/**
-	 * Program load address.
-	 */
+	/** Program load address. */
 	int prgLoadadd;
-	/**
-	 * Length of program.
-	 */
+	/** Length of program. */
 	int prgTotalLen;
-	/**
-	 * Start address of the program
-	 */
+	/** Start address of the program */
 	int prgStart;
-	/**
-	 * Date the object file was made
-	 */
+	/** Date the object file was made */
 	String date;
-	/**
-	 * Version that was used to make outputfile
-	 */
+	/** Version that was used to make outputfile */
 	int version;
-	/**
-	 * Total number of records
-	 */
+	/** Total number of records */
 	int endRec;
-	/**
-	 * Total number of link records
-	 */
+	/** Total number of link records */
 	int endLink;
-	/**
-	 * Total number of text records
-	 */
+	/** Total number of text records */
 	int endText;
-	/**
-	 * Total number of mod records
-	 */
+	/** Total number of mod records */
 	int endMod;
-	/**
-	 * the offset amount from program address.
-	 */
+	/** the offset amount from program address. */
 	int offset;
 
 	/**
@@ -71,29 +45,17 @@ public class LinkerModule {
 	 * @date May 13, 2012; 6:07:31 PM
 	 */
 	public static class TextRecord {
-		/**
-		 * Program assigned LC for text record
-		 */
+		/** Program assigned LC for text record */
 		int assignedLC;
-		/**
-		 * Assembled instruction
-		 */
+		/** Assembled instruction */
 		String instrData;
-		/**
-		 * Flag for high order bits
-		 */
+		/** Flag for high order bits */
 		char flagHigh;
-		/**
-		 * Flag for low order bits
-		 */
+		/** Flag for low order bits */
 		char flagLow;
-		/**
-		 * Number of modifications for high order bits
-		 */
+		/** Number of modifications for high order bits */
 		int modHigh;
-		/**
-		 * Number of modifications for low order bits
-		 */
+		/** Number of modifications for low order bits */
 		int modLow;
 	}
 
@@ -102,25 +64,15 @@ public class LinkerModule {
 	 * @date May 13, 2012; 6:07:53 PM
 	 */
 	public static class ModRecord {
-		/**
-		 * 4 hex nybbles
-		 */
+		/** 4 hex nybbles */
 		int hex;
-		/**
-		 * Plus or minus sign
-		 */
+		/** Plus or minus sign */
 		char plusMin;
-		/**
-		 * Flag A or E
-		 */
+		/**  Flag A or E */
 		char flagAE;
-		/**
-		 * The linkers label for mods
-		 */
+		/** The linkers label for mods */
 		String linkerLabel;
-		/**
-		 * H, L, or S
-		 */
+		/** H, L, or S */
 		char HLS;
 	}
 
@@ -129,13 +81,9 @@ public class LinkerModule {
 	 * @date May 13, 2012; 6:08:12 PM
 	 */
 	public static class LinkerRecord {
-		/**
-		 * Label of link
-		 */
+		/**  Label of link */
 		String entryLabel;
-		/**
-		 * Address of link
-		 */
+		/** Address of link */
 		int entryAddr;
 	}
 
@@ -164,7 +112,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						pName = pName + ch;
 					}
 				}
@@ -176,7 +125,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						lc = lc + ch;
 					}
 				}
@@ -188,7 +138,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						totalLength = totalLength + ch;
 					}
 				}
@@ -200,7 +151,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						start = start + ch;
 					}
 				}
@@ -213,7 +165,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':' && counter == 2) {
 						run = false;
-					} else {
+					}
+					else {
 						if (ch == ':') {
 							counter++;
 						}
@@ -227,7 +180,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						pName = pName + ch;
 					}
 				}
@@ -238,7 +192,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (endOfH.equals(this.prgname)) {
 						run = false;
-					} else {
+					}
+					else {
 						endOfH = endOfH + ch;
 					}
 				}
@@ -257,7 +212,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (ch == ':') {
 							run = false;
-						} else {
+						}
+						else {
 							tLC = tLC + ch;
 						}
 					}
@@ -269,7 +225,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (ch == ':') {
 							run = false;
-						} else {
+						}
+						else {
 							data = data + ch;
 						}
 					}
@@ -281,7 +238,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (ch == ':') {
 							run = false;
-						} else {
+						}
+						else {
 							highFlag = ch;
 						}
 					}
@@ -293,7 +251,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (ch == ':') {
 							run = false;
-						} else {
+						}
+						else {
 							lowFlag = ch;
 						}
 					}
@@ -305,7 +264,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (ch == ':') {
 							run = false;
-						} else {
+						}
+						else {
 							modHigh = modHigh + ch;
 						}
 					}
@@ -317,7 +277,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (ch == ':') {
 							run = false;
-						} else {
+						}
+						else {
 							modLow = modLow + ch;
 						}
 					}
@@ -329,7 +290,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (endOfT.equals(this.prgname)) {
 							run = false;
-						} else {
+						}
+						else {
 							endOfT = endOfT + ch;
 						}
 					}
@@ -345,7 +307,8 @@ public class LinkerModule {
 							char ch = (char) in.read();
 							if (ch == ':') {
 								run = false;
-							} else {
+							}
+							else {
 								hex = hex + ch;
 							}
 						}
@@ -357,7 +320,8 @@ public class LinkerModule {
 							char ch = (char) in.read();
 							if (ch == ':') {
 								run = false;
-							} else {
+							}
+							else {
 								plusMin = ch;
 							}
 						}
@@ -369,7 +333,8 @@ public class LinkerModule {
 							char ch = (char) in.read();
 							if (ch == ':') {
 								run = false;
-							} else {
+							}
+							else {
 								AE = ch;
 							}
 						}
@@ -381,7 +346,8 @@ public class LinkerModule {
 							char ch = (char) in.read();
 							if (ch == ':') {
 								run = false;
-							} else {
+							}
+							else {
 								linkerUse = linkerUse + ch;
 							}
 						}
@@ -394,7 +360,8 @@ public class LinkerModule {
 							char ch = (char) in.read();
 							if (ch == ':') {
 								run = false;
-							} else {
+							}
+							else {
 								HLS = ch;
 							}
 						}
@@ -406,7 +373,8 @@ public class LinkerModule {
 							char ch = (char) in.read();
 							if (endOfM.equals(this.prgname)) {
 								run = false;
-							} else {
+							}
+							else {
 								endOfM = endOfM + ch;
 							}
 						}
@@ -416,7 +384,8 @@ public class LinkerModule {
 					}
 					textMod.put(ttemp, completeMod);
 					// checks for Linking record
-				} else if (record == 'L') {
+				}
+				else if (record == 'L') {
 					String label = "";
 					boolean run = true;
 					in.read();
@@ -425,7 +394,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (ch == ':') {
 							run = false;
-						} else {
+						}
+						else {
 							label = label + ch;
 						}
 					}
@@ -437,7 +407,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (ch == ':') {
 							run = false;
-						} else {
+						}
+						else {
 							address = address + ch;
 						}
 					}
@@ -449,7 +420,8 @@ public class LinkerModule {
 						char ch = (char) in.read();
 						if (endOfL.equals(this.prgname)) {
 							run = false;
-						} else {
+						}
+						else {
 							endOfL = endOfL + ch;
 						}
 					}
@@ -467,7 +439,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						numR = numR + ch;
 					}
 				}
@@ -479,7 +452,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						numL = numL + ch;
 					}
 				}
@@ -491,7 +465,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						numT = numT + ch;
 					}
 				}
@@ -503,7 +478,8 @@ public class LinkerModule {
 					char ch = (char) in.read();
 					if (ch == ':') {
 						run = false;
-					} else {
+					}
+					else {
 						numM = numM + ch;
 					}
 				}

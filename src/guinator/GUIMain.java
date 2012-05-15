@@ -164,6 +164,8 @@ public class GUIMain {
 
 		FileTab ft = new FileTab(tabPane);
 		tabPane.addTab("Untitled", ft);
+		LinkerTab lt = new LinkerTab();
+		tabPane.addTab("Link", lt);
 		mainWindow.setVisible(true);
 		ft.jt.grabFocus();
 	}
