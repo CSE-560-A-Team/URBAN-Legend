@@ -1,11 +1,17 @@
 package assemblernator;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
+
+import assemblernator.ErrorReporting.ErrorHandler;
+
+import simulanator.ScanWrap;
 
 /**
  * 
@@ -13,10 +19,8 @@ import java.util.TreeMap;
  * @date May 12, 2012; 3:59:15 PM
  */
 public class LinkerModule {
-	/** TextRecord with all ModRecords associated with that text Record. */
-	Map<TextRecord, List<ModRecord>> textMod = new TreeMap<TextRecord, List<ModRecord>>();
-	/** List of all link records in file. */
-	List<LinkerRecord> link = new ArrayList<LinkerRecord>();
+	
+	List<AllData> textModLink = new ArrayList<AllData>();
 	/** Name of program. */
 	String prgname;
 	/** Program load address. */
@@ -66,14 +70,21 @@ public class LinkerModule {
 	public static class ModRecord {
 		/** 4 hex nybbles */
 		int hex;
+		/** H, L, or S */
+		char HLS;
+		/**
+		 * The middle of modifications records
+		 */
+		List<MiddleMod> midMod = new ArrayList<MiddleMod>();
+	}
+	
+	public static class MiddleMod {
 		/** Plus or minus sign */
 		char plusMin;
 		/**  Flag A or E */
-		char flagAE;
+		char flagRE;
 		/** The linkers label for mods */
 		String linkerLabel;
-		/** H, L, or S */
-		char HLS;
 	}
 
 	/**
@@ -86,7 +97,15 @@ public class LinkerModule {
 		/** Address of link */
 		int entryAddr;
 	}
-
+	/**
+	 * 
+	 */
+	public static class AllData{
+		/** TextRecord with all ModRecords associated with that text Record. */
+		Map<TextRecord, List<ModRecord>> textMod = new TreeMap<TextRecord, List<ModRecord>>();
+		/** List of all link records in file. */
+		List<LinkerRecord> link = new ArrayList<LinkerRecord>();
+	}
 	/**
 	 * 
 	 * @param in
@@ -97,400 +116,149 @@ public class LinkerModule {
 		TextRecord ttemp = new TextRecord();
 		List<ModRecord> completeMod = new ArrayList<ModRecord>();
 		ModRecord mtemp = new ModRecord();
+		MiddleMod midtemp = new MiddleMod();
 		LinkerRecord ltemp = new LinkerRecord();
-
-		// dont know if i need to error check but just in case
-		try {
-			char header = (char) in.read();
-			// Gets all the header information
-			if (header == 'H') {
-				String pName = "";
-				boolean run = true;
-				in.read();
-				// Gets program Name
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						pName = pName + ch;
-					}
-				}
-				this.prgname = pName;
-				run = true;
-				String lc = "";
-				// Program load address
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						lc = lc + ch;
-					}
-				}
-				this.prgLoadadd = Integer.parseInt(lc, 16);
-				run = true;
-				String totalLength = "";
-				// Program total length
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						totalLength = totalLength + ch;
-					}
-				}
-				this.prgTotalLen = Integer.parseInt(totalLength, 16);
-				run = true;
-				String start = "";
-				// Program execution start
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						start = start + ch;
-					}
-				}
-				this.prgStart = Integer.parseInt(start, 16);
-				run = true;
-				String date = "";
-				int counter = 0;
-				// Date in header
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':' && counter == 2) {
-						run = false;
-					}
-					else {
-						if (ch == ':') {
-							counter++;
-						}
-						date = date + ch;
-					}
-				}
-				this.date = date;
-				run = true;
-				// gets rid of URBAN-ASM
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						pName = pName + ch;
-					}
-				}
-				String endOfH = "";
-				run = true;
-				// gets rid of program name at end of record
-				while (run) {
-					char ch = (char) in.read();
-					if (endOfH.equals(this.prgname)) {
-						run = false;
-					}
-					else {
-						endOfH = endOfH + ch;
-					}
-				}
-			}
-
-			char record = (char) in.read();
-			// gets all text records, mod records, and link records
-			while (record != 'E') {
-				// checks for a text record
-				if (record == 'T') {
-					String tLC = "";
+		Scanner read = new Scanner(in).useDelimiter(":");
+		
+		//scan wrap
+		ErrorHandler error = null;
+		ScanWrap reader = new ScanWrap(read, error);
+		
+		while(read.hasNext())
+		{
+			String check = read.next();
+			if(check.equals("H") || check.equals("\nH"))
+			{
+				this.prgname = reader.readString(ScanWrap.notcolon, "loaderNoName" );
+				if(!reader.go("disreguard"))
+					break;
+				this.prgLoadadd = reader.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
+				if(!reader.go("disreguard"))
+					break;
+				this.prgTotalLen = reader.readInt(ScanWrap.hex4, "loaderHNoPrL", 16);
+				if(!reader.go("disreguard"))
+					break;
+				this.prgStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
+				if(!reader.go("disreguard"))
+					break;
+				this.date = reader.readString(ScanWrap.datep, "loaderHNoDate");
+				if(!reader.go("disreguard"))
+					break;
+				this.version = reader.readInt(ScanWrap.dec4, "loaderHNoVer", 10);
+				if(!reader.go("disreguard"))
+					break;
+				reader.readString(ScanWrap.notcolon, "loaderHNoLLMM");
+				if(!reader.go("disreguard"))
+					break;
+				//some kind of error checking
+				reader.readString(ScanWrap.notcolon, "loaderNoName" );
+				if(!reader.go("disreguard"))
+					break;
+			}//end of header record
+			
+			
+			if(check.equals("L") || check.equals("\nL")){
+				ltemp.entryLabel = reader.readString(ScanWrap.notcolon, "");
+				if(!reader.go("disreguard"))
+					break;
+				ltemp.entryAddr =reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
+				if(!reader.go("disreguard"))
+					break;
+				//some kind of error checking
+				reader.readString(ScanWrap.notcolon, "loaderNoName" );
+				if(!reader.go("disreguard"))
+					break;
+			}//end of link record
+			
+			
+			
+			if(check.equals("T") || check.equals("\nT")){
+				ttemp.assignedLC = reader.readInt(ScanWrap.hex4, "", 16);
+				if(!reader.go("disreguard"))
+					break;
+				ttemp.instrData = reader.readString(ScanWrap.notcolon, "");
+				if(!reader.go("disreguard"))
+					break;
+				ttemp.flagHigh = reader.readString(ScanWrap.notcolon, "").charAt(0);
+				if(!reader.go("disreguard"))
+					break;
+				ttemp.flagLow = reader.readString(ScanWrap.notcolon, "").charAt(0);
+				if(!reader.go("disreguard"))
+					break;
+				ttemp.modHigh = reader.readInt(ScanWrap.notcolon, "", 16);
+				if(!reader.go("disreguard"))
+					break;
+				ttemp.modLow = reader.readInt(ScanWrap.notcolon, "", 16);
+				if(!reader.go("disreguard"))
+					break;
+				//some kind of error checking
+				reader.readString(ScanWrap.notcolon, "loaderNoName" );
+				if(!reader.go("disreguard"))
+					break;
+				check = read.next();
+				while(check.equals("M") || check.equals("\nM")){
+					mtemp.hex = reader.readInt(ScanWrap.hex4, "", 16);
+					if(!reader.go("disreguard"))
+						break;
 					boolean run = true;
-					in.read();
-					// Assigned location counter
-					while (run) {
-						char ch = (char) in.read();
-						if (ch == ':') {
+					String loop = "";
+					while(run){
+						midtemp.plusMin = reader.readString(ScanWrap.notcolon, "").charAt(0);
+						if(!reader.go("disreguard"))
+							break;
+						midtemp.flagRE = reader.readString(ScanWrap.notcolon, "").charAt(0);
+						if(!reader.go("disreguard"))
+							break;
+						midtemp.linkerLabel = reader.readString(ScanWrap.notcolon, "");
+						if(!reader.go("disreguard"))
+							break;
+						loop = reader.readString(ScanWrap.notcolon, "");
+						if(!reader.go("disreguard"))
+							break;
+						if(loop.equals("H") || loop.equals("L") || loop.equals("S")){
 							run = false;
 						}
-						else {
-							tLC = tLC + ch;
-						}
+						mtemp.midMod.add(midtemp);
 					}
-					ttemp.assignedLC = Integer.parseInt(tLC, 16);
-					run = true;
-					String data = "";
-					// Assembled instruction
-					while (run) {
-						char ch = (char) in.read();
-						if (ch == ':') {
-							run = false;
-						}
-						else {
-							data = data + ch;
-						}
-					}
-					ttemp.instrData = data;
-					run = true;
-					char highFlag = 0;
-					// High order flag
-					while (run) {
-						char ch = (char) in.read();
-						if (ch == ':') {
-							run = false;
-						}
-						else {
-							highFlag = ch;
-						}
-					}
-					ttemp.flagHigh = highFlag;
-					run = true;
-					char lowFlag = 0;
-					// Low order flag
-					while (run) {
-						char ch = (char) in.read();
-						if (ch == ':') {
-							run = false;
-						}
-						else {
-							lowFlag = ch;
-						}
-					}
-					ttemp.flagLow = lowFlag;
-					run = true;
-					String modHigh = "";
-					// Modifications for high order
-					while (run) {
-						char ch = (char) in.read();
-						if (ch == ':') {
-							run = false;
-						}
-						else {
-							modHigh = modHigh + ch;
-						}
-					}
-					ttemp.modHigh = Integer.parseInt(modHigh, 16);
-					run = true;
-					String modLow = "";
-					// Modifications for low order
-					while (run) {
-						char ch = (char) in.read();
-						if (ch == ':') {
-							run = false;
-						}
-						else {
-							modLow = modLow + ch;
-						}
-					}
-					ttemp.modLow = Integer.parseInt(modLow, 16);
-					String endOfT = "";
-					run = true;
-					// End of a Text Record
-					while (run) {
-						char ch = (char) in.read();
-						if (endOfT.equals(this.prgname)) {
-							run = false;
-						}
-						else {
-							endOfT = endOfT + ch;
-						}
-					}
-					record = (char) in.read();
-
-					// If a mod record exists while loop runs
-					while (record == 'M') {
-						in.read();
-						run = true;
-						String hex = "";
-						// Four hex nybbles
-						while (run) {
-							char ch = (char) in.read();
-							if (ch == ':') {
-								run = false;
-							}
-							else {
-								hex = hex + ch;
-							}
-						}
-						mtemp.hex = Integer.parseInt(hex, 16);
-						run = true;
-						char plusMin = 0;
-						// Plus or minus sign
-						while (run) {
-							char ch = (char) in.read();
-							if (ch == ':') {
-								run = false;
-							}
-							else {
-								plusMin = ch;
-							}
-						}
-						mtemp.plusMin = plusMin;
-						run = true;
-						char AE = 0;
-						// Flag A or E
-						while (run) {
-							char ch = (char) in.read();
-							if (ch == ':') {
-								run = false;
-							}
-							else {
-								AE = ch;
-							}
-						}
-						mtemp.flagAE = AE;
-						run = true;
-						String linkerUse = "";
-						// Label linker uses
-						while (run) {
-							char ch = (char) in.read();
-							if (ch == ':') {
-								run = false;
-							}
-							else {
-								linkerUse = linkerUse + ch;
-							}
-						}
-						mtemp.linkerLabel = linkerUse;
-						run = true;
-						char HLS = 0;
-						in.read();
-						// H, L, or S
-						while (run) {
-							char ch = (char) in.read();
-							if (ch == ':') {
-								run = false;
-							}
-							else {
-								HLS = ch;
-							}
-						}
-						mtemp.HLS = HLS;
-						String endOfM = "";
-						run = true;
-						// End of Mod Record
-						while (run) {
-							char ch = (char) in.read();
-							if (endOfM.equals(this.prgname)) {
-								run = false;
-							}
-							else {
-								endOfM = endOfM + ch;
-							}
-						}
-						completeMod.add(mtemp);
-						// loop keeps running till a Mod record is not found
-						record = (char) in.read();
-					}
-					textMod.put(ttemp, completeMod);
-					// checks for Linking record
-				}
-				else if (record == 'L') {
-					String label = "";
-					boolean run = true;
-					in.read();
-					// Entry label
-					while (run) {
-						char ch = (char) in.read();
-						if (ch == ':') {
-							run = false;
-						}
-						else {
-							label = label + ch;
-						}
-					}
-					ltemp.entryLabel = label;
-					String address = "";
-					run = true;
-					// Entry address
-					while (run) {
-						char ch = (char) in.read();
-						if (ch == ':') {
-							run = false;
-						}
-						else {
-							address = address + ch;
-						}
-					}
-					ltemp.entryAddr = Integer.parseInt(address, 16);
-					String endOfL = "";
-					run = true;
-					// End of Linker record
-					while (run) {
-						char ch = (char) in.read();
-						if (endOfL.equals(this.prgname)) {
-							run = false;
-						}
-						else {
-							endOfL = endOfL + ch;
-						}
-					}
-					link.add(ltemp);
-					record = (char) in.read();
-				}
-			}
-			// gets all the end record info
-			if (record == 'E') {
-				String numR = "";
-				boolean run = true;
-				in.read();
-				// Number of records
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						numR = numR + ch;
-					}
-				}
-				this.endRec = Integer.parseInt(numR, 16);
-				String numL = "";
-				run = true;
-				// Number of Linking records
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						numL = numL + ch;
-					}
-				}
-				this.endLink = Integer.parseInt(numL, 16);
-				String numT = "";
-				run = true;
-				// Number of Text records
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						numT = numT + ch;
-					}
-				}
-				this.endText = Integer.parseInt(numT, 16);
-				String numM = "";
-				run = true;
-				// Number of Mod records
-				while (run) {
-					char ch = (char) in.read();
-					if (ch == ':') {
-						run = false;
-					}
-					else {
-						numM = numM + ch;
-					}
-				}
-				this.endMod = Integer.parseInt(numM, 16);
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+					mtemp.HLS = loop.charAt(0);
+					//some kind of error checking
+					reader.readString(ScanWrap.notcolon, "loaderNoName" );
+					if(!reader.go("disreguard"))
+						break;
+					completeMod.add(mtemp);
+					check = read.next();
+				}//end of mod record
+					
+			}//end of text record
+			
+			
+			
+			
+			if(check.equals("E") || check.equals("\nE")){
+				this.endRec = reader.readInt(ScanWrap.hex4, "", 16);
+				if(!reader.go("disreguard"))
+					break;
+				this.endLink = reader.readInt(ScanWrap.hex4, "", 16);
+				if(!reader.go("disreguard"))
+					break;
+				this.endText = reader.readInt(ScanWrap.hex4, "", 16);
+				if(!reader.go("disreguard"))
+					break;
+				this.endMod = reader.readInt(ScanWrap.hex4, "", 16);
+				if(!reader.go("disreguard"))
+					break;
+				//some kind of error checking
+				reader.readString(ScanWrap.notcolon, "loaderNoName" );
+				if(!reader.go("disreguard"))
+					break;
+				
+			}//end of end record
+			
+			
+		}//loop again checking for a H record
 	}
+		
 
 }
+
+

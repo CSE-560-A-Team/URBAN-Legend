@@ -46,7 +46,7 @@ public class ScanWrap {
 	 *         test for success.
 	 * @specRef N/A
 	 */
-	int readInt(Pattern p, String err, int base) {
+	public int readInt(Pattern p, String err, int base) {
 		if (!scan.hasNext(p)) { // LM1.5
 			hErr.reportError(makeError("loaderHNoAddr"), 0, 0);
 			success = false;
@@ -82,7 +82,7 @@ public class ScanWrap {
 	 *            Disregarded.
 	 * @return Returns true if the last read succeeded, false otherwise.
 	 */
-	boolean go(Object disregard) {
+	public boolean go(Object disregard) {
 		return success;
 	}
 
