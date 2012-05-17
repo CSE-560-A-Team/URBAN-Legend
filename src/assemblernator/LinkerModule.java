@@ -112,7 +112,7 @@ public class LinkerModule {
 	 * @param in
 	 *            the outputFile containing all the records
 	 */
-	public LinkerModule(InputStream in) {
+	public LinkerModule(InputStream in, ErrorHandler error) {
 		// temp holders for information
 		TextRecord ttemp = new TextRecord();
 		List<ModRecord> completeMod = new ArrayList<ModRecord>();
@@ -122,9 +122,6 @@ public class LinkerModule {
 
 		// scan wrap
 		Scanner read = new Scanner(in);
-		//================================================================================================
-		ErrorHandler error = null; //NEEDS TO BE FIXED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//================================================================================================
 		ScanWrap reader = new ScanWrap(read, error);
 
 		//checks for an H
