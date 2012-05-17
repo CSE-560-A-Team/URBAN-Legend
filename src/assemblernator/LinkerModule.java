@@ -83,6 +83,10 @@ public class LinkerModule {
 		List<MiddleMod> midMod = new ArrayList<MiddleMod>();
 	}
 
+	/**
+	 * @author Eric
+	 * @date May 17, 2012; 5:50:57 PM
+	 */
 	public static class MiddleMod {
 		/** Plus or minus sign */
 		char plusMin;
