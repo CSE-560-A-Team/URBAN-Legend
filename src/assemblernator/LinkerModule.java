@@ -122,7 +122,7 @@ public class LinkerModule {
 		ErrorHandler error = null; //NEEDS TO BE FIXED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//================================================================================================
 		ScanWrap reader = new ScanWrap(read, error);
-		
+
 		//checks for an H
 		String check = reader.readString(ScanWrap.notcolon, "loaderNoHeader");
 		if (!reader.go("disreguard"))
