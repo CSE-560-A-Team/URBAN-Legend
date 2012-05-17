@@ -1,7 +1,6 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-
 import static assemblernator.InstructionFormatter.formatOther;
 import simulanator.Machine;
 import assemblernator.AbstractInstruction;
@@ -11,7 +10,6 @@ import assemblernator.Module;
 import assemblernator.Module.Value;
 import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
-import simulanator.Deformatter;
 
 /**
  * The POP instruction.

@@ -1,5 +1,8 @@
 package assemblernator;
 
+import static assemblernator.OperandChecker.isValidLiteral;
+import static assemblernator.OperandChecker.isValidMem;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -7,16 +10,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import assemblernator.Instruction.ConstantRange;
-import static assemblernator.OperandChecker.isValidMem;
-import static assemblernator.OperandChecker.isValidLiteral;
 
 /**
  * 

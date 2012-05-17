@@ -20,7 +20,7 @@ public class URBANhighlighter extends DefaultTokenMarker implements TokenMarker 
 	 * Construct and add syntax rules.
 	 */
 	public URBANhighlighter() {
-		super();
+		super(false);
 		Color idColor = new Color(128, 0, 128);
 		schemes.add(new BlockDescriptor("Comment", "(?<=;)", "[\r\n]", true, false,
 				(char) 0, new Color(165, 165, 165), Font.ITALIC));
@@ -30,7 +30,7 @@ public class URBANhighlighter extends DefaultTokenMarker implements TokenMarker 
 				new Color(0, 0, 255), 0));
 
 		KeywordSet kws = new KeywordSet("Instructions", new Color(0, 0, 128),
-				Font.BOLD, false);
+				Font.BOLD);
 		for (Entry<String, Instruction> i : Assembler.instructions.entrySet()) {
 			kws.words.add(i.getKey().toLowerCase());
 		}

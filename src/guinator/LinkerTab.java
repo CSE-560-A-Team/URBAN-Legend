@@ -9,6 +9,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
+import javax.swing.table.DefaultTableModel;
 
 import assemblernator.LinkerModule;
 
@@ -19,15 +20,15 @@ import assemblernator.LinkerModule;
 public class LinkerTab extends JSplitPane {
 	/** Make ECJ shut up */
 	private static final long serialVersionUID = 1L;
-	
+
 	/** Table of files to be linked. */
 	JTable linkTable;
 	/** Text box of link messages */
 	JTextArea warningOutput;
-	
+
 	/** The actual modules we will be linking */
 	ArrayList<LinkerModule> linkMods;
-	
+
 	/**
 	 * Populate the linker tab UI.
 	 */
@@ -36,11 +37,16 @@ public class LinkerTab extends JSplitPane {
 		JPanel npanel = new JPanel();
 		JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
 		toolbar.add(new JButton("Link"));
+
+		linkTable = new JTable();
+		String cols[] = { "Filename", "Name", "Date of Assembly", "Load At", "Start At" };
+		linkTable.setModel(new DefaultTableModel(cols, 0));
+
 		npanel.setLayout(new BoxLayout(npanel, BoxLayout.PAGE_AXIS));
-		npanel.add(linkTable = new JTable());
+		npanel.add(linkTable);
 		npanel.add(toolbar);
+		
 		setLeftComponent(npanel);
 		setRightComponent(warningOutput = new JTextArea());
-		
 	}
 }
