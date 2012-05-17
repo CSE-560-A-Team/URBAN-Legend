@@ -1,6 +1,5 @@
 package assemblernator;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,8 +18,10 @@ import simulanator.ScanWrap;
  * @date May 12, 2012; 3:59:15 PM
  */
 public class LinkerModule {
-	
-	List<AllData> textModLink = new ArrayList<AllData>();
+	/** Contains all the link records. */
+	List<LinkerRecord> linkRecord = new ArrayList<LinkerRecord>();
+	/** Contains all the mod and text records. */
+	Map<TextRecord, List<ModRecord>> textModRecord = new TreeMap<TextRecord, List<ModRecord>>();
 	/** Name of program. */
 	String prgname;
 	/** Program load address. */
@@ -43,6 +44,10 @@ public class LinkerModule {
 	int endMod;
 	/** the offset amount from program address. */
 	int offset;
+	/** Success failure boolean */
+	boolean success = false;
+	/** End reached */
+	boolean done = true;
 
 	/**
 	 * @author Eric
@@ -77,11 +82,11 @@ public class LinkerModule {
 		 */
 		List<MiddleMod> midMod = new ArrayList<MiddleMod>();
 	}
-	
+
 	public static class MiddleMod {
 		/** Plus or minus sign */
 		char plusMin;
-		/**  Flag A or E */
+		/** Flag A or E */
 		char flagRE;
 		/** The linkers label for mods */
 		String linkerLabel;
@@ -92,20 +97,12 @@ public class LinkerModule {
 	 * @date May 13, 2012; 6:08:12 PM
 	 */
 	public static class LinkerRecord {
-		/**  Label of link */
+		/** Label of link */
 		String entryLabel;
 		/** Address of link */
 		int entryAddr;
 	}
-	/**
-	 * 
-	 */
-	public static class AllData{
-		/** TextRecord with all ModRecords associated with that text Record. */
-		Map<TextRecord, List<ModRecord>> textMod = new TreeMap<TextRecord, List<ModRecord>>();
-		/** List of all link records in file. */
-		List<LinkerRecord> link = new ArrayList<LinkerRecord>();
-	}
+
 	/**
 	 * 
 	 * @param in
@@ -118,147 +115,160 @@ public class LinkerModule {
 		ModRecord mtemp = new ModRecord();
 		MiddleMod midtemp = new MiddleMod();
 		LinkerRecord ltemp = new LinkerRecord();
-		Scanner read = new Scanner(in).useDelimiter(":");
-		
-		//scan wrap
+
+		// scan wrap
+		Scanner read = new Scanner(in);
 		ErrorHandler error = null;
 		ScanWrap reader = new ScanWrap(read, error);
-		
-		while(read.hasNext())
-		{
-			String check = read.next();
-			if(check.equals("H") || check.equals("\nH"))
-			{
-				this.prgname = reader.readString(ScanWrap.notcolon, "loaderNoName" );
-				if(!reader.go("disreguard"))
-					break;
-				this.prgLoadadd = reader.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
-				if(!reader.go("disreguard"))
-					break;
-				this.prgTotalLen = reader.readInt(ScanWrap.hex4, "loaderHNoPrL", 16);
-				if(!reader.go("disreguard"))
-					break;
-				this.prgStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
-				if(!reader.go("disreguard"))
-					break;
-				this.date = reader.readString(ScanWrap.datep, "loaderHNoDate");
-				if(!reader.go("disreguard"))
-					break;
-				this.version = reader.readInt(ScanWrap.dec4, "loaderHNoVer", 10);
-				if(!reader.go("disreguard"))
-					break;
-				reader.readString(ScanWrap.notcolon, "loaderHNoLLMM");
-				if(!reader.go("disreguard"))
-					break;
-				//some kind of error checking
-				reader.readString(ScanWrap.notcolon, "loaderNoName" );
-				if(!reader.go("disreguard"))
-					break;
-			}//end of header record
-			
-			
-			if(check.equals("L") || check.equals("\nL")){
+
+		String check = reader.readString(ScanWrap.notcolon, "");
+		if (!reader.go("disreguard"))
+			return;
+		if (check.equals("H")) {
+			this.prgname = reader.readString(ScanWrap.notcolon, "loaderNoName");
+			if (!reader.go("disreguard"))
+				return;
+			this.prgLoadadd = reader
+					.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
+			if (!reader.go("disreguard"))
+				return;
+			this.prgTotalLen = reader
+					.readInt(ScanWrap.hex4, "loaderHNoPrL", 16);
+			if (!reader.go("disreguard"))
+				return;
+			this.prgStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
+			if (!reader.go("disreguard"))
+				return;
+			this.date = reader.readString(ScanWrap.datep, "loaderHNoDate");
+			if (!reader.go("disreguard"))
+				return;
+			this.version = reader.readInt(ScanWrap.dec4, "loaderHNoVer", 10);
+			if (!reader.go("disreguard"))
+				return;
+			reader.readString(ScanWrap.notcolon, "loaderHNoLLMM");
+			if (!reader.go("disreguard"))
+				return;
+			// some kind of error checking
+			reader.readString(ScanWrap.notcolon, "loaderNoName");
+			if (!reader.go("disreguard"))
+				return;
+		}else{
+			return;
+		}
+
+		check = reader.readString(ScanWrap.notcolon, "");
+		if (!reader.go("disreguard"))
+			return;
+		while (check.equals("L") || check.equals("T")) {
+			if (check.equals("L")) {
 				ltemp.entryLabel = reader.readString(ScanWrap.notcolon, "");
-				if(!reader.go("disreguard"))
-					break;
-				ltemp.entryAddr =reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
-				if(!reader.go("disreguard"))
-					break;
-				//some kind of error checking
-				reader.readString(ScanWrap.notcolon, "loaderNoName" );
-				if(!reader.go("disreguard"))
-					break;
-			}//end of link record
-			
-			
-			
-			if(check.equals("T") || check.equals("\nT")){
+				if (!reader.go("disreguard"))
+					return;
+				ltemp.entryAddr = reader.readInt(ScanWrap.hex4, "loaderNoEXS",
+						16);
+				if (!reader.go("disreguard"))
+					return;
+				// some kind of error checking
+				reader.readString(ScanWrap.notcolon, "loaderNoName");
+				if (!reader.go("disreguard"))
+					return;
+				linkRecord.add(ltemp);
+				check = reader.readString(ScanWrap.notcolon, "");
+				if (!reader.go("disreguard"))
+					return;
+			} else if (check.equals("T")) {
 				ttemp.assignedLC = reader.readInt(ScanWrap.hex4, "", 16);
-				if(!reader.go("disreguard"))
-					break;
+				if (!reader.go("disreguard"))
+					return;
 				ttemp.instrData = reader.readString(ScanWrap.notcolon, "");
-				if(!reader.go("disreguard"))
-					break;
-				ttemp.flagHigh = reader.readString(ScanWrap.notcolon, "").charAt(0);
-				if(!reader.go("disreguard"))
-					break;
-				ttemp.flagLow = reader.readString(ScanWrap.notcolon, "").charAt(0);
-				if(!reader.go("disreguard"))
-					break;
+				if (!reader.go("disreguard"))
+					return;
+				ttemp.flagHigh = reader.readString(ScanWrap.notcolon, "")
+						.charAt(0);
+				if (!reader.go("disreguard"))
+					return;
+				ttemp.flagLow = reader.readString(ScanWrap.notcolon, "")
+						.charAt(0);
+				if (!reader.go("disreguard"))
+					return;
 				ttemp.modHigh = reader.readInt(ScanWrap.notcolon, "", 16);
-				if(!reader.go("disreguard"))
-					break;
+				if (!reader.go("disreguard"))
+					return;
 				ttemp.modLow = reader.readInt(ScanWrap.notcolon, "", 16);
-				if(!reader.go("disreguard"))
-					break;
-				//some kind of error checking
-				reader.readString(ScanWrap.notcolon, "loaderNoName" );
-				if(!reader.go("disreguard"))
-					break;
-				check = read.next();
-				while(check.equals("M") || check.equals("\nM")){
+				if (!reader.go("disreguard"))
+					return;
+				// some kind of error checking
+				reader.readString(ScanWrap.notcolon, "loaderNoName");
+				if (!reader.go("disreguard"))
+					return;
+				check = reader.readString(ScanWrap.notcolon, "");
+				if (!reader.go("disreguard"))
+					return;
+				while (check.equals("M")) {
 					mtemp.hex = reader.readInt(ScanWrap.hex4, "", 16);
-					if(!reader.go("disreguard"))
-						break;
+					if (!reader.go("disreguard"))
+						return;
 					boolean run = true;
 					String loop = "";
-					while(run){
-						midtemp.plusMin = reader.readString(ScanWrap.notcolon, "").charAt(0);
-						if(!reader.go("disreguard"))
-							break;
-						midtemp.flagRE = reader.readString(ScanWrap.notcolon, "").charAt(0);
-						if(!reader.go("disreguard"))
-							break;
-						midtemp.linkerLabel = reader.readString(ScanWrap.notcolon, "");
-						if(!reader.go("disreguard"))
-							break;
+					while (run) {
+						midtemp.plusMin = reader.readString(ScanWrap.notcolon,
+								"").charAt(0);
+						if (!reader.go("disreguard"))
+							return;
+						midtemp.flagRE = reader.readString(ScanWrap.notcolon,
+								"").charAt(0);
+						if (!reader.go("disreguard"))
+							return;
+						midtemp.linkerLabel = reader.readString(
+								ScanWrap.notcolon, "");
+						if (!reader.go("disreguard"))
+							return;
 						loop = reader.readString(ScanWrap.notcolon, "");
-						if(!reader.go("disreguard"))
-							break;
-						if(loop.equals("H") || loop.equals("L") || loop.equals("S")){
+						if (!reader.go("disreguard"))
+							return;
+						if (loop.equals("H") || loop.equals("L")
+								|| loop.equals("S")) {
 							run = false;
 						}
 						mtemp.midMod.add(midtemp);
 					}
 					mtemp.HLS = loop.charAt(0);
-					//some kind of error checking
-					reader.readString(ScanWrap.notcolon, "loaderNoName" );
-					if(!reader.go("disreguard"))
-						break;
+					// some kind of error checking
+					reader.readString(ScanWrap.notcolon, "loaderNoName");
+					if (!reader.go("disreguard"))
+						return;
 					completeMod.add(mtemp);
-					check = read.next();
-				}//end of mod record
-					
-			}//end of text record
-			
-			
-			
-			
-			if(check.equals("E") || check.equals("\nE")){
-				this.endRec = reader.readInt(ScanWrap.hex4, "", 16);
-				if(!reader.go("disreguard"))
-					break;
-				this.endLink = reader.readInt(ScanWrap.hex4, "", 16);
-				if(!reader.go("disreguard"))
-					break;
-				this.endText = reader.readInt(ScanWrap.hex4, "", 16);
-				if(!reader.go("disreguard"))
-					break;
-				this.endMod = reader.readInt(ScanWrap.hex4, "", 16);
-				if(!reader.go("disreguard"))
-					break;
-				//some kind of error checking
-				reader.readString(ScanWrap.notcolon, "loaderNoName" );
-				if(!reader.go("disreguard"))
-					break;
-				
-			}//end of end record
-			
-			
-		}//loop again checking for a H record
+					check = reader.readString(ScanWrap.notcolon, "");
+					if (!reader.go("disreguard"))
+						return;
+				}// end of mod record
+
+			}// end of text record
+
+		}//end of while loop checking for linking records and text records
+
+		if (check.equals("E")) {
+			this.endRec = reader.readInt(ScanWrap.hex4, "", 16);
+			if (!reader.go("disreguard"))
+				return;
+			this.endLink = reader.readInt(ScanWrap.hex4, "", 16);
+			if (!reader.go("disreguard"))
+				return;
+			this.endText = reader.readInt(ScanWrap.hex4, "", 16);
+			if (!reader.go("disreguard"))
+				return;
+			this.endMod = reader.readInt(ScanWrap.hex4, "", 16);
+			if (!reader.go("disreguard"))
+				return;
+			// some kind of error checking
+			reader.readString(ScanWrap.notcolon, "loaderNoName");
+			if (!reader.go("disreguard"))
+				return;
+		}// end of end record
+		this.success = true;
+		if (read.hasNext()) {
+			this.done = false;
+		}
 	}
-		
 
 }
-
-
