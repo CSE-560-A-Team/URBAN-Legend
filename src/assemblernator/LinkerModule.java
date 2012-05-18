@@ -77,9 +77,7 @@ public class LinkerModule {
 		int hex;
 		/** H, L, or S */
 		char HLS;
-		/**
-		 * The middle of modifications records
-		 */
+		/** The middle of modifications records*/
 		List<MiddleMod> midMod = new ArrayList<MiddleMod>();
 	}
 
@@ -111,6 +109,7 @@ public class LinkerModule {
 	 * 
 	 * @param in
 	 *            the outputFile containing all the records
+	 * @param error errorhandler for constructor
 	 */
 	public LinkerModule(InputStream in, ErrorHandler error) {
 		// temp holders for information
@@ -123,6 +122,17 @@ public class LinkerModule {
 		// scan wrap
 		Scanner read = new Scanner(in);
 		ScanWrap reader = new ScanWrap(read, error);
+
+		//String used for name
+		String ender = "";
+
+		//Number of records
+		int mod = 0;
+		int link = 0;
+		int text = 0;
+
+		//value checking 
+		boolean isValid = true;
 
 		//checks for an H
 		String check = reader.readString(ScanWrap.notcolon, "loaderNoHeader");
@@ -137,13 +147,31 @@ public class LinkerModule {
 					.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
 			if (!reader.go("disreguard"))
 				return;
+			//error checking
+			isValid = OperandChecker.isValidMem(this.prgLoadadd);
+			if(!isValid){
+				error.reportError(makeError("invalidValue"),0,0);
+				return;
+			}
 			this.prgTotalLen = reader
 					.readInt(ScanWrap.hex4, "loaderHNoPrL", 16);
 			if (!reader.go("disreguard"))
 				return;
+			//error checking
+			isValid = OperandChecker.isValidMem(this.prgTotalLen);
+			if(!isValid){
+				error.reportError(makeError("invalidValue"),0,0);
+				return;
+			}
 			this.prgStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
 			if (!reader.go("disreguard"))
 				return;
+			//error checking
+			isValid = OperandChecker.isValidMem(this.prgStart);
+			if(!isValid){
+				error.reportError(makeError("invalidValue"),0,0);
+				return;
+			}
 			this.date = reader.readString(ScanWrap.datep, "loaderHNoDate");
 			if (!reader.go("disreguard"))
 				return;
@@ -153,11 +181,13 @@ public class LinkerModule {
 			reader.readString(ScanWrap.notcolon, "loaderHNoLLMM");
 			if (!reader.go("disreguard"))
 				return;
-			// some kind of error checking====================================================================================
-			reader.readString(ScanWrap.notcolon, "loaderNoName");
+			// some kind of error checking
+			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
-			//=================================================================================================================
+			if(ender.equals(this.prgname)){
+				error.reportWarning(makeError("noMatch"), 0, 0);
+			}
 		}else{
 			error.reportError(makeError("loaderNoHeader"),0,0); 
 			return;
@@ -170,6 +200,7 @@ public class LinkerModule {
 		while (check.equals("L") || check.equals("T")) {
 			//gets all information from linker record
 			if (check.equals("L")) {
+				link++;
 				ltemp.entryLabel = reader.readString(ScanWrap.notcolon, "");
 				if (!reader.go("disreguard"))
 					return;
@@ -177,20 +208,35 @@ public class LinkerModule {
 						16);
 				if (!reader.go("disreguard"))
 					return;
-				// some kind of error checking==========================================================================================
-				reader.readString(ScanWrap.notcolon, "loaderNoName");
+				//error checking
+				isValid = OperandChecker.isValidMem(ltemp.entryAddr);
+				if(!isValid){
+					error.reportError(makeError("invalidValue"),0,0);
+					return;
+				}
+				// some kind of error checking
+				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if (!reader.go("disreguard"))
 					return;
-				//=====================================================================================================================
+				if(ender.equals(this.prgname)){
+					error.reportWarning(makeError("noMatch"), 0, 0);
+				}
 				linkRecord.add(ltemp);
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 				if (!reader.go("disreguard"))
 					return;
 				//gets all information out of Text record
 			} else if (check.equals("T")) {
+				text++;
 				ttemp.assignedLC = reader.readInt(ScanWrap.hex4, "textLC", 16);
 				if (!reader.go("disreguard"))
 					return;
+				//error checking
+				isValid = OperandChecker.isValidMem(ttemp.assignedLC);
+				if(!isValid){
+					error.reportError(makeError("invalidValue"),0,0);
+					return;
+				}
 				ttemp.instrData = reader.readString(ScanWrap.notcolon, "textData");
 				if (!reader.go("disreguard"))
 					return;
@@ -208,19 +254,28 @@ public class LinkerModule {
 				ttemp.modLow = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
 					return;
-				// some kind of error checking==========================================================================================
-				reader.readString(ScanWrap.notcolon, "loaderNoName");
+				// some kind of error checking
+				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if (!reader.go("disreguard"))
 					return;
-				//=======================================================================================================================
+				if(ender.equals(this.prgname)){
+					error.reportWarning(makeError("noMatch"), 0, 0);
+				}
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 				if (!reader.go("disreguard"))
 					return;
 				//gets all mod records for a text record
 				while (check.equals("M")) {
+					mod++;
 					mtemp.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
 					if (!reader.go("disreguard"))
 						return;
+					//error checking
+					isValid = OperandChecker.isValidMem(mtemp.hex);
+					if(!isValid){
+						error.reportError(makeError("invalidValue"),0,0);
+						return;
+					}
 					boolean run = true;
 					String loop = "";
 					while (run) {
@@ -228,6 +283,12 @@ public class LinkerModule {
 								"modPm").charAt(0);
 						if (!reader.go("disreguard"))
 							return;
+						//error checking
+						isValid = OperandChecker.isValidPlusMin(midtemp.plusMin);
+						if(!isValid){
+							error.reportError(makeError("invalidPlus"),0,0);
+							return;
+						}
 						midtemp.flagRE = reader.readString(ScanWrap.notcolon,
 								"modFlag").charAt(0);
 						if (!reader.go("disreguard"))
@@ -246,11 +307,13 @@ public class LinkerModule {
 						mtemp.midMod.add(midtemp);
 					}
 					mtemp.HLS = loop.charAt(0);
-					// some kind of error checking========================================================================================
-					reader.readString(ScanWrap.notcolon, "loaderNoName");
+					// some kind of error checking
+					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 					if (!reader.go("disreguard"))
 						return;
-					//====================================================================================================================
+					if(ender.equals(this.prgname)){
+						error.reportWarning(makeError("noMatch"), 0, 0);
+					}
 					completeMod.add(mtemp);
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
@@ -266,24 +329,64 @@ public class LinkerModule {
 			this.endRec = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			if (!reader.go("disreguard"))
 				return;
+			//error checking
+			isValid = OperandChecker.isValidMem(this.endRec);
+			if(!isValid){
+				error.reportError(makeError("invalidValue"),0,0);
+				return;
+			}
 			this.endLink = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			if (!reader.go("disreguard"))
 				return;
+			//error checking
+			isValid = OperandChecker.isValidMem(this.endLink);
+			if(!isValid){
+				error.reportError(makeError("invalidValue"),0,0);
+				return;
+			}
 			this.endText = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			if (!reader.go("disreguard"))
 				return;
+			//error checking
+			isValid = OperandChecker.isValidMem(this.endText);
+			if(!isValid){
+				error.reportError(makeError("invalidValue"),0,0);
+				return;
+			}
 			this.endMod = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			if (!reader.go("disreguard"))
 				return;
-			// some kind of error checking================================================================================================
-			reader.readString(ScanWrap.notcolon, "loaderNoName");
+			//error checking
+			isValid = OperandChecker.isValidMem(this.endMod);
+			if(!isValid){
+				error.reportError(makeError("invalidValue"),0,0);
+				return;
+			}
+			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
-			//============================================================================================================================
+			if(ender.equals(this.prgname)){
+				error.reportWarning(makeError("noMatch"), 0, 0);
+			}
+
 		}else{
 			error.reportError(makeError("loaderNoEnd"),0,0); 
 			return;
 		}
+
+		//warnings for amount of mod text and link records
+		if(link != this.endLink){
+			error.reportWarning(makeError("linkMatch"), 0, 0);
+		}else if(text != this.endText){
+			error.reportWarning(makeError("textMatch"), 0, 0);
+		}else if(mod != this.endMod){
+			error.reportWarning(makeError("modMatch"), 0, 0); 
+		}else if((link+text+mod) != this.endRec){
+			error.reportWarning(makeError("totalMatch"), 0, 0); 
+		}
+
+
+		//program ran successful. Checks for more in file
 		this.success = true;
 		if (read.hasNext()) {
 			this.done = false;

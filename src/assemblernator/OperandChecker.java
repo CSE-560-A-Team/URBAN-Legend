@@ -149,4 +149,24 @@ public class OperandChecker {
 			}
 		return false;
 	}
+	
+	/**
+	 * @author Eric
+	 * @date May 17, 2012; 8:24:57 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param str the parameter to be checked
+	 * @return true if it is true
+	 * @specRef N/A
+	 */
+	public static boolean isValidPlusMin(char str){
+		if(str == '+'|| str == '-'){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
