@@ -5,6 +5,9 @@ import static assemblernator.ErrorReporting.makeError;
 import java.io.InputStream;
 import java.util.Scanner;
 
+import simulanator.Machine.URBANInputStream;
+import simulanator.Machine.URBANOutputStream;
+
 import assemblernator.Assembler;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
@@ -14,9 +17,6 @@ import assemblernator.IOFormat;
  * @date May 12, 2012; 4:53:16 PM
  */
 public class Simulator {
-	/** The machine on which we are running */
-	Machine machine;
-
 	/**
 	 * @author Josh Ventura
 	 * @date May 12, 2012; 4:53:37 PM
@@ -29,6 +29,12 @@ public class Simulator {
 	 * @param hErr
 	 *            An error handler to which any problems in the load will be
 	 *            reported.
+	 * @param uis
+	 *            The URBAN input stream the machine the running machine will
+	 *            use.
+	 * @param uos
+	 *            The URBAN output stream the machine the running machine will
+	 *            use.
 	 * @specRef LM1
 	 * @specRef LM1.1
 	 * @specRef LM1.2
@@ -49,12 +55,13 @@ public class Simulator {
 	 * @specRef LM1.17
 	 * @specRef LM1.18
 	 */
-	void load(InputStream loaderFile, ErrorHandler hErr) {
+	void load(InputStream loaderFile, ErrorHandler hErr, URBANInputStream uis,
+			URBANOutputStream uos) {
 		int loadAddr;
 		int execStart;
 		int progLen;
 		int asmVer;
-		Machine m = new Machine();
+		Machine machine = new Machine(hErr, uis, uos);
 
 		try {
 			Scanner s = new Scanner(loaderFile);
@@ -255,10 +262,11 @@ public class Simulator {
 		}
 
 		if (asmVer > Assembler.VERSION)
-			m.hErr.reportWarning(
+			machine.hErr.reportWarning(
 					makeError("newerAssemler", "" + Assembler.VERSION, ""
 							+ asmVer), 0, 0);
-		m.lc = loadAddr;
-		m.lc = execStart;
+		machine.lc = loadAddr;
+
+		machine.runThread(execStart);
 	}
 }

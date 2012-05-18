@@ -25,6 +25,8 @@ public class Deformatter {
 	 * @date May 12, 2012; 5:42:31 PM
 	 */
 	public static class OpcodeBreakdownOther {
+		/** The format bit; true if we are using the memory-memory format. */
+		public boolean format;
 		/** True if the data field is a literal, false if it is an address. */
 		public boolean literal;
 		/** The kind of the source. */
@@ -106,7 +108,9 @@ public class Deformatter {
 				word = mach.registers[source];
 				break;
 			case MEMORY:
-				if (source < 0 || source > 7)
+				if (literal)
+					return source;
+				if (source < 0 || source > 4095)
 					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
 				word = mach.memory[source];
 				break;
@@ -162,6 +166,8 @@ public class Deformatter {
 		}
 	}
 
+	/** The bit indicating the format used. */
+	private static final int FORMATBIT = 0x02000000;
 	/** The bit indicating if the data is a literal. */
 	private static final int LITERALBIT = 0x01000000;
 	/** The bit indicating if the source is not a regular register. */
@@ -185,6 +191,15 @@ public class Deformatter {
 	/** The offset of the address index register bits. */
 	private static final int ADDRESSIXROFFS = 12;
 
+	/** Dual-memory high-order address bitmask. */
+	private static final int DUALMEMHIADDRBITS = 0x00FFF000;
+	/** Dual-memory high-order address offset. */
+	private static final int DUALMEMHIADDROFFS = 12;
+	/** Dual-memory low-order address bitmask. */
+	private static final int DUALMEMLOADDRBITS = 0x00000FFF;
+	/** Dual-memory low-order address offset. */
+	private static final int DUALMEMLOADDROFFS = 0;
+
 	/**
 	 * @author Josh Ventura
 	 * @date May 12, 2012; 5:54:26 PM
@@ -199,28 +214,37 @@ public class Deformatter {
 	 */
 	public static OpcodeBreakdownOther breakDownOther(int instruction) {
 		OpcodeBreakdownOther res = new OpcodeBreakdownOther();
+		res.format = (instruction & FORMATBIT) != 0;
 		res.literal = (instruction & LITERALBIT) != 0;
-		res.sourceKind = ((instruction & SOURCEKBIT) == 0) ? Location.REGISTER
-				: ((instruction & SOURCEBITS) == 0) ? Location.MEMORY
-						: Location.INDEXREGISTER;
+		if (!res.format) {
+			res.sourceKind = ((instruction & SOURCEKBIT) == 0) ? Location.REGISTER
+					: ((instruction & SOURCEBITS) == 0) ? Location.MEMORY
+							: Location.INDEXREGISTER;
 
-		res.destKind = ((instruction & DESTINKBIT) == 0) ? Location.REGISTER
-				: ((instruction & DESTINBITS) == 0) ? Location.MEMORY
-						: Location.INDEXREGISTER;
+			res.destKind = ((instruction & DESTINKBIT) == 0) ? Location.REGISTER
+					: ((instruction & DESTINBITS) == 0) ? Location.MEMORY
+							: Location.INDEXREGISTER;
 
-		if (res.sourceKind == Location.MEMORY)
-			res.source = res.literal ? (instruction & ALLDATABITS)
-					: (instruction & ADDRESSBITS)
-							+ ((instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS);
-		else
-			res.source = (instruction & SOURCEBITS) >> SOURCEOFFS;
+			if (res.sourceKind == Location.MEMORY)
+				res.source = res.literal ? (instruction & ALLDATABITS)
+						: (instruction & ADDRESSBITS)
+								+ ((instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS);
+			else
+				res.source = (instruction & SOURCEBITS) >> SOURCEOFFS;
 
-		if (res.destKind == Location.MEMORY)
-			res.destination = res.literal ? (instruction & ALLDATABITS)
-					: (instruction & ADDRESSBITS)
-							+ ((instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS);
-		else
-			res.destination = (instruction & DESTINBITS) >> DESTINOFFS;
+			if (res.destKind == Location.MEMORY)
+				res.destination = res.literal ? (instruction & ALLDATABITS)
+						: (instruction & ADDRESSBITS)
+								+ ((instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS);
+			else
+				res.destination = (instruction & DESTINBITS) >> DESTINOFFS;
+		}
+		else {
+			res.sourceKind = Location.MEMORY;
+			res.destKind = Location.MEMORY;
+			res.source = instruction & DUALMEMHIADDRBITS >> DUALMEMHIADDROFFS;
+			res.destination = instruction & DUALMEMLOADDRBITS >> DUALMEMLOADDROFFS;
+		}
 
 
 		return res;
