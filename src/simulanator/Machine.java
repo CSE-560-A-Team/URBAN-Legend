@@ -15,11 +15,11 @@ public class Machine {
 	public static final int memorySizeInWords = 4096;
 
 	/** Our eight machine registers. */
-	public int[] registers = new int[8];
+	public int[] registers;
 	/** Our seven index registers: Index register 0 is unused. */
-	public int[] indexRegisters = new int[8];
+	public int[] indexRegisters;
 	/** Our entire memory; all 16 kibibytes of it. */
-	public int[] memory = new int[memorySizeInWords];
+	public int[] memory;
 	/** The current program counter. */
 	public int lc;
 	/** The current instruction. */
@@ -28,8 +28,75 @@ public class Machine {
 	/** Stack of integers. */
 	public Stack<Integer> stack;
 
+	/** Interface to handle input. */
+	public interface URBANInputStream {
+		/**
+		 * Prompt the user for a string, blocking until the user submits it.
+		 * 
+		 * @return A string given by the user.
+		 */
+		String getString();
+	}
+
+	/** Interface to handle input. */
+	public interface URBANOutputStream {
+		/**
+		 * Display a string to the user.
+		 * 
+		 * @param str
+		 *            The string to display.
+		 */
+		void putString(String str);
+	}
+
+	// ========================================================================
+	// === MACHINE STREAMS ====================================================
+	// ========================================================================
+
 	/** An error channel to which any access violations can be reported. */
 	ErrorHandler hErr;
+	/** Out input stream, through which the user will be prompted for input. */
+	URBANInputStream input;
+	/** An output stream to which messages can be printed. */
+	URBANOutputStream output;
+
+	// ========================================================================
+	// === MACHINE STATE ======================================================
+	// ========================================================================
+	/** True if the machine is still running. */
+	boolean running;
+
+	/**
+	 * @param err
+	 *            The error handler to which any problems are reported.
+	 * @param uis
+	 *            The URBAN input stream for this machine.
+	 * @param uos
+	 *            The URBAN output stream for this machine.
+	 */
+	Machine(ErrorHandler err, URBANInputStream uis, URBANOutputStream uos) {
+		hErr = err;
+		input = uis;
+		output = uos;
+		registers = new int[8];
+		indexRegisters = new int[8];
+		memory = new int[memorySizeInWords];
+	}
+
+	/**
+	 * Fork constructor, for use in SYS_FORK.
+	 * 
+	 * @param forkFrom
+	 *            The machine to be forked.
+	 */
+	Machine(Machine forkFrom) {
+		hErr = forkFrom.hErr;
+		input = forkFrom.input;
+		output = forkFrom.output;
+		registers = forkFrom.registers;
+		indexRegisters = forkFrom.indexRegisters;
+		memory = forkFrom.memory;
+	}
 
 	/**
 	 * Creates a string dump of this machine state, according to spec.
@@ -74,5 +141,21 @@ public class Machine {
 	/** @see java.lang.Object#toString() */
 	@Override public String toString() {
 		return dump(3);
+	}
+
+	/**
+	 * @author Josh Ventura
+	 * @date May 18, 2012; 7:50:40 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param execStart
+	 *            The starting LC from which to run.
+	 */
+	public void runThread(int execStart) {
+		lc = execStart;
+		// TODO: Implement
 	}
 }
