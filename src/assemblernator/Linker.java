@@ -1,5 +1,6 @@
 package assemblernator;
 
+import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
 
@@ -10,11 +11,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import simulanator.Deformatter;
+import simulanator.Deformatter.OpcodeBreakdownOther;
+
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction.ConstantRange;
 
 /**
@@ -138,6 +144,7 @@ public class Linker {
 	/**
 	 * Takes fileNames, the file names of the object files to link, and an out to output 
 	 * the load file.
+	 * Requires that all modules were created from valid object files.
 	 * @author Noah
 	 * @date May 12, 2012; 3:44:18 PM
 	 * @modified UNMODIFIED
@@ -149,8 +156,7 @@ public class Linker {
 	 * @param out output stream to output load file.
 	 * @specRef N/A
 	 */
-	public static void link(LinkerModule[] modules, OutputStream out) {
-		//List<LinkerModule> offsetModules = new ArrayList<LinkerModule>();
+	public static void link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
 		Map<String, Integer> linkerTable = new HashMap<String, Integer>();
 		boolean isValid = true;
 		//sort the modules by order of address of modules.
@@ -167,15 +173,20 @@ public class Linker {
 			//add LinkerModule with adjusted addresses to offsetModules.
 			for(int i = 0; i < modules.length - 1; ++i) {
 				if(modules[i+1].prgLoadadd <= modules[i].prgLoadadd) {
+					//calc offset
 					offset = ((modules[i].prgLoadadd + modules[i].prgTotalLen) - modules[i+1].prgLoadadd + 1);
 					modules[i+1].prgLoadadd += offset;
 					totalLen += modules[i+1].prgTotalLen;
 					if(modules[i+1].prgStart > execStartAddr) {
 						execStartAddr = modules[i+1].prgStart;
 					}
-					//put offset linker records into linker table.
-					for(LinkerModule.LinkerRecord lr : modules[i+1].link) {
-						linkerTable.put(lr.entryLabel, lr.entryAddr + offset);
+					//put all linker records of current module into linker table with offset.
+					for(LinkerModule.LinkerRecord lr : modules[i+1].linkRecord) {
+						if(!linkerTable.containsKey(lr.entryLabel)) {
+							linkerTable.put(lr.entryLabel, lr.entryAddr + offset);
+						} else {
+							hErr.reportError(makeError("dupLbl"), -1, -1);
+						}
 					}
 				}
 				
@@ -185,64 +196,82 @@ public class Linker {
 			try {
 				//write header record.
 				out.write(LoaderHeader(modules[0].prgname, modules[0].prgLoadadd, execStartAddr, totalLen, modules[0].date, modules[0].version));
+				//iterate through all linker modules.
 				for(LinkerModule offMod : modules) {
+					//iterate through entries in text and mod record map of a linker module.
 					for(Map.Entry<LinkerModule.TextRecord, List<LinkerModule.ModRecord>> textMod 
-							: offMod.textMod.entrySet()) {
+							: offMod.textModRecord.entrySet()) {
 						//if both high and low flags are 'A', no adjustments is necessary.
 						if(!(textMod.getKey().flagHigh == 'A' && textMod.getKey().flagLow == 'A')) {
 							char litBit = textMod.getKey().instrData.charAt(7);
-							int opcode = IOFormat.parseHex32Int(textMod.getKey().instrData);
+							char formatBit = textMod.getKey().instrData.charAt(6);
+							int opcode = IOFormat.parseHex32Int(textMod.getKey().instrData); //the assembled code.
 							int mem;
 							int adjustVal = 0;
 							int mask;
 							
 							textMod.getKey().assignedLC += offMod.offset; //offset text lc.
-							//adjust text mem.
+							//iterate through mod records mapped to text.
 							for(LinkerModule.ModRecord mRec : textMod.getValue()) {
-								if(mRec.flagAE == 'E') {
-									if(linkerTable.containsKey(mRec.linkerLabel)) {
-										adjustVal = linkerTable.get(mRec.linkerLabel);
-									} else {
-										//error
-										continue;
+								//iterate through contents of mod record.
+								for(LinkerModule.MiddleMod midMod : mRec.midMod) {
+									if(midMod.flagRE == 'E') {
+										if(linkerTable.containsKey(midMod.linkerLabel)) {
+											adjustVal = linkerTable.get(midMod.linkerLabel);
+										} else {
+											isValid = false;
+											hErr.reportError(makeError("noLbl"), -1, -1);
+											continue;
+										}
+									} else { //'R'
+										adjustVal = offMod.offset;
 									}
-								} else { //'R'
-									adjustVal = offMod.offset;
-								}
-
-								if((mRec.HLS == 'S' && litBit == '0') || (mRec.HLS == 'L')) {
-									mask = 0x00000FFF;
-									opcode &= 0xFFFFF000; //zero out mem bits.
-								} else if(mRec.HLS == 'S') {
-									mask = 0x0000FFFF;
-									opcode &= 0xFFFF0000; //zero out mem bits.
-								} else { //'H's
-									mask = 0x00FFF000;
-									opcode &= 0xFF000FFF; //zero out mem bits.
-								}
-								
-								mem = IOFormat.parseHex32Int(textMod.getKey().instrData) & mask; //unaltered opcode & mask to get mem bits.
-								
-								//adjust mem
-								if(mRec.plusMin == '+') {
-									mem += adjustVal; 
-									if(litBit == '0') {
-										isValid = isValidMem(mem);
-									} else {
-										isValid = isValidLiteral(mem, ConstantRange.RANGE_16_TC);
+	
+									if((mRec.HLS == 'S' && litBit == '0') || (mRec.HLS == 'L')) {
+										mask = 0x00000FFF;
+										opcode &= 0xFFFFF000; //zero out mem bits.
+									} else if(mRec.HLS == 'S') {
+										mask = 0x0000FFFF;
+										opcode &= 0xFFFF0000; //zero out mem bits.
+									} else { //'H's
+										mask = 0x00FFF000;
+										opcode &= 0xFF000FFF; //zero out mem bits.
 									}
-								} else {
-									mem -= adjustVal;
-									if(litBit == '0') {
-										isValid = isValidMem(mem);
+									
+									mem = IOFormat.parseHex32Int(textMod.getKey().instrData) & mask; //unaltered opcode & mask to get mem bits.
+									
+									//adjust mem
+									if(midMod.plusMin == '+') {
+										mem += adjustVal; 
+										if(litBit == '0') {
+											isValid = isValidMem(mem);
+											if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+										} else if(formatBit == '0'){
+											isValid = isValidLiteral(mem, ConstantRange.RANGE_16_TC);
+											if(!isValid) hErr.reportError(makeError("lnkOORLit16"), -1, -1);
+										} else {
+											isValid = isValidLiteral(mem, ConstantRange.RANGE_13_TC);
+											if(!isValid) hErr.reportError(makeError("lnkOORLit13"), -1, -1);
+										}
+										
 									} else {
-										isValid = isValidLiteral(mem, ConstantRange.RANGE_16_TC);
+										mem -= adjustVal;
+										if(litBit == '0') {
+											isValid = isValidMem(mem);
+											if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+										} else if(formatBit == '0'){
+											isValid = isValidLiteral(mem, ConstantRange.RANGE_16_TC);
+											if(!isValid) hErr.reportError(makeError("lnkOORLit16"), -1, -1);
+										} else {
+											isValid = isValidLiteral(mem, ConstantRange.RANGE_13_TC);
+											if(!isValid) hErr.reportError(makeError("lnkOORLit13"), -1, -1);
+										}
 									}
-								}
-								
-								if(isValid) {
-									opcode |= mem; //fill in mem bits.
-									textMod.getKey().instrData = IOFormat.formatHexInteger(opcode, 8);
+									
+									if(isValid) {
+										opcode |= mem; //fill in mem bits.
+										textMod.getKey().instrData = IOFormat.formatHexInteger(opcode, 8);
+									}
 								}
 							}
 						}
@@ -276,17 +305,26 @@ public class Linker {
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
 	 * @param fileNames file names of object files to read from.
+	 * @param hErr error handler.
 	 * @return an array of LinkerModules representing the object files.
 	 * @specRef N/A
 	 */
-	public static LinkerModule[] getModules(String[] fileNames) {
-		LinkerModule[] modules = new LinkerModule[fileNames.length];
+	public static LinkerModule[] getModules(String[] fileNames, ErrorHandler hErr) {
+		List<LinkerModule> modules = new ArrayList<LinkerModule>(); 
 		
 		for(int fileIndex = 0; fileIndex < fileNames.length; ++fileIndex) {
 			try {
 				InputStream in = new BufferedInputStream(new FileInputStream(fileNames[fileIndex]));
 				for(int i = 0; i < fileNames.length; ++i) {
-					modules[i] = new LinkerModule(in);
+					boolean hasNext = true;
+					LinkerModule temp;
+					while(hasNext) { //while there are modules left in the object file.s
+						temp = new LinkerModule(in, hErr);
+						if(temp.success) { //add to list of linker modules only if object file is valid.
+							modules.add(temp);
+						}
+						hasNext = temp.done; 
+					}
 				}
 			} catch(FileNotFoundException e) {
 				System.err.println(e.getMessage());
@@ -294,6 +332,6 @@ public class Linker {
 			}
 		}
 		
-		return modules;
+		return (LinkerModule[]) modules.toArray();
 	}
 }
