@@ -17,9 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import simulanator.Deformatter;
-import simulanator.Deformatter.OpcodeBreakdownOther;
-
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction.ConstantRange;
 
@@ -154,6 +151,7 @@ public class Linker {
 	 * @testingStandards Awaiting signature
 	 * @param modules an array of LinkerModules.
 	 * @param out output stream to output load file.
+	 * @param hErr error handler.
 	 * @specRef N/A
 	 */
 	public static void link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
