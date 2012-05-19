@@ -396,7 +396,7 @@ public class LinkerModule {
 			error.reportWarning(makeError("textMatch"), 0, 0);
 		}else if(mod != this.endMod){
 			error.reportWarning(makeError("modMatch"), 0, 0); 
-		}else if((link+text+mod) != this.endRec){
+		}else if((link+text+mod+2) != this.endRec){
 			error.reportWarning(makeError("totalMatch"), 0, 0); 
 		}
 
