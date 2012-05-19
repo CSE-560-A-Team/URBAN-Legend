@@ -132,9 +132,9 @@ public class LinkerTab extends JSplitPane {
 		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
 		@Override public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == doLink) {
-				// String saveto = GUIUtil.getSaveFname(LinkerTab.this, ".ux");
-				hErr.reportError("too many lolcats: system overload", 0, 0);
-				hErr.reportWarning("all glory to the hypnotoad", 0, 0);
+				hErr.reportWarning("All glory to the hypnotoad!", 0, 0);
+				String saveto = GUIUtil.getSaveFname(LinkerTab.this, ".ulx");
+				Linker.link((LinkerModule[]) linkMods.toArray(new LinkerModule[0]), saveto, hErr);
 			}
 			else if (e.getSource() == addFiles) {
 				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this, ".o",
