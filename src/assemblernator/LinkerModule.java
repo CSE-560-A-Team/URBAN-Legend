@@ -254,9 +254,21 @@ public class LinkerModule {
 				ttemp.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
 					return;
+				//check for mod high
+				if(ttemp.modHigh>16 || ttemp.modHigh<0)
+				{
+					error.reportError(makeError("invalidMods"),0,0);
+					return;
+				}
 				ttemp.modLow = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
 					return;
+				//check for mod low
+				if(ttemp.modLow>16 || ttemp.modLow<0)
+				{
+					error.reportError(makeError("invalidMods"),0,0);
+					return;
+				}
 				// some kind of error checking
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if (!reader.go("disreguard"))
