@@ -201,6 +201,11 @@ public class Linker {
 					//calc offset
 					offset = ((modules[i].loadAddr + modules[i].prgTotalLen) - modules[i+1].loadAddr + 1);
 					modules[i+1].loadAddr += offset;
+					//error if module loadAddr + offset > max addr
+					if(modules[i+1].loadAddr > 4095) {
+						hErr.reportError(makeError(""), -1, -1);
+						break;
+					}
 					totalLen += modules[i+1].prgTotalLen;
 					if(modules[i+1].execStart > execStartAddr) {
 						execStartAddr = modules[i+1].execStart;
