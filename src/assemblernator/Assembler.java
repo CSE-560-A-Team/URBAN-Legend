@@ -269,12 +269,7 @@ public class Assembler {
 					break;
 				}
 				
-				if(!instr.getOpId().equalsIgnoreCase("EXT")) {
-					instr.lc = module.highLC;
-				} else {
-					instr = USI_NOP.getInstance().getNewInstance();
-					instr.lc = 0;
-				}
+				instr.lc = module.highLC;
 
 				// checks for operand errors in instruction.
 				valid = instr.immediateCheck(instr.getHErr(hErr), module);

@@ -2,6 +2,7 @@ package assemblernator;
 
 import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
+import instructions.USI_EXT;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -151,14 +152,14 @@ public class Module {
 					if (instr.usage == Usage.EXTERNAL
 							&& symbols.containsKey(lbl)) { // EXT label and is
 															// already in local
-						hErr.reportError(
-								makeError("shadowLabel", lbl, Integer
-										.toString(symbols.get(lbl).lineNum)),
-								instr.lineNum, -1);
+						hErr.reportError(makeError("shadowLabel", lbl, Integer.toString(symbols.get(lbl).lineNum)), instr.lineNum, -1);
 						// don't add.
-					}
-					else { // add.
-						extEntSymbols.put(instr.getOperand("LR", i), instr);
+					} else { // add.
+						//add separate instance of instruction for each operand.
+						Instruction ext = USI_EXT.getInstance().getNewInstance();
+						ext.usage = instr.usage;
+						ext.lc = 0;
+						extEntSymbols.put(instr.getOperand("LR", i), ext);
 					}
 				}
 			}
@@ -167,9 +168,7 @@ public class Module {
 						&& extEntSymbols.get(instr.label).usage == Usage.EXTERNAL) {
 					// remove ext label from symbol table.
 					Instruction ext = extEntSymbols.remove(instr.label);
-					hErr.reportError(
-							makeError("shadowLabel", instr.label,
-									Integer.toString(ext.lineNum)),
+					hErr.reportError(makeError("shadowLabel", instr.label, Integer.toString(ext.lineNum)),
 							instr.lineNum, -1);
 					// put local label in symbol table.
 					symbols.put(instr.label, instr);
