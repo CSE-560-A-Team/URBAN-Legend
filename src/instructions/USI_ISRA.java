@@ -37,14 +37,11 @@ public class USI_ISRA extends UIG_ShiftManipulate {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		
-		OpcodeBreakdownOther bkdwn = breakDownOther(machine.instruction);
 		
-		if(this.hasOperand("DR")) {
-			//shift the data in DR whatever to the right by amount given in FC times.
-		} else if(this.hasOperand("DX")) {
-			//shift the data in DX whatever to the right by amount given in FC times. 
-		}
-		// TODO: IMPLEMENT
+		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
+		int wordOrig = brkdwn.readFromDest(machine);
+		wordOrig >>= brkdwn.readFromSource(machine); //right shift and assign.
+		brkdwn.putToDest(wordOrig, machine);
 	}
 
 	// =========================================================

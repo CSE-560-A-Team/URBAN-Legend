@@ -1,6 +1,8 @@
 package instructions;
 
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -35,7 +37,11 @@ public class USI_ISHL extends UIG_ShiftManipulate {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+
+		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
+		int signbit = 0;
+		signbit <<= brkdwn.readFromSource(machine); //left shift and assign.
+		brkdwn.putToDest(signbit, machine);
 	}
 
 	// =========================================================
