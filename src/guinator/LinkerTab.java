@@ -14,8 +14,6 @@ import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
@@ -141,7 +139,9 @@ public class LinkerTab extends JSplitPane {
 			else if (e.getSource() == addFiles) {
 				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this, ".o",
 						".ulo");
+				System.out.println("Received " + fnames.length + " filenames");
 				LinkerModule lms[] = Linker.getModules(fnames, hErr);
+				System.out.println("Received " + lms.length + " modules");
 				int i = 0;
 				for (LinkerModule lm : lms) {
 					linkTable.getRowCount();

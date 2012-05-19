@@ -69,7 +69,7 @@ public class GUIUtil {
 	private static String[] backendFunc(boolean multi, boolean open,
 			Component window, final String... extensions) {
 		JFileChooser jfc = new JFileChooser();
-		jfc.setMultiSelectionEnabled(false);
+		jfc.setMultiSelectionEnabled(multi);
 		jfc.setFileFilter(new FileFilter() {
 			@Override public String getDescription() {
 				return "URBAN Assembly files (*.s, *.uls)";
@@ -92,16 +92,20 @@ public class GUIUtil {
 			String res[] = new String[fs.length];
 			for (int i = 0; i < fs.length; ++i) {
 				res[i] = fs[i].getAbsolutePath();
-				String ap = res[i].toLowerCase();
-				if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
-					res[i] += ".uls";
+				if (!open) {
+					String ap = res[i].toLowerCase();
+					if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
+						res[i] += ".uls";
+				}
 			}
 			return res;
 		}
 		String res = jfc.getSelectedFile().getAbsolutePath();
-		String ap = res.toLowerCase();
-		if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
-			res += ".uls";
+		if (!open) {
+			String ap = res.toLowerCase();
+			if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
+				res += ".uls";
+		}
 		return new String[] { res };
 	}
 }
