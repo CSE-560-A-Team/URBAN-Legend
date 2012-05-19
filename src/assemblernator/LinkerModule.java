@@ -136,15 +136,16 @@ public class LinkerModule {
 
 		//checks for an H
 		String check = reader.readString(ScanWrap.notcolon, "loaderNoHeader");
+		System.err.println(check);
 		if (!reader.go("disreguard"))
 			return;
+
 		//Runs through header record
-		if (check.equals("H")) {
+		if (check.equalsIgnoreCase("H")) {
 			this.progName = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
-			this.loadAddr = reader
-					.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
+			this.loadAddr = reader.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
 			if (!reader.go("disreguard"))
 				return;
 			//error checking

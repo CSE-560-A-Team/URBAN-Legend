@@ -20,18 +20,18 @@ public class ScanWrap {
 	private Scanner scan;
 
 	/** Pattern matching four hex nybbles */
-	public static final Pattern hex4 = Pattern.compile("[0-9A-Fa-f]{4}");
+	public static final Pattern hex4 = Pattern.compile("([0-9a-fA-F]{4})(:|:.+)");
 	/** Pattern matching six hex nybbles */
-	public static final Pattern hex6 = Pattern.compile("[0-9A-Fa-f]{6}");
+	public static final Pattern hex6 = Pattern.compile("([0-9a-fA-F]{6})(:|:.+)");
 	/** Pattern matching eight hex nybbles */
-	public static final Pattern hex8 = Pattern.compile("[0-9A-Fa-f]{8}");
+	public static final Pattern hex8 = Pattern.compile("([0-9a-fA-F]{8})(:|:.+)");
 	/** Pattern matching four decimal digits */
-	public static final Pattern dec4 = Pattern.compile("[0-9]{4}");
+	public static final Pattern dec4 = Pattern.compile("([0-9]{4})(:|:.+)");
 	/** Pattern matching anything that isn't a colon */
-	public static final Pattern notcolon = Pattern.compile("[^:]+");
+	public static final Pattern notcolon = Pattern.compile("[^:]+(:|:.+)");
 	/** Pattern matching one of Al's dates */
 	public static final Pattern datep = Pattern
-			.compile("[0-9]{7},[0-9][0-9]:[0-9][0-9]:[0-9][0-9]");
+			.compile("([0-9]{7},[0-9][0-9]:[0-9][0-9]:[0-9][0-9])(:|:.+)");
 
 	/**
 	 * @author Josh Ventura
@@ -47,13 +47,14 @@ public class ScanWrap {
 	 * @specRef N/A
 	 */
 	public int readInt(Pattern p, String err, int base) {
-		if (!scan.hasNext(p)) { // LM1.5
+		if (!scan.hasNext()) { // LM1.5
 			hErr.reportError(makeError("loaderHNoAddr"), 0, 0);
 			success = false;
 			return -1;
 		}
 		success = true;
-		return Integer.parseInt(scan.next(p), base);
+		scan.useDelimiter(":");
+		return Integer.parseInt(scan.next(), base);
 	}
 
 	/**
@@ -68,13 +69,15 @@ public class ScanWrap {
 	 * @specRef N/A
 	 */
 	public String readString(Pattern p, String err) {
-		if (!scan.hasNext(p)) { // LM1.5
+		scan.useDelimiter(p);
+		if (!scan.hasNext()) { // LM1.5
 			hErr.reportError(makeError("loaderHNoAddr"), 0, 0);
 			success = false;
 			return null;
 		}
 		success = true;
-		return scan.next(p);
+		scan.useDelimiter(":");
+		return scan.next();
 	}
 
 	/**
