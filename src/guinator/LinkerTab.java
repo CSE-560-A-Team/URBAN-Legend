@@ -147,7 +147,7 @@ public class LinkerTab extends JSplitPane {
 					linkTable.getRowCount();
 					DefaultTableModel tm = (DefaultTableModel) linkTable
 							.getModel();
-					System.out.println("Adding row: " + fnames[i++] + ","
+					System.out.println("Adding row: " + fnames[i] + ","
 							+ lm.progName + "," + lm.date + "," + lm.loadAddr
 							+ "," + lm.execStart);
 					tm.addRow(new Object[] { fnames[i++], lm.progName, lm.date,
