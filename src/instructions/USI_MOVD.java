@@ -43,15 +43,15 @@ public class USI_MOVD extends UIG_Arithmetic {
 		//dest is a index register
 		if(kind == Location.INDEXREGISTER){
 			int srcValue = brkDwn.readFromSource(machine);
-			machine.indexRegisters[dest] = srcValue;
+			brkDwn.putToDest(srcValue, machine);
 			//dest is a memory
 		}else if(kind == Location.MEMORY){
 			int srcValue = brkDwn.readFromSource(machine);
-			machine.memory[dest] = srcValue;
+			brkDwn.putToDest(srcValue, machine);
 			//dest is a register
 		}else if(kind == Location.REGISTER){
 			int srcValue = brkDwn.readFromSource(machine);
-			machine.registers[dest] = srcValue;
+			brkDwn.putToDest(srcValue, machine);
 		}
 	}
 
