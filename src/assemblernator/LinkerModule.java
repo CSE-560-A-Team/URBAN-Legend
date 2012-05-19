@@ -188,7 +188,7 @@ public class LinkerModule {
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
-			if(ender.equals(this.progName)){
+			if(!ender.equals(this.progName)){
 				error.reportWarning(makeError("noMatch"), 0, 0);
 			}
 		}else{
@@ -221,7 +221,7 @@ public class LinkerModule {
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if (!reader.go("disreguard"))
 					return;
-				if(ender.equals(this.progName)){
+				if(!ender.equals(this.progName)){
 					error.reportWarning(makeError("noMatch"), 0, 0);
 				}
 				linkRecord.add(ltemp);
@@ -273,7 +273,7 @@ public class LinkerModule {
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if (!reader.go("disreguard"))
 					return;
-				if(ender.equals(this.progName)){
+				if(!ender.equals(this.progName)){
 					error.reportWarning(makeError("noMatch"), 0, 0);
 				}
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
@@ -326,7 +326,7 @@ public class LinkerModule {
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 					if (!reader.go("disreguard"))
 						return;
-					if(ender.equals(this.progName)){
+					if(!ender.equals(this.progName)){
 						error.reportWarning(makeError("noMatch"), 0, 0);
 					}
 					completeMod.add(mtemp);
@@ -380,7 +380,7 @@ public class LinkerModule {
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
-			if(ender.equals(this.progName)){
+			if(!ender.equals(this.progName)){
 				error.reportWarning(makeError("noMatch"), 0, 0);
 			}
 
