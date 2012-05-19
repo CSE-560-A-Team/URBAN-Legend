@@ -5,9 +5,11 @@ import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -138,10 +140,35 @@ public class Linker {
 		}
 		return end.toByteArray();
 	}
+	
 	/**
-	 * Takes fileNames, the file names of the object files to link, and an out to output 
+	 * Wraps link(LinkerModule, OutputStream, ErrorHandler).
+	 * Takes filename of file to output to, and an array of LinkerModules and outputs a loader file.
 	 * the load file.
 	 * Requires that all modules were created from valid object files.
+	 * @author Noah
+	 * @date May 18, 2012; 11:11:32 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param modules an array of LinkerModules.
+	 * @param filename name of file to output to.
+	 * @param hErr error handler
+	 * @specRef N/A
+	 */
+	public static void link(LinkerModule[] modules, String filename, ErrorHandler hErr) {
+		try {
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(filename));
+			link(modules, out, hErr);
+		} catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Takes an array of LinkerModules and outputs a loader file.
 	 * @author Noah
 	 * @date May 12, 2012; 3:44:18 PM
 	 * @modified UNMODIFIED
