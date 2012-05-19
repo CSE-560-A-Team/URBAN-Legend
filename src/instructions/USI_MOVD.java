@@ -1,7 +1,6 @@
 package instructions;
 
 import static simulanator.Deformatter.breakDownOther;
-import simulanator.Deformatter.Location;
 import simulanator.Machine;
 import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.Instruction;
@@ -35,26 +34,6 @@ public class USI_MOVD extends UIG_Arithmetic {
 	}
 
 
-	/** @see assemblernator.Instruction#execute(int, Machine) */
-	@Override public void execute(int instruction, Machine machine) {
-		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
-		int dest = brkDwn.destination;
-		Location kind = brkDwn.destKind;
-		//dest is a index register
-		if(kind == Location.INDEXREGISTER){
-			int srcValue = brkDwn.readFromSource(machine);
-			brkDwn.putToDest(srcValue, machine);
-			//dest is a memory
-		}else if(kind == Location.MEMORY){
-			int srcValue = brkDwn.readFromSource(machine);
-			brkDwn.putToDest(srcValue, machine);
-			//dest is a register
-		}else if(kind == Location.REGISTER){
-			int srcValue = brkDwn.readFromSource(machine);
-			brkDwn.putToDest(srcValue, machine);
-		}
-	}
-
 	// =========================================================
 	// === Redundant code ======================================
 	// =========================================================
@@ -85,6 +64,12 @@ public class USI_MOVD extends UIG_Arithmetic {
 	@Override public Instruction getNewInstance() {
 		return new USI_MOVD();
 	}
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	@Override public void execute(int instruction, Machine machine) {
+		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		int srcValue = brkDwn.readFromSource(machine);
+		brkDwn.putToDest(srcValue, machine);
+	}
 
 	/**
 	 * Calls the Instance(String,int) constructor to track this instruction.
@@ -99,5 +84,6 @@ public class USI_MOVD extends UIG_Arithmetic {
 
 	/** Default constructor; does nothing. */
 	private USI_MOVD() {}
+
 }
 
