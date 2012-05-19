@@ -3,6 +3,7 @@ package assemblernator;
 import static assemblernator.ErrorReporting.makeError;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class LinkerModule {
 	/** Contains all the link records. */
 	public List<LinkerRecord> linkRecord = new ArrayList<LinkerRecord>();
 	/** Contains all the mod and text records. */
-	public Map<TextRecord, List<ModRecord>> textModRecord = new TreeMap<TextRecord, List<ModRecord>>();
+	public Map<TextRecord, List<ModRecord>> textModRecord = new HashMap<TextRecord, List<ModRecord>>();
 	/** Name of program. */
 	public String progName;
 	/** Program load address. */
