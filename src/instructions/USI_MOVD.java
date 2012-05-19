@@ -1,6 +1,9 @@
 package instructions;
 
+import static simulanator.Deformatter.breakDownOther;
+import simulanator.Deformatter.Location;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -34,7 +37,22 @@ public class USI_MOVD extends UIG_Arithmetic {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		int dest = brkDwn.destination;
+		Location kind = brkDwn.destKind;
+		//dest is a index register
+		if(kind == Location.INDEXREGISTER){
+			int srcValue = brkDwn.readFromSource(machine);
+			machine.indexRegisters[dest] = srcValue;
+			//dest is a memory
+		}else if(kind == Location.MEMORY){
+			int srcValue = brkDwn.readFromSource(machine);
+			machine.memory[dest] = srcValue;
+			//dest is a register
+		}else if(kind == Location.REGISTER){
+			int srcValue = brkDwn.readFromSource(machine);
+			machine.registers[dest] = srcValue;
+		}
 	}
 
 	// =========================================================
