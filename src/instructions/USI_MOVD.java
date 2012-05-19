@@ -32,6 +32,12 @@ public class USI_MOVD extends UIG_Arithmetic {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	@Override public void execute(int instruction, Machine machine) {
+		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		int srcValue = brkDwn.readFromSource(machine);
+		brkDwn.putToDest(srcValue, machine);
+	}
 
 
 	// =========================================================
@@ -63,12 +69,6 @@ public class USI_MOVD extends UIG_Arithmetic {
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override public Instruction getNewInstance() {
 		return new USI_MOVD();
-	}
-	/** @see assemblernator.Instruction#execute(int, Machine) */
-	@Override public void execute(int instruction, Machine machine) {
-		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
-		int srcValue = brkDwn.readFromSource(machine);
-		brkDwn.putToDest(srcValue, machine);
 	}
 
 	/**
