@@ -134,7 +134,7 @@ public class LinkerTab extends JSplitPane {
 			if (e.getSource() == doLink) {
 				hErr.reportWarning("All glory to the hypnotoad!", 0, 0);
 				String saveto = GUIUtil.getSaveFname(LinkerTab.this, ".ulx");
-				Linker.link((LinkerModule[]) linkMods.toArray(new LinkerModule[0]), saveto, hErr);
+				Linker.link(linkMods.toArray(new LinkerModule[0]), saveto, hErr);
 			}
 			else if (e.getSource() == addFiles) {
 				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this, ".o",

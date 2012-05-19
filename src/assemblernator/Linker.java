@@ -7,6 +7,7 @@ import static assemblernator.OperandChecker.isValidMem;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -96,7 +97,7 @@ public class Linker {
 			text.write((byte)':'); //LM2.2
 			text.write(IOFormat.formatIntegerWithRadix(addr, 16, 4)); //LM2.3 
 			text.write((byte)':'); //LM2.4
-			text.write(IOFormat.formatIntegerWithRadix(code, 16, 4)); //LM2.5 
+			text.write(IOFormat.formatIntegerWithRadix(code, 16, 8)); //LM2.5 
 			text.write((byte)':'); //LM2.6
 			text.write(prgName.getBytes()); //LM2.7
 			text.write((byte)':'); //LM2.8
@@ -161,7 +162,7 @@ public class Linker {
 	public static void link(LinkerModule[] modules, String filename, ErrorHandler hErr) {
 		try {
 			OutputStream out = new BufferedOutputStream(new FileOutputStream(filename));
-			link(modules, out, hErr);
+			link(modules, System.out, hErr);
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
@@ -186,7 +187,7 @@ public class Linker {
 		boolean isValid = true;
 		//sort the modules by order of address of modules.
 		Arrays.sort(modules);
-
+		
 		if(modules.length > 0) {
 			int totalLen = modules[0].prgTotalLen;
 			int totalRecords = 2;
@@ -199,7 +200,7 @@ public class Linker {
 			for(int i = 0; i < modules.length - 1; ++i) {
 				if(modules[i+1].loadAddr <= modules[i].loadAddr) {
 					//calc offset
-					offset = ((modules[i].loadAddr + modules[i].prgTotalLen) - modules[i+1].loadAddr + 1);
+					offset = ((modules[i].loadAddr + modules[i].prgTotalLen) - modules[i+1].loadAddr);
 					modules[i+1].loadAddr += offset;
 					//error if module loadAddr + offset > max addr
 					if(modules[i+1].loadAddr > 4095) {
@@ -222,7 +223,6 @@ public class Linker {
 				
 				modules[i+1].offset = offset;
 			}
-			
 			try {
 				//write header record.
 				out.write(LoaderHeader(modules[0].progName, modules[0].loadAddr, execStartAddr, totalLen, modules[0].date, modules[0].version));
@@ -232,15 +232,43 @@ public class Linker {
 					for(Map.Entry<LinkerModule.TextRecord, List<LinkerModule.ModRecord>> textMod 
 							: offMod.textModRecord.entrySet()) {
 						//if both high and low flags are 'A', no adjustments is necessary.
+						textMod.getKey().assignedLC += offMod.offset; //offset text lc.
 						if(!(textMod.getKey().flagHigh == 'A' && textMod.getKey().flagLow == 'A')) {
 							char litBit = textMod.getKey().instrData.charAt(7);
 							char formatBit = textMod.getKey().instrData.charAt(6);
 							int opcode = IOFormat.parseHex32Int(textMod.getKey().instrData); //the assembled code.
 							int mem;
 							int adjustVal = 0;
+							final int memMaskLow = 0x00000FFF;
+							final int memMaskHigh = 0x00FFF000;
+							final int litMaskLow = 0x0000FFFF;
+							final int memMaskHighLow = 0x00FFFFFF;
 							int mask;
 							
-							textMod.getKey().assignedLC += offMod.offset; //offset text lc.
+							if(textMod.getKey().flagHigh == 'R' || textMod.getKey().flagLow == 'R') {
+								int highMem = 0;
+								int lowMem = 0;
+								if(textMod.getKey().flagHigh == 'R' && textMod.getKey().flagLow == 'R') {
+									highMem = (opcode & 0x00FFF000) + offMod.offset; //get high mem bits and adjust by offset.
+									lowMem = (opcode & 0x00000FFF) + offMod.offset; //get low mem bits and adjust by offset.
+									opcode &= 0xFF000000; //zero out mem bits of opcode.
+								} else if(textMod.getKey().flagHigh == 'R') {
+									highMem = (opcode & 0x00FFF000) + offMod.offset; //get high mem bits and adjust by offset.
+									opcode &= 0xFF000FFF; //zero out mem bits of opcode.
+								} else if(litBit == '0'){
+									lowMem = (opcode & 0x00000FFF) + offMod.offset; //get low mem bits and adjust by offset.
+									opcode &= 0xFFFFF000; //zero out mem bits of opcode.
+								} else {
+									lowMem = (opcode & 0x0000FFFF) + offMod.offset; //get low lit bits and adjust by offset.
+									opcode &= 0xFFFF0000; //zero out lit bits of opcode.
+								}
+								
+								opcode |= highMem;
+								opcode |= lowMem;
+								
+								textMod.getKey().instrData = IOFormat.formatHexInteger(opcode, 8);
+							}
+							
 							//iterate through mod records mapped to text.
 							for(LinkerModule.ModRecord mRec : textMod.getValue()) {
 								//iterate through contents of mod record.
@@ -314,6 +342,7 @@ public class Linker {
 					
 				}
 				//write end record
+				totalRecords += totalTextRecords;
 				out.write(LoaderEnd(totalRecords, totalTextRecords, modules[0].progName));
 				
 			} catch (IOException e) {
