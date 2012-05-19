@@ -321,7 +321,7 @@ public class Linker {
 						if(temp.success) { //add to list of linker modules only if object file is valid.
 							modules.add(temp);
 						}
-						hasNext = temp.done; 
+						hasNext = !temp.done; 
 					}
 				}
 			} catch(FileNotFoundException e) {
