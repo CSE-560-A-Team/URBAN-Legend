@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
-
 import assemblernator.ErrorReporting.ErrorHandler;
 
 import simulanator.ScanWrap;
@@ -316,12 +314,14 @@ public class LinkerModule {
 						loop = reader.readString(ScanWrap.notcolon, "modHLS");
 						if (!reader.go("disreguard"))
 							return;
-						if (loop.equals("H") || loop.equals("L")
-								|| loop.equals("S")) {
+						if (loop.equals("")) {
 							run = false;
 						}
 						mtemp.midMod.add(midtemp);
 					}
+					loop = reader.readString(ScanWrap.notcolon, "modHLS");
+					if (!reader.go("disreguard"))
+						return;
 					mtemp.HLS = loop.charAt(0);
 					// some kind of error checking
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
