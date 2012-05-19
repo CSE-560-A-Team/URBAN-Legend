@@ -44,7 +44,7 @@ public class LinkerTab extends JSplitPane {
 	HTMLEditorKit htmlKit;
 
 	/** The actual modules we will be linking */
-	ArrayList<LinkerModule> linkMods;
+	ArrayList<LinkerModule> linkMods = new ArrayList<LinkerModule>();
 
 	/**
 	 * Populate the linker tab UI.
