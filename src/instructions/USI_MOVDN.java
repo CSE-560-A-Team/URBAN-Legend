@@ -1,6 +1,8 @@
 package instructions;
 
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -34,6 +36,9 @@ public class USI_MOVDN extends UIG_Arithmetic {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
+		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		int srcValue = brkDwn.readFromSource(machine)*(-1);
+		brkDwn.putToDest(srcValue, machine);
 
 	}
 
