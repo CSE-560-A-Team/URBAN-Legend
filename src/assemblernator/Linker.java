@@ -164,19 +164,19 @@ public class Linker {
 			int totalLen = modules[0].prgTotalLen;
 			int totalRecords = 2;
 			int totalTextRecords = 0;
-			int execStartAddr = modules[0].prgStart;
+			int execStartAddr = modules[0].execStart;
 			int offset = 0;
 			modules[0].offset = offset;
 			//calc offset and adjust prog, linker record addr, and text record addr by offset.
 			//add LinkerModule with adjusted addresses to offsetModules.
 			for(int i = 0; i < modules.length - 1; ++i) {
-				if(modules[i+1].prgLoadadd <= modules[i].prgLoadadd) {
+				if(modules[i+1].loadAddr <= modules[i].loadAddr) {
 					//calc offset
-					offset = ((modules[i].prgLoadadd + modules[i].prgTotalLen) - modules[i+1].prgLoadadd + 1);
-					modules[i+1].prgLoadadd += offset;
+					offset = ((modules[i].loadAddr + modules[i].prgTotalLen) - modules[i+1].loadAddr + 1);
+					modules[i+1].loadAddr += offset;
 					totalLen += modules[i+1].prgTotalLen;
-					if(modules[i+1].prgStart > execStartAddr) {
-						execStartAddr = modules[i+1].prgStart;
+					if(modules[i+1].execStart > execStartAddr) {
+						execStartAddr = modules[i+1].execStart;
 					}
 					//put all linker records of current module into linker table with offset.
 					for(LinkerModule.LinkerRecord lr : modules[i+1].linkRecord) {
@@ -193,7 +193,7 @@ public class Linker {
 			
 			try {
 				//write header record.
-				out.write(LoaderHeader(modules[0].prgname, modules[0].prgLoadadd, execStartAddr, totalLen, modules[0].date, modules[0].version));
+				out.write(LoaderHeader(modules[0].progName, modules[0].loadAddr, execStartAddr, totalLen, modules[0].date, modules[0].version));
 				//iterate through all linker modules.
 				for(LinkerModule offMod : modules) {
 					//iterate through entries in text and mod record map of a linker module.
@@ -275,14 +275,14 @@ public class Linker {
 						}
 						//write text records.
 						if(isValid) {
-							out.write(LoaderText(textMod.getKey().assignedLC, IOFormat.parseHex32Int(textMod.getKey().instrData), modules[0].prgname));
+							out.write(LoaderText(textMod.getKey().assignedLC, IOFormat.parseHex32Int(textMod.getKey().instrData), modules[0].progName));
 							++totalTextRecords;
 						}
 					}
 					
 				}
 				//write end record
-				out.write(LoaderEnd(totalRecords, totalTextRecords, modules[0].prgname));
+				out.write(LoaderEnd(totalRecords, totalTextRecords, modules[0].progName));
 				
 			} catch (IOException e) {
 				System.err.println(e.getMessage());

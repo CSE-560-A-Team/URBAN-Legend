@@ -19,35 +19,35 @@ import simulanator.ScanWrap;
  */
 public class LinkerModule {
 	/** Contains all the link records. */
-	List<LinkerRecord> linkRecord = new ArrayList<LinkerRecord>();
+	public List<LinkerRecord> linkRecord = new ArrayList<LinkerRecord>();
 	/** Contains all the mod and text records. */
-	Map<TextRecord, List<ModRecord>> textModRecord = new TreeMap<TextRecord, List<ModRecord>>();
+	public Map<TextRecord, List<ModRecord>> textModRecord = new TreeMap<TextRecord, List<ModRecord>>();
 	/** Name of program. */
-	String prgname;
+	public String progName;
 	/** Program load address. */
-	int prgLoadadd;
+	public int loadAddr;
 	/** Length of program. */
-	int prgTotalLen;
+	public int prgTotalLen;
 	/** Start address of the program */
-	int prgStart;
+	public int execStart;
 	/** Date the object file was made */
-	String date;
+	public String date;
 	/** Version that was used to make outputfile */
-	int version;
+	public int version;
 	/** Total number of records */
-	int endRec;
+	public int endRec;
 	/** Total number of link records */
-	int endLink;
+	public int endLink;
 	/** Total number of text records */
-	int endText;
+	public int endText;
 	/** Total number of mod records */
-	int endMod;
+	public int endMod;
 	/** the offset amount from program address. */
-	int offset;
+	public int offset;
 	/** Success failure boolean */
-	boolean success = false;
+	public boolean success = false;
 	/** End reached */
-	boolean done = true;
+	public boolean done = true;
 
 	/**
 	 * @author Eric
@@ -55,17 +55,17 @@ public class LinkerModule {
 	 */
 	public static class TextRecord {
 		/** Program assigned LC for text record */
-		int assignedLC;
+		public int assignedLC;
 		/** Assembled instruction */
-		String instrData;
+		public String instrData;
 		/** Flag for high order bits */
-		char flagHigh;
+		public char flagHigh;
 		/** Flag for low order bits */
-		char flagLow;
+		public char flagLow;
 		/** Number of modifications for high order bits */
-		int modHigh;
+		public int modHigh;
 		/** Number of modifications for low order bits */
-		int modLow;
+		public int modLow;
 	}
 
 	/**
@@ -74,11 +74,11 @@ public class LinkerModule {
 	 */
 	public static class ModRecord {
 		/** 4 hex nybbles */
-		int hex;
+		public int hex;
 		/** H, L, or S */
-		char HLS;
+		public char HLS;
 		/** The middle of modifications records*/
-		List<MiddleMod> midMod = new ArrayList<MiddleMod>();
+		public List<MiddleMod> midMod = new ArrayList<MiddleMod>();
 	}
 
 	/**
@@ -87,11 +87,11 @@ public class LinkerModule {
 	 */
 	public static class MiddleMod {
 		/** Plus or minus sign */
-		char plusMin;
+		public char plusMin;
 		/** Flag A or E */
-		char flagRE;
+		public char flagRE;
 		/** The linkers label for mods */
-		String linkerLabel;
+		public String linkerLabel;
 	}
 
 	/**
@@ -100,9 +100,9 @@ public class LinkerModule {
 	 */
 	public static class LinkerRecord {
 		/** Label of link */
-		String entryLabel;
+		public String entryLabel;
 		/** Address of link */
-		int entryAddr;
+		public int entryAddr;
 	}
 
 	/**
@@ -140,15 +140,15 @@ public class LinkerModule {
 			return;
 		//Runs through header record
 		if (check.equals("H")) {
-			this.prgname = reader.readString(ScanWrap.notcolon, "loaderNoName");
+			this.progName = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
-			this.prgLoadadd = reader
+			this.loadAddr = reader
 					.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
 			if (!reader.go("disreguard"))
 				return;
 			//error checking
-			isValid = OperandChecker.isValidMem(this.prgLoadadd);
+			isValid = OperandChecker.isValidMem(this.loadAddr);
 			if(!isValid){
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
@@ -163,11 +163,11 @@ public class LinkerModule {
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
 			}
-			this.prgStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
+			this.execStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
 			if (!reader.go("disreguard"))
 				return;
 			//error checking
-			isValid = OperandChecker.isValidMem(this.prgStart);
+			isValid = OperandChecker.isValidMem(this.execStart);
 			if(!isValid){
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
@@ -185,7 +185,7 @@ public class LinkerModule {
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
-			if(ender.equals(this.prgname)){
+			if(ender.equals(this.progName)){
 				error.reportWarning(makeError("noMatch"), 0, 0);
 			}
 		}else{
@@ -218,7 +218,7 @@ public class LinkerModule {
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if (!reader.go("disreguard"))
 					return;
-				if(ender.equals(this.prgname)){
+				if(ender.equals(this.progName)){
 					error.reportWarning(makeError("noMatch"), 0, 0);
 				}
 				linkRecord.add(ltemp);
@@ -258,7 +258,7 @@ public class LinkerModule {
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if (!reader.go("disreguard"))
 					return;
-				if(ender.equals(this.prgname)){
+				if(ender.equals(this.progName)){
 					error.reportWarning(makeError("noMatch"), 0, 0);
 				}
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
@@ -311,7 +311,7 @@ public class LinkerModule {
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 					if (!reader.go("disreguard"))
 						return;
-					if(ender.equals(this.prgname)){
+					if(ender.equals(this.progName)){
 						error.reportWarning(makeError("noMatch"), 0, 0);
 					}
 					completeMod.add(mtemp);
@@ -365,7 +365,7 @@ public class LinkerModule {
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
-			if(ender.equals(this.prgname)){
+			if(ender.equals(this.progName)){
 				error.reportWarning(makeError("noMatch"), 0, 0);
 			}
 

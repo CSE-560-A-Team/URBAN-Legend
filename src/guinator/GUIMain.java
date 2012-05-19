@@ -28,7 +28,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
-import javax.swing.filechooser.FileFilter;
 
 import org.lateralgm.joshedit.JoshText;
 
@@ -171,40 +170,6 @@ public class GUIMain {
 	}
 
 	/**
-	 * Utility function to prompt for save filename.
-	 * 
-	 * @author Josh Ventura
-	 * @date May 7, 2012; 1:58:22 AM
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
-	 * @return The save filename.
-	 * @specRef N/A
-	 */
-	public String getSaveFname() {
-		JFileChooser jfc = new JFileChooser();
-		jfc.setMultiSelectionEnabled(false);
-		jfc.setFileFilter(new FileFilter() {
-			@Override public String getDescription() {
-				return "URBAN Assembly files (*.s, *.uls)";
-			}
-
-			@Override public boolean accept(File f) {
-				if (f.isDirectory())
-					return true;
-				String ap = f.getAbsolutePath().toLowerCase();
-				return ap.endsWith(".s") || ap.endsWith(".uls");
-			}
-		});
-		if (jfc.showSaveDialog(mainWindow) != JFileChooser.APPROVE_OPTION)
-			return null;
-		String res = jfc.getSelectedFile().getAbsolutePath();
-		String ap = res.toLowerCase();
-		if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
-			res += ".uls";
-		return res;
-	}
-
-	/**
 	 * Parses the active code, reporting any errors.
 	 * 
 	 * @author Josh Ventura
@@ -232,7 +197,7 @@ public class GUIMain {
 		rm = ft.compile();
 
 		if (ft.getFileName() == null) {
-			String fn = getSaveFname();
+			String fn = GUIUtil.getSaveFname(mainWindow,".s",".uls");
 			if (fn == null)
 				return;
 			ft.setFileName(fn);
@@ -351,7 +316,7 @@ public class GUIMain {
 			if (e.getSource() == m_save || e.getSource() == m_saveAs) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
 				if (ft.getFileName() == null || e.getSource() == m_saveAs) {
-					String n = getSaveFname();
+					String n = GUIUtil.getSaveFname(mainWindow,".s",".uls");
 					if (n == null)
 						return;
 					ft.setFileName(n);
@@ -368,7 +333,7 @@ public class GUIMain {
 				return;
 			}
 			if (e.getSource() == m_load) {
-				String fn = getSaveFname();
+				String fn = GUIUtil.getLoadFname(mainWindow,".s",".uls");
 				if (fn == null)
 					return;
 				try {
