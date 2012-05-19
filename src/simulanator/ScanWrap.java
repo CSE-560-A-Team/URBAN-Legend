@@ -77,7 +77,15 @@ public class ScanWrap {
 		}
 		success = true;
 		scan.useDelimiter(":");
-		return scan.next();
+		
+		String date = scan.next();
+		
+		if(p.equals(datep)) {
+			date = date + ":" + scan.next() + ":";
+			date = date + scan.next();
+		}
+			
+		return date;
 	}
 
 	/**
