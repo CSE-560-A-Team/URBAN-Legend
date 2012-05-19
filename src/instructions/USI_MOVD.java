@@ -1,6 +1,8 @@
 package instructions;
 
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -32,11 +34,6 @@ public class USI_MOVD extends UIG_Arithmetic {
 	}
 
 
-	/** @see assemblernator.Instruction#execute(int, Machine) */
-	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
-	}
-
 	// =========================================================
 	// === Redundant code ======================================
 	// =========================================================
@@ -67,6 +64,12 @@ public class USI_MOVD extends UIG_Arithmetic {
 	@Override public Instruction getNewInstance() {
 		return new USI_MOVD();
 	}
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	@Override public void execute(int instruction, Machine machine) {
+		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		int srcValue = brkDwn.readFromSource(machine);
+		brkDwn.putToDest(srcValue, machine);
+	}
 
 	/**
 	 * Calls the Instance(String,int) constructor to track this instruction.
@@ -81,5 +84,6 @@ public class USI_MOVD extends UIG_Arithmetic {
 
 	/** Default constructor; does nothing. */
 	private USI_MOVD() {}
+
 }
 

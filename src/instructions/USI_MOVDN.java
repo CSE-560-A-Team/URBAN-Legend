@@ -34,7 +34,7 @@ public class USI_MOVDN extends UIG_Arithmetic {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+
 	}
 
 	// =========================================================
