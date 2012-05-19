@@ -103,6 +103,7 @@ public class ScanWrap {
 	 *            The error handler which will receive error messages.
 	 */
 	public ScanWrap(Scanner s, ErrorHandler herr) {
+		scan = s;
 		hErr = herr;
 	}
 }
