@@ -330,6 +330,6 @@ public class Linker {
 			}
 		}
 		
-		return (LinkerModule[]) modules.toArray();
+		return modules.toArray(new LinkerModule[modules.size()]);
 	}
 }
