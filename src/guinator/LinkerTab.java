@@ -11,9 +11,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Linker;
@@ -30,11 +34,16 @@ public class LinkerTab extends JSplitPane {
 	/** Table of files to be linked. */
 	JTable linkTable;
 	/** Text box of link messages */
-	JTextArea warningOutput;
+	JTextPane warningOutput;
 	/** What you press to add files. */
 	JButton addFiles;
 	/** What you press to start the linker. */
 	JButton doLink;
+
+	/** The HTML document to print stuff to. */
+	HTMLDocument htmlDoc;
+	/** The HTML kit to print stuff to. */
+	HTMLEditorKit htmlKit;
 
 	/** The actual modules we will be linking */
 	ArrayList<LinkerModule> linkMods;
@@ -51,7 +60,9 @@ public class LinkerTab extends JSplitPane {
 		toolbar.setFloatable(false);
 		toolbar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 64));
 
-		addFiles.addActionListener(new LinktabListener());
+		LinktabListener ltl = new LinktabListener();
+		addFiles.addActionListener(ltl);
+		doLink.addActionListener(ltl);
 
 		linkTable = new FullTable();
 		String cols[] = { "Filename", "Name", "Date of Assembly", "Load At",
@@ -65,8 +76,13 @@ public class LinkerTab extends JSplitPane {
 		npanel.add(new JScrollPane(linkTable));
 		npanel.add(toolbar);
 
+		warningOutput = new JTextPane();
+		warningOutput.setEditorKit(htmlKit = new HTMLEditorKit());
+		warningOutput.setDocument(htmlDoc = new HTMLDocument());
+		warningOutput.setEditable(false);
+		
 		setLeftComponent(npanel);
-		setRightComponent(warningOutput = new JTextArea());
+		setRightComponent(new JScrollPane(warningOutput));
 		setDividerLocation(330);
 	}
 
@@ -80,7 +96,14 @@ public class LinkerTab extends JSplitPane {
 		 *      int, int)
 		 */
 		@Override public void reportError(String err, int line, int pos) {
-			warningOutput.append("ERROR: " + err + "\n");
+			try {
+				htmlKit.insertHTML(htmlDoc,
+						htmlDoc.getLength(),
+						"<span style=\"color:red\"><b>ERROR:</b> " + err + "</span><br/>\n",
+						0, 0, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		/**
@@ -88,7 +111,14 @@ public class LinkerTab extends JSplitPane {
 		 *      int, int)
 		 */
 		@Override public void reportWarning(String warn, int line, int pos) {
-			warningOutput.append("WARNING: " + warn + "\n");
+			try {
+				htmlKit.insertHTML(htmlDoc,
+						htmlDoc.getLength(),
+						"<span style=\"color:#FF8000\"><b>WARNING:</b> " + warn + "</span><br/>\n",
+						0, 0, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -104,8 +134,9 @@ public class LinkerTab extends JSplitPane {
 		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
 		@Override public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == doLink) {
-				String saveto = GUIUtil.getSaveFname(LinkerTab.this, ".ux");
-
+				// String saveto = GUIUtil.getSaveFname(LinkerTab.this, ".ux");
+				hErr.reportError("too many lolcats: system overload", 0, 0);
+				hErr.reportWarning("all glory to the hypnotoad", 0, 0);
 			}
 			else if (e.getSource() == addFiles) {
 				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this, ".o",
@@ -114,19 +145,13 @@ public class LinkerTab extends JSplitPane {
 				int i = 0;
 				for (LinkerModule lm : lms) {
 					linkTable.getRowCount();
-					DefaultTableModel tm = (DefaultTableModel) linkTable.getModel();
-					System.out.println("Adding row: " + fnames[i++] + "," + 
-							lm.progName + "," + 
-							lm.date + "," + 
-							lm.loadAddr + "," + 
-							lm.execStart);
-					tm.addRow(new Object[] {
-							fnames[i++],
-							lm.progName,
-							lm.date,
-							lm.loadAddr,
-							lm.execStart
-					});
+					DefaultTableModel tm = (DefaultTableModel) linkTable
+							.getModel();
+					System.out.println("Adding row: " + fnames[i++] + ","
+							+ lm.progName + "," + lm.date + "," + lm.loadAddr
+							+ "," + lm.execStart);
+					tm.addRow(new Object[] { fnames[i++], lm.progName, lm.date,
+							lm.loadAddr, lm.execStart });
 					linkMods.add(lm);
 				}
 			}
