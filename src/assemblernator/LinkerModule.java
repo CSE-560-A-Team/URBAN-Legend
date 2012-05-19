@@ -136,7 +136,6 @@ public class LinkerModule {
 
 		//checks for an H
 		String check = reader.readString(ScanWrap.notcolon, "loaderNoHeader");
-		System.err.println(check);
 		if (!reader.go("disreguard"))
 			return;
 
@@ -158,6 +157,7 @@ public class LinkerModule {
 					.readInt(ScanWrap.hex4, "loaderHNoPrL", 16);
 			if (!reader.go("disreguard"))
 				return;
+			System.err.println(this.prgTotalLen);
 			//error checking
 			isValid = OperandChecker.isValidMem(this.prgTotalLen);
 			if(!isValid){
@@ -165,6 +165,7 @@ public class LinkerModule {
 				return;
 			}
 			this.execStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
+			System.err.println(this.execStart);
 			if (!reader.go("disreguard"))
 				return;
 			//error checking
@@ -174,6 +175,7 @@ public class LinkerModule {
 				return;
 			}
 			this.date = reader.readString(ScanWrap.datep, "loaderHNoDate");
+			System.err.println(this.date);
 			if (!reader.go("disreguard"))
 				return;
 			this.version = reader.readInt(ScanWrap.dec4, "loaderHNoVer", 10);
