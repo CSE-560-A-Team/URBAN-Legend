@@ -16,7 +16,7 @@ import simulanator.ScanWrap;
  * @author Eric
  * @date May 12, 2012; 3:59:15 PM
  */
-public class LinkerModule {
+public class LinkerModule implements Comparable<LinkerModule>{
 	/** Contains all the link records. */
 	public List<LinkerRecord> linkRecord = new ArrayList<LinkerRecord>();
 	/** Contains all the mod and text records. */
@@ -408,5 +408,21 @@ public class LinkerModule {
 			this.done = false;
 		}
 	}
+	/**
+	 * 
+	 */
+	@Override
+	public int compareTo(LinkerModule cmp) {
+		if(this.loadAddr > cmp.loadAddr){
+			return 1;
+		}else if(this.loadAddr < cmp.loadAddr){
+			return -1;
+		}else{
+			return 0;
+		}
+	}
+
+
+
 
 }
