@@ -409,7 +409,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		}
 	}
 	/**
-	 * 
+	 * Compares loadAddr of the LinkerModules
 	 */
 	@Override
 	public int compareTo(LinkerModule cmp) {
