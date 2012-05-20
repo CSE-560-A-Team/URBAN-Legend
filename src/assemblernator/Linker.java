@@ -195,7 +195,7 @@ public class Linker {
 			int execStartAddr = modules[0].execStart;
 			int offset = 0;
 			modules[0].offset = offset;
-			
+			linkerTable.putAll(modules[0].linkRecord);// put all link records from first module.
 			//calc offset and adjust prog, linker record addr, and text record addr by offset.
 			//add LinkerModule with adjusted addresses to offsetModules.
 			for(int i = 0; i < modules.length - 1; ++i) {
@@ -213,9 +213,9 @@ public class Linker {
 						execStartAddr = modules[i+1].execStart;
 					}
 					//put all linker records of current module into linker table with offset.
-					for(LinkerModule.LinkerRecord lr : modules[i+1].linkRecord) {
-						if(!linkerTable.containsKey(lr.entryLabel)) {
-							linkerTable.put(lr.entryLabel, lr.entryAddr + offset);
+					for(Map.Entry<String, Integer> lr : modules[i+1].linkRecord.entrySet()) {
+						if(!linkerTable.containsKey(lr.getKey())) {
+							linkerTable.put(lr.getKey(), lr.getValue() + offset);
 						} else {
 							hErr.reportError(makeError("dupLbl"), -1, -1);
 						}
