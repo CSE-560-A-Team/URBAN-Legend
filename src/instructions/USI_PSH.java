@@ -2,7 +2,9 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -102,7 +104,13 @@ public class USI_PSH extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		
+		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
+		int wordOrig = brkdwn.readFromSource(machine);
+		
+		int s= 0;
+		s = machine.stack.push(wordOrig);
+	
 	}
 
 	// =========================================================
