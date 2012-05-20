@@ -107,9 +107,8 @@ public class USI_PSH extends AbstractInstruction {
 		
 		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromSource(machine);
-		
-		int s= 0;
-		s = machine.stack.push(wordOrig);
+
+		machine.stack.push(wordOrig);
 	
 	}
 

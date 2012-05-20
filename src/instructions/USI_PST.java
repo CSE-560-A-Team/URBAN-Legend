@@ -2,7 +2,9 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -142,7 +144,20 @@ public class USI_PST extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+
+		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
+		int wordOrig = brkdwn.readFromSource(machine);
+		int compareVal;
+		int poppedVal = machine.stack.pop();
+		
+		if(poppedVal == wordOrig) {
+			compareVal = 0;
+		} else if (poppedVal < wordOrig) {
+			compareVal = 2;
+		} else {
+			compareVal = 3;			
+		}
+		brkdwn.putToDest(compareVal, machine);
 	}
 
 	// =========================================================
