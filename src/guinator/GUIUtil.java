@@ -18,13 +18,15 @@ public class GUIUtil {
 	 * 
 	 * @param window
 	 *            The window to which the dialog belongs.
+	 * @param filtername
+	 *            The name of the filter matching the given extensions.
 	 * @param extensions
 	 *            The allowed extensions.
 	 * @return The save filename.
 	 */
-	public static String getSaveFname(Component window,
+	public static String getSaveFname(Component window, String filtername,
 			final String... extensions) {
-		return backendFunc(false, false, window, extensions)[0];
+		return backendFunc(false, false, window, filtername, extensions)[0];
 	}
 
 	/**
@@ -32,13 +34,15 @@ public class GUIUtil {
 	 * 
 	 * @param window
 	 *            The window to which the dialog belongs.
+	 * @param filtername
+	 *            The name of the filter matching the given extensions.
 	 * @param extensions
 	 *            The allowed extensions.
 	 * @return The save filename.
 	 */
-	public static String getLoadFname(Component window,
+	public static String getLoadFname(Component window, String filtername,
 			final String... extensions) {
-		return backendFunc(false, true, window, extensions)[0];
+		return backendFunc(false, true, window, filtername, extensions)[0];
 	}
 
 	/**
@@ -46,13 +50,15 @@ public class GUIUtil {
 	 * 
 	 * @param window
 	 *            The window to which the dialog belongs.
+	 * @param filtername
+	 *            The name of the filter matching the given extensions.
 	 * @param extensions
 	 *            The allowed extensions.
 	 * @return The save filename.
 	 */
-	public static String[] getLoadFnames(Component window,
+	public static String[] getLoadFnames(Component window, String filtername,
 			final String... extensions) {
-		return backendFunc(true, true, window, extensions);
+		return backendFunc(true, true, window, filtername, extensions);
 	}
 
 	/**
@@ -62,17 +68,19 @@ public class GUIUtil {
 	 *            True if this is an open dialog, false if it's a save dialog.
 	 * @param window
 	 *            The parent window.
+	 * @param filtName
+	 *            The name of the filter for the given extensions.
 	 * @param extensions
 	 *            Filter extensions.
 	 * @return The selected filename(s).
 	 */
 	private static String[] backendFunc(boolean multi, boolean open,
-			Component window, final String... extensions) {
+			Component window, final String filtName, final String... extensions) {
 		JFileChooser jfc = new JFileChooser();
 		jfc.setMultiSelectionEnabled(multi);
 		jfc.setFileFilter(new FileFilter() {
 			@Override public String getDescription() {
-				return "URBAN Assembly files (*.s, *.uls)";
+				return filtName;
 			}
 
 			@Override public boolean accept(File f) {
@@ -90,12 +98,15 @@ public class GUIUtil {
 		if (multi) {
 			File[] fs = jfc.getSelectedFiles();
 			String res[] = new String[fs.length];
+			fnames:
 			for (int i = 0; i < fs.length; ++i) {
 				res[i] = fs[i].getAbsolutePath();
 				if (!open) {
 					String ap = res[i].toLowerCase();
-					if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
-						res[i] += ".uls";
+					for (String ext : extensions)
+						if (ap.endsWith(ext))
+							continue fnames;
+					res[i] += extensions[extensions.length - 1];
 				}
 			}
 			return res;
@@ -103,8 +114,10 @@ public class GUIUtil {
 		String res = jfc.getSelectedFile().getAbsolutePath();
 		if (!open) {
 			String ap = res.toLowerCase();
-			if (!ap.endsWith(".s") && !ap.endsWith(".uls"))
-				res += ".uls";
+			for (String ext : extensions)
+				if (ap.endsWith(ext))
+					return new String[] { res };
+			res += extensions[extensions.length - 1];
 		}
 		return new String[] { res };
 	}
