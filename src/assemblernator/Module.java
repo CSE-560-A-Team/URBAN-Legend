@@ -2,7 +2,6 @@ package assemblernator;
 
 import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
-import instructions.USI_ENT;
 import instructions.USI_EXT;
 
 import java.io.ByteArrayOutputStream;

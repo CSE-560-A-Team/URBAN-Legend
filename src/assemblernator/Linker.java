@@ -195,6 +195,7 @@ public class Linker {
 			int execStartAddr = modules[0].execStart;
 			int offset = 0;
 			modules[0].offset = offset;
+			
 			//calc offset and adjust prog, linker record addr, and text record addr by offset.
 			//add LinkerModule with adjusted addresses to offsetModules.
 			for(int i = 0; i < modules.length - 1; ++i) {

@@ -334,7 +334,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}// end of mod record
 				textModRecord.put(ttemp, completeMod);
 			}// end of text record
-
 		}//end of while loop checking for linking records and text records
 
 		//checks for an end record
