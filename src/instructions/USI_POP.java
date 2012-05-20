@@ -2,7 +2,9 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -115,18 +117,13 @@ public class USI_POP extends AbstractInstruction {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		
+		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
+
 		int s= 0;
 		s = machine.stack.pop();
 		
-		if(this.hasOperand("DM")) {
-			machine.memory[machine.instruction] = s;
-		} else if(this.hasOperand("DX")) {
-			
-		} else if(this.hasOperand("DR")) {
-			
-		}
+		brkdwn.putToDest(s, machine);
 		
-		// TODO: IMPLEMENT
 	}
 
 	// =========================================================
