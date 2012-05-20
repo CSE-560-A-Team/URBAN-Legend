@@ -161,8 +161,8 @@ public class Linker {
 	 */
 	public static void link(LinkerModule[] modules, String filename, ErrorHandler hErr) {
 		try {
-			OutputStream out = new BufferedOutputStream(new FileOutputStream(filename));
-			link(modules, System.out, hErr);
+			OutputStream out = new FileOutputStream(filename);
+			link(modules, out, hErr);
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
@@ -266,7 +266,10 @@ public class Linker {
 									opcode &= (~litMaskLow); //zero out lit bits of opcode.
 								}
 								
+								/*
 								if(formatBit == '1' && litBit == '1') { 
+									System.err.println(highMem);
+									System.err.println(lowMem);
 									isValid = (isValidLiteral(highMem, ConstantRange.RANGE_13_TC) && isValidMem(lowMem));
 									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 								} else if(litBit == '1') {
@@ -276,6 +279,7 @@ public class Linker {
 									isValid = (isValidMem(highMem) && isValidMem(lowMem));
 									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 								}
+								*/
 								
 								opcode |= highMem;
 								opcode |= lowMem;
