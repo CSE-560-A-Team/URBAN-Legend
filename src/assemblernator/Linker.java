@@ -226,9 +226,11 @@ public class Linker {
 			try {
 				//write header record.
 				out.write(LoaderHeader(modules[0].progName, modules[0].loadAddr, execStartAddr, totalLen, modules[0].date, modules[0].version));
+				System.err.println("Mod len: " + modules.length);
 				//iterate through all linker modules.
 				for(LinkerModule offMod : modules) {
 					//iterate through entries in text and mod record map of a linker module.
+					System.err.println("text len: " + offMod.textModRecord.size());
 					for(Map.Entry<LinkerModule.TextRecord, List<LinkerModule.ModRecord>> textMod 
 							: offMod.textModRecord.entrySet()) {
 						//if both high and low flags are 'A', no adjustments is necessary.
@@ -249,18 +251,18 @@ public class Linker {
 								int highMem = 0;
 								int lowMem = 0;
 								if(textMod.getKey().flagHigh == 'R' && textMod.getKey().flagLow == 'R') {
-									highMem = (opcode & 0x00FFF000) + offMod.offset; //get high mem bits and adjust by offset.
-									lowMem = (opcode & 0x00000FFF) + offMod.offset; //get low mem bits and adjust by offset.
-									opcode &= 0xFF000000; //zero out mem bits of opcode.
+									highMem = (opcode & memMaskHigh) + offMod.offset; //get high mem bits and adjust by offset.
+									lowMem = (opcode & memMaskLow) + offMod.offset; //get low mem bits and adjust by offset.
+									opcode &= (~memMaskHighLow); //zero out mem bits of opcode.
 								} else if(textMod.getKey().flagHigh == 'R') {
-									highMem = (opcode & 0x00FFF000) + offMod.offset; //get high mem bits and adjust by offset.
-									opcode &= 0xFF000FFF; //zero out mem bits of opcode.
+									highMem = (opcode & memMaskHigh) + offMod.offset; //get high mem bits and adjust by offset.
+									opcode &= (~memMaskHigh); //zero out mem bits of opcode.
 								} else if(litBit == '0'){
-									lowMem = (opcode & 0x00000FFF) + offMod.offset; //get low mem bits and adjust by offset.
-									opcode &= 0xFFFFF000; //zero out mem bits of opcode.
+									lowMem = (opcode & memMaskLow) + offMod.offset; //get low mem bits and adjust by offset.
+									opcode &= (~memMaskLow); //zero out mem bits of opcode.
 								} else {
-									lowMem = (opcode & 0x0000FFFF) + offMod.offset; //get low lit bits and adjust by offset.
-									opcode &= 0xFFFF0000; //zero out lit bits of opcode.
+									lowMem = (opcode & litMaskLow) + offMod.offset; //get low lit bits and adjust by offset.
+									opcode &= (~litMaskLow); //zero out lit bits of opcode.
 								}
 								
 								opcode |= highMem;
@@ -287,16 +289,14 @@ public class Linker {
 	
 									if((mRec.HLS == 'S' && litBit == '0') || (mRec.HLS == 'L')) {
 										mask = 0x00000FFF;
-										opcode &= 0xFFFFF000; //zero out mem bits.
 									} else if(mRec.HLS == 'S') {
 										mask = 0x0000FFFF;
-										opcode &= 0xFFFF0000; //zero out mem bits.
 									} else { //'H's
 										mask = 0x00FFF000;
-										opcode &= 0xFF000FFF; //zero out mem bits.
 									}
 									
-									mem = IOFormat.parseHex32Int(textMod.getKey().instrData) & mask; //unaltered opcode & mask to get mem bits.
+									mem = opcode & mask; //unaltered opcode & mask to get mem bits.
+									opcode &= (~mask); //zero out membits.
 									
 									//adjust mem
 									if(midMod.plusMin == '+') {
