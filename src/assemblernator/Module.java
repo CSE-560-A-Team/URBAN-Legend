@@ -2,6 +2,7 @@ package assemblernator;
 
 import static assemblernator.ErrorReporting.makeError;
 import instructions.UIG_Equated;
+import instructions.USI_ENT;
 import instructions.USI_EXT;
 
 import java.io.ByteArrayOutputStream;
@@ -76,7 +77,7 @@ public class Module {
 	 * 	the usage is how the instruction is used,
 	 * 	and the string is the string of characters that the label is equated to if 
 	 * 	the opcode of the instruction = EQU or EQUe.
-	 * SymbolTable.symbols union SymbolTable.extEntSymbols = SymbolTable.
+	 * SymbolTable.symbols union SymbolTable.extSymbols = SymbolTable.
 	 * </pre>
 	 */
 	public static class SymbolTable implements
@@ -121,10 +122,14 @@ public class Module {
 		 * usage = Instruction.usage,
 		 * and string = the value of the operand in Instruction.
 		 * 
-		 * only includes Instructions extEntInstr, where instr.opID = "EXT" or
-		 * "ENT".
+		 * only includes Instructions instr, where instr.opID = "EXT".
 		 */
-		private Map<String, Instruction> extEntSymbols = new TreeMap<String, Instruction>();
+		private Map<String, Instruction> extSymbols = new TreeMap<String, Instruction>();
+		
+		/**
+		 * list of ent labels.
+		 */
+		private List<String> entLabels = new ArrayList<String>();
 
 		/**
 		 * adds an entry into the symbol table.
@@ -155,33 +160,34 @@ public class Module {
 						hErr.reportError(makeError("shadowLabel", lbl, Integer.toString(symbols.get(lbl).lineNum)), instr.lineNum, -1);
 						// don't add.
 					} else { // add.
-						//add separate instance of instruction for each operand.
-						Instruction ext = USI_EXT.getInstance().getNewInstance();
-						ext.usage = instr.usage;
-						ext.lc = 0;
-						extEntSymbols.put(instr.getOperand("LR", i), ext);
+						Instruction instance;
+						if(instr.getOpId().equalsIgnoreCase("EXT")) {
+							//add separate instance of instruction for each operand.
+							instance = USI_EXT.getInstance().getNewInstance();
+							instance.lc = 0;
+							instance.usage = instr.usage;
+							extSymbols.put(instr.getOperand("LR", i), instance);
+						} else {
+							entLabels.add(lbl);
+						}
+						
 					}
 				}
 			}
 			else {
-				if (extEntSymbols.containsKey(instr.label)
-						&& extEntSymbols.get(instr.label).usage == Usage.EXTERNAL) {
+				if (extSymbols.containsKey(instr.label)
+						&& extSymbols.get(instr.label).usage == Usage.EXTERNAL) {
 					// remove ext label from symbol table.
-					Instruction ext = extEntSymbols.remove(instr.label);
+					Instruction ext = extSymbols.remove(instr.label);
 					hErr.reportError(makeError("shadowLabel", instr.label, Integer.toString(ext.lineNum)),
 							instr.lineNum, -1);
 					// put local label in symbol table.
 					symbols.put(instr.label, instr);
-				}
-				// no duplicates allowed.
-				else if (!symbols.containsKey(instr.label)) {
+				} else if (!symbols.containsKey(instr.label)) {
 					symbols.put(instr.label, instr);
-				}
-				else {
-					hErr.reportError(
-							makeError("duplicateSymbol", instr.label, Integer
-									.toString(symbols.get(instr.label).lineNum)),
-							instr.lineNum, -1);
+				} else {
+					hErr.reportError(makeError("duplicateSymbol", instr.label, 
+							Integer.toString(symbols.get(instr.label).lineNum)),instr.lineNum, -1);
 				}
 			}
 
@@ -210,9 +216,8 @@ public class Module {
 
 			if (symbols.containsKey(label)) {
 				entry = symbols.get(label);
-			}
-			else {
-				entry = extEntSymbols.get(label);
+			} else {
+				entry = extSymbols.get(label);
 			}
 			return entry;
 		}
@@ -233,7 +238,7 @@ public class Module {
 		 * @specRef N/A
 		 */
 		public Instruction getEntExtEntry(String label) {
-			return extEntSymbols.get(label);
+			return extSymbols.get(label);
 		}
 
 		/**
@@ -284,27 +289,23 @@ public class Module {
 			ByteArrayOutputStream records = new ByteArrayOutputStream();
 			int recordCnt = 0;
 			try {
-				for (Map.Entry<String, Instruction> entry : this.extEntSymbols
-						.entrySet()) {
-					// if the entry is an ENT entry.
-					if (entry.getValue().getOpId().equalsIgnoreCase("ENT")) {
-						records.write((byte) 'L'); // OB2.1
-						records.write((byte) ':'); // OB2.2
-						// add label
-						records.write(entry.getKey().getBytes()); // OB2.3
+				for (String entry : this.entLabels) {
+				
+					records.write((byte) 'L'); // OB2.1
+					records.write((byte) ':'); // OB2.2
+					// add label
+					records.write(entry.getBytes()); // OB2.3
 
-						records.write((byte) ':'); // OB2.4
-						// address
-						records.write(IOFormat.formatIntegerWithRadix(
-								entry.getValue().lc, 16, 4)); // OB2.5
+					records.write((byte) ':'); // OB2.4
+					// address
+					records.write(IOFormat.formatIntegerWithRadix(this.symbols.get(entry).lc, 16, 4)); // OB2.5
+					records.write((byte) ':'); // OB2.6
+					// program name
+					records.write(progName.getBytes()); // OB2.7
+					records.write((byte) ':');
 
-						records.write((byte) ':'); // OB2.6
-						// program name
-						records.write(progName.getBytes()); // OB2.7
-						records.write((byte) ':');
-
-						recordCnt++;
-					}
+					recordCnt++;
+					
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -333,7 +334,7 @@ public class Module {
 		@Override public Iterator<Map.Entry<String, Instruction>> iterator() {
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
 			combinedSymbols.addAll(symbols.entrySet()); // combine
-			combinedSymbols.addAll(extEntSymbols.entrySet()); // combine
+			combinedSymbols.addAll(extSymbols.entrySet()); // combine
 
 			return combinedSymbols.iterator();
 		}
@@ -357,7 +358,7 @@ public class Module {
 		public String[][] toStringTable() {
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
 			combinedSymbols.addAll(symbols.entrySet()); // combine
-			combinedSymbols.addAll(extEntSymbols.entrySet()); // combine
+			combinedSymbols.addAll(extSymbols.entrySet()); // combine
 
 			Collections.sort(combinedSymbols, new MapEntryComparator()); // sort
 
@@ -433,7 +434,7 @@ public class Module {
 
 			List<Map.Entry<String, Instruction>> combinedSymbols = new ArrayList<Map.Entry<String, Instruction>>();
 			combinedSymbols.addAll(symbols.entrySet()); // combine
-			combinedSymbols.addAll(extEntSymbols.entrySet()); // combine
+			combinedSymbols.addAll(extSymbols.entrySet()); // combine
 
 			Collections.sort(combinedSymbols, new MapEntryComparator()); // sort
 

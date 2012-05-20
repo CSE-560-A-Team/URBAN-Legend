@@ -197,7 +197,7 @@ public class GUIMain {
 		rm = ft.compile();
 
 		if (ft.getFileName() == null) {
-			String fn = GUIUtil.getSaveFname(mainWindow,".s",".uls");
+			String fn = GUIUtil.getSaveFname(mainWindow,"URBAN Assembly Files",".s",".uls");
 			if (fn == null)
 				return;
 			ft.setFileName(fn);
@@ -316,7 +316,7 @@ public class GUIMain {
 			if (e.getSource() == m_save || e.getSource() == m_saveAs) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
 				if (ft.getFileName() == null || e.getSource() == m_saveAs) {
-					String n = GUIUtil.getSaveFname(mainWindow,".s",".uls");
+					String n = GUIUtil.getSaveFname(mainWindow,"URBAN Assembly Files",".s",".uls");
 					if (n == null)
 						return;
 					ft.setFileName(n);
@@ -333,7 +333,7 @@ public class GUIMain {
 				return;
 			}
 			if (e.getSource() == m_load) {
-				String fn = GUIUtil.getLoadFname(mainWindow,".s",".uls");
+				String fn = GUIUtil.getLoadFname(mainWindow,"URBAN Assembly Files",".s",".uls");
 				if (fn == null)
 					return;
 				try {

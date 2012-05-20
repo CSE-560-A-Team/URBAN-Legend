@@ -66,7 +66,6 @@ public class LinkerTab extends JSplitPane {
 		String cols[] = { "Filename", "Name", "Date of Assembly", "Load At",
 				"Start At" };
 		linkTable.setModel(new DefaultTableModel(cols, 0));
-		linkTable.setShowHorizontalLines(false);
 		linkTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		linkTable.setFillsViewportHeight(true);
 
@@ -133,11 +132,11 @@ public class LinkerTab extends JSplitPane {
 		@Override public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == doLink) {
 				hErr.reportWarning("All glory to the hypnotoad!", 0, 0);
-				String saveto = GUIUtil.getSaveFname(LinkerTab.this, ".ulx");
-				Linker.link((LinkerModule[]) linkMods.toArray(new LinkerModule[0]), saveto, hErr);
+				String saveto = GUIUtil.getSaveFname(LinkerTab.this, "URBAN Legend Executables", ".ulx");
+				Linker.link(linkMods.toArray(new LinkerModule[0]), saveto, hErr);
 			}
 			else if (e.getSource() == addFiles) {
-				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this, ".o",
+				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this, "URBAN Object Files", ".o",
 						".ulo");
 				System.out.println("Received " + fnames.length + " filenames");
 				LinkerModule lms[] = Linker.getModules(fnames, hErr);
