@@ -205,7 +205,7 @@ public class Linker {
 					modules[i+1].loadAddr += offset;
 					//error if module loadAddr + offset > max addr
 					if(modules[i+1].loadAddr > 4095) {
-						hErr.reportError(makeError(""), -1, -1);
+						hErr.reportError(makeError("OOM"), -1, -1);
 						break;
 					}
 					totalLen += modules[i+1].prgTotalLen;
@@ -231,11 +231,10 @@ public class Linker {
 				//iterate through all linker modules.
 				for(LinkerModule offMod : modules) {
 					//iterate through entries in text and mod record map of a linker module.
-					System.err.println("text len: " + offMod.textModRecord.size());
 					for(Map.Entry<LinkerModule.TextRecord, List<LinkerModule.ModRecord>> textMod 
 							: offMod.textModRecord.entrySet()) {
-						//if both high and low flags are 'A', no adjustments is necessary.
 						textMod.getKey().assignedLC += offMod.offset; //offset text lc.
+						//if both high and low flags are 'A', no adjustments is necessary.
 						if(!(textMod.getKey().flagHigh == 'A' && textMod.getKey().flagLow == 'A')) {
 							char litBit = textMod.getKey().instrData.charAt(7);
 							char formatBit = textMod.getKey().instrData.charAt(6);
@@ -248,6 +247,7 @@ public class Linker {
 							final int memMaskHighLow = 0x00FFFFFF;
 							int mask;
 							
+							//adjust mem of instruction data by offset if relocatable.
 							if(textMod.getKey().flagHigh == 'R' || textMod.getKey().flagLow == 'R') {
 								int highMem = 0;
 								int lowMem = 0;
@@ -264,6 +264,17 @@ public class Linker {
 								} else {
 									lowMem = (opcode & litMaskLow) + offMod.offset; //get low lit bits and adjust by offset.
 									opcode &= (~litMaskLow); //zero out lit bits of opcode.
+								}
+								
+								if(formatBit == '1' && litBit == '1') { 
+									isValid = (isValidLiteral(highMem, ConstantRange.RANGE_13_TC) && isValidMem(lowMem));
+									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+								} else if(litBit == '1') {
+									isValid = isValidLiteral(lowMem, ConstantRange.RANGE_16_TC);
+									if(!isValid) hErr.reportError(makeError("lnkOORLit16"), -1, -1);
+								} else {
+									isValid = (isValidMem(highMem) && isValidMem(lowMem));
+									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 								}
 								
 								opcode |= highMem;
