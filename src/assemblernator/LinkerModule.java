@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import assemblernator.ErrorReporting.ErrorHandler;
-
 import simulanator.ScanWrap;
 
 /**
@@ -18,7 +17,7 @@ import simulanator.ScanWrap;
  */
 public class LinkerModule implements Comparable<LinkerModule>{
 	/** Contains all the link records. */
-	public List<LinkerRecord> linkRecord = new ArrayList<LinkerRecord>();
+	public Map<String, Integer> linkRecord = new HashMap<String, Integer>();
 	/** Contains all the mod and text records. */
 	public Map<TextRecord, List<ModRecord>> textModRecord = new HashMap<TextRecord, List<ModRecord>>();
 	/** Name of program. */
@@ -94,30 +93,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	}
 
 	/**
-	 * @author Eric
-	 * @date May 13, 2012; 6:08:12 PM
-	 */
-	public static class LinkerRecord {
-		/** Label of link */
-		public String entryLabel;
-		/** Address of link */
-		public int entryAddr;
-	}
-
-	/**
 	 * 
 	 * @param in
 	 *            the outputFile containing all the records
 	 * @param error errorhandler for constructor
 	 */
 	public LinkerModule(InputStream in, ErrorHandler error) {
-		// temp holders for information
-		TextRecord ttemp = new TextRecord();
-		List<ModRecord> completeMod = new ArrayList<ModRecord>();
-		ModRecord mtemp = new ModRecord();
-		MiddleMod midtemp = new MiddleMod();
-		LinkerRecord ltemp = new LinkerRecord();
-
 		// scan wrap
 		Scanner read = new Scanner(in);
 		ScanWrap reader = new ScanWrap(read, error);
@@ -197,18 +178,22 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			return;
 		//loops to get all the L and T records from object file
 		while (check.equals("L") || check.equals("T")) {
+			TextRecord ttemp = new TextRecord();
+			List<ModRecord> completeMod = new ArrayList<ModRecord>();
+			String entryLabel = "";
+			int entryAddr = 0;
 			//gets all information from linker record
 			if (check.equals("L")) {
 				link++;
-				ltemp.entryLabel = reader.readString(ScanWrap.notcolon, "");
+				entryLabel = reader.readString(ScanWrap.notcolon, "");
 				if (!reader.go("disreguard"))
 					return;
-				ltemp.entryAddr = reader.readInt(ScanWrap.hex4, "loaderNoEXS",
+				entryAddr = reader.readInt(ScanWrap.hex4, "loaderNoEXS",
 						16);
 				if (!reader.go("disreguard"))
 					return;
 				//error checking
-				isValid = OperandChecker.isValidMem(ltemp.entryAddr);
+				isValid = OperandChecker.isValidMem(entryAddr);
 				if(!isValid){
 					error.reportError(makeError("invalidValue"),0,0);
 					return;
@@ -220,7 +205,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				if(!ender.equals(this.progName)){
 					error.reportWarning(makeError("noMatch"), 0, 0);
 				}
-				linkRecord.add(ltemp);
+				linkRecord.put(entryLabel, entryAddr);
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 				if (!reader.go("disreguard"))
 					return;
@@ -277,6 +262,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					return;
 				//gets all mod records for a text record
 				while (check.equals("M")) {
+					ModRecord mtemp = new ModRecord();
+					MiddleMod midtemp = new MiddleMod();
 					mod++;
 					mtemp.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
 					if (!reader.go("disreguard"))
@@ -417,8 +404,5 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			return 0;
 		}
 	}
-
-
-
 
 }
