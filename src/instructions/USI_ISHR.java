@@ -39,7 +39,7 @@ public class USI_ISHR extends UIG_ShiftManipulate {
 		
 		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
 		int signbit = 0;
-		signbit >>= brkdwn.readFromSource(machine); //right shift and assign.
+		signbit >>>= brkdwn.readFromSource(machine); //right shift and assign.
 		brkdwn.putToDest(signbit, machine);
 	}
 
