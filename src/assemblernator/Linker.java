@@ -5,9 +5,7 @@ import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -251,12 +249,15 @@ public class Linker {
 							if(textMod.getKey().flagHigh == 'R' || textMod.getKey().flagLow == 'R') {
 								int highMem = 0;
 								int lowMem = 0;
+								System.err.println(textMod.getKey().flagHigh);
+								System.err.println(textMod.getKey().flagLow);
 								if(textMod.getKey().flagHigh == 'R' && textMod.getKey().flagLow == 'R') {
-									highMem = (opcode & memMaskHigh) + offMod.offset; //get high mem bits and adjust by offset.
+									highMem = (opcode & memMaskHigh) + (offMod.offset * 0x1000); //get high mem bits and adjust by offset.
+									System.err.println(highMem);
 									lowMem = (opcode & memMaskLow) + offMod.offset; //get low mem bits and adjust by offset.
 									opcode &= (~memMaskHighLow); //zero out mem bits of opcode.
 								} else if(textMod.getKey().flagHigh == 'R') {
-									highMem = (opcode & memMaskHigh) + offMod.offset; //get high mem bits and adjust by offset.
+									highMem = (opcode & memMaskHigh) + (offMod.offset * 0x1000); //get high mem bits and adjust by offset.
 									opcode &= (~memMaskHigh); //zero out mem bits of opcode.
 								} else if(litBit == '0'){
 									lowMem = (opcode & memMaskLow) + offMod.offset; //get low mem bits and adjust by offset.
@@ -309,6 +310,7 @@ public class Linker {
 										mask = 0x0000FFFF;
 									} else { //'H's
 										mask = 0x00FFF000;
+										adjustVal = offMod.offset * 0x1000; //can't just add because high mem bits don't start at lowest bit.
 									}
 									
 									mem = opcode & mask; //unaltered opcode & mask to get mem bits.
