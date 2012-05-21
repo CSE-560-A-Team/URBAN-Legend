@@ -19,7 +19,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	/** Contains all the link records. */
 	public Map<String, Integer> linkRecord = new HashMap<String, Integer>();
 	/** Contains all the mod and text records. */
-	public Map<TextRecord, List<ModRecord>> textModRecord = new HashMap<TextRecord, List<ModRecord>>();
+	public List<textModRecord> textMod = new ArrayList<textModRecord>();
 	/** Name of program. */
 	public String progName;
 	/** Program load address. */
@@ -46,6 +46,17 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	public boolean success = false;
 	/** End reached */
 	public boolean done = true;
+	/**
+	 * 
+	 * @author Eric
+	 * @date May 20, 2012; 11:42:52 PM
+	 */
+	public static class textModRecord {
+		/**Text Records*/
+		public TextRecord text = new TextRecord();
+		/**Mod Records*/
+		public ModRecord mods = new ModRecord();
+	}
 
 	/**
 	 * @author Eric
@@ -178,8 +189,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			return;
 		//loops to get all the L and T records from object file
 		while (check.equals("L") || check.equals("T")) {
-			TextRecord ttemp = new TextRecord();
 			List<ModRecord> completeMod = new ArrayList<ModRecord>();
+			textModRecord theRecordsForTextMod = new textModRecord();
 			String entryLabel = "";
 			int entryAddr = 0;
 			//gets all information from linker record
@@ -212,40 +223,40 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				//gets all information out of Text record
 			} else if (check.equals("T")) {
 				text++;
-				ttemp.assignedLC = reader.readInt(ScanWrap.hex4, "textLC", 16);
+				theRecordsForTextMod.text.assignedLC = reader.readInt(ScanWrap.hex4, "textLC", 16);
 				if (!reader.go("disreguard"))
 					return;
 				//error checking
-				isValid = OperandChecker.isValidMem(ttemp.assignedLC);
+				isValid = OperandChecker.isValidMem(theRecordsForTextMod.text.assignedLC);
 				if(!isValid){
 					error.reportError(makeError("invalidValue"),0,0);
 					return;
 				}
-				ttemp.instrData = reader.readString(ScanWrap.notcolon, "textData");
+				theRecordsForTextMod.text.instrData = reader.readString(ScanWrap.notcolon, "textData");
 				if (!reader.go("disreguard"))
 					return;
-				ttemp.flagHigh = reader.readString(ScanWrap.notcolon, "textStatus")
+				theRecordsForTextMod.text.flagHigh = reader.readString(ScanWrap.notcolon, "textStatus")
 						.charAt(0);
 				if (!reader.go("disreguard"))
 					return;
-				ttemp.flagLow = reader.readString(ScanWrap.notcolon, "textStatus")
+				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus")
 						.charAt(0);
 				if (!reader.go("disreguard"))
 					return;
-				ttemp.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
+				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
 					return;
 				//check for mod high
-				if(ttemp.modHigh>16 || ttemp.modHigh<0)
+				if(theRecordsForTextMod.text.modHigh>16 || theRecordsForTextMod.text.modHigh<0)
 				{
 					error.reportError(makeError("invalidMods"),0,0);
 					return;
 				}
-				ttemp.modLow = reader.readInt(ScanWrap.notcolon, "textMod", 16);
+				theRecordsForTextMod.text.modLow = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
 					return;
 				//check for mod low
-				if(ttemp.modLow>16 || ttemp.modLow<0)
+				if(theRecordsForTextMod.text.modLow>16 || theRecordsForTextMod.text.modLow<0)
 				{
 					error.reportError(makeError("invalidMods"),0,0);
 					return;
@@ -262,14 +273,13 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					return;
 				//gets all mod records for a text record
 				while (check.equals("M")) {
-					ModRecord mtemp = new ModRecord();
 					MiddleMod midtemp = new MiddleMod();
 					mod++;
-					mtemp.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
+					theRecordsForTextMod.mods.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
 					if (!reader.go("disreguard"))
 						return;
 					//error checking
-					isValid = OperandChecker.isValidMem(mtemp.hex);
+					isValid = OperandChecker.isValidMem(theRecordsForTextMod.mods.hex);
 					if(!isValid){
 						error.reportError(makeError("invalidValue"),0,0);
 						return;
@@ -301,12 +311,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						if (loop.equals("")) {
 							run = false;
 						}
-						mtemp.midMod.add(midtemp);
+						theRecordsForTextMod.mods.midMod.add(midtemp);
 					}
 					loop = reader.readString(ScanWrap.notcolon, "modHLS");
 					if (!reader.go("disreguard"))
 						return;
-					mtemp.HLS = loop.charAt(0);
+					theRecordsForTextMod.mods.HLS = loop.charAt(0);
 					// some kind of error checking
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 					if (!reader.go("disreguard"))
@@ -314,12 +324,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					if(!ender.equals(this.progName)){
 						error.reportWarning(makeError("noMatch"), 0, 0);
 					}
-					completeMod.add(mtemp);
+					completeMod.add(theRecordsForTextMod.mods);
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
 						return;
 				}// end of mod record
-				textModRecord.put(ttemp, completeMod);
+				textMod.add(theRecordsForTextMod);
 			}// end of text record
 		}//end of while loop checking for linking records and text records
 
