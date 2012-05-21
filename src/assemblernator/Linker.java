@@ -244,14 +244,13 @@ public class Linker {
 							final int memMaskHighLow = 0x00FFFFFF;
 							final int iniHighMemBit = 0x1000;
 							int mask;
-							boolean sameText = false;
+							boolean sameText = true;
 							
 							//adjust mem of instruction data by offset if relocatable.
 							if(textMod.text.flagHigh == 'R' || textMod.text.flagLow == 'R') {
 								int highMem = 0;
 								int lowMem = 0;
-								
-								//set mem values, and zero out mem bits of opcode.
+								/*
 								if(textMod.text.flagHigh == 'R' && textMod.text.flagLow == 'R') {
 									highMem = (opcode & memMaskHigh) + (offMod.offset * iniHighMemBit); //get high mem bits and adjust by offset.
 									lowMem = (opcode & memMaskLow) + offMod.offset; //get low mem bits and adjust by offset.
@@ -267,7 +266,7 @@ public class Linker {
 									opcode &= (~litMaskLow); //zero out lit bits of opcode.
 								}
 								
-								//check if mem values are valid.
+								
 								if(formatBit == '1' && litBit == '1') { 
 									isValid = (isValidLiteral(highMem/iniHighMemBit, ConstantRange.RANGE_13_TC) && isValidMem(lowMem));
 									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
@@ -279,13 +278,13 @@ public class Linker {
 									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 								}
 								
-								//if highMem/lowMem values are valid, then fill in opcode with mem bits.
-								if(isValid) {  
-									opcode |= highMem;
-									opcode |= lowMem;
-								} else { //else set adjustVal to offset, and see if mod records adjust mem values back into range.
-									adjustVal = offMod.offset;
-								} 
+								
+								opcode |= highMem;
+								opcode |= lowMem;
+								*/
+								
+								adjustVal += offMod.offset;
+	
 							}
 							
 							//iterate through mod records mapped to text.
@@ -294,14 +293,14 @@ public class Linker {
 								for(LinkerModule.MiddleMod midMod : mRec.midMod) {
 									if(midMod.flagRE == 'E') {
 										if(linkerTable.containsKey(midMod.linkerLabel)) {
-											adjustVal += linkerTable.get(midMod.linkerLabel);
+											adjustVal = linkerTable.get(midMod.linkerLabel);
 										} else {
 											isValid = false;
 											hErr.reportError(makeError("noLbl"), -1, -1);
 											continue;
 										}
 									} else { //'R'
-										adjustVal += offMod.offset;
+										adjustVal = offMod.offset;
 									}
 									
 									if(!sameText) {
@@ -323,37 +322,29 @@ public class Linker {
 										} else {
 											mem -= adjustVal;
 										}
-										sameText = true;
+										sameText = false;
 									}
-									//reset adjustVal for next modification.
-									//offset from text that made mem values invalid is added only once per text record.
-									adjustVal = 0; //reset adjustVal for next modification.
+									
+									if(litBit == '1' && formatBit == '1') {
+										isValid = isValidLiteral(mem/iniHighMemBit, ConstantRange.RANGE_13_TC);
+										if(!isValid) hErr.reportError(makeError("lnkOORLit13"), -1, -1);
+									} else if(litBit == '1') {
+										isValid = isValidLiteral(mem, ConstantRange.RANGE_16_TC);
+										if(!isValid) hErr.reportError(makeError("lnkOORLit16"), -1, -1);
+									} else if(formatBit == '1') {
+										isValid = isValidMem(mem/iniHighMemBit);
+										if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									} else {
+										isValid = isValidMem(mem);
+										if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									}
+									
+									if(isValid) {
+										opcode |= mem; //fill in mem bits.
+										textMod.text.instrData = IOFormat.formatHexInteger(opcode, 8);
+									}
 								}
 							}
-							
-							//if no mod records, then mem is not checked.  
-							if(textMod.mods.size() > 0) {
-								if(litBit == '1' && formatBit == '1') {
-									isValid = isValidLiteral(mem/iniHighMemBit, ConstantRange.RANGE_13_TC);
-									if(!isValid) hErr.reportError(makeError("lnkOORLit13"), -1, -1);
-								} else if(litBit == '1') {
-									isValid = isValidLiteral(mem, ConstantRange.RANGE_16_TC);
-									if(!isValid) hErr.reportError(makeError("lnkOORLit16"), -1, -1);
-								} else if(formatBit == '1') {
-									isValid = isValidMem(mem/iniHighMemBit);
-									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-								} else {
-									isValid = isValidMem(mem);
-									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-								}
-							} 
-							
-							if(isValid) {
-								opcode |= mem; //fill in mem bits.
-								textMod.text.instrData = IOFormat.formatHexInteger(opcode, 8);
-							}
-							//we are now finished with this text record.
-							sameText = false;
 						}
 						//write text records.
 						if(isValid) {
