@@ -97,8 +97,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	public static class MiddleMod {
 		/** Plus or minus sign */
 		public char plusMin;
-		/** Flag A or E */
-		public char flagRE;
+		/** Flag A or E or N */
+		public char addrType;
 		/** The linkers label for mods */
 		public String linkerLabel;
 	}
@@ -124,6 +124,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 
 		//value checking 
 		boolean isValid = true;
+		boolean add = true;
 
 		//checks for an H
 		String check = reader.readString(ScanWrap.notcolon, "loaderNoHeader");
@@ -240,12 +241,20 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						.charAt(0);
 				if (!reader.go("disreguard"))
 					return;
+				if(!(theRecordsForTextMod.text.flagLow == 'A' || theRecordsForTextMod.text.flagLow == 'R' || theRecordsForTextMod.text.flagLow == 'E' || theRecordsForTextMod.text.flagLow == 'C')){
+					error.reportError(makeError("modHLS"), 0, 0);
+					add = false;
+				}
 
 				theRecordsForTextMod.text.flagHigh = reader.readString(ScanWrap.notcolon, "textStatus")
 
 						.charAt(0);
 				if (!reader.go("disreguard"))
 					return;
+				if(!(theRecordsForTextMod.text.flagHigh == 'A' || theRecordsForTextMod.text.flagHigh == 'R' || theRecordsForTextMod.text.flagHigh == 'E' || theRecordsForTextMod.text.flagHigh == 'C')){
+					error.reportError(makeError("modHLS"), 0, 0);
+					add = false;
+				}
 				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
 					return;
@@ -301,10 +310,14 @@ public class LinkerModule implements Comparable<LinkerModule>{
 							error.reportError(makeError("invalidPlus"),0,0);
 							return;
 						}
-						midtemp.flagRE = reader.readString(ScanWrap.notcolon,
+						midtemp.addrType = reader.readString(ScanWrap.notcolon,
 								"modFlag").charAt(0);
 						if (!reader.go("disreguard"))
 							return;
+						if(!(midtemp.addrType == 'E' || midtemp.addrType == 'R' || midtemp.addrType == 'N')){
+							error.reportError(makeError("modFlag"), 0, 0);
+							add = false;
+						}
 						midtemp.linkerLabel = reader.readString(
 								ScanWrap.notcolon, "modLink");
 						if (!reader.go("disreguard"))
@@ -321,6 +334,10 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					if (!reader.go("disreguard"))
 						return;
 					modification.HLS = loop.charAt(0);
+					if(!(modification.HLS == 'H' || modification.HLS == 'L' || modification.HLS == 'S')){
+						error.reportError(makeError("modHLS"), 0, 0);
+						add = false;
+					}
 					// some kind of error checking
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 					if (!reader.go("disreguard"))
@@ -333,7 +350,11 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					if (!reader.go("disreguard"))
 						return;
 				}// end of mod record
-				textMod.add(theRecordsForTextMod);
+				if(add){
+					textMod.add(theRecordsForTextMod);
+				}else{
+					add = true;
+				}
 			}// end of text record
 		}//end of while loop checking for linking records and text records
 
