@@ -233,53 +233,26 @@ public class Linker {
 						textMod.text.assignedLC += offMod.offset; //offset text lc.
 						//if both high and low flags are 'A', no adjustments is necessary.
 						if(!(textMod.text.flagHigh == 'A' && textMod.text.flagLow == 'A')) {
-							char litBit = textMod.text.instrData.charAt(7);
-							char formatBit = textMod.text.instrData.charAt(6);
+							String dataBin = IOFormat.formatBinInteger(IOFormat.parseHex32Int(textMod.text.instrData), 32);
+							char litBit = dataBin.charAt(7);
+							char formatBit = dataBin.charAt(6);
 							int opcode = IOFormat.parseHex32Int(textMod.text.instrData); //the assembled code.
 							int highMem = 0, lowMem = 0;
 							int lowAdjustVal = 0, highAdjustVal = 0;
+							int highSign = 1, lowSign = 1;
 							final int memMaskLow = 0x00000FFF;
 							final int memMaskHigh = 0x00FFF000;
 							final int litMaskLow = 0x0000FFFF;
-							final int memMaskHighLow = 0x00FFFFFF;
 							final int iniHighMemBit = 0x1000;
 							
-							//adjust mem of instruction data by offset if relocatable.
+							
+							//sets adjustment value depending on whether mem bits are relocatable.
 							if(textMod.text.flagHigh == 'R' || textMod.text.flagLow == 'R') {
-								if(textMod.text.flagHigh == 'R' && textMod.text.flagLow == 'R') {
-									lowAdjustVal = offMod.offset;
+								if(textMod.text.flagHigh == 'R') {
 									highAdjustVal = offMod.offset;
-									highMem = (opcode & memMaskHigh) + (highAdjustVal * iniHighMemBit); //get high mem bits and adjust by offset.
-									lowMem = (opcode & memMaskLow) + lowAdjustVal; //get low mem bits and adjust by offset.
-									opcode &= (~memMaskHighLow); //zero out mem bits of opcode.
-								} else if(textMod.text.flagHigh == 'R') {
-									highAdjustVal = offMod.offset;
-									highMem = (opcode & memMaskHigh) + (highAdjustVal * iniHighMemBit); //get high mem bits and adjust by offset.
-									opcode &= (~memMaskHigh); //zero out mem bits of opcode.
-								} else if(litBit == '0'){
-									lowAdjustVal = offMod.offset;
-									lowMem = (opcode & memMaskLow) + lowAdjustVal; //get low mem bits and adjust by offset.
-									opcode &= (~memMaskLow); //zero out mem bits of opcode.
-								} else {
-									lowAdjustVal = offMod.offset;
-									lowMem = (opcode & litMaskLow) + lowAdjustVal; //get low lit bits and adjust by offset.
-									opcode &= (~litMaskLow); //zero out lit bits of opcode.
 								}
-								
-								
-								if(formatBit == '1' && litBit == '1') { 
-									isValid = (isValidLiteral(highMem/iniHighMemBit, ConstantRange.RANGE_12_TC) && isValidMem(lowMem));
-								} else if(litBit == '1') {
-									isValid = isValidLiteral(lowMem, ConstantRange.RANGE_16_TC);
-								} else {
-									isValid = (isValidMem(highMem/iniHighMemBit) && isValidMem(lowMem));
-								}
-								//if adjustment 'R' adjustment to mem bits is valid, then fill in assemble code with adjusted memory/literal bits.
-								if(isValid) {
-									opcode |= highMem;
-									opcode |= lowMem;
-									highAdjustVal = 0;
-									lowAdjustVal = 0;
+								if(textMod.text.flagLow == 'R') {
+									lowAdjustVal = offMod.offset;
 								}
 							}
 							
@@ -288,7 +261,7 @@ public class Linker {
 								int tempAdjustVal = 0;
 								//iterate through contents of mod record.
 								for(LinkerModule.MiddleMod midMod : mRec.midMod) {
-									if(midMod.flagRE == 'E') {
+									if(midMod.addrType == 'E') {
 										if(linkerTable.containsKey(midMod.linkerLabel)) {
 											tempAdjustVal = linkerTable.get(midMod.linkerLabel);
 										} else {
@@ -296,12 +269,19 @@ public class Linker {
 											hErr.reportError(makeError("noLbl"), -1, -1);
 											continue;
 										}
-									} else { //'R'
+									} else if(midMod.addrType == 'N') { 
+										if(mRec.HLS == 'S' || mRec.HLS == 'L') {
+											lowSign = -1;
+										} else {
+											highSign = -1;
+										}
+										continue;
+									} else {
 										tempAdjustVal = offMod.offset;
 									}
 									
 									
-									if(mRec.HLS == 'S') {
+									if(mRec.HLS == 'S' || mRec.HLS == 'L') {
 										if(midMod.plusMin == '+') {
 											lowAdjustVal += tempAdjustVal;
 										} else {
@@ -321,14 +301,14 @@ public class Linker {
 							if(litBit == '1' && formatBit == '1') {
 								//even if instruction format lit+mem or mem+mem, high or low lit/mem bits may not be adjusted by mod record.
 								if(highAdjustVal != 0) {
-									highMem = (opcode & memMaskHigh) + (highAdjustVal * iniHighMemBit); 
+									highMem = highSign*((opcode & memMaskHigh) + (highAdjustVal * iniHighMemBit)); 
 									isValid = isValidLiteral(highMem/iniHighMemBit, ConstantRange.RANGE_12_TC);
 									if(!isValid) hErr.reportError(makeError("lnkOORLit12"), -1, -1);
 									//zero out high mem/lit bits.
 									opcode &= (~memMaskHigh);
 								}
 								if(lowAdjustVal != 0 && isValid) {
-									lowMem = (opcode & memMaskLow) + lowAdjustVal;
+									lowMem = lowSign*((opcode & memMaskLow) + lowAdjustVal);
 									isValid = isValidMem(lowMem);
 									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 									//zero out low mem/lit bits.
@@ -336,27 +316,27 @@ public class Linker {
 								}
 							} else if(litBit == '1') {
 								if(lowAdjustVal != 0) {
-									lowMem = (opcode & litMaskLow) + lowAdjustVal;
+									lowMem = lowSign*((opcode & litMaskLow) + lowAdjustVal);
 									isValid = isValidLiteral(lowMem, ConstantRange.RANGE_16_TC);
 									hErr.reportError(makeError("lnkOORLit16"), -1, -1);
 									opcode &= (~litMaskLow); 
 								}
 							} else if(formatBit == '1') {
 								if(highAdjustVal != 0) {
-									highMem = (opcode & memMaskHigh) + (highAdjustVal * iniHighMemBit);
+									highMem = highSign*((opcode & memMaskHigh) + (highAdjustVal * iniHighMemBit));
 									isValid = isValidMem(highMem/iniHighMemBit);
 									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 									opcode &= (~memMaskHigh);
 								}
 								if(lowAdjustVal != 0) {
-									lowMem = (opcode & memMaskLow) + lowAdjustVal;
+									lowMem = lowSign*((opcode & memMaskLow) + lowAdjustVal);
 									isValid = isValidMem(lowMem);
 									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 									opcode &= (~memMaskLow);
 								}
 							} else {
 								if(lowAdjustVal != 0) {
-									lowMem = (opcode & memMaskLow) + lowAdjustVal;
+									lowMem = lowSign*((opcode & memMaskLow) + lowAdjustVal);
 									isValid = isValidMem(lowMem);
 									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 									opcode &= (~memMaskLow); 
