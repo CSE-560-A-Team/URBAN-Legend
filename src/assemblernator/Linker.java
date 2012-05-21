@@ -229,7 +229,7 @@ public class Linker {
 				//iterate through all linker modules.
 				for(LinkerModule offMod : modules) {
 					//iterate through entries in text and mod record map of a linker module.
-					for(LinkerModule.textModRecord textMod
+					for(LinkerModule.TextModRecord textMod
 							: offMod.textMod) {
 						textMod.text.assignedLC += offMod.offset; //offset text lc.
 						//if both high and low flags are 'A', no adjustments is necessary.
