@@ -19,7 +19,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	/** Contains all the link records. */
 	public Map<String, Integer> linkRecord = new HashMap<String, Integer>();
 	/** Contains all the mod and text records. */
-	public List<textModRecord> textMod = new ArrayList<textModRecord>();
+	public List<TextModRecord> textMod = new ArrayList<TextModRecord>();
 	/** Name of program. */
 	public String progName;
 	/** Program load address. */
@@ -51,7 +51,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	 * @author Eric
 	 * @date May 20, 2012; 11:42:52 PM
 	 */
-	public static class textModRecord {
+	public static class TextModRecord {
 		/**Text Records*/
 		public TextRecord text = new TextRecord();
 		/**Mod Records*/
@@ -189,7 +189,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			return;
 		//loops to get all the L and T records from object file
 		while (check.equals("L") || check.equals("T")) {
-			textModRecord theRecordsForTextMod = new textModRecord();
+			TextModRecord theRecordsForTextMod = new TextModRecord();
 			String entryLabel = "";
 			int entryAddr = 0;
 			//gets all information from linker record
