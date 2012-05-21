@@ -299,47 +299,98 @@ public class Linker {
 							
 							//check if memory values are valid, and error report if not.
 							if(litBit == '1' && formatBit == '1') {
-								//even if instruction format lit+mem or mem+mem, high or low lit/mem bits may not be adjusted by mod record.
+								//get high literal value.
+								highMem = opcode & memMaskHigh;
+								//adjust literal value.
 								if(highAdjustVal != 0) {
-									highMem = highSign*((opcode & memMaskHigh) + (highAdjustVal * iniHighMemBit)); 
-									isValid = isValidLiteral(highMem/iniHighMemBit, ConstantRange.RANGE_12_TC);
-									if(!isValid) hErr.reportError(makeError("lnkOORLit12"), -1, -1);
-									//zero out high mem/lit bits.
-									opcode &= (~memMaskHigh);
-								}
-								if(lowAdjustVal != 0 && isValid) {
-									lowMem = lowSign*((opcode & memMaskLow) + lowAdjustVal);
+									highMem += (highAdjustVal * iniHighMemBit);
+								} 
+								highMem *= highSign;
+								//check if high value is valid.
+								isValid = isValidLiteral(highMem/iniHighMemBit, ConstantRange.RANGE_12_TC);
+								if(isValid) {
+									//zero out high address bits to fill in later.
+									opcode &= (~memMaskHigh); 
+									//get low mem value.
+									lowMem = opcode & memMaskLow;
+									//adjust low mem value.
+									if(lowAdjustVal != 0) {
+										lowMem += lowAdjustVal;
+									}
+									lowMem *= lowSign;
+									//check if low mem value is valid.
 									isValid = isValidMem(lowMem);
-									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-									//zero out low mem/lit bits.
-									opcode &= (~memMaskLow);
+									if(isValid) {
+										//zero out low mem bits to fill in later.
+										opcode &= (~memMaskLow); 
+									} else {
+										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									}
+								} else {
+									hErr.reportError(makeError("lnkOORLit12"), -1, -1);
 								}
 							} else if(litBit == '1') {
+								//get low literal value.
+								lowMem = opcode & litMaskLow;
+								//adjust literal value.
 								if(lowAdjustVal != 0) {
-									lowMem = lowSign*((opcode & litMaskLow) + lowAdjustVal);
-									isValid = isValidLiteral(lowMem, ConstantRange.RANGE_16_TC);
-									hErr.reportError(makeError("lnkOORLit16"), -1, -1);
+									lowMem += lowAdjustVal;
+								}
+								lowMem *= lowSign;
+								//check if value is valid.
+								isValid = isValidLiteral(lowMem, ConstantRange.RANGE_16_TC);
+								if(isValid) {
+									//zero out low mem bits to later fill in.
 									opcode &= (~litMaskLow); 
+								} else {
+									hErr.reportError(makeError("lnkOORLit16"), -1, -1);
 								}
 							} else if(formatBit == '1') {
+								//get high value.
+								highMem = opcode & memMaskHigh;
+								//adjust high value.
 								if(highAdjustVal != 0) {
-									highMem = highSign*((opcode & memMaskHigh) + (highAdjustVal * iniHighMemBit));
-									isValid = isValidMem(highMem/iniHighMemBit);
-									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-									opcode &= (~memMaskHigh);
-								}
-								if(lowAdjustVal != 0) {
-									lowMem = lowSign*((opcode & memMaskLow) + lowAdjustVal);
+									highMem += (highAdjustVal * iniHighMemBit);
+								} 
+								highMem *= highSign;
+								//check if valid.
+								isValid = isValidMem(highMem/iniHighMemBit);
+								if(isValid) {
+									//zero out high mem bits of assembled code to later fill in.
+									opcode &= (~memMaskHigh); 
+									//get low value.
+									lowMem = opcode & memMaskLow;
+									//adjust low value.
+									if(lowAdjustVal != 0) {
+										lowMem += lowAdjustVal;
+									}
+									lowMem *= lowSign;
+									//check if valid.
 									isValid = isValidMem(lowMem);
-									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-									opcode &= (~memMaskLow);
+									if(isValid) {
+										//zero out low mem bits to later fill in.
+										opcode &= (~memMaskLow); 
+									} else {
+										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									}
+								} else {
+									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 								}
 							} else {
+								//get low memory value.
+								lowMem = opcode & memMaskLow;
+								//adjust mem value.
 								if(lowAdjustVal != 0) {
-									lowMem = lowSign*((opcode & memMaskLow) + lowAdjustVal);
-									isValid = isValidMem(lowMem);
-									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									lowMem += lowAdjustVal;
+								} 
+								lowMem *= lowSign;
+								//check if low mem value is valid.
+								isValid = isValidMem(lowMem);
+								if(isValid) {
+									//zero out low mem bits to later fill in.
 									opcode &= (~memMaskLow); 
+								} else {
+									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 								}
 							} 
 							
