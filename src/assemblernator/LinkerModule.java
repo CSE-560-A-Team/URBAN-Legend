@@ -97,8 +97,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	public static class MiddleMod {
 		/** Plus or minus sign */
 		public char plusMin;
-		/** Flag A or E */
-		public char flagRE;
+		/** Flag A or E or N */
+		public char addrType;
 		/** The linkers label for mods */
 		public String linkerLabel;
 	}
@@ -301,7 +301,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 							error.reportError(makeError("invalidPlus"),0,0);
 							return;
 						}
-						midtemp.flagRE = reader.readString(ScanWrap.notcolon,
+						midtemp.addrType = reader.readString(ScanWrap.notcolon,
 								"modFlag").charAt(0);
 						if (!reader.go("disreguard"))
 							return;
