@@ -302,10 +302,10 @@ public class Linker {
 								//get high literal value.
 								highMem = opcode & memMaskHigh;
 								//adjust literal value.
+								highMem *= highSign;
 								if(highAdjustVal != 0) {
 									highMem += (highAdjustVal * iniHighMemBit);
 								} 
-								highMem *= highSign;
 								//check if high value is valid.
 								isValid = isValidLiteral(highMem/iniHighMemBit, ConstantRange.RANGE_12_TC);
 								if(isValid) {
@@ -314,10 +314,10 @@ public class Linker {
 									//get low mem value.
 									lowMem = opcode & memMaskLow;
 									//adjust low mem value.
+									lowMem *= lowSign;
 									if(lowAdjustVal != 0) {
 										lowMem += lowAdjustVal;
 									}
-									lowMem *= lowSign;
 									//check if low mem value is valid.
 									isValid = isValidMem(lowMem);
 									if(isValid) {
@@ -333,10 +333,10 @@ public class Linker {
 								//get low literal value.
 								lowMem = opcode & litMaskLow;
 								//adjust literal value.
+								lowMem *= lowSign;
 								if(lowAdjustVal != 0) {
 									lowMem += lowAdjustVal;
 								}
-								lowMem *= lowSign;
 								//check if value is valid.
 								isValid = isValidLiteral(lowMem, ConstantRange.RANGE_16_TC);
 								if(isValid) {
@@ -349,10 +349,10 @@ public class Linker {
 								//get high value.
 								highMem = opcode & memMaskHigh;
 								//adjust high value.
+								highMem *= highSign;
 								if(highAdjustVal != 0) {
 									highMem += (highAdjustVal * iniHighMemBit);
 								} 
-								highMem *= highSign;
 								//check if valid.
 								isValid = isValidMem(highMem/iniHighMemBit);
 								if(isValid) {
@@ -361,10 +361,11 @@ public class Linker {
 									//get low value.
 									lowMem = opcode & memMaskLow;
 									//adjust low value.
+									lowMem *= lowSign;
 									if(lowAdjustVal != 0) {
 										lowMem += lowAdjustVal;
 									}
-									lowMem *= lowSign;
+									
 									//check if valid.
 									isValid = isValidMem(lowMem);
 									if(isValid) {
@@ -380,10 +381,10 @@ public class Linker {
 								//get low memory value.
 								lowMem = opcode & memMaskLow;
 								//adjust mem value.
+								lowMem *= lowSign;
 								if(lowAdjustVal != 0) {
 									lowMem += lowAdjustVal;
 								} 
-								lowMem *= lowSign;
 								//check if low mem value is valid.
 								isValid = isValidMem(lowMem);
 								if(isValid) {
