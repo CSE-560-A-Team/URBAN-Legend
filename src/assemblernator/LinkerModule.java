@@ -55,7 +55,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		/**Text Records*/
 		public TextRecord text = new TextRecord();
 		/**Mod Records*/
-		public ModRecord mods = new ModRecord();
+		public List<ModRecord> mods = new ArrayList<ModRecord>();
 	}
 
 	/**
@@ -189,7 +189,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			return;
 		//loops to get all the L and T records from object file
 		while (check.equals("L") || check.equals("T")) {
-			List<ModRecord> completeMod = new ArrayList<ModRecord>();
 			textModRecord theRecordsForTextMod = new textModRecord();
 			String entryLabel = "";
 			int entryAddr = 0;
@@ -274,12 +273,13 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				//gets all mod records for a text record
 				while (check.equals("M")) {
 					MiddleMod midtemp = new MiddleMod();
+					ModRecord modification = new ModRecord();
 					mod++;
-					theRecordsForTextMod.mods.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
+					modification.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
 					if (!reader.go("disreguard"))
 						return;
 					//error checking
-					isValid = OperandChecker.isValidMem(theRecordsForTextMod.mods.hex);
+					isValid = OperandChecker.isValidMem(modification.hex);
 					if(!isValid){
 						error.reportError(makeError("invalidValue"),0,0);
 						return;
@@ -311,12 +311,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						if (loop.equals("")) {
 							run = false;
 						}
-						theRecordsForTextMod.mods.midMod.add(midtemp);
+						modification.midMod.add(midtemp);
 					}
 					loop = reader.readString(ScanWrap.notcolon, "modHLS");
 					if (!reader.go("disreguard"))
 						return;
-					theRecordsForTextMod.mods.HLS = loop.charAt(0);
+					modification.HLS = loop.charAt(0);
 					// some kind of error checking
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 					if (!reader.go("disreguard"))
@@ -324,7 +324,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					if(!ender.equals(this.progName)){
 						error.reportWarning(makeError("noMatch"), 0, 0);
 					}
-					completeMod.add(theRecordsForTextMod.mods);
+					theRecordsForTextMod.mods.add(modification);
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
 						return;
