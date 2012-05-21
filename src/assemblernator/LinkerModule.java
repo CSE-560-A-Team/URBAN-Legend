@@ -234,11 +234,15 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				theRecordsForTextMod.text.instrData = reader.readString(ScanWrap.notcolon, "textData");
 				if (!reader.go("disreguard"))
 					return;
+
 				theRecordsForTextMod.text.flagHigh = reader.readString(ScanWrap.notcolon, "textStatus")
+
 						.charAt(0);
 				if (!reader.go("disreguard"))
 					return;
+
 				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus")
+
 						.charAt(0);
 				if (!reader.go("disreguard"))
 					return;
