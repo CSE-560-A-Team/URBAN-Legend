@@ -1196,14 +1196,15 @@ public abstract class Instruction {
 				if (dm != null) {
 					Operand opr = getOperandData("DM");
 					desM = opr.value.modRecord.adjustments.size();
-					records.write((byte) dm.value.arec);
-					records.write((byte) ':');
 					records.write((byte) srcflag);
+					records.write((byte) ':');
+					records.write((byte) dm.value.arec);
 				}
 				else {
-					records.write((byte) desflag);
-					records.write((byte) ':');
 					records.write((byte) srcflag);
+					records.write((byte) ':');
+					records.write((byte) desflag);
+
 				}
 				records.write((byte) ':');
 				// number of M adjustments
