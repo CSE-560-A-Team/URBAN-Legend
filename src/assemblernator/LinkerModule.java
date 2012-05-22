@@ -236,16 +236,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				if (!reader.go("disreguard"))
 					return;
 
-				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus")
-
-						.charAt(0);
-				if (!reader.go("disreguard"))
-					return;
-				if(!(theRecordsForTextMod.text.flagLow == 'A' || theRecordsForTextMod.text.flagLow == 'R' || theRecordsForTextMod.text.flagLow == 'E' || theRecordsForTextMod.text.flagLow == 'C')){
-					error.reportError(makeError("modHLS"), 0, 0);
-					add = false;
-				}
-
 				theRecordsForTextMod.text.flagHigh = reader.readString(ScanWrap.notcolon, "textStatus")
 
 						.charAt(0);
@@ -258,6 +248,16 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
 					return;
+				
+				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus")
+
+						.charAt(0);
+				if (!reader.go("disreguard"))
+					return;
+				if(!(theRecordsForTextMod.text.flagLow == 'A' || theRecordsForTextMod.text.flagLow == 'R' || theRecordsForTextMod.text.flagLow == 'E' || theRecordsForTextMod.text.flagLow == 'C')){
+					error.reportError(makeError("modHLS"), 0, 0);
+					add = false;
+				}
 				//check for mod high
 				if(theRecordsForTextMod.text.modHigh>16 || theRecordsForTextMod.text.modHigh<0)
 				{
