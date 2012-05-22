@@ -165,6 +165,8 @@ public class GUIMain {
 		tabPane.addTab("Untitled", ft);
 		LinkerTab lt = new LinkerTab();
 		tabPane.addTab("Link", lt);
+		SimulatorTab st = new SimulatorTab();
+		tabPane.addTab("Run", st);
 		mainWindow.setVisible(true);
 		ft.jt.grabFocus();
 	}

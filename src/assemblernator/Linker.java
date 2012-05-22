@@ -225,7 +225,6 @@ public class Linker {
 			try {
 				//write header record.
 				out.write(LoaderHeader(modules[0].progName, modules[0].loadAddr, execStartAddr, totalLen, modules[0].date, modules[0].version));
-				System.err.println("Mod len: " + modules.length);
 				//iterate through all linker modules.
 				for(LinkerModule offMod : modules) {
 					//iterate through entries in text and mod record map of a linker module.
@@ -234,114 +233,178 @@ public class Linker {
 						textMod.text.assignedLC += offMod.offset; //offset text lc.
 						//if both high and low flags are 'A', no adjustments is necessary.
 						if(!(textMod.text.flagHigh == 'A' && textMod.text.flagLow == 'A')) {
-							char litBit = textMod.text.instrData.charAt(7);
-							char formatBit = textMod.text.instrData.charAt(6);
+							String dataBin = IOFormat.formatBinInteger(IOFormat.parseHex32Int(textMod.text.instrData), 32);
+							char litBit = dataBin.charAt(7);
+							char formatBit = dataBin.charAt(6);
 							int opcode = IOFormat.parseHex32Int(textMod.text.instrData); //the assembled code.
-							int mem;
-							int adjustVal = 0;
+							int highMem = 0, lowMem = 0;
+							int lowAdjustVal = 0, highAdjustVal = 0;
+							int highSign = 1, lowSign = 1;
 							final int memMaskLow = 0x00000FFF;
 							final int memMaskHigh = 0x00FFF000;
 							final int litMaskLow = 0x0000FFFF;
-							final int memMaskHighLow = 0x00FFFFFF;
 							final int iniHighMemBit = 0x1000;
-							int mask;
 							
-							//adjust mem of instruction data by offset if relocatable.
+							
+							//sets adjustment value depending on whether mem bits are relocatable.
 							if(textMod.text.flagHigh == 'R' || textMod.text.flagLow == 'R') {
-								int highMem = 0;
-								int lowMem = 0;
-								
-								if(textMod.text.flagHigh == 'R' && textMod.text.flagLow == 'R') {
-									highMem = (opcode & memMaskHigh) + (offMod.offset * iniHighMemBit); //get high mem bits and adjust by offset.
-									lowMem = (opcode & memMaskLow) + offMod.offset; //get low mem bits and adjust by offset.
-									opcode &= (~memMaskHighLow); //zero out mem bits of opcode.
-								} else if(textMod.text.flagHigh == 'R') {
-									highMem = (opcode & memMaskHigh) + (offMod.offset * iniHighMemBit); //get high mem bits and adjust by offset.
-									opcode &= (~memMaskHigh); //zero out mem bits of opcode.
-								} else if(litBit == '0'){
-									lowMem = (opcode & memMaskLow) + offMod.offset; //get low mem bits and adjust by offset.
-									opcode &= (~memMaskLow); //zero out mem bits of opcode.
-								} else {
-									lowMem = (opcode & litMaskLow) + offMod.offset; //get low lit bits and adjust by offset.
-									opcode &= (~litMaskLow); //zero out lit bits of opcode.
+								if(textMod.text.flagHigh == 'R') {
+									highAdjustVal = offMod.offset;
 								}
-								
-								
-								if(formatBit == '1' && litBit == '1') { 
-									System.err.println(highMem);
-									System.err.println(lowMem);
-									isValid = (isValidLiteral(highMem/iniHighMemBit, ConstantRange.RANGE_13_TC) && isValidMem(lowMem));
-									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-								} else if(litBit == '1') {
-									isValid = isValidLiteral(lowMem, ConstantRange.RANGE_16_TC);
-									if(!isValid) hErr.reportError(makeError("lnkOORLit16"), -1, -1);
-								} else {
-									isValid = (isValidMem(highMem/iniHighMemBit) && isValidMem(lowMem));
-									if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+								if(textMod.text.flagLow == 'R') {
+									lowAdjustVal = offMod.offset;
 								}
-								
-								
-								opcode |= highMem;
-								opcode |= lowMem;
-								
-								textMod.text.instrData = IOFormat.formatHexInteger(opcode, 8);
 							}
 							
 							//iterate through mod records mapped to text.
 							for(LinkerModule.ModRecord mRec : textMod.mods) {
+								int tempAdjustVal = 0;
 								//iterate through contents of mod record.
 								for(LinkerModule.MiddleMod midMod : mRec.midMod) {
-									if(midMod.flagRE == 'E') {
+									if(midMod.addrType == 'E') {
 										if(linkerTable.containsKey(midMod.linkerLabel)) {
-											adjustVal = linkerTable.get(midMod.linkerLabel);
+											tempAdjustVal = linkerTable.get(midMod.linkerLabel);
 										} else {
 											isValid = false;
 											hErr.reportError(makeError("noLbl"), -1, -1);
 											continue;
 										}
-									} else { //'R'
-										adjustVal = offMod.offset;
-									}
-	
-									if((mRec.HLS == 'S' && litBit == '0') || (mRec.HLS == 'L')) {
-										mask = 0x00000FFF;
-									} else if(mRec.HLS == 'S') {
-										mask = 0x0000FFFF;
-									} else { //'H's
-										mask = 0x00FFF000;
-										adjustVal = offMod.offset * iniHighMemBit; //can't just add because high mem bits don't start at lowest bit.
-									}
-									
-									mem = opcode & mask; //unaltered opcode & mask to get mem bits.
-									opcode &= (~mask); //zero out membits.
-									
-									//adjust mem
-									if(midMod.plusMin == '+') {
-										mem += adjustVal; 
+									} else if(midMod.addrType == 'N') { 
+										if(mRec.HLS == 'S' || mRec.HLS == 'L') {
+											lowSign = -1;
+										} else {
+											highSign = -1;
+										}
+										continue;
 									} else {
-										mem -= adjustVal;
+										tempAdjustVal = offMod.offset;
 									}
 									
-									if(litBit == '1' && formatBit == '1') {
-										isValid = isValidLiteral(mem/iniHighMemBit, ConstantRange.RANGE_13_TC);
-										if(!isValid) hErr.reportError(makeError("lnkOORLit13"), -1, -1);
-									} else if(litBit == '1') {
-										isValid = isValidLiteral(mem, ConstantRange.RANGE_16_TC);
-										if(!isValid) hErr.reportError(makeError("lnkOORLit16"), -1, -1);
-									} else if(formatBit == '1') {
-										isValid = isValidMem(mem/iniHighMemBit);
-										if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									
+									if(mRec.HLS == 'S' || mRec.HLS == 'L') {
+										if(midMod.plusMin == '+') {
+											lowAdjustVal += tempAdjustVal;
+										} else {
+											lowAdjustVal -= tempAdjustVal;
+										}
 									} else {
-										isValid = isValidMem(mem);
-										if(!isValid) hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-									}
-									
-									if(isValid) {
-										opcode |= mem; //fill in mem bits.
-										textMod.text.instrData = IOFormat.formatHexInteger(opcode, 8);
+										if(midMod.plusMin == '+') {
+											highAdjustVal += tempAdjustVal;
+										} else {
+											highAdjustVal -= tempAdjustVal;
+										}
 									}
 								}
 							}
+							
+							//check if memory values are valid, and error report if not.
+							if(litBit == '1' && formatBit == '1') {
+								//get high literal value.
+								highMem = opcode & memMaskHigh;
+								//adjust literal value.
+								highMem *= highSign;
+								if(highAdjustVal != 0) {
+									highMem += (highAdjustVal * iniHighMemBit);
+								} 
+								//check if high value is valid.
+								isValid = isValidLiteral(highMem/iniHighMemBit, ConstantRange.RANGE_12_TC);
+								if(isValid) {
+									//zero out high address bits to fill in later.
+									opcode &= (~memMaskHigh); 
+									//get low mem value.
+									lowMem = opcode & memMaskLow;
+									//adjust low mem value.
+									lowMem *= lowSign;
+									if(lowAdjustVal != 0) {
+										lowMem += lowAdjustVal;
+									}
+									//check if low mem value is valid.
+									isValid = isValidMem(lowMem);
+									if(isValid) {
+										//zero out low mem bits to fill in later.
+										opcode &= (~memMaskLow); 
+									} else {
+										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									}
+								} else {
+									hErr.reportError(makeError("lnkOORLit12"), -1, -1);
+								}
+							} else if(litBit == '1') {
+								//get low literal value.
+								lowMem = opcode & litMaskLow;
+								//adjust literal value.
+								lowMem *= lowSign;
+								if(lowAdjustVal != 0) {
+									lowMem += lowAdjustVal;
+								}
+								//check if value is valid.
+								isValid = isValidLiteral(lowMem, ConstantRange.RANGE_16_TC);
+								if(isValid) {
+									//zero out low mem bits to later fill in.
+									opcode &= (~litMaskLow); 
+								} else {
+									hErr.reportError(makeError("lnkOORLit16"), -1, -1);
+								}
+							} else if(formatBit == '1') {
+								//get high value.
+								highMem = opcode & memMaskHigh;
+								//adjust high value.
+								highMem *= highSign;
+								if(highAdjustVal != 0) {
+									highMem += (highAdjustVal * iniHighMemBit);
+								} 
+								//check if valid.
+								isValid = isValidMem(highMem/iniHighMemBit);
+								if(isValid) {
+									//zero out high mem bits of assembled code to later fill in.
+									opcode &= (~memMaskHigh); 
+									//get low value.
+									lowMem = opcode & memMaskLow;
+									//adjust low value.
+									lowMem *= lowSign;
+									if(lowAdjustVal != 0) {
+										lowMem += lowAdjustVal;
+									}
+									
+									//check if valid.
+									isValid = isValidMem(lowMem);
+									if(isValid) {
+										//zero out low mem bits to later fill in.
+										opcode &= (~memMaskLow); 
+									} else {
+										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									}
+								} else {
+									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+								}
+							} else {
+								//get low memory value.
+								lowMem = opcode & memMaskLow;
+								//adjust mem value.
+								lowMem *= lowSign;
+								if(lowAdjustVal != 0) {
+									lowMem += lowAdjustVal;
+								} 
+								//check if low mem value is valid.
+								isValid = isValidMem(lowMem);
+								if(isValid) {
+									//zero out low mem bits to later fill in.
+									opcode &= (~memMaskLow); 
+								} else {
+									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+								}
+							} 
+							
+							//fill in memory/literal bits into assembled code, and store adjusted assembled code into text record.
+							if(isValid) {
+								opcode |= highMem;
+								opcode |= lowMem;
+								textMod.text.instrData = IOFormat.formatHexInteger(opcode, 8);
+							}
+							
+							//reset adjustment values.
+							highAdjustVal = 0;
+							lowAdjustVal = 0;
 						}
 						//write text records.
 						if(isValid) {
