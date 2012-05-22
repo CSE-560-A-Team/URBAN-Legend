@@ -282,7 +282,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					return;
 				//gets all mod records for a text record
 				while (check.equals("M")) {
-					MiddleMod midtemp = new MiddleMod();
 					ModRecord modification = new ModRecord();
 					mod++;
 					modification.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
@@ -298,6 +297,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					String loop = "";
 					boolean firstRun = true;
 					while (run) {
+						MiddleMod midtemp = new MiddleMod();
 						if(firstRun){
 						midtemp.plusMin = reader.readString(ScanWrap.notcolon,
 								"modPm").charAt(0);
