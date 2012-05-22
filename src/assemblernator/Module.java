@@ -569,7 +569,6 @@ public class Module {
 	 */
 	public void addInstruction(Instruction instr, ErrorHandler hErr) {
 		this.moduleLength = this.highLC - this.loadAddr;
-		System.out.println("this.moduleLength = " + this.highLC + " - " + this.loadAddr + ";");
 		if (this.moduleLength > MAX_LEN) {
 			hErr.reportError(makeError("ORmoduleLength", this.programName),
 					instr.lineNum, -1);
@@ -971,33 +970,7 @@ public class Module {
 			FileNotFoundException {
 		OutputStream out = new FileOutputStream(fileName);
 
-		int totalRecords = 0, totalLinkRecords = 0, totalTextRecords = 0, totalModRecords = 0;
-		RecordSet recSet;
-		// write header record.
-		out.write(getHeaderRecord());
-
-		// write linking records.
-		recSet = this.symbolTable.getLinkRecords(this.programName);
-		totalLinkRecords = recSet.size;
-		out.write(recSet.records);
-		// write text records and mod records. adjust record cnts.
-		for (Instruction instr : this.assembly) {
-			RecordSet rs = instr.getTextRecord(this.programName); 
-			out.write(rs.records);
-			totalTextRecords += rs.size;
-
-			recSet = instr.getModRecords(this.programName);
-			out.write(recSet.records);
-			totalModRecords += recSet.size;
-
-		}
-
-		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords
-				+ 2;// includes end record and header record.
-		// write end record
-		out.write(getEndRecord(totalRecords, totalLinkRecords,
-				totalTextRecords, totalModRecords));
-
+		writeObjectFile(out);
 	}
 
 	/**
@@ -1037,7 +1010,6 @@ public class Module {
 			recSet = instr.getModRecords(this.programName);
 			out.write(recSet.records);
 			totalModRecords += recSet.size;
-
 		}
 		totalRecords = totalLinkRecords + totalTextRecords + totalModRecords
 				+ 2;

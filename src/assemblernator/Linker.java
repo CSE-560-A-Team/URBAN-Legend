@@ -258,9 +258,9 @@ public class Linker {
 							
 							//iterate through mod records mapped to text.
 							for(LinkerModule.ModRecord mRec : textMod.mods) {
-								int tempAdjustVal = 0;
 								//iterate through contents of mod record.
 								for(LinkerModule.MiddleMod midMod : mRec.midMod) {
+									int tempAdjustVal = 0;
 									if(midMod.addrType == 'E') {
 										if(linkerTable.containsKey(midMod.linkerLabel)) {
 											tempAdjustVal = linkerTable.get(midMod.linkerLabel);
