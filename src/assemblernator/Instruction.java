@@ -1201,10 +1201,9 @@ public abstract class Instruction {
 					records.write((byte) dm.value.arec);
 				}
 				else {
-					records.write((byte) srcflag);
-					records.write((byte) ':');
 					records.write((byte) desflag);
-
+					records.write((byte) ':');
+					records.write((byte) srcflag);
 				}
 				records.write((byte) ':');
 				// number of M adjustments
