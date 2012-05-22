@@ -1199,18 +1199,24 @@ public abstract class Instruction {
 					records.write((byte) srcflag);
 					records.write((byte) ':');
 					records.write((byte) dm.value.arec);
+					records.write((byte) ':');
+					// number of M adjustments
+					records.write(IOFormat.formatIntegerWithRadix(srcM, 16, 2));
+					records.write((byte) ':');
+					records.write(IOFormat.formatIntegerWithRadix(desM, 16, 2));
+					records.write((byte) ':');
 				}
 				else {
 					records.write((byte) desflag);
 					records.write((byte) ':');
 					records.write((byte) srcflag);
+					records.write((byte) ':');
+					// number of M adjustments
+					records.write(IOFormat.formatIntegerWithRadix(desM, 16, 2));
+					records.write((byte) ':');
+					records.write(IOFormat.formatIntegerWithRadix(srcM, 16, 2));
+					records.write((byte) ':');
 				}
-				records.write((byte) ':');
-				// number of M adjustments
-				records.write(IOFormat.formatIntegerWithRadix(desM, 16, 2));
-				records.write((byte) ':');
-				records.write(IOFormat.formatIntegerWithRadix(srcM, 16, 2));
-				records.write((byte) ':');
 				// program name
 				records.write(progName.getBytes());
 				records.write((byte) ':');
