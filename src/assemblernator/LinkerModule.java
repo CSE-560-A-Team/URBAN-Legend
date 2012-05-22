@@ -242,11 +242,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				if(!(theRecordsForTextMod.text.flagHigh == 'A' || theRecordsForTextMod.text.flagHigh == 'R' || theRecordsForTextMod.text.flagHigh == 'E' || theRecordsForTextMod.text.flagHigh == 'C')){
 					error.reportError(makeError("modHLS"), 0, 0);
 					add = false;
-				}
-				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
-				if (!reader.go("disreguard"))
-					return;
-				
+				}				
 				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus")
 
 						.charAt(0);
@@ -256,6 +252,9 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					error.reportError(makeError("modHLS"), 0, 0);
 					add = false;
 				}
+				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
+				if (!reader.go("disreguard"))
+					return;
 				//check for mod high
 				if(theRecordsForTextMod.text.modHigh>16 || theRecordsForTextMod.text.modHigh<0)
 				{
@@ -297,9 +296,15 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					}
 					boolean run = true;
 					String loop = "";
+					boolean firstRun = true;
 					while (run) {
+						if(firstRun){
 						midtemp.plusMin = reader.readString(ScanWrap.notcolon,
 								"modPm").charAt(0);
+						firstRun=false;
+						}else{
+						midtemp.plusMin = loop.charAt(0);
+						}
 						if (!reader.go("disreguard"))
 							return;
 						//error checking
