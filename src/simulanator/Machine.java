@@ -161,8 +161,10 @@ public class Machine {
 	 */
 	public void runThread(int execStart) {
 		setLC(execStart);
+		System.out.println("Starting run from lc = " + lc);
+		running = true;
 		while (running) {
-			if (lc < 0 || lc > memory.length) {
+			if (lc < 0 || lc >= memory.length) {
 				hErr.reportError(
 						makeError("runLCwentOOR", Integer.toString(lc, 16)),
 						-1, -1);
@@ -177,6 +179,7 @@ public class Machine {
 						makeError("InvOpCode",
 								IOFormat.formatBinInteger(opcode, 6)), -1, -1);
 			}
+			System.out.println("Execute " + ins.getOpId() + ": lc = " + lc);
 		}
 	}
 
