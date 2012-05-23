@@ -15,13 +15,13 @@ public class Machine {
 	public static final int memorySizeInWords = 4096;
 
 	/** Our eight machine registers. */
-	public int[] registers;
+	private int[] registers;
 	/** Our seven index registers: Index register 0 is unused. */
-	public int[] indexRegisters;
+	private int[] indexRegisters;
 	/** Our entire memory; all 16 kibibytes of it. */
-	public int[] memory;
+	private int[] memory;
 	/** The current program counter. */
-	public int lc;
+	private int lc;
 	/** The current instruction. */
 	public int instruction;
 
@@ -119,7 +119,7 @@ public class Machine {
 	public String dump(int level) {
 		String res = "";
 		if ((level & 1) != 0) {
-			res += "LC " + lc + "  WORD="
+			res += "LC " + getLC() + "  WORD="
 					+ IOFormat.formatHexInteger(instruction, 8) + "\n";
 			for (int i = 0; i < 8; ++i)
 				res += "R" + i + "="
@@ -155,7 +155,85 @@ public class Machine {
 	 *            The starting LC from which to run.
 	 */
 	public void runThread(int execStart) {
-		lc = execStart;
+		setLC(execStart);
 		// TODO: Implement
+	}
+
+	/**
+	 * @param addr
+	 *            The address of the desired memory word.
+	 * @return The word at the given address.
+	 */
+	public int getMemory(int addr) {
+		return memory[addr];
+	}
+
+	/**
+	 * Standard setter; fires memory change.
+	 * 
+	 * @param addr
+	 *            The address of the desired memory word.
+	 * @param word
+	 *            The new word to place at that address.
+	 */
+	public void setMemory(int addr, int word) {
+		memory[addr] = word;
+	}
+
+	/** @return The current location counter. */
+	public int getLC() {
+		return lc;
+	}
+
+	/**
+	 * Standard setter; fires location counter change.
+	 * 
+	 * @param lc
+	 *            The new location counter.
+	 */
+	public void setLC(int lc) {
+		this.lc = lc;
+	}
+
+	/**
+	 * Standard setter; fires register change.
+	 * 
+	 * @param register
+	 *            The ID of the register to set, 0-7.
+	 * @param word
+	 *            The new value for the register.
+	 */
+	public void setRegister(int register, int word) {
+		registers[register] = word;
+	}
+
+	/**
+	 * Standard setter; fires register change.
+	 * 
+	 * @param register
+	 *            The ID of the index register to set, 1-7.
+	 * @param word
+	 *            The new value for the register.
+	 */
+	public void setIndexRegister(int register, int word) {
+		indexRegisters[register] = word;
+	}
+
+	/**
+	 * @param reg
+	 *            The register to get.
+	 * @return The value of the index register with the given ID.
+	 */
+	public int getIndexRegister(int reg) {
+		return indexRegisters[reg];
+	}
+
+	/**
+	 * @param reg
+	 *            The register to get.
+	 * @return The value of the index register with the given ID.
+	 */
+	public int getRegister(int reg) {
+		return registers[reg];
 	}
 }

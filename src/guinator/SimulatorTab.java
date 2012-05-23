@@ -211,7 +211,9 @@ public class SimulatorTab extends JSplitPane {
 
 		machine = new Machine(outputBox.hErr, inputStream, outputStream);
 		inputField.setEnabled(false);
+		setOneTouchExpandable(true);
 		setDividerLocation(320);
+		setResizeWeight(.9);
 	}
 
 
@@ -231,7 +233,7 @@ public class SimulatorTab extends JSplitPane {
 					InputStream is = new FileInputStream(new File(fname));
 					Simulator.load(is, outputBox.hErr, machine);
 					for (int addr = 0; addr < Machine.memorySizeInWords; ++addr)
-						memTable.setValueAt(IOFormat.formatHexInteger(machine.memory[addr],8), addr / 16,
+						memTable.setValueAt(IOFormat.formatHexInteger(machine.getMemory(addr),8), addr / 16,
 								addr % 16);
 				} catch (Exception ex) {
 					GUIUtil.showException("Error loading executable file", ex,
@@ -239,7 +241,7 @@ public class SimulatorTab extends JSplitPane {
 				}
 			}
 			else if (e.getSource() == runButton) {
-				machine.runThread(machine.lc);
+				machine.runThread(machine.getLC());
 			}
 		}
 	}

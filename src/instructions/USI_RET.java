@@ -106,7 +106,7 @@ public class USI_RET extends AbstractInstruction {
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
 		int addr = brkDwn.destination;
-		machine.lc = addr;
+		machine.setLC(addr);
 	}
 
 	// =========================================================

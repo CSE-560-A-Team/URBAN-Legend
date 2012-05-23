@@ -40,7 +40,7 @@ public class USI_TRLT extends UIG_TransferCond {
 		
 		int addr = brkDwn.readFromDest(machine);
 		if(reg < 0) {
-			machine.lc = addr;
+			machine.setLC(addr);
 		}
 	}
 

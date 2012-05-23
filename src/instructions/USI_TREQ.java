@@ -41,7 +41,7 @@ public class USI_TREQ extends UIG_TransferCond {
 		
 		int addr = brkDwn.destination;
 		if(reg == 0) {
-			machine.lc = addr;
+			machine.setLC(addr);
 		}
 	}
 

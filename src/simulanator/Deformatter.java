@@ -59,18 +59,18 @@ public class Deformatter {
 			switch (destKind) {
 			case INDEXREGISTER:
 				if (destination < 1 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				mach.indexRegisters[destination] = word;
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				mach.setIndexRegister(destination, word);
 				break;
 			case REGISTER: // This should have come from three bits, but...
 				if (destination < 0 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				mach.registers[destination] = word;
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				mach.setRegister(destination, word);
 				break;
 			case MEMORY:
 				if (destination < 0 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				mach.memory[destination] = word;
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				mach.setMemory(destination, word);
 				break;
 			default:
 				mach.hErr.reportError(
@@ -99,24 +99,24 @@ public class Deformatter {
 			switch (sourceKind) {
 			case INDEXREGISTER:
 				if (source < 1 || source > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				word = mach.indexRegisters[source];
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				word = mach.getIndexRegister(source);
 				break;
 			case REGISTER: // This should have come from three bits, but...
 				if (source < 0 || source > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				word = mach.registers[source];
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				word = mach.getRegister(source);
 				break;
 			case MEMORY:
 				if (literal)
 					return source;
 				if (source < 0 || source > 4095)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				word = mach.memory[source];
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				word = mach.getMemory(source);
 				break;
 			default:
 				mach.hErr.reportError(
-						"Simulation error: Invalid source set...", mach.lc, 0);
+						"Simulation error: Invalid source set...", mach.getLC(), 0);
 				word = 0;
 			}
 			return word;
@@ -143,23 +143,23 @@ public class Deformatter {
 			switch (destKind) {
 			case INDEXREGISTER:
 				if (destination < 1 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				word = mach.indexRegisters[destination];
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				word = mach.getIndexRegister(destination);
 				break;
 			case REGISTER: // This should have come from three bits, but...
 				if (destination < 0 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				word = mach.registers[destination];
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				word = mach.getRegister(destination);
 				break;
 			case MEMORY:
 				if (destination < 0 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.lc, 0);
-				word = mach.memory[destination];
+					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+				word = mach.getMemory(destination);
 				break;
 			default:
 				mach.hErr.reportError(
 						"Simulation error: Invalid destination set...",
-						mach.lc, 0);
+						mach.getLC(), 0);
 				word = 0;
 			}
 			return word;

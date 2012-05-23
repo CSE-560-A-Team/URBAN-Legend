@@ -130,7 +130,7 @@ public class Simulator {
 						.readInt(ScanWrap.hex8, "loaderTNoWord", 16)))
 					return;
 
-				machine.memory[addr] = word;
+				machine.setMemory(addr, word);
 
 				if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon,
 						"loaderNoCRC"))) // LM2.7
@@ -182,7 +182,7 @@ public class Simulator {
 					makeError("newerAssemler", "" + Assembler.VERSION, ""
 							+ asmVer), -1, -1);
 		machine.output.putString("Loaded file.");
-		machine.lc = loadAddr;
-		machine.lc = execStart;
+		machine.setLC(loadAddr);
+		machine.setLC(execStart);
 	}
 }

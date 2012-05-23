@@ -163,7 +163,7 @@ public class USI_TRDR extends AbstractInstruction {
 		int addr = brkDwn.destination;
 		reg--;
 		brkDwn.putToDest(reg, machine);
-		machine.lc = addr;
+		machine.setLC(addr);
 	}
 
 	// =========================================================
