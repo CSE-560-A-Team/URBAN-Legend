@@ -11,13 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
 
-import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Linker;
 import assemblernator.LinkerModule;
 
@@ -32,17 +28,12 @@ public class LinkerTab extends JSplitPane {
 	/** Table of files to be linked. */
 	JTable linkTable;
 	/** Text box of link messages */
-	JTextPane warningOutput;
+	IOPane warningOutput;
 	/** What you press to add files. */
 	JButton addFiles;
 	/** What you press to start the linker. */
 	JButton doLink;
-
-	/** The HTML document to print stuff to. */
-	HTMLDocument htmlDoc;
-	/** The HTML kit to print stuff to. */
-	HTMLEditorKit htmlKit;
-
+	
 	/** The actual modules we will be linking */
 	ArrayList<LinkerModule> linkMods = new ArrayList<LinkerModule>();
 
@@ -73,54 +64,12 @@ public class LinkerTab extends JSplitPane {
 		npanel.add(new JScrollPane(linkTable));
 		npanel.add(toolbar);
 
-		warningOutput = new JTextPane();
-		warningOutput.setEditorKit(htmlKit = new HTMLEditorKit());
-		warningOutput.setDocument(htmlDoc = new HTMLDocument());
-		warningOutput.setEditable(false);
+		warningOutput = new IOPane();
 		
 		setLeftComponent(npanel);
 		setRightComponent(new JScrollPane(warningOutput));
 		setDividerLocation(330);
 	}
-
-	/**
-	 * @author Josh Ventura
-	 * @date May 18, 2012; 11:03:01 PM
-	 */
-	class LinkErrHander implements ErrorHandler {
-		/**
-		 * @see assemblernator.ErrorReporting.ErrorHandler#reportError(java.lang.String,
-		 *      int, int)
-		 */
-		@Override public void reportError(String err, int line, int pos) {
-			try {
-				htmlKit.insertHTML(htmlDoc,
-						htmlDoc.getLength(),
-						"<span style=\"color:red\"><b>ERROR:</b> " + err + "</span><br/>\n",
-						0, 0, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * @see assemblernator.ErrorReporting.ErrorHandler#reportWarning(java.lang.String,
-		 *      int, int)
-		 */
-		@Override public void reportWarning(String warn, int line, int pos) {
-			try {
-				htmlKit.insertHTML(htmlDoc,
-						htmlDoc.getLength(),
-						"<span style=\"color:#FF8000\"><b>WARNING:</b> " + warn + "</span><br/>\n",
-						0, 0, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/** This tab's error handling context */
-	LinkErrHander hErr = new LinkErrHander();
 
 	/**
 	 * @author Josh Ventura
@@ -131,15 +80,15 @@ public class LinkerTab extends JSplitPane {
 		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
 		@Override public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == doLink) {
-				hErr.reportWarning("All glory to the hypnotoad!", 0, 0);
+				warningOutput.hErr.reportWarning("All glory to the hypnotoad!", 0, 0);
 				String saveto = GUIUtil.getSaveFname(LinkerTab.this, "URBAN Legend Executables", ".ulx");
-				Linker.link(linkMods.toArray(new LinkerModule[0]), saveto, hErr);
+				Linker.link(linkMods.toArray(new LinkerModule[0]), saveto, warningOutput.hErr);
 			}
 			else if (e.getSource() == addFiles) {
 				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this, "URBAN Object Files", ".o",
 						".ulo");
 				System.out.println("Received " + fnames.length + " filenames");
-				LinkerModule lms[] = Linker.getModules(fnames, hErr);
+				LinkerModule lms[] = Linker.getModules(fnames, warningOutput.hErr);
 				System.out.println("Received " + lms.length + " modules");
 				int i = 0;
 				for (LinkerModule lm : lms) {

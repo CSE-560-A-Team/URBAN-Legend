@@ -5,9 +5,6 @@ import static assemblernator.ErrorReporting.makeError;
 import java.io.InputStream;
 import java.util.Scanner;
 
-import simulanator.Machine.URBANInputStream;
-import simulanator.Machine.URBANOutputStream;
-
 import assemblernator.Assembler;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
@@ -29,12 +26,8 @@ public class Simulator {
 	 * @param hErr
 	 *            An error handler to which any problems in the load will be
 	 *            reported.
-	 * @param uis
-	 *            The URBAN input stream the machine the running machine will
-	 *            use.
-	 * @param uos
-	 *            The URBAN output stream the machine the running machine will
-	 *            use.
+	 * @param machine
+	 *            The URBAN Machine into which memory is loaded.
 	 * @specRef LM1
 	 * @specRef LM1.1
 	 * @specRef LM1.2
@@ -55,13 +48,11 @@ public class Simulator {
 	 * @specRef LM1.17
 	 * @specRef LM1.18
 	 */
-	void load(InputStream loaderFile, ErrorHandler hErr, URBANInputStream uis,
-			URBANOutputStream uos) {
+	public static void load(InputStream loaderFile, ErrorHandler hErr, Machine machine) {
 		int loadAddr;
 		int execStart;
 		int progLen;
 		int asmVer;
-		Machine machine = new Machine(hErr, uis, uos);
 
 		try {
 			Scanner s = new Scanner(loaderFile);
@@ -266,7 +257,6 @@ public class Simulator {
 					makeError("newerAssemler", "" + Assembler.VERSION, ""
 							+ asmVer), 0, 0);
 		machine.lc = loadAddr;
-
-		machine.runThread(execStart);
+		machine.lc = execStart;
 	}
 }

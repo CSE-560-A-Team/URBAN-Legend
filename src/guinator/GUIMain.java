@@ -199,7 +199,8 @@ public class GUIMain {
 		rm = ft.compile();
 
 		if (ft.getFileName() == null) {
-			String fn = GUIUtil.getSaveFname(mainWindow,"URBAN Assembly Files",".s",".uls");
+			String fn = GUIUtil.getSaveFname(mainWindow,
+					"URBAN Assembly Files", ".s", ".uls");
 			if (fn == null)
 				return;
 			ft.setFileName(fn);
@@ -217,27 +218,10 @@ public class GUIMain {
 		try {
 			rm.writeObjectFile(ofname);
 		} catch (Exception e) {
-			showException(e);
+			GUIUtil.showException(
+					"An error occurred during object file generation", e,
+					mainWindow);
 		}
-	}
-
-	/**
-	 * Display an exception to the user.
-	 * 
-	 * @author Josh Ventura
-	 * @date May 7, 2012; 2:30:11 AM
-	 * @param e
-	 *            The exception to display.
-	 */
-	private void showException(Exception e) {
-		String errmsg = "An error occurred during object file generation:\n"
-				+ e.getMessage() + "\n\n";
-		int sec = 0;
-		for (StackTraceElement el : e.getStackTrace())
-			if (sec++ < 12)
-				errmsg += el.toString() + "\n";
-		JOptionPane.showMessageDialog(mainWindow, errmsg);
-		e.printStackTrace();
 	}
 
 	/**
@@ -318,7 +302,8 @@ public class GUIMain {
 			if (e.getSource() == m_save || e.getSource() == m_saveAs) {
 				FileTab ft = (FileTab) tabPane.getSelectedComponent();
 				if (ft.getFileName() == null || e.getSource() == m_saveAs) {
-					String n = GUIUtil.getSaveFname(mainWindow,"URBAN Assembly Files",".s",".uls");
+					String n = GUIUtil.getSaveFname(mainWindow,
+							"URBAN Assembly Files", ".s", ".uls");
 					if (n == null)
 						return;
 					ft.setFileName(n);
@@ -328,14 +313,19 @@ public class GUIMain {
 					fw.write(ft.jt.getText());
 					fw.close();
 				} catch (FileNotFoundException e1) {
-					showException(e1);
+					GUIUtil.showException(
+							"An error occurred while trying to save the file",
+							e1, mainWindow);
 				} catch (IOException e2) {
-					showException(e2);
+					GUIUtil.showException(
+							"An error occurred while trying to save the file",
+							e2, mainWindow);
 				}
 				return;
 			}
 			if (e.getSource() == m_load) {
-				String fn = GUIUtil.getLoadFname(mainWindow,"URBAN Assembly Files",".s",".uls");
+				String fn = GUIUtil.getLoadFname(mainWindow,
+						"URBAN Assembly Files", ".s", ".uls");
 				if (fn == null)
 					return;
 				try {
@@ -351,7 +341,9 @@ public class GUIMain {
 					tabPane.setSelectedComponent(ft);
 					fw.close();
 				} catch (FileNotFoundException e1) {
-					showException(e1);
+					GUIUtil.showException(
+							"An error occurred while trying to open the file",
+							e1, mainWindow);
 				}
 				return;
 			}

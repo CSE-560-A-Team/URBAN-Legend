@@ -12,6 +12,8 @@ import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -37,13 +39,27 @@ public class RowNumberTable extends JTable implements ChangeListener,
 		setFocusable(false);
 		setAutoCreateColumnsFromModel(false);
 		setModel(main.getModel());
-		setSelectionModel(main.getSelectionModel());
+		//setSelectionModel(main.getSelectionModel());
+		main.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override public void valueChanged(ListSelectionEvent e) {
+				RowNumberTable.this.repaint();
+			}
+		});
+		getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override public void valueChanged(ListSelectionEvent e) {
+				main.clearSelection();
+				main.setColumnSelectionInterval(0, 15);
+				int rows[] = RowNumberTable.this.getSelectedRows();
+				for (int row: rows)
+					main.addRowSelectionInterval(row, row);
+				RowNumberTable.this.repaint();
+			}
+		});
 
 		TableColumn column = new TableColumn();
 		column.setHeaderValue(" ");
 		addColumn(column);
 		column.setCellRenderer(new RowNumberRenderer());
-		column.setMaxWidth(48);
 
 		getColumnModel().getColumn(0).setPreferredWidth(50);
 		setPreferredScrollableViewportSize(getPreferredSize());
@@ -112,7 +128,7 @@ public class RowNumberTable extends JTable implements ChangeListener,
 	}
 
 	/** Borrow the renderer from JDK1.4.2 table header */
-	private static class RowNumberRenderer extends DefaultTableCellRenderer {
+	private class RowNumberRenderer extends DefaultTableCellRenderer {
 		/** More of the same! */
 		private static final long serialVersionUID = 1L;
 
@@ -138,8 +154,10 @@ public class RowNumberTable extends JTable implements ChangeListener,
 				}
 			}
 
-			if (isSelected) {
+			int srows[] = main.getSelectedRows();
+			for (int srow: srows) if (row == srow) {
 				setFont(getFont().deriveFont(Font.BOLD));
+				break;
 			}
 
 			setText((value == null) ? "" : value.toString());
