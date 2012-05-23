@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 /**
@@ -120,5 +121,29 @@ public class GUIUtil {
 			res += extensions[extensions.length - 1];
 		}
 		return new String[] { res };
+	}
+
+
+	/**
+	 * Display an exception to the user.
+	 * 
+	 * @author Josh Ventura
+	 * @date May 7, 2012; 2:30:11 AM
+	 * @param basicErr
+	 *            The error string to display at the top.
+	 * @param e
+	 *            The exception to display.
+	 * @param mainWindow
+	 *            The window that owns this message.
+	 */
+	public static void showException(String basicErr, Exception e,
+			Component mainWindow) {
+		String errmsg = basicErr + ":\n" + e.getMessage() + "\n\n" + e.getClass().toString() + ":\n";
+		int sec = 0;
+		for (StackTraceElement el : e.getStackTrace())
+			if (sec++ < 12)
+				errmsg += el.toString() + "\n";
+		JOptionPane.showMessageDialog(mainWindow, errmsg);
+		e.printStackTrace();
 	}
 }

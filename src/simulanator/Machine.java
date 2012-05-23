@@ -74,7 +74,7 @@ public class Machine {
 	 * @param uos
 	 *            The URBAN output stream for this machine.
 	 */
-	Machine(ErrorHandler err, URBANInputStream uis, URBANOutputStream uos) {
+	public Machine(ErrorHandler err, URBANInputStream uis, URBANOutputStream uos) {
 		hErr = err;
 		input = uis;
 		output = uos;
@@ -89,7 +89,7 @@ public class Machine {
 	 * @param forkFrom
 	 *            The machine to be forked.
 	 */
-	Machine(Machine forkFrom) {
+	public Machine(Machine forkFrom) {
 		hErr = forkFrom.hErr;
 		input = forkFrom.input;
 		output = forkFrom.output;
