@@ -30,7 +30,7 @@ public class USI_POP extends AbstractInstruction {
 	private static final String opId = "POP";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000031; // 0b11000100000000000000000000000000
+	private static final int opCode = 0x31; // 0b110001
 
 	/** The static instance for this instruction. */
 	static USI_POP staticInstance = new USI_POP(true);

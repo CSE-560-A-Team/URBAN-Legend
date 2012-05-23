@@ -23,7 +23,7 @@ public class USI_MOVD extends UIG_Arithmetic {
 	private static final String opId = "MOVD";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000000; // 0b00000000000000000000000000000000
+	private static final int opCode = 0x00; // 0b000000
 
 	/** The static instance for this instruction. */
 	static USI_MOVD staticInstance = new USI_MOVD(true);

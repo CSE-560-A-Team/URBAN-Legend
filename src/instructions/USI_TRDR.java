@@ -30,7 +30,7 @@ public class USI_TRDR extends AbstractInstruction {
 	private static final String opId = "TRDR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000024; // 0b10010000000000000000000000000000
+	private static final int opCode = 0x24; // 0b100100
 
 	/** The static instance for this instruction. */
 	static USI_TRDR staticInstance = new USI_TRDR(true);

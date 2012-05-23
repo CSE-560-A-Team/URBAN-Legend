@@ -30,7 +30,7 @@ public class USI_TR extends AbstractInstruction {
 	private static final String opId = "TR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000023; // 0b10001100000000000000000000000000
+	private static final int opCode = 0x23; // 0b100011
 
 	/** The static instance for this instruction. */
 	static USI_TR staticInstance = new USI_TR(true);

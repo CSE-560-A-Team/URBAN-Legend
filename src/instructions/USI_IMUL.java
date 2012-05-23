@@ -23,7 +23,7 @@ public class USI_IMUL extends UIG_Arithmetic {
 	private static final String opId = "IMUL";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000000D; // 0b00110100000000000000000000000000
+	private static final int opCode = 0x0D; // 0b001101
 
 	/** The static instance for this instruction. */
 	static USI_IMUL staticInstance = new USI_IMUL(true);

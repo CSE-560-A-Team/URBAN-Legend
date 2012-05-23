@@ -23,7 +23,7 @@ public class USI_IAA extends UIG_Arithmetic {
 	private static final String opId = "IAA";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000000A; // 0b00101000000000000000000000000000
+	private static final int opCode = 0x0A; // 0b001010
 
 	/** The static instance for this instruction. */
 	static USI_IAA staticInstance = new USI_IAA(true);

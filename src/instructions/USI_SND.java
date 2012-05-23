@@ -25,20 +25,20 @@ import assemblernator.OperandChecker;
  * @date Apr 08, 2012; 08:26:19
  * @specRef IA3
  */
-public class USI_NOISE extends AbstractInstruction {
+public class USI_SND extends AbstractInstruction {
 	/**
 	 * The operation identifier of this instruction; while comments should not
 	 * be treated as an instruction, specification says they must be included in
 	 * the user report. Hence, we will simply give this class a semicolon as its
 	 * instruction ID.
 	 */
-	private static final String opId = "NOISE";
+	private static final String opId = "SND";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000004; // 0b00010000000000000000000000000000
+	private static final int opCode = 0x04; // 0b000100
 
 	/** The static instance for this instruction. */
-	static USI_NOISE staticInstance = new USI_NOISE(true);
+	static USI_SND staticInstance = new USI_SND(true);
 
 	/**
 	 * Denotes the waveform (type) of our sample.
@@ -338,7 +338,7 @@ public class USI_NOISE extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#getNewInstance() */
 	@Override public Instruction getNewInstance() {
-		return new USI_NOISE();
+		return new USI_SND();
 	}
 
 	/**
@@ -348,10 +348,10 @@ public class USI_NOISE extends AbstractInstruction {
 	 *            Unused parameter; used to distinguish the constructor for the
 	 *            static instance.
 	 */
-	private USI_NOISE(boolean ignored) {
+	private USI_SND(boolean ignored) {
 		super(opId, opCode);
 	}
 
 	/** Default constructor; does nothing. */
-	private USI_NOISE() {}
+	private USI_SND() {}
 }

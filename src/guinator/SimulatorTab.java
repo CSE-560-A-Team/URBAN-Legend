@@ -8,27 +8,27 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
+import java.util.Map.Entry;
+import java.util.SortedMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
-
-import assemblernator.IOFormat;
 
 import simulanator.Machine;
 import simulanator.Machine.URBANInputStream;
 import simulanator.Machine.URBANOutputStream;
 import simulanator.Simulator;
+import assemblernator.IOFormat;
 
 /**
  * Tab containing a simulator pane.
@@ -52,6 +52,8 @@ public class SimulatorTab extends JSplitPane {
 	private JButton loadButton;
 	/** Button to reset the module */
 	private JButton runButton;
+	/** How long to sleep after each instruction */
+	private JSpinner delaySpinbox;
 
 	/** The text box into which the user can type */
 	private JLTextField inputField;
@@ -65,7 +67,7 @@ public class SimulatorTab extends JSplitPane {
 	 * @author Josh Ventura
 	 * @date May 22, 2012; 4:34:04 PM
 	 */
-	class JLTextField extends JTextField implements Lock, ActionListener {
+	class JLTextField extends JTextField implements ActionListener {
 		/** Shut up, ECJ */
 		private static final long serialVersionUID = 1L;
 		/** True if this lock is set */
@@ -74,7 +76,7 @@ public class SimulatorTab extends JSplitPane {
 		public boolean submitted;
 
 		/** Grab the lock */
-		@Override public synchronized void lock() {
+		public synchronized void lock() {
 			while (isLocked) {
 				try {
 					wait();
@@ -84,33 +86,9 @@ public class SimulatorTab extends JSplitPane {
 		}
 
 		/** Release the lock */
-		@Override public synchronized void unlock() {
+		public synchronized void unlock() {
 			isLocked = false;
 			notify();
-		}
-
-		/** @see java.util.concurrent.locks.Lock#lockInterruptibly() */
-		@Override public void lockInterruptibly() {
-			lock();
-		}
-
-		/** Does nothing */
-		@Override public Condition newCondition() {
-			return null;
-		}
-
-		/** Attempt to lock */
-		@Override public boolean tryLock() {
-			if (isLocked)
-				return false;
-			lock();
-			return true;
-		}
-
-		/** Parameters ignored. */
-		@Override public boolean tryLock(long time, TimeUnit unit)
-				throws InterruptedException {
-			return tryLock();
 		}
 
 		/** Enter pressed */
@@ -191,6 +169,8 @@ public class SimulatorTab extends JSplitPane {
 		bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 		toolbar.add(loadButton = new JButton("Load"));
 		toolbar.add(runButton = new JButton("Run"));
+		toolbar.add(delaySpinbox = new JSpinner(new SpinnerNumberModel(400, 0,
+				4000, 10)));
 		toolbar.add(inputField = new JLTextField());
 		toolbar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 10));
 		bottom.add(new JScrollPane(outputBox = new IOPane()));
@@ -212,6 +192,9 @@ public class SimulatorTab extends JSplitPane {
 		// ===================================================================
 
 		machine = new Machine(outputBox.hErr, inputStream, outputStream);
+		machine.addThreadListener(myUIUpdater);
+		machine.addMemoryListener(myUIUpdater);
+		machine.addRegisterListener(myUIUpdater);
 		inputField.setEnabled(false);
 		setOneTouchExpandable(true);
 		setDividerLocation(320);
@@ -273,20 +256,90 @@ public class SimulatorTab extends JSplitPane {
 		/** @see simulanator.Machine.URBANInputStream#getString() */
 		@Override public String getString() {
 			inputField.lock();
-			inputField.setEnabled(true);
-			while (!inputField.submitted)
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			String ret = inputField.getText();
-			inputField.setText("");
-			inputField.setEnabled(false);
-			return ret;
+			try {
+				inputField.setEnabled(true);
+				while (!inputField.submitted)
+					try {
+						wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				String ret = inputField.getText();
+				inputField.setText("");
+				inputField.setEnabled(false);
+				return ret;
+			} finally {
+				inputField.unlock();
+			}
 		}
 	}
 
 	/** Our input stream. */
 	InputReader inputStream = new InputReader();
+
+	/**
+	 * Updates the UI as our machine state changes.
+	 * 
+	 * @author Josh Ventura
+	 * @date May 23, 2012; 2:50:52 PM
+	 */
+	class UIUpdater implements Machine.ThreadListener, Machine.MemoryListener,
+			Machine.RegisterListener {
+
+		/** Allows us to pause or sleep */
+		@Override public void fetchDecodeExecute() {
+			int d = (Integer) delaySpinbox.getValue();
+			if (d > 0)
+				try {
+					Thread.sleep(d);
+				} catch (InterruptedException e) {}
+		}
+
+		/** Update register display */
+		@Override public void updatedRegisters(boolean index,
+				int firstRegister, int lastRegister) {
+			// TODO Auto-generated method stub
+
+		}
+
+		/** Update memory table */
+		@Override public void updatedMemory(int startAddr, int endAddr) {
+			for (int addr = startAddr; addr < endAddr; ++addr) {
+				memTable.setValueAt(
+						IOFormat.formatHexInteger(machine.getMemory(addr), 8),
+						addr / 16, addr % 16);
+			}
+		}
+
+		/** Update thread location counter */
+		@Override public void updatedLC(int threadID, int newlc) {
+			DefaultTableModel tm = (DefaultTableModel) threadList.getModel();
+			if (threadID >= 0 && threadID < tm.getRowCount()) {
+				tm.setValueAt(threadID, threadID, 0);
+				tm.setValueAt(newlc, threadID, 1);
+			}
+		}
+
+		/** Add new thread to our list */
+		@Override public void createThread(int threadID) {
+			DefaultTableModel tm = (DefaultTableModel) threadList.getModel();
+			SortedMap<Integer, Machine> threads = machine.getThreadData();
+			tm.setRowCount(threads.size());
+			int row = 0;
+			for (Entry<Integer, Machine> thread : threads.entrySet()) {
+				tm.setValueAt(thread.getKey(), row, 0);
+				tm.setValueAt(thread.getValue().getLC(), row, 1);
+				++row;
+			}
+		}
+
+		/** Add new thread to our list */
+		@Override public void destroyThread(int threadID) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+	/** Updates this UI as machine state changes. */
+	UIUpdater myUIUpdater = new UIUpdater();
 }

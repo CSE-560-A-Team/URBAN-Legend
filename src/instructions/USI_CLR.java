@@ -28,7 +28,7 @@ public class USI_CLR extends AbstractInstruction {
 	private static final String opId = "CLR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000010; // 0b01000000000000000000000000000000
+	private static final int opCode = 0x10; // 0b010000
 
 	/** The static instance for this instruction. */
 	static USI_CLR staticInstance = new USI_CLR(true);

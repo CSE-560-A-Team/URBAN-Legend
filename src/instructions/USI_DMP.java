@@ -28,7 +28,7 @@ public class USI_DMP extends AbstractInstruction {
 	private static final String opId = "DMP";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000003E; // 0b11111000000000000000000000000000
+	private static final int opCode = 0x3E; // 0b111110
 
 	/** The static instance for this instruction. */
 	static USI_DMP staticInstance = new USI_DMP(true);

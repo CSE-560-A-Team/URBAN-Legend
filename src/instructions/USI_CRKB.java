@@ -21,7 +21,7 @@ public class USI_CRKB extends UIG_IO {
 	private static final String opId = "CRKB";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000002C; // 0b10110000000000000000000000000000
+	private static final int opCode = 0x2C; // 0b101100
 
 	/** The static instance for this instruction. */
 	static USI_CRKB staticInstance = new USI_CRKB(true);

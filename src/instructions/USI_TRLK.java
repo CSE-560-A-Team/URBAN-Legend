@@ -30,7 +30,7 @@ public class USI_TRLK extends AbstractInstruction {
 	private static final String opId = "TRLK";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000025; // 0b10010100000000000000000000000000
+	private static final int opCode = 0x25; // 0b100101
 
 	/** The static instance for this instruction. */
 	static USI_TRLK staticInstance = new USI_TRLK(true);

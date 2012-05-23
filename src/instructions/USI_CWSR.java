@@ -21,7 +21,7 @@ public class USI_CWSR extends UIG_IO {
 	private static final String opId = "CWSR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000002A; // 0b10101000000000000000000000000000
+	private static final int opCode = 0x2A; // 0b101010
 
 	/** The static instance for this instruction. */
 	static USI_CWSR staticInstance = new USI_CWSR(true);

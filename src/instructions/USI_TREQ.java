@@ -23,7 +23,7 @@ public class USI_TREQ extends UIG_TransferCond {
 	private static final String opId = "TREQ";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000020; // 0b10000000000000000000000000000000
+	private static final int opCode = 0x20; // 0b100000
 
 	/** The static instance for this instruction. */
 	static USI_TREQ staticInstance = new USI_TREQ(true);

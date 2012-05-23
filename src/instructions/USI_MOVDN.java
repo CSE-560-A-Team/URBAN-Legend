@@ -23,7 +23,7 @@ public class USI_MOVDN extends UIG_Arithmetic {
 	private static final String opId = "MOVDN";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000001; // 0b00000100000000000000000000000000
+	private static final int opCode = 0x01; // 0b000001
 
 	/** The static instance for this instruction. */
 	static USI_MOVDN staticInstance = new USI_MOVDN(true);

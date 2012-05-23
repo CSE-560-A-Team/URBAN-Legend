@@ -30,7 +30,7 @@ public class USI_SKT extends AbstractInstruction {
 	private static final String opId = "SKT";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000027; // 0b10011100000000000000000000000000
+	private static final int opCode = 0x27; // 0b100111
 
 	/** The static instance for this instruction. */
 	static USI_SKT staticInstance = new USI_SKT(true);

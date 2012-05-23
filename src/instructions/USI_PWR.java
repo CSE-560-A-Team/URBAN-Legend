@@ -34,7 +34,7 @@ public class USI_PWR extends AbstractInstruction {
 	private static final String opId = "PWR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000000F; // 0b00111100000000000000000000000000
+	private static final int opCode = 0x0F; // 0b001111
 
 	/** The static instance for this instruction. */
 	static USI_PWR staticInstance = new USI_PWR(true);

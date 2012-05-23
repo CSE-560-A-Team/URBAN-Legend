@@ -23,7 +23,7 @@ public class USI_TRGT extends UIG_TransferCond {
 	private static final String opId = "TRGT";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000022; // 0b10001000000000000000000000000000
+	private static final int opCode = 0x22; // 0b100010
 
 	/** The static instance for this instruction. */
 	static USI_TRGT staticInstance = new USI_TRGT(true);

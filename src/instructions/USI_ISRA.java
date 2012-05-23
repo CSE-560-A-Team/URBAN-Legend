@@ -24,7 +24,7 @@ public class USI_ISRA extends UIG_ShiftManipulate {
 	private static final String opId = "ISRA";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000001A; // 0b01101000000000000000000000000000
+	private static final int opCode = 0x1A; // 0b011010
 
 	/** The static instance for this instruction. */
 	static USI_ISRA staticInstance = new USI_ISRA(true);

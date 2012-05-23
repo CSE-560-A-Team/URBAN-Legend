@@ -23,7 +23,7 @@ public class USI_IDIV extends UIG_Arithmetic {
 	private static final String opId = "IDIV";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000000E; // 0b00111000000000000000000000000000
+	private static final int opCode = 0x0E; // 0b001110
 
 	/** The static instance for this instruction. */
 	static USI_IDIV staticInstance = new USI_IDIV(true);

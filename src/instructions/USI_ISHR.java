@@ -23,7 +23,7 @@ public class USI_ISHR extends UIG_ShiftManipulate {
 	private static final String opId = "ISHR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000018; // 0b01100000000000000000000000000000
+	private static final int opCode = 0x18; // 0b011000
 
 	/** The static instance for this instruction. */
 	static USI_ISHR staticInstance = new USI_ISHR(true);

@@ -30,7 +30,7 @@ public class USI_RET extends AbstractInstruction {
 	private static final String opId = "RET";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000026; // 0b10011000000000000000000000000000
+	private static final int opCode = 0x26; // 0b100110
 
 	/** The static instance for this instruction. */
 	static USI_RET staticInstance = new USI_RET(true);

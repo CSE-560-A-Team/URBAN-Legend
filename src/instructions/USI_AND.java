@@ -23,7 +23,7 @@ public class USI_AND extends UIG_Arithmetic {
 	private static final String opId = "AND";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000001E; // 0b01111000000000000000000000000000
+	private static final int opCode = 0x1E; // 0b011110
 
 	/** The static instance for this instruction. */
 	static USI_AND staticInstance = new USI_AND(true);

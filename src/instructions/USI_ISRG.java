@@ -34,7 +34,7 @@ public class USI_ISRG extends AbstractInstruction {
 	private static final String opId = "ISRG";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000000B; // 0b00101100000000000000000000000000
+	private static final int opCode = 0x0B; // 0b001011
 
 	/** The static instance for this instruction. */
 	static USI_ISRG staticInstance = new USI_ISRG(true);

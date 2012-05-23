@@ -28,7 +28,7 @@ public class USI_HLT extends AbstractInstruction {
 	private static final String opId = "HLT";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000003F; // 0b11111100000000000000000000000000
+	private static final int opCode = 0x3F; // 0b111111
 
 	/** The static instance for this instruction. */
 	static USI_HLT staticInstance = new USI_HLT(true);

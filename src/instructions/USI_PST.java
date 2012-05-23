@@ -30,7 +30,7 @@ public class USI_PST extends AbstractInstruction {
 	private static final String opId = "PST";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000032; // 0b11001000000000000000000000000000
+	private static final int opCode = 0x32; // 0b110010
 
 	/** The static instance for this instruction. */
 	static USI_PST staticInstance = new USI_PST(true);

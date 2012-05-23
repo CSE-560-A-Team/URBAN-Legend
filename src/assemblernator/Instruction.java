@@ -149,7 +149,7 @@ public abstract class Instruction {
 					return new byte[0];
 				try {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					
+
 					baos.write((byte) 'M'); // OB4.1
 					baos.write((byte) ':'); // OB4.2
 					baos.write(IOFormat.formatIntegerWithRadix(address, 16, 4)); // OB4.3
@@ -897,7 +897,8 @@ public abstract class Instruction {
 	 * @testingStandards This method is abstract.
 	 * @param instruction
 	 *            The byte code of the instruction to be executed.
-	 * @param machine TODO
+	 * @param machine
+	 *            TODO
 	 */
 	public abstract void execute(int instruction, Machine machine);
 
@@ -997,7 +998,7 @@ public abstract class Instruction {
 		 * rep = rep + instrBreak;
 		 * 
 		 * return rep; */
-		//int opPos = 0;
+		// int opPos = 0;
 		char srcAddrStat = 'A', destAddrStat = '-';
 		String rep = IOFormat.formatHexInteger(this.lc, 4) + "\t";
 		if ((!this.isDirective()) || this.getOpId().equalsIgnoreCase("NUM")
@@ -1021,7 +1022,8 @@ public abstract class Instruction {
 				String opId = o.operand;
 				if (opId.equalsIgnoreCase("DM")) {
 					destAddrStat = o.value.arec;
-				} else if (opId.equalsIgnoreCase("FM")
+				}
+				else if (opId.equalsIgnoreCase("FM")
 						|| opId.equalsIgnoreCase("FL")
 						|| opId.equalsIgnoreCase("FC")
 						|| opId.equalsIgnoreCase("EX")
@@ -1034,12 +1036,10 @@ public abstract class Instruction {
 		rep = rep + "src: " + srcAddrStat + "," + "dest:" + destAddrStat + "\t"
 				+ this.lineNum + "\t" + this.origSrcLine + "\n";
 
-		/*
-		for (Operand o : operands) {
-			rep = rep + "Operand " + opPos + ": " + o.toString() + "\n";
-			opPos++;
-		}
-		*/
+		/*for (Operand o : operands) {
+		 * rep = rep + "Operand " + opPos + ": " + o.toString() + "\n";
+		 * opPos++;
+		 * } */
 		if (!errors.isEmpty()) {
 			rep = rep + "errors:\n";
 			for (String error : errors) {
@@ -1067,6 +1067,12 @@ public abstract class Instruction {
 	 *            The byte code for this instruction as returned by getOpCode().
 	 */
 	protected Instruction(String iname, int opcode) {
+		if (Assembler.instructions.containsKey(iname))
+			System.err.println("SHIT! Multiple instruction keys defined for "
+					+ iname + ".");
+		if (Assembler.byteCodes.containsKey(opcode))
+			System.err.println("SHIT! Multiple instruction keys defined for 0b"
+					+ IOFormat.formatBinInteger(opcode, 6) + ".");
 		Assembler.instructions.put(iname, this);
 		Assembler.byteCodes.put(opcode, this);
 	}
@@ -1163,7 +1169,7 @@ public abstract class Instruction {
 	public RecordSet getTextRecord(String progName) {
 		if (assembled == null || assembled.length == 0)
 			return new RecordSet(new byte[0], 0);
-		
+
 		ByteArrayOutputStream records = new ByteArrayOutputStream();
 		try {
 			if (this.assembled != null) {
@@ -1174,7 +1180,8 @@ public abstract class Instruction {
 				records.write((byte) ':');
 				// instruction
 				for (int count = 0; count < this.assembled.length; count++) {
-					records.write(IOFormat.formatIntegerWithRadix(this.assembled[count], 16, 8));
+					records.write(IOFormat.formatIntegerWithRadix(
+							this.assembled[count], 16, 8));
 				}
 				records.write((byte) ':');
 				// gets two flags
@@ -1223,10 +1230,11 @@ public abstract class Instruction {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new RecordSet(":Something wicked has happened:".getBytes(), 1);
+			return new RecordSet(":Something wicked has happened:".getBytes(),
+					1);
 		}
 
-		return new RecordSet(records.toByteArray(),1);
+		return new RecordSet(records.toByteArray(), 1);
 	}
 
 }

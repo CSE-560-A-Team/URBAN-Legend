@@ -23,7 +23,7 @@ public class USI_TRLT extends UIG_TransferCond {
 	private static final String opId = "TRLT";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000021; // 0b10000100000000000000000000000000
+	private static final int opCode = 0x21; // 0b100001
 
 	/** The static instance for this instruction. */
 	static USI_TRLT staticInstance = new USI_TRLT(true);

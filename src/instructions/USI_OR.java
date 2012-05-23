@@ -23,7 +23,7 @@ public class USI_OR extends UIG_Arithmetic {
 	private static final String opId = "OR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000001F; // 0b01111100000000000000000000000000
+	private static final int opCode = 0x1F; // 0b011111
 
 	/** The static instance for this instruction. */
 	static USI_OR staticInstance = new USI_OR(true);

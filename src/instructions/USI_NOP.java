@@ -25,7 +25,7 @@ public class USI_NOP extends AbstractInstruction {
 	private static final String opId = "NOP";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000003D; // 0b11110100000000000000000000000000
+	private static final int opCode = 0x3D; // 0b111101
 
 	/** The static instance for this instruction. */
 	static USI_NOP staticInstance = new USI_NOP(true);

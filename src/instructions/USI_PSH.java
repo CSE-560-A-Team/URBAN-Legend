@@ -30,7 +30,7 @@ public class USI_PSH extends AbstractInstruction {
 	private static final String opId = "PSH";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000030; // 0b11000000000000000000000000000000
+	private static final int opCode = 0x30; // 0b110000
 
 	/** The static instance for this instruction. */
 	static USI_PSH staticInstance = new USI_PSH(true);

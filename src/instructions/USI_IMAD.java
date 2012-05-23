@@ -23,7 +23,7 @@ public class USI_IMAD extends UIG_Arithmetic {
 	private static final String opId = "IMAD";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000009; // 0b00100100000000000000000000000000
+	private static final int opCode = 0x09; // 0b001001
 
 	/** The static instance for this instruction. */
 	static USI_IMAD staticInstance = new USI_IMAD(true);

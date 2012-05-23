@@ -23,7 +23,7 @@ public class USI_ROR extends UIG_ShiftManipulate {
 	private static final String opId = "ROR";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000001D; // 0b01110100000000000000000000000000
+	private static final int opCode = 0x1D; // 0b011101
 
 	/** The static instance for this instruction. */
 	static USI_ROR staticInstance = new USI_ROR(true);

@@ -23,7 +23,7 @@ public class USI_ISUB extends UIG_Arithmetic {
 	private static final String opId = "ISUB";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000000C; // 0b00110000000000000000000000000000
+	private static final int opCode = 0x0C; // 0b001100
 
 	/** The static instance for this instruction. */
 	static USI_ISUB staticInstance = new USI_ISUB(true);

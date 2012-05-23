@@ -25,7 +25,7 @@ public class USI_CLRX extends AbstractInstruction {
 	private static final String opId = "CLRX";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x00000012; // 0b01001000000000000000000000000000
+	private static final int opCode = 0x12; // 0b010010
 
 	/** The static instance for this instruction. */
 	static USI_CLRX staticInstance = new USI_CLRX(true);

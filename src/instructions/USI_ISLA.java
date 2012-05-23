@@ -23,7 +23,7 @@ public class USI_ISLA extends UIG_ShiftManipulate {
 	private static final String opId = "ISLA";
 
 	/** This instruction's identifying opcode. */
-	private static final int opCode = 0x0000001B; // 0b01101100000000000000000000000000
+	private static final int opCode = 0x1B; // 0b011011
 
 	/** The static instance for this instruction. */
 	static USI_ISLA staticInstance = new USI_ISLA(true);

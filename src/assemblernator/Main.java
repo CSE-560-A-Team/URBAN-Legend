@@ -3,7 +3,7 @@ package assemblernator;
 import guinator.GUIMain;
 import instructions.USI_EQU;
 import instructions.USI_EXT;
-import instructions.USI_NOISE;
+import instructions.USI_SND;
 import instructions.USI_NUM;
 
 import java.io.File;
@@ -75,7 +75,7 @@ public class Main {
 		}
 
 
-		USI_NOISE.test();
+		USI_SND.test();
 
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
