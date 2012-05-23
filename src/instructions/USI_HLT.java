@@ -75,7 +75,7 @@ public class USI_HLT extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		machine.running = false;
 	}
 
 	// =========================================================

@@ -163,7 +163,7 @@ public class Machine {
 	/** The current instruction. */
 	public int instruction;
 	/** True if the machine is still running. */
-	boolean running;
+	public boolean running;
 	/** The zero-based ID of this thread. */
 	private int threadID;
 
