@@ -18,6 +18,8 @@ public class ScanWrap {
 	private ErrorHandler hErr;
 	/** The scanner to poll. */
 	private Scanner scan;
+	/** The latest error string ID. */
+	private String cachedErr;
 
 	/** Pattern matching four hex nybbles */
 	public static final Pattern hex4 = Pattern.compile("([0-9a-fA-F]{4})(:|:.+)");
@@ -47,14 +49,23 @@ public class ScanWrap {
 	 * @specRef N/A
 	 */
 	public int readInt(Pattern p, String err, int base) {
+		cachedErr = err;
 		if (!scan.hasNext()) { // LM1.5
-			hErr.reportError(makeError("loaderHNoAddr"), 0, 0);
+			hErr.reportError(makeError(err), 0, 0);
 			success = false;
 			return -1;
 		}
 		success = true;
 		scan.useDelimiter(":");
-		return Integer.parseInt(scan.next(), base);
+		String num = scan.next();
+		try {
+		  return (int)Long.parseLong(num, base);
+		}
+		catch (NumberFormatException nfe) {
+			hErr.reportError(makeError(err) + " [Extra information: `" + num + "' is not a number]", -1, -1);
+		}
+		success = false;
+		return -1;
 	}
 
 	/**
@@ -69,9 +80,10 @@ public class ScanWrap {
 	 * @specRef N/A
 	 */
 	public String readString(Pattern p, String err) {
+		cachedErr = err;
 		scan.useDelimiter(p);
 		if (!scan.hasNext()) { // LM1.5
-			hErr.reportError(makeError("loaderHNoAddr"), 0, 0);
+			hErr.reportError(makeError(cachedErr), -1, -1);
 			success = false;
 			return null;
 		}
@@ -104,6 +116,8 @@ public class ScanWrap {
 	 *         expression is true; returns false otherwise.
 	 */
 	boolean go(boolean And) {
+		if (success && !And)
+			hErr.reportError(makeError(cachedErr), -1, -1);
 		return success && And;
 	}
 

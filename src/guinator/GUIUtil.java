@@ -5,7 +5,11 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 /**
  * Utility functions for UI work.
@@ -123,6 +127,22 @@ public class GUIUtil {
 		return new String[] { res };
 	}
 
+	/**
+	 * @author Josh Ventura
+	 * @date May 23, 2012; 12:09:48 AM
+	 * @param e
+	 *            The exception to convert.
+	 * @return A string representation of the exception, similar to what
+	 *         e.printStackTrace() would give.
+	 */
+	public static String getExceptionString(Exception e) {
+		String res = e.getMessage() + "\n\n" + e.getClass().toString() + ":\n";
+		int sec = 0;
+		for (StackTraceElement el : e.getStackTrace())
+			if (sec++ < 12)
+				res += "  at " + el.toString() + "\n";
+		return res;
+	}
 
 	/**
 	 * Display an exception to the user.
@@ -138,12 +158,45 @@ public class GUIUtil {
 	 */
 	public static void showException(String basicErr, Exception e,
 			Component mainWindow) {
-		String errmsg = basicErr + ":\n" + e.getMessage() + "\n\n" + e.getClass().toString() + ":\n";
-		int sec = 0;
-		for (StackTraceElement el : e.getStackTrace())
-			if (sec++ < 12)
-				errmsg += el.toString() + "\n";
+		String errmsg = basicErr + ":\n" + getExceptionString(e);
 		JOptionPane.showMessageDialog(mainWindow, errmsg);
 		e.printStackTrace();
+	}
+
+	/**
+	 * @date May 22, 2012; 11:58:59 PM
+	 * @param table
+	 *            The table to pack.
+	 */
+	public static void packTable(JTable table) {
+		DefaultTableColumnModel colModel = (DefaultTableColumnModel) table
+				.getColumnModel();
+		for (int coln = 0; coln < 16; ++coln) {
+			TableColumn col = colModel.getColumn(coln);
+			int width = 0;
+
+			// Get width of column header
+			TableCellRenderer renderer = col.getHeaderRenderer();
+			if (renderer == null) {
+				renderer = table.getTableHeader().getDefaultRenderer();
+			}
+			Component comp = renderer.getTableCellRendererComponent(table,
+					col.getHeaderValue(), false, false, 0, 0);
+			width = comp.getPreferredSize().width;
+
+			// Get maximum width of column data
+			for (int r = 0; r < table.getRowCount(); r++) {
+				renderer = table.getCellRenderer(r, coln);
+				comp = renderer.getTableCellRendererComponent(table,
+						table.getValueAt(r, coln), false, false, r, coln);
+				width = Math.max(width, comp.getPreferredSize().width);
+			}
+
+			// Add margin
+			width += 4;
+
+			// Set the width
+			col.setPreferredWidth(width);
+		}
 	}
 }

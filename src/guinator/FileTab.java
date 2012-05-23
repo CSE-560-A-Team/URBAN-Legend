@@ -122,7 +122,8 @@ class FileTab extends JSplitPane {
 		dispTabs.add("User Report", userReportTab = new JScrollPane(userReport));
 
 		// Major hack to compensate for Swing's ABYSMAL table sizing API!
-		sTable = new FullTable();
+		sTable = new FullTable(new String[0][],
+				new Module.SymbolTable().toStringTable()[0]);
 
 
 		sTable.getColumnModel().getColumn(0).setMinWidth(64);
