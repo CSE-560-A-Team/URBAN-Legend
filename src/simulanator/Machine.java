@@ -1,8 +1,13 @@
 package simulanator;
 
+import static assemblernator.ErrorReporting.makeError;
+
+import java.util.Stack;
+
+import assemblernator.Assembler;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
-import java.util.Stack;
+import assemblernator.Instruction;
 
 /**
  * A class representing an entire machine state.
@@ -156,7 +161,23 @@ public class Machine {
 	 */
 	public void runThread(int execStart) {
 		setLC(execStart);
-		// TODO: Implement
+		while (running) {
+			if (lc < 0 || lc > memory.length) {
+				hErr.reportError(
+						makeError("runLCwentOOR", Integer.toString(lc, 16)),
+						-1, -1);
+				running = false;
+				break;
+			}
+			instruction = memory[lc++];
+			Integer opcode = (instruction & 0xFC000000) >> 26;
+			Instruction ins = Assembler.byteCodes.get(opcode);
+			if (ins == null) {
+				hErr.reportError(
+						makeError("InvOpCode",
+								IOFormat.formatBinInteger(opcode, 6)), -1, -1);
+			}
+		}
 	}
 
 	/**
