@@ -33,7 +33,7 @@ public class LinkerTab extends JSplitPane {
 	JButton addFiles;
 	/** What you press to start the linker. */
 	JButton doLink;
-	
+
 	/** The actual modules we will be linking */
 	ArrayList<LinkerModule> linkMods = new ArrayList<LinkerModule>();
 
@@ -53,10 +53,9 @@ public class LinkerTab extends JSplitPane {
 		addFiles.addActionListener(ltl);
 		doLink.addActionListener(ltl);
 
-		linkTable = new FullTable();
 		String cols[] = { "Filename", "Name", "Date of Assembly", "Load At",
 				"Start At" };
-		linkTable.setModel(new DefaultTableModel(cols, 0));
+		linkTable = new FullTable(new DefaultTableModel(cols, 0));
 		linkTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		linkTable.setFillsViewportHeight(true);
 
@@ -65,7 +64,7 @@ public class LinkerTab extends JSplitPane {
 		npanel.add(toolbar);
 
 		warningOutput = new IOPane();
-		
+
 		setLeftComponent(npanel);
 		setRightComponent(new JScrollPane(warningOutput));
 		setDividerLocation(330);
@@ -80,15 +79,19 @@ public class LinkerTab extends JSplitPane {
 		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
 		@Override public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == doLink) {
-				warningOutput.hErr.reportWarning("All glory to the hypnotoad!", 0, 0);
-				String saveto = GUIUtil.getSaveFname(LinkerTab.this, "URBAN Legend Executables", ".ulx");
-				Linker.link(linkMods.toArray(new LinkerModule[0]), saveto, warningOutput.hErr);
+				warningOutput.hErr.reportWarning("All glory to the hypnotoad!",
+						0, 0);
+				String saveto = GUIUtil.getSaveFname(LinkerTab.this,
+						"URBAN Legend Executables", ".ulx");
+				Linker.link(linkMods.toArray(new LinkerModule[0]), saveto,
+						warningOutput.hErr);
 			}
 			else if (e.getSource() == addFiles) {
-				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this, "URBAN Object Files", ".o",
-						".ulo");
+				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this,
+						"URBAN Object Files", ".o", ".ulo");
 				System.out.println("Received " + fnames.length + " filenames");
-				LinkerModule lms[] = Linker.getModules(fnames, warningOutput.hErr);
+				LinkerModule lms[] = Linker.getModules(fnames,
+						warningOutput.hErr);
 				System.out.println("Received " + lms.length + " modules");
 				int i = 0;
 				for (LinkerModule lm : lms) {

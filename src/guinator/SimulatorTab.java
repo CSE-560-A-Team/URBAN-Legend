@@ -1,6 +1,7 @@
 package guinator;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
+import assemblernator.IOFormat;
 
 import simulanator.Machine;
 import simulanator.Machine.URBANInputStream;
@@ -114,7 +117,7 @@ public class SimulatorTab extends JSplitPane {
 		@Override public void actionPerformed(ActionEvent e) {
 			submitted = true;
 		}
-		
+
 		/** Default constructor */
 		public JLTextField() {
 			super();
@@ -134,17 +137,19 @@ public class SimulatorTab extends JSplitPane {
 		String rows[][] = new String[4096 / 16][16];
 		for (int row = 0; row < rows.length; row++)
 			for (int col = 0; col < 16; ++col)
-				rows[row][col] = "00";
+				rows[row][col] = "00000000";
 
 		JPanel top = new JPanel();
 		top.setLayout(new BoxLayout(top, BoxLayout.X_AXIS));
 
-		memTable = new JTable(new DefaultTableModel(rows, columns));
-		memTable.setMinimumSize(new Dimension(540, 320));
+		memTable = new FullTable(rows, columns);
 		JScrollPane scrollPane = new JScrollPane(memTable);
 		RowNumberTable rnt = new RowNumberTable(memTable);
 		memTable.setShowGrid(false);
 		memTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		memTable.setFont(new Font(Font.MONOSPACED, 0, 12));
+
+		GUIUtil.packTable(memTable);
 
 		scrollPane.setRowHeaderView(rnt);
 		scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
@@ -169,7 +174,8 @@ public class SimulatorTab extends JSplitPane {
 				new DefaultTableModel(new String[] { "ID", "LC" }, 0))));
 		threadList.setFillsViewportHeight(true);
 
-		otherStats.setPreferredSize(new Dimension(220, -1));
+		otherStats.setMaximumSize(new Dimension(216, Integer.MAX_VALUE));
+		otherStats.setPreferredSize(new Dimension(216, -1));
 		top.add(scrollPane);
 		top.add(otherStats);
 
@@ -203,8 +209,9 @@ public class SimulatorTab extends JSplitPane {
 		// == The Machine ====================================================
 		// ===================================================================
 
-		machine = new Machine(outputBox.hErr, null, null);
+		machine = new Machine(outputBox.hErr, inputStream, outputStream);
 		inputField.setEnabled(false);
+		setDividerLocation(320);
 	}
 
 
@@ -222,7 +229,10 @@ public class SimulatorTab extends JSplitPane {
 					return;
 				try {
 					InputStream is = new FileInputStream(new File(fname));
-					Simulator.load(is, outputBox.hErr, null);
+					Simulator.load(is, outputBox.hErr, machine);
+					for (int addr = 0; addr < Machine.memorySizeInWords; ++addr)
+						memTable.setValueAt(IOFormat.formatHexInteger(machine.memory[addr],8), addr / 16,
+								addr % 16);
 				} catch (Exception ex) {
 					GUIUtil.showException("Error loading executable file", ex,
 							SimulatorTab.this);
@@ -245,6 +255,9 @@ public class SimulatorTab extends JSplitPane {
 		}
 	}
 
+	/** Our output printer. */
+	OutputPrinter outputStream = new OutputPrinter();
+
 	/**
 	 * @author Josh Ventura
 	 * @date May 22, 2012; 2:31:27 PM
@@ -266,4 +279,7 @@ public class SimulatorTab extends JSplitPane {
 			return ret;
 		}
 	}
+
+	/** Our input stream. */
+	InputReader inputStream = new InputReader();
 }
