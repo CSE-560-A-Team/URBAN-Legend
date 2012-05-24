@@ -4,7 +4,9 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatHaltDump;
 import static assemblernator.OperandChecker.isValidConstant;
 import static assemblernator.Module.Value.BitLocation.Literal;
+import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -75,8 +77,11 @@ public class USI_HLT extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
+		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		int srcValue = brkDwn.readFromSource(machine);
 		machine.running = false;
-	}
+		machine.output.putString(String.valueOf(srcValue));
+		}
 
 	// =========================================================
 	// === Redundant code ======================================
