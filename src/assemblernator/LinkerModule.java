@@ -20,6 +20,10 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	public Map<String, Integer> linkRecord = new HashMap<String, Integer>();
 	/** Contains all the mod and text records. */
 	public List<TextModRecord> textMod = new ArrayList<TextModRecord>();
+	/**Contains all the errors. */
+	public List<TextRecord> errorText = new ArrayList<TextRecord>();
+	/**Map with the address and error message. */
+	public Map<Integer, String> errorMap = new HashMap<Integer, String>();
 	/** Name of program. */
 	public String progName;
 	/** Program load address. */
@@ -126,6 +130,9 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		boolean isValid = true;
 		boolean add = true;
 
+		//last address 
+		int lastAddr = 0;
+		
 		//checks for an H
 		String check = reader.readString(ScanWrap.notcolon, "loaderNoHeader");
 		if (!reader.go("disreguard"))
@@ -224,56 +231,73 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			} else if (check.equals("T")) {
 				text++;
 				theRecordsForTextMod.text.assignedLC = reader.readInt(ScanWrap.hex4, "textLC", 16);
-				if (!reader.go("disreguard"))
-					return;
+				if (!reader.go("disreguard")){
+					errorMap.put(lastAddr, "textLC");
+					add = false;
+				}
 				//error checking
 				isValid = OperandChecker.isValidMem(theRecordsForTextMod.text.assignedLC);
 				if(!isValid){
-					error.reportError(makeError("invalidValue"),0,0);
-					return;
+					errorMap.put(lastAddr, "invalidValue");
+					add = false;
 				}
+				lastAddr = theRecordsForTextMod.text.assignedLC;
+				
 				theRecordsForTextMod.text.instrData = reader.readString(ScanWrap.notcolon, "textData");
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMap.put(lastAddr, "textData");
+					add = false;
+				}
 
 				theRecordsForTextMod.text.flagHigh = reader.readString(ScanWrap.notcolon, "textStatus").charAt(0);
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMap.put(lastAddr, "textStatus");
+					add = false;
+				}
 				if(!(theRecordsForTextMod.text.flagHigh == 'A' || theRecordsForTextMod.text.flagHigh == 'R' || theRecordsForTextMod.text.flagHigh == 'E' || theRecordsForTextMod.text.flagHigh == 'C')){
-					error.reportError(makeError("modHLS"), 0, 0);
+					errorMap.put(lastAddr, "modHLS");
 					add = false;
 				}				
-				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus")
-
-						.charAt(0);
+				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus").charAt(0);
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMap.put(lastAddr, "textStatus");
+					add = false;
+				}
 				if(!(theRecordsForTextMod.text.flagLow == 'A' || theRecordsForTextMod.text.flagLow == 'R' || theRecordsForTextMod.text.flagLow == 'E' || theRecordsForTextMod.text.flagLow == 'C')){
-					error.reportError(makeError("modHLS"), 0, 0);
+					errorMap.put(lastAddr, "modHLS");
 					add = false;
 				}
 				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMap.put(lastAddr, "textMod");
+					add = false;
+				}
 				//check for mod high
 				if(theRecordsForTextMod.text.modHigh>16 || theRecordsForTextMod.text.modHigh<0)
 				{
-					error.reportError(makeError("invalidMods"),0,0);
-					return;
+					errorMap.put(lastAddr, "invalidMods");
+					add = false;
 				}
 				theRecordsForTextMod.text.modLow = reader.readInt(ScanWrap.notcolon, "textMod", 16);
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMap.put(lastAddr, "textMod");
+					add = false;
+				}
 				//check for mod low
 				if(theRecordsForTextMod.text.modLow>16 || theRecordsForTextMod.text.modLow<0)
 				{
-					error.reportError(makeError("invalidMods"),0,0);
-					return;
+					errorMap.put(lastAddr, "invalidMods");
+					add = false;
 				}
 				// some kind of error checking
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
-				if (!reader.go("disreguard"))
-					return;
+//				if (!reader.go("disreguard"))
+//					return;
 				if(!ender.equals(this.progName)){
 					error.reportWarning(makeError("noMatch"), 0, 0);
 				}
@@ -286,12 +310,15 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					mod++;
 					modification.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
 					if (!reader.go("disreguard"))
-						return;
+					{
+						errorMap.put(lastAddr, "modHex");
+						add = false;
+					}
 					//error checking
 					isValid = OperandChecker.isValidMem(modification.hex);
 					if(!isValid){
-						error.reportError(makeError("invalidValue"),0,0);
-						return;
+						errorMap.put(lastAddr, "invalidValue");
+						add = false;
 					}
 					boolean run = true;
 					String loop = "";
@@ -306,28 +333,40 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						midtemp.plusMin = loop.charAt(0);
 						}
 						if (!reader.go("disreguard"))
-							return;
+						{
+							errorMap.put(lastAddr, "modPm");
+							add = false;
+						}
 						//error checking
 						isValid = OperandChecker.isValidPlusMin(midtemp.plusMin);
 						if(!isValid){
-							error.reportError(makeError("invalidPlus"),0,0);
-							return;
+							errorMap.put(lastAddr, "invalidPlus");
+							add = false;
 						}
 						midtemp.addrType = reader.readString(ScanWrap.notcolon,
 								"modFlag").charAt(0);
 						if (!reader.go("disreguard"))
-							return;
+						{
+							errorMap.put(lastAddr, "modFlag");
+							add = false;
+						}
 						if(!(midtemp.addrType == 'E' || midtemp.addrType == 'R' || midtemp.addrType == 'N')){
-							error.reportError(makeError("modFlag"), 0, 0);
+							errorMap.put(lastAddr, "modFlag");
 							add = false;
 						}
 						midtemp.linkerLabel = reader.readString(
 								ScanWrap.notcolon, "modLink");
 						if (!reader.go("disreguard"))
-							return;
+						{
+							errorMap.put(lastAddr, "modLink");
+							add = false;
+						}
 						loop = reader.readString(ScanWrap.notcolon, "modHLS");
 						if (!reader.go("disreguard"))
-							return;
+						{
+							errorMap.put(lastAddr, "modHLS");
+							add = false;
+						}
 						if (loop.equals("")) {
 							run = false;
 						}
@@ -335,30 +374,38 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					}
 					loop = reader.readString(ScanWrap.notcolon, "modHLS");
 					if (!reader.go("disreguard"))
-						return;
+					{
+						errorMap.put(lastAddr, "modHLS");
+						add = false;
+					}
 					modification.HLS = loop.charAt(0);
 					if(!(modification.HLS == 'H' || modification.HLS == 'L' || modification.HLS == 'S')){
-						error.reportError(makeError("modHLS"), 0, 0);
-						add = false;
+							errorMap.put(lastAddr, "modHLS");
+							add = false;
 					}
 					// some kind of error checking
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
-					if (!reader.go("disreguard"))
-						return;
+//					if (!reader.go("disreguard"))
+//						return;
 					if(!ender.equals(this.progName)){
 						error.reportWarning(makeError("noMatch"), 0, 0);
 					}
 					theRecordsForTextMod.mods.add(modification);
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
-						return;
+					{
+						errorMap.put(lastAddr, "invalidRecord");
+						add = false;
+					}
 				}// end of mod record
 				if(add){
 					textMod.add(theRecordsForTextMod);
 				}else{
+					errorText.add(theRecordsForTextMod.text);
 					add = true;
 				}
 			}// end of text record
+			
 		}//end of while loop checking for linking records and text records
 
 		//checks for an end record
