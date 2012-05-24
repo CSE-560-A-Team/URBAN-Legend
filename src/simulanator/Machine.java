@@ -119,9 +119,9 @@ public class Machine {
 	// ========================================================================
 
 	/** An error channel to which any access violations can be reported. */
-	ErrorHandler hErr;
+	public ErrorHandler hErr;
 	/** Out input stream, through which the user will be prompted for input. */
-	URBANInputStream input;
+	public URBANInputStream input;
 	/** An output stream to which messages can be printed. */
 	public URBANOutputStream output;
 	/** Our memory listeners */
@@ -281,31 +281,36 @@ public class Machine {
 			}
 		}).start();
 	}
-	
+
 	/**
 	 * @author Josh Ventura
 	 * @date May 23, 2012; 4:26:42 PM
-	 * @param m The calling machine thread.
+	 * @param m
+	 *            The calling machine thread.
 	 * @return The first available thread ID.
 	 */
 	private synchronized int getAvailableThreadId(Machine m) {
 		int lowkey = 0;
-		SortedMap<Integer, Machine> TSthreads = Collections.synchronizedSortedMap(threads);
+		SortedMap<Integer, Machine> TSthreads = Collections
+				.synchronizedSortedMap(threads);
 		for (Entry<Integer, Machine> e : TSthreads.entrySet()) {
-			if (e.getKey() > lowkey) break;
+			if (e.getKey() > lowkey)
+				break;
 			++lowkey;
 		}
 		TSthreads.put(lowkey, m);
 		return lowkey;
 	}
-	
+
 	/**
 	 * @author Josh Ventura
 	 * @date May 23, 2012; 4:39:52 PM
-	 * @param threadID The ID of the thread to remove.
+	 * @param threadID
+	 *            The ID of the thread to remove.
 	 */
 	private synchronized void removeThread(int threadID) {
-		SortedMap<Integer, Machine> TSthreads = Collections.synchronizedSortedMap(threads);
+		SortedMap<Integer, Machine> TSthreads = Collections
+				.synchronizedSortedMap(threads);
 		TSthreads.remove(threadID);
 	}
 
@@ -338,10 +343,9 @@ public class Machine {
 				hErr.reportError(
 						makeError("runInvOPCode",
 								IOFormat.formatBinInteger(opcode, 6)), -1, -1);
-			} else {
-				ins.execute(instruction, this);
 			}
-			System.out.println("Execute " + ins.getOpId() + ": lc = " + lc);
+			else
+				ins.execute(instruction, this);
 			for (ThreadListener tl : threadListeners)
 				tl.fetchDecodeExecute();
 		}
@@ -384,7 +388,7 @@ public class Machine {
 	public void setMemoryDiscretely(int addr, int word) {
 		memory[addr] = word;
 	}
-	
+
 	/** @return The current location counter. */
 	public int getLC() {
 		return lc;

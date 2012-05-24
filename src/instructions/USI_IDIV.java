@@ -1,5 +1,7 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -27,16 +29,16 @@ public class USI_IDIV extends UIG_Arithmetic {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+1;
+		return lc + 1;
 	}
-	
-	/**
-	 * Returns value to arithmetic
-	 */
-	@Override
-	int operate(int srcValue, int destValue) {
-		int total = destValue/srcValue;
-		return total;
+
+	/** Returns value to arithmetic */
+	@Override int operate(int left, int right, ErrorHandler hErr) {
+		if (right == 0) {
+			hErr.reportError(makeError("runDivZero"), -1, -1);
+			return 0;
+		}
+		return left / right;
 	}
 
 	// =========================================================
@@ -84,4 +86,3 @@ public class USI_IDIV extends UIG_Arithmetic {
 	/** Default constructor; does nothing. */
 	private USI_IDIV() {}
 }
-

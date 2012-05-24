@@ -37,6 +37,8 @@ public class Deformatter {
 		public Location destKind;
 		/** The destination register index or memory address. */
 		public int destination;
+		/** The index register of whatever memory is to be read. */
+		public int memIXR = 0;
 
 		/**
 		 * Write a word to the machine according to the instruction broken down
@@ -59,18 +61,23 @@ public class Deformatter {
 			switch (destKind) {
 			case INDEXREGISTER:
 				if (destination < 1 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+					mach.hErr.reportError(makeError("runIRegOOR"),
+							mach.getLC(), 0);
 				mach.setIndexRegister(destination, word);
 				break;
 			case REGISTER: // This should have come from three bits, but...
 				if (destination < 0 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+					mach.hErr.reportError(makeError("runIRegOOR"),
+							mach.getLC(), 0);
 				mach.setRegister(destination, word);
 				break;
 			case MEMORY:
-				if (destination < 0 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
-				mach.setMemory(destination, word);
+				if (destination < 0 || destination > 4095)
+					mach.hErr.reportError(makeError("runMemOOR"), mach.getLC(),
+							0);
+				mach.setMemory(
+						(memIXR == 0 ? destination : destination
+								+ mach.getIndexRegister(memIXR)), word);
 				break;
 			default:
 				mach.hErr.reportError(
@@ -95,31 +102,31 @@ public class Deformatter {
 		 * @specRef N/A
 		 */
 		public int readFromSource(Machine mach) {
-			int word;
 			switch (sourceKind) {
 			case INDEXREGISTER:
 				if (source < 1 || source > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
-				word = mach.getIndexRegister(source);
-				break;
+					mach.hErr.reportError(makeError("runIRegOOR"),
+							mach.getLC(), 0);
+				return mach.getIndexRegister(source);
 			case REGISTER: // This should have come from three bits, but...
 				if (source < 0 || source > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
-				word = mach.getRegister(source);
-				break;
+					mach.hErr.reportError(makeError("runIRegOOR"),
+							mach.getLC(), 0);
+				return mach.getRegister(source);
 			case MEMORY:
 				if (literal)
 					return source;
 				if (source < 0 || source > 4095)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
-				word = mach.getMemory(source);
-				break;
+					mach.hErr.reportError(makeError("runMemOOR"), mach.getLC(),
+							0);
+				return mach.getMemory(memIXR == 0 ? source : source
+						+ mach.getIndexRegister(memIXR));
 			default:
 				mach.hErr.reportError(
-						"Simulation error: Invalid source set...", mach.getLC(), 0);
-				word = 0;
+						"Simulation error: Invalid source set...",
+						mach.getLC(), 0);
+				return 0;
 			}
-			return word;
 		}
 
 		/**
@@ -143,19 +150,22 @@ public class Deformatter {
 			switch (destKind) {
 			case INDEXREGISTER:
 				if (destination < 1 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+					mach.hErr.reportError(makeError("runIRegOOR"),
+							mach.getLC(), 0);
 				word = mach.getIndexRegister(destination);
 				break;
 			case REGISTER: // This should have come from three bits, but...
 				if (destination < 0 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
+					mach.hErr.reportError(makeError("runIRegOOR"),
+							mach.getLC(), 0);
 				word = mach.getRegister(destination);
 				break;
 			case MEMORY:
-				if (destination < 0 || destination > 7)
-					mach.hErr.reportError(makeError("runIRegOOR"), mach.getLC(), 0);
-				word = mach.getMemory(destination);
-				break;
+				if (destination < 0 || destination > 4095)
+					mach.hErr.reportError(makeError("runMemOOR"), mach.getLC(),
+							0);
+				return mach.getMemory(memIXR == 0 ? destination : destination
+						+ mach.getIndexRegister(memIXR));
 			default:
 				mach.hErr.reportError(
 						"Simulation error: Invalid destination set...",
@@ -226,24 +236,31 @@ public class Deformatter {
 							: Location.INDEXREGISTER;
 
 			if (res.sourceKind == Location.MEMORY)
-				res.source = res.literal ? (instruction & ALLDATABITS)
-						: (instruction & ADDRESSBITS)
-								+ ((instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS);
+				if (res.literal)
+					res.source = instruction & ALLDATABITS;
+				else {
+					res.source = instruction & ADDRESSBITS;
+					res.memIXR = (instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS;
+				}
 			else
 				res.source = (instruction & SOURCEBITS) >> SOURCEOFFS;
 
 			if (res.destKind == Location.MEMORY)
-				res.destination = res.literal ? (instruction & ALLDATABITS)
-						: (instruction & ADDRESSBITS)
-								+ ((instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS);
+				if (res.literal)
+					res.destination = instruction & ALLDATABITS;
+				else {
+					res.destination = instruction & ADDRESSBITS;
+					res.memIXR = (instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS;
+				}
 			else
 				res.destination = (instruction & DESTINBITS) >> DESTINOFFS;
 		}
 		else {
 			res.sourceKind = Location.MEMORY;
 			res.destKind = Location.MEMORY;
-			res.source = instruction & DUALMEMHIADDRBITS >> DUALMEMHIADDROFFS;
-			res.destination = instruction & DUALMEMLOADDRBITS >> DUALMEMLOADDROFFS;
+			res.source = (instruction & DUALMEMHIADDRBITS) >> DUALMEMHIADDROFFS;
+			res.destination = instruction
+					& DUALMEMLOADDRBITS >> DUALMEMLOADDROFFS;
 		}
 
 

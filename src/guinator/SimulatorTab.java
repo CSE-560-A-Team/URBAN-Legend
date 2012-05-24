@@ -4,8 +4,13 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -205,6 +210,7 @@ public class SimulatorTab extends JSplitPane {
 		machine.addRegisterListener(myUIUpdater);
 		for (int i = 0; i < memTable.getColumnModel().getColumnCount(); ++i)
 			memTable.getColumnModel().getColumn(i).setCellEditor(myUIUpdater);
+		memTable.addKeyListener(myUIUpdater);
 		inputField.setEnabled(false);
 		setOneTouchExpandable(true);
 		setDividerLocation(320);
@@ -295,7 +301,8 @@ public class SimulatorTab extends JSplitPane {
 	 */
 	class UIUpdater extends AbstractCellEditor implements
 			Machine.ThreadListener, Machine.MemoryListener,
-			Machine.RegisterListener, TableCellEditor, CellEditorListener {
+			Machine.RegisterListener, TableCellEditor, CellEditorListener,
+			KeyListener {
 
 		/** SHUT UP, ECJ. */
 		private static final long serialVersionUID = 1L;
@@ -364,7 +371,7 @@ public class SimulatorTab extends JSplitPane {
 		private int editcol = 0;
 
 		/** Completed edit. */
-		@Override public void editingStopped(ChangeEvent FUCKINGUSELESS) {
+		@Override public void editingStopped(ChangeEvent useless) {
 			try {
 				int a = (int) Long.parseLong(cellEditor.getText(), 16);
 				machine.setMemory(editrow * 16 + editcol, a);
@@ -377,7 +384,6 @@ public class SimulatorTab extends JSplitPane {
 		/** Steal information from our good-for-nothing super class */
 		@Override public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
-			System.out.println("MINE, FUCKER!");
 			editrow = row;
 			editcol = column;
 			cellEditor.setText(IOFormat.formatHexInteger(
@@ -402,6 +408,51 @@ public class SimulatorTab extends JSplitPane {
 			cellEditor = new JTextField();
 			cellEditor.setFont(new Font(Font.MONOSPACED, 0, 11));
 			super.addCellEditorListener(this);
+		}
+
+		/** Ignored */
+		@Override public void keyPressed(KeyEvent arg0) {}
+
+		/** Ignored */
+		@Override public void keyReleased(KeyEvent arg0) {}
+
+		/** Paste */
+		@Override public void keyTyped(KeyEvent e) {
+			if (e.getSource() == memTable
+					&& (Character.toLowerCase(e.getKeyChar()) == 'v' || e
+							.getKeyChar() == 22) && e.isControlDown()) {
+				try {
+					Transferable t = Toolkit.getDefaultToolkit()
+							.getSystemClipboard().getContents(null);
+					if (t != null
+							&& t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+						String raw = (String) t
+								.getTransferData(DataFlavor.stringFlavor);
+						String wordstrs[] = raw.split("\\s+");
+						if (wordstrs.length > 0) {
+							int words[] = new int[wordstrs.length];
+							for (int i = 0; i < wordstrs.length; ++i)
+								words[i] = (int) Long
+										.parseLong(wordstrs[i], 16);
+							int[] rows = memTable.getSelectedRows();
+							int[] cols = memTable.getSelectedColumns();
+							if (cols.length == 1 && rows.length == 1) {
+								int addr = rows[0] * 16 + cols[0];
+								for (int i = 0; i < words.length; ++i)
+									machine.setMemory(addr++, words[i]);
+							}
+							else if (words.length == 1) {
+								for (int row : rows)
+									for (int col : cols)
+										machine.setMemory(row * 16 + col,
+												words[0]);
+							}
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 	}
 

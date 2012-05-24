@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -30,14 +31,10 @@ public class USI_ISUB extends UIG_Arithmetic {
 	public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
-	
-	/**
-	 * Returns value to arithmetic
-	 */
-	@Override
-	int operate(int srcValue, int destValue) {
-		int total = destValue-srcValue;
-		return total;
+
+	/** Returns value to arithmetic */
+	@Override int operate(int left, int right, ErrorHandler hErr) {
+		return left - right;
 	}
 
 	// =========================================================

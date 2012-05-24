@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -27,14 +28,12 @@ public class USI_MOVD extends UIG_Arithmetic {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+1;
+		return lc + 1;
 	}
 
-	/**
-	 * Returns value to arithmetic
-	 */
-	@Override
-	int operate(int srcValue, int destValue) {
+
+	/** Returns value to arithmetic */
+	@Override int operate(int destValue, int srcValue, ErrorHandler hErr) {
 		return srcValue;
 	}
 
@@ -85,4 +84,3 @@ public class USI_MOVD extends UIG_Arithmetic {
 	private USI_MOVD() {}
 
 }
-

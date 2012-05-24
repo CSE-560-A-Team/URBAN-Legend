@@ -1,5 +1,6 @@
 package instructions;
 
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -27,16 +28,13 @@ public class USI_IMAD extends UIG_Arithmetic {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+1;
+		return lc + 1;
 	}
-	
-	/**
-	 * Returns value to arithmetic
-	 */
-	@Override
-	int operate(int srcValue, int destValue) {
-		int total = (destValue*srcValue) + srcValue;
-		return total;
+
+
+	/** Returns value to arithmetic */
+	@Override int operate(int left, int right, ErrorHandler hErr) {
+		return left * right + right;
 	}
 
 	// =========================================================
@@ -84,4 +82,3 @@ public class USI_IMAD extends UIG_Arithmetic {
 	/** Default constructor; does nothing. */
 	private USI_IMAD() {}
 }
-
