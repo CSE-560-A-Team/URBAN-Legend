@@ -1,8 +1,5 @@
 package instructions;
 
-import static simulanator.Deformatter.breakDownOther;
-import simulanator.Machine;
-import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -32,13 +29,14 @@ public class USI_IMUL extends UIG_Arithmetic {
 	@Override public int getNewLC(int lc, Module mod) {
 		return lc+1;
 	}
-
-	/** @see assemblernator.Instruction#execute(int, Machine) */
-	@Override public void execute(int instruction, Machine machine) {
-		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
-		int srcValue = brkDwn.readFromSource(machine);
-		int destValue = brkDwn.readFromDest(machine);
-		brkDwn.putToDest(destValue*srcValue, machine);
+	
+	/**
+	 * Returns value to arithmetic
+	 */
+	@Override
+	int operate(int srcValue, int destValue) {
+		int total = destValue*srcValue;
+		return total;
 	}
 
 	// =========================================================
