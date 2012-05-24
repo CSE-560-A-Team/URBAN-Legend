@@ -123,7 +123,7 @@ public class Machine {
 	/** Out input stream, through which the user will be prompted for input. */
 	URBANInputStream input;
 	/** An output stream to which messages can be printed. */
-	URBANOutputStream output;
+	public URBANOutputStream output;
 	/** Our memory listeners */
 	private ArrayList<MemoryListener> memoryListeners = new ArrayList<MemoryListener>();
 	/** Our register listeners */
