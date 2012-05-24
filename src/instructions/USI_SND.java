@@ -9,13 +9,12 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 
 import simulanator.Machine;
-
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Module.Value.BitLocation;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value.BitLocation;
 import assemblernator.OperandChecker;
 
 /**
@@ -123,8 +122,8 @@ public class USI_SND extends AbstractInstruction {
 					lineNum, 0);
 			return false;
 		}
-		op.value = module.evaluate(op.expression, false, BitLocation.Other, hErr, this,
-				op.valueStartPosition);
+		op.value = module.evaluate(op.expression, false, BitLocation.Other,
+				hErr, this, op.valueStartPosition);
 		if (op.value.value < 50 || op.value.value > 20000) {
 			hErr.reportError(
 					makeError("OORconstant", "FR", opId, "50", "20000"),
@@ -139,8 +138,8 @@ public class USI_SND extends AbstractInstruction {
 							"Duration Millis"), lineNum, 0);
 			return false;
 		}
-		op.value = module.evaluate(op.expression, false, BitLocation.Other, hErr, this,
-				op.valueStartPosition);
+		op.value = module.evaluate(op.expression, false, BitLocation.Other,
+				hErr, this, op.valueStartPosition);
 		if (op.value.value < 10 || op.value.value > 10000) {
 			hErr.reportError(
 					makeError("OORconstant", "DM", opId, "10", "10000"),
@@ -160,9 +159,44 @@ public class USI_SND extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		int freq = (instruction & ~(0xFFFFFFFF >>> 23 << 23)) >> 9;
+		int dur = (instruction & (~(0xFFFFFFFF >>> 9 << 9))) * 10;
+		play(MakeTone.sine(freq, dur, 48000), 48000);
+		try {
+			Thread.sleep(dur);
+		} catch (InterruptedException e) {}
 	}
 
+	/**
+	 * Tone generation class.
+	 * 
+	 * @author Josh Ventura
+	 * @date May 24, 2012; 1:41:07 AM
+	 */
+	static class MakeTone {
+		/**
+		 * @param freq
+		 *            The frequency of the tone.
+		 * @param dur
+		 *            The duration of the tone.
+		 * @param sps
+		 *            Samples per second.
+		 * @return Bytes of this sample.
+		 */
+		public static byte[] sine(int freq, int dur, int sps) {
+			System.out.println("Generate sine tone " + freq + " * " + dur);
+			int buflen = (dur * sps) / 1000, i;
+			byte[] buf = new byte[buflen];
+			for (i = 0; i < buf.length - 1200; i++)
+				buf[i] = (byte) (Math.sin(2 * Math.PI
+						* (i / (double) sps * freq)) * 64);
+			byte frqat = buf[i - 1];
+			while (i < buf.length)
+				buf[i++] = frqat = (byte) (frqat > 0 ? frqat - 1
+						: frqat < 0 ? frqat + 1 : 0);
+			return buf;
+		}
+	}
 
 	/** Note Lengths. */
 	static enum Tone {//@formatter:off
