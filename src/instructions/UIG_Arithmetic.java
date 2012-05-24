@@ -2,6 +2,9 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
+import static simulanator.Deformatter.breakDownOther;
+import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdownOther;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Module;
@@ -227,6 +230,32 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 		}
 		return isValid;
 	}
+	
+	
+	/** @see assemblernator.Instruction#execute(int, Machine) */
+	public final void execute(int instruction, Machine machine) {
+		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		int srcValue = brkDwn.readFromSource(machine);
+		int destValue = brkDwn.readFromDest(machine);
+		brkDwn.putToDest(operate(srcValue,destValue), machine);
+	}
+	
+	/**
+	 * 
+	 * @author Eric
+	 * @date May 23, 2012; 7:43:08 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param srcValue the Value of the source
+	 * @param destValue the Value of the destination
+	 * @return the value to be put in memory
+	 * @specRef N/A
+	 */
+	abstract int operate(int srcValue, int destValue);
+
 
 	/**
 	 * @author Eric
