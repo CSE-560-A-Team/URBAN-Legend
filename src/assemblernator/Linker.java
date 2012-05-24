@@ -27,6 +27,8 @@ import assemblernator.Instruction.ConstantRange;
  * @date May 12, 2012; 1:37:15 PM
  */
 public class Linker {
+	public static String linkerTableString = "";
+	
 	/**
 	 * Returns the loader header record.
 	 * @author Noah
@@ -193,7 +195,16 @@ public class Linker {
 			int execStartAddr = modules[0].execStart;
 			int offset = 0;
 			modules[0].offset = offset;
-			linkerTable.putAll(modules[0].linkRecord);// put all link records from first module.
+			//linkerTable.putAll(modules[0].linkRecord);// put all link records from first module.
+			for(Map.Entry<String, Integer> lr : modules[0].linkRecord.entrySet()) {
+				linkerTableString = linkerTableString + 
+						"label: " + lr.getKey() + 
+						"\t" + "Original Address: " + lr.getValue() + 
+						"\t" + "Offset: " + offset + 
+						"\t" + "Adjusted Address: " + (lr.getValue() + offset) + "\n";
+				linkerTable.put(lr.getKey(), lr.getValue());
+				
+			}
 			//calc offset and adjust prog, linker record addr, and text record addr by offset.
 			//add LinkerModule with adjusted addresses to offsetModules.
 			for(int i = 0; i < modules.length - 1; ++i) {
@@ -213,6 +224,11 @@ public class Linker {
 					//put all linker records of current module into linker table with offset.
 					for(Map.Entry<String, Integer> lr : modules[i+1].linkRecord.entrySet()) {
 						if(!linkerTable.containsKey(lr.getKey())) {
+							linkerTableString = linkerTableString + 
+									"label: " + lr.getKey() + 
+									"\t" + "Original Address: " + lr.getValue() + 
+									"\t" + "Offset: " + offset + 
+									"\t" + "Adjusted Address: " + (lr.getValue() + offset) + "\n";
 							linkerTable.put(lr.getKey(), lr.getValue() + offset);
 						} else {
 							hErr.reportError(makeError("dupLbl"), -1, -1);

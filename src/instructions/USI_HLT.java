@@ -81,7 +81,7 @@ public class USI_HLT extends AbstractInstruction {
 		int srcValue = brkDwn.readFromSource(machine);
 		machine.running = false;
 		machine.output.putString(String.valueOf(srcValue));
-		}
+	}
 
 	// =========================================================
 	// === Redundant code ======================================
