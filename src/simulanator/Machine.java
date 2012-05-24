@@ -338,6 +338,8 @@ public class Machine {
 				hErr.reportError(
 						makeError("runInvOPCode",
 								IOFormat.formatBinInteger(opcode, 6)), -1, -1);
+			} else {
+				ins.execute(instruction, this);
 			}
 			System.out.println("Execute " + ins.getOpId() + ": lc = " + lc);
 			for (ThreadListener tl : threadListeners)
