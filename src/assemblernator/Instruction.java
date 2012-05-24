@@ -1070,11 +1070,13 @@ public abstract class Instruction {
 		if (Assembler.instructions.containsKey(iname))
 			System.err.println("SHIT! Multiple instruction keys defined for "
 					+ iname + ".");
-		if (Assembler.byteCodes.containsKey(opcode))
-			System.err.println("SHIT! Multiple instruction keys defined for 0b"
-					+ IOFormat.formatBinInteger(opcode, 6) + ".");
 		Assembler.instructions.put(iname, this);
-		Assembler.byteCodes.put(opcode, this);
+		if (opcode != -1) {
+			if (Assembler.byteCodes.containsKey(opcode))
+				System.err.println("SHIT! Multiple instruction keys defined for 0b"
+						+ IOFormat.formatBinInteger(opcode, 6) + ".");
+			Assembler.byteCodes.put(opcode, this);
+		}
 	}
 
 	// ------------------------------------------------------------------

@@ -1,16 +1,20 @@
 package guinator;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.EventObject;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,7 +26,10 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 
 import simulanator.Machine;
 import simulanator.Machine.URBANInputStream;
@@ -42,6 +49,8 @@ public class SimulatorTab extends JSplitPane {
 
 	/** Hex editor pane for our memory. */
 	private JTable memTable;
+	/** Index register/Register readouts */
+	private JTextField[][] registerFields = new JTextField[2][8];
 
 	/** A table of all active threads */
 	private JTable threadList;
@@ -136,13 +145,12 @@ public class SimulatorTab extends JSplitPane {
 		JPanel registerGrid = new JPanel();
 		GridLayout registerLayout = new GridLayout(8, 2);
 		registerGrid.setLayout(registerLayout);
-		registerGrid.add(new JTextField("Register 0"));
-		JTextField dead = new JTextField("");
-		registerGrid.add(dead);
-		dead.setEnabled(false);
+		registerGrid.add(registerFields[0][0] = new JTextField("00000000"));
+		registerGrid.add(registerFields[1][0] = new JTextField("--------"));
+		registerFields[1][0].setEnabled(false);
 		for (int i = 1; i < 8; ++i) {
-			registerGrid.add(new JTextField("Register " + i));
-			registerGrid.add(new JTextField("Index Register " + i));
+			registerGrid.add(registerFields[0][i] = new JTextField("00000000"));
+			registerGrid.add(registerFields[1][i] = new JTextField("00000000"));
 		}
 
 		JPanel otherStats = new JPanel();
@@ -195,6 +203,8 @@ public class SimulatorTab extends JSplitPane {
 		machine.addThreadListener(myUIUpdater);
 		machine.addMemoryListener(myUIUpdater);
 		machine.addRegisterListener(myUIUpdater);
+		for (int i = 0; i < memTable.getColumnModel().getColumnCount(); ++i)
+			memTable.getColumnModel().getColumn(i).setCellEditor(myUIUpdater);
 		inputField.setEnabled(false);
 		setOneTouchExpandable(true);
 		setDividerLocation(320);
@@ -283,8 +293,12 @@ public class SimulatorTab extends JSplitPane {
 	 * @author Josh Ventura
 	 * @date May 23, 2012; 2:50:52 PM
 	 */
-	class UIUpdater implements Machine.ThreadListener, Machine.MemoryListener,
-			Machine.RegisterListener {
+	class UIUpdater extends AbstractCellEditor implements
+			Machine.ThreadListener, Machine.MemoryListener,
+			Machine.RegisterListener, TableCellEditor, CellEditorListener {
+
+		/** SHUT UP, ECJ. */
+		private static final long serialVersionUID = 1L;
 
 		/** Allows us to pause or sleep */
 		@Override public void fetchDecodeExecute() {
@@ -298,13 +312,14 @@ public class SimulatorTab extends JSplitPane {
 		/** Update register display */
 		@Override public void updatedRegisters(boolean index,
 				int firstRegister, int lastRegister) {
-			// TODO Auto-generated method stub
-
+			for (int i = firstRegister; i <= lastRegister; ++i)
+				registerFields[index ? 1 : 0][i].setText(IOFormat
+						.formatHexInteger(machine.getRegister(i), 8));
 		}
 
 		/** Update memory table */
 		@Override public void updatedMemory(int startAddr, int endAddr) {
-			for (int addr = startAddr; addr < endAddr; ++addr) {
+			for (int addr = startAddr; addr <= endAddr; ++addr) {
 				memTable.setValueAt(
 						IOFormat.formatHexInteger(machine.getMemory(addr), 8),
 						addr / 16, addr % 16);
@@ -333,10 +348,60 @@ public class SimulatorTab extends JSplitPane {
 			}
 		}
 
-		/** Add new thread to our list */
-		@Override public void destroyThread(int threadID) {
-			// TODO Auto-generated method stub
+		/** A thread in our list has died */
+		@Override public void destroyThread(int threadID) {}
 
+
+		/** Aborted edit. */
+		@Override public void editingCanceled(ChangeEvent e) {}
+
+
+		/** Memory table cell editor. */
+		private JTextField cellEditor;
+		/** Row of cell we're editing. */
+		private int editrow = 0;
+		/** Column of cell we're editing. */
+		private int editcol = 0;
+
+		/** Completed edit. */
+		@Override public void editingStopped(ChangeEvent FUCKINGUSELESS) {
+			try {
+				int a = (int) Long.parseLong(cellEditor.getText(), 16);
+				machine.setMemory(editrow * 16 + editcol, a);
+			} catch (NumberFormatException nfe) {
+				int addr = editrow * 16 + editcol;
+				updatedMemory(addr, addr);
+			}
+		}
+
+		/** Steal information from our good-for-nothing super class */
+		@Override public Component getTableCellEditorComponent(JTable table,
+				Object value, boolean isSelected, int row, int column) {
+			System.out.println("MINE, FUCKER!");
+			editrow = row;
+			editcol = column;
+			cellEditor.setText(IOFormat.formatHexInteger(
+					machine.getMemory(row * 16 + column), 8));
+			return cellEditor;
+		}
+
+		/** Editable? */
+		@Override public boolean isCellEditable(EventObject evt) {
+			if (evt instanceof MouseEvent)
+				return ((MouseEvent) evt).getClickCount() >= 2;
+			return true;
+		}
+
+		/** Get the text in our editor component. */
+		@Override public Object getCellEditorValue() {
+			return cellEditor.getText();
+		}
+
+		/** Default constructor */
+		public UIUpdater() {
+			cellEditor = new JTextField();
+			cellEditor.setFont(new Font(Font.MONOSPACED, 0, 11));
+			super.addCellEditorListener(this);
 		}
 	}
 

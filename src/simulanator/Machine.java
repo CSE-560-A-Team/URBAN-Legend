@@ -371,6 +371,18 @@ public class Machine {
 			ml.updatedMemory(addr, addr);
 	}
 
+	/**
+	 * Standard setter, but does not fire memory change.
+	 * 
+	 * @param addr
+	 *            The address of the desired memory word.
+	 * @param word
+	 *            The new word to place at that address.
+	 */
+	public void setMemoryDiscretely(int addr, int word) {
+		memory[addr] = word;
+	}
+	
 	/** @return The current location counter. */
 	public int getLC() {
 		return lc;
