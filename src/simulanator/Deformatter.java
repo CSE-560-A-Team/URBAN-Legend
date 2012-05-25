@@ -243,6 +243,7 @@ public class Deformatter {
 			}
 		}
 		
+		
 	}
 
 	/**
@@ -269,32 +270,6 @@ public class Deformatter {
 		public Location sourceKind;
 		/** The index register of whatever memory is to be read. */
 		public int memIXR = 0;
-	
-		/**
-		 * Puts a single word to destination. Wraps OpcodeBreakdownOther's putToDest.
-		 * @author Noah
-		 * @date May 24, 2012; 6:38:09 PM
-		 * @modified UNMODIFIED
-		 * @tested UNTESTED
-		 * @errors NO ERRORS REPORTED
-		 * @codingStandards Awaiting signature
-		 * @testingStandards Awaiting signature
-		 * @param word 
-		 * @param machine
-		 * @specRef N/A
-		 */
-		public void putToDest(int word, Machine machine) {
-			OpcodeBreakdownOther brkdwn = new OpcodeBreakdownOther();
-			brkdwn.destination = destination;
-			brkdwn.destKind = destKind;
-			brkdwn.format = format;
-			brkdwn.literal = literal;
-			brkdwn.source = source;
-			brkdwn.sourceKind = sourceKind;
-			brkdwn.memIXR = memIXR;
-			
-			brkdwn.putToDest(word, machine);
-		}
 		
 		/**
 		 * read from nw words starting at source. 
