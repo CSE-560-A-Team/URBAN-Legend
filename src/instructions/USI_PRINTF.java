@@ -1,7 +1,9 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.Module.Value.BitLocation.Address;
 import static assemblernator.Module.Value.BitLocation.Other;
+import static assemblernator.OperandChecker.isValidMem;
 import static assemblernator.OperandChecker.isValidNumWords;
 import simulanator.Deformatter;
 import simulanator.Deformatter.OpcodeBreakdown;
@@ -10,6 +12,7 @@ import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
+import assemblernator.InstructionFormatter;
 import assemblernator.Module;
 import assemblernator.Module.Value;
 
@@ -44,8 +47,8 @@ public class USI_PRINTF extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return givnStr == null ? lc + 1 : USI_CHAR
-				.padWord(givnStr.getBytes().length);
+		return givnStr == null ? lc + 1 : lc + 1
+				+ USI_CHAR.padWord(givnStr.getBytes().length);
 	}
 
 	/**
@@ -57,6 +60,7 @@ public class USI_PRINTF extends AbstractInstruction {
 		if (st != null) {
 			givnStr = IOFormat.escapeString(st.expression, lineNum,
 					st.valueStartPosition, hErr);
+			System.out.println(givnStr);
 			st.value = new Value(0, 'A');
 			if (operands.size() != 1)
 				hErr.reportWarning(makeError("extraParamsIgF", opId, "ST"),
@@ -82,6 +86,7 @@ public class USI_PRINTF extends AbstractInstruction {
 			nw.value = value;
 			numWords = nw.value.value;
 		}
+
 		return true;
 	}
 
@@ -90,12 +95,45 @@ public class USI_PRINTF extends AbstractInstruction {
 	 *      assemblernator.Module)
 	 */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
+		if (givnStr == null) {
+			Operand dm = getOperandData("DM");
+			Value v = module.evaluate(dm.expression, true, Address, hErr, this,
+					this.getOperandData("DM").valueStartPosition);
+			if (!isValidMem(v.value)) {
+				hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()),
+						this.lineNum, -1);
+				return false;
+			}
+			addr = v.value;
+		}
+		else {
+			int nwa = USI_CHAR.padWord(givnStr.getBytes().length);
+			Operand fnw = new Operand("NW", "" + nwa, 0, 0);
+			fnw.value = new Value(nwa, 'A');
+			operands.add(fnw);
+
+			Operand ffl = new Operand("FL", Integer.toString(lc + 1), 0, 0);
+			ffl.value = new Value(lc + 1, 'R');
+			operands.add(ffl);
+		}
 		return true;
 	}
 
+	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		// TODO Auto-generated method stub
-		return null;
+		int[] assembly;
+		if (givnStr != null) {
+			int[] subassembly = USI_CHAR.strToIntArray(givnStr.getBytes());
+			assembly = new int[subassembly.length + 1];
+			assembly[0] = InstructionFormatter.formatSrcRange(this)[0];
+			for (int i = 0; i < subassembly.length; ++i)
+				assembly[i + 1] = subassembly[i];
+		}
+		else {
+			assembly = new int[1];
+			assembly[0] = InstructionFormatter.formatSrcRange(this)[0];
+		}
+		return assembly;
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
@@ -111,7 +149,28 @@ public class USI_PRINTF extends AbstractInstruction {
 			b[(i << 2) + 2] = ((byte) ((a & 0x0000FF00) >>> 8));
 			b[(i << 2) + 3] = ((byte) ((a & 0x000000FF) >>> 0));
 		}
-		machine.output.putString(new String(b));
+		StringBuilder raw = new StringBuilder(new String(b));
+		for (int i = 0; i < raw.length() - 1; ++i) {
+			if (raw.charAt(i) == '%') {
+				char c = raw.charAt(i + 1);
+				if (c == '%')
+					raw.delete(i, i + 1);
+				else if (Character.isDigit(c) && Character.digit(c, 10) < 8)
+					raw.replace(i, i + 2,
+							"" + machine.getRegister(Character.digit(c, 10)));
+			}
+			else if (raw.charAt(i) == '$') {
+				char c = raw.charAt(i + 1);
+				if (c == '$')
+					raw.delete(i, i + 1);
+				else if (Character.isDigit(c) && Character.digit(c, 10) < 8)
+					raw.replace(i, i + 2, Integer.toString(machine
+							.getIndexRegister(Character.digit(c, 10))));
+			}
+		}
+		machine.output.putString(raw.toString());
+		if (breakDown.literal)
+			machine.setLC(machine.getLC() + nw);
 	}
 
 	// =========================================================

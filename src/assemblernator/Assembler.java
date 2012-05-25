@@ -39,6 +39,7 @@ import instructions.USI_NOP;
 import instructions.USI_NUM;
 import instructions.USI_OR;
 import instructions.USI_POP;
+import instructions.USI_PRINTF;
 import instructions.USI_PSH;
 import instructions.USI_PST;
 import instructions.USI_PWR;
@@ -160,6 +161,7 @@ public class Assembler {
 		Comment.getInstance();
 		
 		USI_SND.getInstance();
+		USI_PRINTF.getInstance();
 	}
 
 	/**

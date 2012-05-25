@@ -1194,7 +1194,7 @@ public abstract class Instruction {
 				for (String op : new String[] { "FM", "FC", "FL", "EX" }) {
 					Operand opr = getOperandData(op);
 					if (opr != null) {
-						if (opr.value != null) {
+						if (opr.value != null && opr.value.modRecord != null) {
 							srcflag = opr.value.arec;
 							srcM = opr.value.modRecord.adjustments.size();
 							break;
