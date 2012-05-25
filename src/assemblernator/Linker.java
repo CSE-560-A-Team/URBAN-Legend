@@ -491,6 +491,7 @@ public class Linker {
 				while(hasNext) { //while there are modules left in the object file.s
 					temp = new LinkerModule(input, hErr);
 					if(temp.success) { //add to list of linker modules only if object file is valid.
+						temp.filename = fileNames[fileIndex];
 						modules.add(temp);
 					}
 					hasNext = !temp.done; 

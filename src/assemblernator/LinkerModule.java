@@ -54,6 +54,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	public boolean success = false;
 	/** End reached */
 	public boolean done = true;
+	/** file name being read. */
+	public String filename;
 	/**
 	 * 
 	 * @author Eric
