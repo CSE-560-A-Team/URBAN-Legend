@@ -35,16 +35,16 @@ public class USI_CWSR extends UIG_IO {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		OpcodeBreakdown breakDown = Deformatter.breakDownOther(instruction);
+		OpcodeBreakdown breakDown = Deformatter.breakDownSrcRange(instruction);
 		int addr = breakDown.getEffectiveSrcAddress(machine);
 		int nw = breakDown.numWords;
 		byte[] b = new byte[nw << 2];
 		for (int i = 0; i < nw; ++i) {
 			int a = machine.getMemory(addr + i);
-			b[(i << 2) + 0] = ((byte) (a & 0xFF000000 >>> 24));
-			b[(i << 2) + 1] = ((byte) (a & 0x00FF0000 >>> 16));
-			b[(i << 2) + 2] = ((byte) (a & 0x0000FF00 >>> 8));
-			b[(i << 2) + 3] = ((byte) (a & 0x000000FF >>> 0));
+			b[(i << 2) + 0] = ((byte) ((a & 0xFF000000) >>> 24));
+			b[(i << 2) + 1] = ((byte) ((a & 0x00FF0000) >>> 16));
+			b[(i << 2) + 2] = ((byte) ((a & 0x0000FF00) >>> 8));
+			b[(i << 2) + 3] = ((byte) ((a & 0x000000FF) >>> 0));
 		}
 		machine.output.putString(new String(b));
 	}

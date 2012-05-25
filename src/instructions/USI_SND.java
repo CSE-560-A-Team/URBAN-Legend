@@ -160,7 +160,7 @@ public class USI_SND extends AbstractInstruction {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		int freq = (instruction & ~(0xFFFFFFFF >>> 23 << 23)) >> 9;
-		int dur = (instruction & (~(0xFFFFFFFF >>> 9 << 9))) * 10;
+		int dur = (instruction & (~(0xFFFFFFFF >>> 9 << 9))) * 25;
 		int sample = (instruction & ~(0xFFFFFFFF >>> 26 << 26)) >> 23;
 		play(samples[sample].generate(freq, dur, 48000), 48000);
 		try {
