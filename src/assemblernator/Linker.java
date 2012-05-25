@@ -455,7 +455,6 @@ public class Linker {
 				//write end record
 				totalRecords += totalTextRecords;
 				out.write(LoaderEnd(totalRecords, totalTextRecords, modules[0].progName));
-				
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
 				e.printStackTrace();
@@ -481,7 +480,7 @@ public class Linker {
 	 */
 	public static LinkerModule[] getModules(String[] fileNames, ErrorHandler hErr) {
 		List<LinkerModule> modules = new ArrayList<LinkerModule>(); 
-		
+
 		for(int fileIndex = 0; fileIndex < fileNames.length; ++fileIndex) {
 			try {
 				InputStream inStream = new BufferedInputStream(new FileInputStream(fileNames[fileIndex]));
