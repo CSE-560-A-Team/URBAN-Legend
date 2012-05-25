@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction.ConstantRange;
@@ -27,6 +28,7 @@ import assemblernator.Instruction.ConstantRange;
  * @date May 12, 2012; 1:37:15 PM
  */
 public class Linker {
+	/** shut up */
 	public static String linkerTableString = "";
 	
 	/**
@@ -482,18 +484,17 @@ public class Linker {
 		
 		for(int fileIndex = 0; fileIndex < fileNames.length; ++fileIndex) {
 			try {
-				InputStream in = new BufferedInputStream(new FileInputStream(fileNames[fileIndex]));
-				//for(int i = 0; i < fileNames.length; ++i) {
-					boolean hasNext = true;
-					LinkerModule temp;
-					while(hasNext) { //while there are modules left in the object file.s
-						temp = new LinkerModule(in, hErr);
-						if(temp.success) { //add to list of linker modules only if object file is valid.
-							modules.add(temp);
-						}
-						hasNext = !temp.done; 
+				InputStream inStream = new BufferedInputStream(new FileInputStream(fileNames[fileIndex]));
+				Scanner input = new Scanner(inStream);
+				boolean hasNext = true;
+				LinkerModule temp;
+				while(hasNext) { //while there are modules left in the object file.s
+					temp = new LinkerModule(input, hErr);
+					if(temp.success) { //add to list of linker modules only if object file is valid.
+						modules.add(temp);
 					}
-				//}
+					hasNext = !temp.done; 
+				}
 			} catch(FileNotFoundException e) {
 				System.err.println(e.getMessage());
 				e.printStackTrace();
