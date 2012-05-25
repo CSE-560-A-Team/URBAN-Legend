@@ -22,7 +22,7 @@ import assemblernator.OperandChecker;
  * 
  * @author Generate.java
  * @date Apr 08, 2012; 08:26:19
- * @specRef IA3
+ * @specRef UL1
  */
 public class USI_SND extends AbstractInstruction {
 	/**
@@ -140,9 +140,9 @@ public class USI_SND extends AbstractInstruction {
 		}
 		op.value = module.evaluate(op.expression, false, BitLocation.Other,
 				hErr, this, op.valueStartPosition);
-		if (op.value.value < 10 || op.value.value > 10000) {
+		if (op.value.value < 25 || op.value.value > 6400) {
 			hErr.reportError(
-					makeError("OORconstant", "DM", opId, "10", "10000"),
+					makeError("OORconstant", "DM", opId, "25", "6400"),
 					lineNum, op.valueStartPosition);
 			return false;
 		}
@@ -154,7 +154,7 @@ public class USI_SND extends AbstractInstruction {
 	@Override public int[] assemble() {
 		return new int[] { (opCode << 26) | (sampleType.id << 23)
 				| (getOperandData("FR").value.value << 9)
-				| (getOperandData("DM").value.value / 10) };
+				| (getOperandData("DM").value.value / 25) };
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */

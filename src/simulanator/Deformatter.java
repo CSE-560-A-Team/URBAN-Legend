@@ -39,6 +39,8 @@ public class Deformatter {
 		public int destination;
 		/** The index register of whatever memory is to be read. */
 		public int memIXR = 0;
+		/** The number of words specified */
+		public int numWords = 0;
 
 		/**
 		 * Write a word to the machine according to the instruction broken down
@@ -173,6 +175,40 @@ public class Deformatter {
 				word = 0;
 			}
 			return word;
+		}
+
+		/**
+		 * @author Josh Ventura
+		 * @date May 24, 2012; 10:55:28 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @param m The machine to access.
+		 * @return The effective destination address.
+		 * @specRef N/A
+		 */
+		public int getEffectiveDestAddress(Machine m) {
+			if (destKind != Location.MEMORY) {
+				m.hErr.reportError(makeError("runInsNotMemory"), -1, -1);
+				return -1;
+			}
+			return memIXR != 0 ? destination + m.getIndexRegister(memIXR) : destination;
+		}
+		
+		/**
+		 * @author Josh Ventura
+		 * @date May 24, 2012; 10:55:28 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @param m The machine to access.
+		 * @return The effective destination address.
+		 * @specRef N/A
+		 */
+		public int getEffectiveSrcAddress(Machine m) {
+			if (sourceKind != Location.MEMORY) {
+				m.hErr.reportError(makeError("runInsNotMemory"), -1, -1);
+				return -1;
+			}
+			return memIXR != 0 ? source + m.getIndexRegister(memIXR) : source;
 		}
 	}
 
