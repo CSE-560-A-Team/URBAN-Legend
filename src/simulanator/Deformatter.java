@@ -299,7 +299,7 @@ public class Deformatter {
 		{
 			if (srcRaw) {
 				res.sourceKind = Location.RAW;
-				res.source = (instruction & RAWSRCBITS) >> SOURCEOFFS;
+				res.source = res.numWords = (instruction & RAWSRCBITS) >> SOURCEOFFS;
 			}
 			else // Source is compound boolean + three bit integer
 			{
@@ -321,7 +321,7 @@ public class Deformatter {
 
 			if (destRaw) {
 				res.destKind = Location.RAW;
-				res.destination = (instruction & RAWDESTBITS) >> DESTINOFFS;
+				res.destination = res.numWords = (instruction & RAWDESTBITS) >> DESTINOFFS;
 			}
 			else // Destination is compound boolean + three bit integer
 			{
