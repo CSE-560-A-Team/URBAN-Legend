@@ -193,7 +193,7 @@ public class InstructionFormatter {
 	}
 	
 	/**
-	 * Formats instructions USI_IRKB and USI_CRKB into their bit codes.
+	 * Formats instructions USI_IRKB, USI_ISRG, and USI_CRKB into their bit codes.
 	 * @author Noah
 	 * @date Apr 27, 2012; 6:16:53 PM
 	 * @modified UNMODIFIED
@@ -206,28 +206,41 @@ public class InstructionFormatter {
 	 * @specRef N/A
 	 */
 	public static int [] formatDestRange(Instruction instr) {
-		//opcode(6b) + "00" + number of words (4b) + "1000" + memAddr(16b) or 
-		//opcode(6b) + "00" + number of words (4b) + "1000" + ixr(4b) + memAddr(12b)
-		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //e.g. 011000
-		String fmt = "00";
+		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6);
+		String fmtLit = "00";
 		String nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value.value, 4);
-		String destReg = "1000"; //destination is never a register.
-		int mem; 
+		String destReg = "0000";
+		String ixr = "0000";
+		String memLit = "";
 		int[] assembled = new int[1];
 		
-		code = code + fmt + nw + destReg;
-		
-		if(instr.hasOperand("DX")) {
-			code = code + IOFormat.formatBinInteger(instr.getOperandData("DX").value.value, 4); //add ixr bits.
+		if(instr.hasOperand("FL") || instr.hasOperand("EX")) {
+			fmtLit = "01";
+			if(instr.hasOperand("FL")) {
+				memLit = IOFormat.formatBinInteger(instr.getOperandData("FL").value.value, 16);
+			} else {
+				memLit = IOFormat.formatBinInteger(instr.getOperandData("EX").value.value, 16);
+			}
+		} else if(instr.hasOperand("FM")) {
+			memLit = IOFormat.formatBinInteger(instr.getOperandData("FM").value.value, 12);
 		} else {
-			code = code + "0000"; //ixr bits are 0'd.
+			memLit = IOFormat.formatBinInteger(instr.getOperandData("DM").value.value, 12);
 		}
 		
-		mem = instr.getOperandData("DM").value.value; //mem = value of dm operand.
+		if(instr.hasOperand("DX")) {
+			destReg = "1000";
+			ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value.value, 4);
+		} else if(instr.hasOperand("DR")) {
+			destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value.value, 4);
+		}
 		
-		code = code + IOFormat.formatBinInteger(mem, 12); //concat memory bits.
+		if(memLit.length() == 16) {
+			code = code + fmtLit + nw + destReg +  memLit;
+		} else {
+			code = code + fmtLit + nw + destReg + ixr + memLit;
+		}
+
 		assembled[0] = IOFormat.parseBin32Int(code);
-		
 		return assembled;
 	}
 	

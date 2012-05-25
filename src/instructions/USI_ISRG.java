@@ -1,7 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatSrcRange;
+import static assemblernator.InstructionFormatter.formatDestRange;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
@@ -113,7 +113,7 @@ public class USI_ISRG extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return formatSrcRange(this);
+		return formatDestRange(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
