@@ -27,6 +27,8 @@ public class ScanWrap {
 	public static final Pattern hex6 = Pattern.compile("([0-9a-fA-F]{6})(:|:.+)");
 	/** Pattern matching eight hex nybbles */
 	public static final Pattern hex8 = Pattern.compile("([0-9a-fA-F]{8})(:|:.+)");
+	/** Pattern matching eight hex nybbles */
+	public static final Pattern hexArb = Pattern.compile("([0-9a-fA-F]+)(:|:.+)");
 	/** Pattern matching four decimal digits */
 	public static final Pattern dec4 = Pattern.compile("([0-9]{4})(:|:.+)");
 	/** Pattern matching anything that isn't a colon */

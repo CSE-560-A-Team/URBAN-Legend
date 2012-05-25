@@ -125,12 +125,16 @@ public class Simulator {
 							makeError("loaderTAddOOR",
 									Integer.toString(addr, 16)), -1, -1);
 
-				int word; // LM2.5
-				if (!rd.go(word = rd
-						.readInt(ScanWrap.hex8, "loaderTNoWord", 16)))
+				String words; // LM2.5
+				if (!rd.go(words = rd
+						.readString(ScanWrap.hexArb, "loaderTNoWord")))
 					return;
+				if (words.length() % 8 != 0)
+					hErr.reportError(makeError("loaderTNoWord") + " [Extra information: Invalid word size]", -1, -1);
 
-				machine.setMemory(addr, word);
+				for (int i = 0; i < words.length(); i += 8) {
+					machine.setMemory(addr++, IOFormat.parseHex32Int(words.substring(i,i+8)));
+				}
 
 				if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon,
 						"loaderNoCRC"))) // LM2.7
