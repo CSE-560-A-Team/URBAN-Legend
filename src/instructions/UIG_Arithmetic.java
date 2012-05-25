@@ -4,7 +4,7 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
-import simulanator.Deformatter.OpcodeBreakdownOther;
+import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Module;
@@ -311,7 +311,7 @@ public abstract class UIG_Arithmetic extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public final void execute(int instruction, Machine machine) {
-		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		OpcodeBreakdown brkDwn = breakDownOther(instruction);
 		int srcValue = brkDwn.readFromSource(machine);
 		int destValue = brkDwn.readFromDest(machine);
 		brkDwn.putToDest(operate(destValue, srcValue, machine.hErr), machine);

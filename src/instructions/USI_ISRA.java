@@ -2,7 +2,7 @@ package instructions;
 
 import simulanator.Machine;
 
-import simulanator.Deformatter.OpcodeBreakdownOther;
+import simulanator.Deformatter.OpcodeBreakdown;
 import static simulanator.Deformatter.breakDownOther;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -38,7 +38,7 @@ public class USI_ISRA extends UIG_ShiftManipulate {
 	@Override public void execute(int instruction, Machine machine) {
 		
 		
-		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
+		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromDest(machine);
 		wordOrig >>= brkdwn.readFromSource(machine); //right shift and assign.
 		brkdwn.putToDest(wordOrig, machine);

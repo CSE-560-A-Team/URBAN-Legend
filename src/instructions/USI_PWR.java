@@ -7,7 +7,7 @@ import static assemblernator.Module.Value.BitLocation.Other;
 import static assemblernator.OperandChecker.isValidConstant;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidReg;
-import simulanator.Deformatter.OpcodeBreakdownOther;
+import simulanator.Deformatter.OpcodeBreakdown;
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
 import static java.lang.Math.pow;
@@ -103,7 +103,7 @@ public class USI_PWR extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		OpcodeBreakdownOther brkDwn = breakDownOther(machine.instruction);
+		OpcodeBreakdown brkDwn = breakDownOther(machine.instruction);
 		int power = brkDwn.readFromSource(machine);
 		double regVal = brkDwn.readFromDest(machine);
 		regVal = pow(regVal, (double) power);

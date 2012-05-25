@@ -2,7 +2,7 @@ package instructions;
 
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
-import simulanator.Deformatter.OpcodeBreakdownOther;
+import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -36,7 +36,7 @@ public class USI_ROR extends UIG_ShiftManipulate {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		
-		OpcodeBreakdownOther brkdwn = breakDownOther(machine.instruction);
+		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromDest(machine);
 		int rotateVal = brkdwn.readFromSource(machine);
 		

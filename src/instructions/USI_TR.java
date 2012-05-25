@@ -2,7 +2,7 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
-import simulanator.Deformatter.OpcodeBreakdownOther;
+import simulanator.Deformatter.OpcodeBreakdown;
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
 import assemblernator.AbstractInstruction;
@@ -110,7 +110,7 @@ public class USI_TR extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		OpcodeBreakdown brkDwn = breakDownOther(instruction);
 		int addr = brkDwn.destination;
 		machine.setLC(addr);
 	}

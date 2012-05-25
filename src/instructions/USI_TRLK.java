@@ -4,7 +4,7 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
-import simulanator.Deformatter.OpcodeBreakdownOther;
+import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -136,7 +136,7 @@ public class USI_TRLK extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		OpcodeBreakdownOther brkDwn = breakDownOther(instruction);
+		OpcodeBreakdown brkDwn = breakDownOther(instruction);
 		int addr = brkDwn.destination;
 		brkDwn.putToDest(machine.getLC(), machine);
 		machine.setLC(addr);
