@@ -90,14 +90,14 @@ public class Linker {
 	 * @return a text record.
 	 * @specRef N/A
 	 */
-	public static byte[] LoaderText(int addr, int code, String prgName) {
+	public static byte[] LoaderText(int addr, String code, String prgName) {
 		ByteArrayOutputStream text = new ByteArrayOutputStream();
 		try {
 			text.write((byte)'T'); //LM2.1
 			text.write((byte)':'); //LM2.2
 			text.write(IOFormat.formatIntegerWithRadix(addr, 16, 4)); //LM2.3 
 			text.write((byte)':'); //LM2.4
-			text.write(IOFormat.formatIntegerWithRadix(code, 16, 8)); //LM2.5 
+			text.write(code.getBytes()); //LM2.5 
 			text.write((byte)':'); //LM2.6
 			text.write(prgName.getBytes()); //LM2.7
 			text.write((byte)':'); //LM2.8
@@ -185,6 +185,7 @@ public class Linker {
 	public static void link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
 		Map<String, Integer> linkerTable = new HashMap<String, Integer>();
 		boolean isValid = true;
+		String error;
 		//sort the modules by order of address of modules.
 		Arrays.sort(modules);
 		
@@ -341,9 +342,15 @@ public class Linker {
 										opcode &= (~memMaskLow); 
 									} else {
 										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+										error = makeError("lnkOORAddr");
+										textMod.text.textRecord = textMod.text.textRecord + error + "\n";
+										offMod.errorText.add(textMod.text);
 									}
 								} else {
 									hErr.reportError(makeError("lnkOORLit12"), -1, -1);
+									error = makeError("lnkOORLit12");
+									textMod.text.textRecord = textMod.text.textRecord + error + "\n";
+									offMod.errorText.add(textMod.text);
 								}
 							} else if(litBit == '1') {
 								//get low literal value.
@@ -360,6 +367,9 @@ public class Linker {
 									opcode &= (~litMaskLow); 
 								} else {
 									hErr.reportError(makeError("lnkOORLit16"), -1, -1);
+									error = makeError("lnkOORLit16");
+									textMod.text.textRecord = textMod.text.textRecord + error + "\n";
+									offMod.errorText.add(textMod.text);
 								}
 							} else if(formatBit == '1') {
 								//get high value.
@@ -389,9 +399,15 @@ public class Linker {
 										opcode &= (~memMaskLow); 
 									} else {
 										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+										error = makeError("lnkOORAddr");
+										textMod.text.textRecord = textMod.text.textRecord + error + "\n";
+										offMod.errorText.add(textMod.text);
 									}
 								} else {
 									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									error = makeError("lnkOORAddr");
+									textMod.text.textRecord = textMod.text.textRecord + error + "\n";
+									offMod.errorText.add(textMod.text);
 								}
 							} else {
 								//get low memory value.
@@ -408,6 +424,9 @@ public class Linker {
 									opcode &= (~memMaskLow); 
 								} else {
 									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
+									error = makeError("lnkOORAddr");
+									textMod.text.textRecord = textMod.text.textRecord + error + "\n";
+									offMod.errorText.add(textMod.text);
 								}
 							} 
 							
@@ -424,7 +443,8 @@ public class Linker {
 						}
 						//write text records.
 						if(isValid) {
-							out.write(LoaderText(textMod.text.assignedLC, IOFormat.parseHex32Int(textMod.text.instrData), modules[0].progName));
+							//out.write(LoaderText(textMod.text.assignedLC, IOFormat.parseHex32Int(textMod.text.instrData), modules[0].progName));
+							out.write(LoaderText(textMod.text.assignedLC, textMod.text.instrData, modules[0].progName));
 							++totalTextRecords;
 						}
 					}
@@ -482,4 +502,9 @@ public class Linker {
 		
 		return modules.toArray(new LinkerModule[modules.size()]);
 	}
+	/**
+	public static String getLinkerReport() {
+		
+	}
+	*/
 }
