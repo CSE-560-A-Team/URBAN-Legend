@@ -47,6 +47,7 @@ import instructions.USI_ROL;
 import instructions.USI_ROR;
 import instructions.USI_SKIPS;
 import instructions.USI_SKT;
+import instructions.USI_SND;
 import instructions.USI_TR;
 import instructions.USI_TRDR;
 import instructions.USI_TREQ;
@@ -157,6 +158,8 @@ public class Assembler {
 		USI_DMP.getInstance();
 		USI_HLT.getInstance();
 		Comment.getInstance();
+		
+		USI_SND.getInstance();
 	}
 
 	/**

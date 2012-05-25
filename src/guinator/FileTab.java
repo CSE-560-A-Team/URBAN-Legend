@@ -163,7 +163,7 @@ class FileTab extends JSplitPane {
 	Module compile() {
 		problems.clear();
 		String str = jt.getText();
-		Module mod = Assembler.parseString(str, new GUIErrorHandler());
+		Module mod = Assembler.parseString(str, hErr = new GUIErrorHandler());
 		userReport.setText(mod.toString());
 		String[][] rawTable = mod.getSymbolTable().toStringTable();
 		((DefaultTableModel) sTable.getModel())
@@ -304,8 +304,10 @@ class FileTab extends JSplitPane {
 		@Override public void reportWarning(String warn, int line, int pos) {
 			problems.add(new EWMark(false, warn, line, pos));
 		}
-
 	}
+
+	/** The last used error handler. */
+	public GUIErrorHandler hErr;
 
 
 	/**

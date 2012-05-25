@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -217,39 +218,6 @@ public class SimulatorTab extends JSplitPane {
 		setResizeWeight(.9);
 	}
 
-
-	/**
-	 * @author Josh Ventura
-	 * @date May 21, 2012; 11:37:40 PM
-	 */
-	public class SimulatorListener implements ActionListener {
-		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
-		@Override public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == loadButton) {
-				String fname = GUIUtil.getLoadFname(SimulatorTab.this,
-						"URBAN Legend Executable Files", ".ulx");
-				if (fname == null)
-					return;
-				try {
-					InputStream is = new FileInputStream(new File(fname));
-					Simulator.load(is, outputBox.hErr, machine);
-					for (int addr = 0; addr < Machine.memorySizeInWords; ++addr)
-						memTable.setValueAt(
-								IOFormat.formatHexInteger(
-										machine.getMemory(addr), 8), addr / 16,
-								addr % 16);
-				} catch (Exception ex) {
-					GUIUtil.showException("Error loading executable file", ex,
-							SimulatorTab.this);
-				}
-			}
-			else if (e.getSource() == runButton) {
-				outputBox.append("<i>Starting main thread...</i><br/>");
-				machine.runThread(machine.getLC());
-			}
-		}
-	}
-
 	/**
 	 * @author Josh Ventura
 	 * @date May 22, 2012; 2:31:27 PM
@@ -449,6 +417,8 @@ public class SimulatorTab extends JSplitPane {
 							}
 						}
 					}
+				} catch (NumberFormatException ex) {
+					System.out.println("Bogus hex data on clipboard");
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -458,4 +428,46 @@ public class SimulatorTab extends JSplitPane {
 
 	/** Updates this UI as machine state changes. */
 	UIUpdater myUIUpdater = new UIUpdater();
+
+
+	/**
+	 * @author Josh Ventura
+	 * @date May 24, 2012; 9:05:08 PM
+	 * @param is
+	 *            The input stream to load.
+	 */
+	public void loadStream(InputStream is) {
+		Simulator.load(is, outputBox.hErr, machine);
+		for (int addr = 0; addr < Machine.memorySizeInWords; ++addr)
+			memTable.setValueAt(
+					IOFormat.formatHexInteger(machine.getMemory(addr), 8),
+					addr / 16, addr % 16);
+	}
+
+	/**
+	 * @author Josh Ventura
+	 * @date May 21, 2012; 11:37:40 PM
+	 */
+	public class SimulatorListener implements ActionListener {
+		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
+		@Override public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == loadButton) {
+				String fname = GUIUtil.getLoadFname(SimulatorTab.this,
+						"URBAN Legend Executable Files", ".ulx");
+				if (fname == null)
+					return;
+				try {
+					InputStream is = new FileInputStream(new File(fname));
+					loadStream(is);
+				} catch (Exception ex) {
+					GUIUtil.showException("Error loading executable file", ex,
+							SimulatorTab.this);
+				}
+			}
+			else if (e.getSource() == runButton) {
+				outputBox.append("<i>Starting main thread...</i><br/>");
+				machine.runThread(machine.getLC());
+			}
+		}
+	}
 }
