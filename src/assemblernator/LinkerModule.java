@@ -1,7 +1,7 @@
 package assemblernator;
 
 import static assemblernator.ErrorReporting.makeError;
-import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,13 +117,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 
 	/**
 	 * 
-	 * @param in
+	 * @param read
 	 *            the outputFile containing all the records
 	 * @param error errorhandler for constructor
 	 */
-	public LinkerModule(InputStream in, ErrorHandler error) {
+	public LinkerModule(Scanner read, ErrorHandler error){
 		// scan wrap
-		Scanner read = new Scanner(in);
 		ScanWrap reader = new ScanWrap(read, error);
 
 		//String used for name
@@ -439,7 +438,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			}// end of text record
 			
 		}//end of while loop checking for linking records and text records
-
+		
 		//checks for an end record
 		if (check.equals("E")) {
 			this.endRec = reader.readInt(ScanWrap.hex4, "endRecords", 16);
@@ -502,6 +501,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		}else if((link+text+mod+2) != this.endRec){
 			error.reportWarning(makeError("totalMatch"), 0, 0); 
 		}
+	
 
 
 		//program ran successful. Checks for more in file
