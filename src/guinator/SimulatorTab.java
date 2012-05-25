@@ -9,6 +9,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -20,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.BoundedRangeModel;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -71,6 +74,8 @@ public class SimulatorTab extends JSplitPane {
 
 	/** The text box into which the user can type */
 	private JLTextField inputField;
+	/** The scroll box to our output pane */
+	private JScrollPane outSP;
 	/** Output Stream Display */
 	private IOPane outputBox;
 
@@ -186,7 +191,24 @@ public class SimulatorTab extends JSplitPane {
 				4000, 10)));
 		toolbar.add(inputField = new JLTextField());
 		toolbar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 10));
-		bottom.add(new JScrollPane(outputBox = new IOPane()));
+		bottom.add(outSP = new JScrollPane(outputBox = new IOPane()));
+		outSP.getVerticalScrollBar().addAdjustmentListener(
+				new AdjustmentListener() {
+
+					BoundedRangeModel brm = outSP.getVerticalScrollBar()
+							.getModel();
+					boolean wasAtBottom = true;
+
+					@Override public void adjustmentValueChanged(
+							AdjustmentEvent e) {
+						if (!brm.getValueIsAdjusting()) {
+							if (wasAtBottom)
+								brm.setValue(brm.getMaximum());
+						}
+						wasAtBottom = ((brm.getValue() + brm.getExtent()) == brm
+								.getMaximum());
+					}
+				});
 		toolbar.setFloatable(false);
 		bottom.add(toolbar);
 
