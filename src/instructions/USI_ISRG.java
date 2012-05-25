@@ -76,12 +76,14 @@ public class USI_ISRG extends AbstractInstruction {
 							isValid = isValidMem(value.value);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("FM").value = value;
-						} else if(this.hasOperand("FL")) {
-							value = module.evaluate(this.getOperand("FL"), false, Literal, hErr, this, this.getOperandData("FL").valueStartPosition);
-							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
-							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
-							this.getOperandData("FL").value = value;
-						} else if(this.hasOperand("EX")) {
+						}
+//						else if(this.hasOperand("FL")) {
+//							value = module.evaluate(this.getOperand("FL"), false, Literal, hErr, this, this.getOperandData("FL").valueStartPosition);
+//							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
+//							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
+//							this.getOperandData("FL").value = value;
+//						} 
+						else if(this.hasOperand("EX")) {
 							value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").valueStartPosition);
 							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "EX", this.getOpId()), this.lineNum, -1);
