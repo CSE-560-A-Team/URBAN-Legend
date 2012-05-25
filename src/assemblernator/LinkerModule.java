@@ -481,8 +481,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			this.endRecord = this.endRecord + ":" + ender +":\n" + errorMessage;
 			//error checking
-			if (!reader.go("disreguard"))
-				return;
+//			if (!reader.go("disreguard"))
+//				return;
 			if(!ender.equals(this.progName)){
 				error.reportWarning(makeError("noMatch"), 0, 0);
 			}
