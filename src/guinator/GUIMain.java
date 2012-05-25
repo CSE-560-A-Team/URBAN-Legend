@@ -252,7 +252,7 @@ public class GUIMain {
 
 			ByteArrayInputStream bais = new ByteArrayInputStream(
 					baos.toByteArray());
-			LinkerModule lm = new LinkerModule(bais, ft.hErr);
+			LinkerModule lm = new LinkerModule(new Scanner(bais), ft.hErr);
 			if (!lm.success) {
 				GUIUtil.showError("General failure; bailing.", mainWindow);
 				return;

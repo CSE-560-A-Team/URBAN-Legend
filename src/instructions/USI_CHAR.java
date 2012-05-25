@@ -43,37 +43,39 @@ public class USI_CHAR extends AbstractDirective {
 	 * @return The number of words needed to hold byteCount bytes.
 	 * @specRef N/A
 	 */
-	int padWord(int byteCount) {
+	public static int padWord(int byteCount) {
 		return Math.max(1, (byteCount + 3) / 4);
 	}
 
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		String st = getOperand("ST");
-		if (st == null)
-			return lc+1;
-		int stringWordSize = padWord(IOFormat.escapeString(st, 0, 0, null)
-				.getBytes().length);
-		return lc + Math.max(1, stringWordSize);
+		if (content == null)
+			return lc + 1;
+		int stringWordSize = padWord(content.getBytes().length);
+		return lc + stringWordSize;
 	}
 
 	/** The string given to us in the ST: operand. */
 	private String content;
 
-	/** @see assemblernator.Instruction#assemble() */
-	@Override public int[] assemble() {
-		byte[] resb = content.getBytes();
-		int[] res = new int[padWord(resb.length)];
+	/**
+	 * @author Josh Ventura
+	 * @param bytes
+	 *            The bytes to cast to int[].
+	 * @return The given byte array, as an array of integers.
+	 */
+	public static int[] strToIntArray(byte[] bytes) {
+		int[] res = new int[padWord(bytes.length)];
 		int nw = 0;
-		for (int i = 0; i < resb.length; ++i) {
-			int tw = resb[i] << 24;
-			if (++i < resb.length) {
-				tw |= resb[i] << 16;
-				if (++i < resb.length) {
-					tw += resb[i] << 8;
-					if (++i < resb.length)
-						tw |= resb[i];
+		for (int i = 0; i < bytes.length; ++i) {
+			int tw = bytes[i] << 24;
+			if (++i < bytes.length) {
+				tw |= bytes[i] << 16;
+				if (++i < bytes.length) {
+					tw += bytes[i] << 8;
+					if (++i < bytes.length)
+						tw |= bytes[i];
 					else
 						tw |= 0x00000020;
 				}
@@ -85,6 +87,11 @@ public class USI_CHAR extends AbstractDirective {
 			res[nw++] = tw;
 		}
 		return res;
+	}
+
+	/** @see assemblernator.Instruction#assemble() */
+	@Override public int[] assemble() {
+		return strToIntArray(content.getBytes());
 	}
 
 	/**
@@ -101,9 +108,10 @@ public class USI_CHAR extends AbstractDirective {
 		else {
 			content = IOFormat.escapeString(st.expression, lineNum,
 					st.valueStartPosition, hErr);
-			st.value = new Value(0,'A');
+			st.value = new Value(0, 'A');
 			if (operands.size() != 1)
-				hErr.reportWarning(makeError("extraParamsIgF", opId, "ST"), lineNum, 0);
+				hErr.reportWarning(makeError("extraParamsIgF", opId, "ST"),
+						lineNum, 0);
 			return true;
 		}
 		return false;
