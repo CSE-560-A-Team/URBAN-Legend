@@ -1,7 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatSrcRange;
+import static assemblernator.InstructionFormatter.formatDestRange;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
@@ -76,12 +76,14 @@ public class USI_ISRG extends AbstractInstruction {
 							isValid = isValidMem(value.value);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("FM").value = value;
-						} else if(this.hasOperand("FL")) {
-							value = module.evaluate(this.getOperand("FL"), false, Literal, hErr, this, this.getOperandData("FL").valueStartPosition);
-							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
-							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
-							this.getOperandData("FL").value = value;
-						} else if(this.hasOperand("EX")) {
+						}
+//						else if(this.hasOperand("FL")) {
+//							value = module.evaluate(this.getOperand("FL"), false, Literal, hErr, this, this.getOperandData("FL").valueStartPosition);
+//							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
+//							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
+//							this.getOperandData("FL").value = value;
+//						} 
+						else if(this.hasOperand("EX")) {
 							value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").valueStartPosition);
 							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "EX", this.getOpId()), this.lineNum, -1);
@@ -113,7 +115,7 @@ public class USI_ISRG extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return formatSrcRange(this);
+		return formatDestRange(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */

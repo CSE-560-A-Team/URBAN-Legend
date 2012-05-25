@@ -1,6 +1,9 @@
 package simulanator;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.OperandChecker.*;
+import assemblernator.IOFormat;
+import assemblernator.Instruction.ConstantRange;
 
 /**
  * @author Josh Ventura
@@ -212,6 +215,157 @@ public class Deformatter {
 		}
 	}
 
+	/**
+	 * 
+	 * @author Noah
+	 * @date May 24, 2012; 3:17:28 PM
+	 */
+	public static class OpcodeBreakdownDestRange {
+		/** The number of words to read.*/
+		public int nw;
+		/** index register is used. */
+		public boolean idxReg;
+		/** format bit */
+		public boolean format;
+		/** literal bit */
+		public boolean literal;
+		/** The destination memory address. */
+		public int destination;
+		/** The index register of whatever memory is to be read. */
+		public int memIXR = 0;
+		
+		/**
+		 * Puts all words at the destination address.
+		 * @author Noah
+		 * @date May 24, 2012; 4:56:48 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @param words words to store in machine memory.
+		 * @param machine machine to store words in.
+		 * @specRef N/A
+		 */
+		public void putToDest(int[] words, Machine machine) {
+			int memAddr = destination;
+			if(!format && !literal && isValidMem(destination) && isValidMem(destination + nw) && isValidNumWords(nw)) {
+				if(idxReg) {
+					if(isValidIndex(memIXR)) {
+						memAddr += machine.getIndexRegister(memIXR);
+					} else {
+						machine.hErr.reportError(makeError("runIRegOOR", IOFormat.formatHexInteger(destination, 4)), machine.getLC(), 0);
+						return;
+					}
+				} else {
+					//register not allowed as destination.
+					return;
+				}
+				//put all words in memory.
+				for(int i = 0; i < words.length; ++i) {
+					machine.setMemory(memAddr, words[i]);
+					++memAddr;
+				}
+				
+			} else {
+				if(format);//only format bit 0 is allowed.
+				if(literal); //no literals allowed.
+				if(!isValidMem(destination)) {
+					machine.hErr.reportError(makeError("runMemOOR", IOFormat.formatHexInteger(destination, 4)), machine.getLC(), 0);
+				} else if(!isValidMem(destination + nw)) {
+					machine.hErr.reportError(makeError("runNWMemOOR", Integer.toString(destination), Integer.toString(nw)), machine.getLC(), 0);
+				}
+				if(!isValidNumWords(nw)) machine.hErr.reportError(makeError("runNWOOR", Integer.toString(nw)), machine.getLC(), 0);
+			}
+		}
+		
+		
+	}
+
+	/**
+	 * 
+	 * @author Noah
+	 * @date May 24, 2012; 5:54:00 PM
+	 */
+	public static class OpcodeBreakdownSrcRange {
+		/** The number of words to read.*/
+		public int nw;
+		/** destination kind. */
+		public Location destKind;
+		/** destination */
+		public int destination;
+		/** index register is used. */
+		public boolean idxReg;
+		/** format bit */
+		public boolean format;
+		/** literal bit */
+		public boolean literal;
+		/** The source memory address or literal */
+		public int source;
+		/** The source kind */
+		public Location sourceKind;
+		/** The index register of whatever memory is to be read. */
+		public int memIXR = 0;
+		
+		/**
+		 * read from nw words starting at source. 
+		 * @author Noah
+		 * @date May 24, 2012; 6:15:37 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @param machine machine to read from.
+		 * @return words.
+		 * @specRef N/A
+		 */
+		public int[] readFromSource(Machine machine) {
+			boolean isValid = true;
+			int[] words = new int[0];
+			if(isValidNumWords(nw) && !format) {
+				int src;
+				words = new int[nw];
+				if((idxReg && literal) || (memIXR != 0 && literal)) {
+					//error can't have an index reg and a literal.
+				} else if(idxReg) {
+					if(isValidIndex(memIXR)) {
+						src = source + machine.getIndexRegister(memIXR);
+					} else {
+						isValid = false;
+						machine.hErr.reportError(makeError("runIRegOOR", IOFormat.formatHexInteger(source, 4)), machine.getLC(), 0);
+					}
+				} else {
+					if(!literal && !isValidMem(source)) {
+						isValid = false;
+						machine.hErr.reportError(makeError("runMemOOR", IOFormat.formatHexInteger(source, 4)), machine.getLC(), 0);
+					} else {
+						src = source;
+					}
+				}
+				
+				if(isValid) {
+					if(literal) { //if literal just read the literal.
+						words[0] = machine.getMemory(source);
+					} else { //else read all words starting from address source.
+						for(int i = 0; i < nw; ++i) {
+							if(isValidMem(source+i)) {
+								words[i] = machine.getMemory(source + i);
+							} else {
+								machine.hErr.reportError(makeError("runMemOOR", Integer.toString(source+i)), machine.getLC(), 0);
+								break;
+							}
+						}
+					}
+				}
+			} else {
+				if(!isValidNumWords(nw)) machine.hErr.reportError(makeError("runNWOOR", Integer.toString(nw)), machine.getLC(), 0);
+				if(format); //error
+			}
+			
+			return words;
+		}
+	}
 	/** The bit indicating the format used. */
 	private static final int FORMATBIT = 0x02000000;
 	/** The bit indicating if the data is a literal. */
@@ -302,4 +456,48 @@ public class Deformatter {
 
 		return res;
 	}
+
+	
+	/**
+	 * Breaks down dest range formatted instruction.
+	 * @author Noah
+	 * @date May 24, 2012; 5:25:43 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @param instruction instruction to breakdown.
+	 * @return breakdown.
+	 * @specRef N/A
+	 */
+	public static OpcodeBreakdownDestRange breakDownDestRange(int instruction) {
+		OpcodeBreakdownDestRange brkdwn = new OpcodeBreakdownDestRange();
+		brkdwn.format = (instruction & FORMATBIT) != 0;
+		brkdwn.literal = (instruction & LITERALBIT) != 0;
+		brkdwn.nw = (instruction & SOURCEBITS) >>> SOURCEOFFS;
+		brkdwn.idxReg = (instruction & DESTINKBIT) != 0;
+		if(brkdwn.idxReg) {
+			brkdwn.memIXR = (instruction & ADDRESSIXRBITS) >>> ADDRESSIXROFFS;
+		}
+		brkdwn.destination = instruction & ADDRESSBITS;
+		return brkdwn;
+	}
+	
+	public static OpcodeBreakdownSrcRange breakDownSrcRange(int instruction) {
+		OpcodeBreakdownSrcRange brkdwn = new OpcodeBreakdownSrcRange();
+		brkdwn.format = (instruction & FORMATBIT) != 0;
+		brkdwn.literal = (instruction & LITERALBIT) != 0;
+		brkdwn.nw = (instruction & DESTINBITS) >>> DESTINOFFS;
+		brkdwn.idxReg = (instruction & SOURCEKBIT) != 0;
+		if(brkdwn.idxReg) {
+			brkdwn.memIXR = (instruction & ADDRESSIXRBITS) >>> ADDRESSIXROFFS;
+		} else if(brkdwn.literal) {
+			brkdwn.source = instruction & ALLDATABITS;
+		}
+		brkdwn.destination = instruction & ADDRESSBITS;
+		return brkdwn;
+	}
+	
+	
 }

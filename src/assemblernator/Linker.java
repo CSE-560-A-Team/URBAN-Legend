@@ -463,7 +463,7 @@ public class Linker {
 		for(int fileIndex = 0; fileIndex < fileNames.length; ++fileIndex) {
 			try {
 				InputStream in = new BufferedInputStream(new FileInputStream(fileNames[fileIndex]));
-				for(int i = 0; i < fileNames.length; ++i) {
+				//for(int i = 0; i < fileNames.length; ++i) {
 					boolean hasNext = true;
 					LinkerModule temp;
 					while(hasNext) { //while there are modules left in the object file.s
@@ -473,7 +473,7 @@ public class Linker {
 						}
 						hasNext = !temp.done; 
 					}
-				}
+				//}
 			} catch(FileNotFoundException e) {
 				System.err.println(e.getMessage());
 				e.printStackTrace();
