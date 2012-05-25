@@ -1,16 +1,17 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import static assemblernator.Module.Value.BitLocation.Other;
+import static assemblernator.OperandChecker.isValidNumWords;
 import simulanator.Deformatter;
 import simulanator.Deformatter.OpcodeBreakdown;
 import simulanator.Machine;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Instruction.Operand;
-import assemblernator.Module.Value;
 import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value;
 
 /**
  * The CWSR instruction.
@@ -36,14 +37,21 @@ public class USI_PRINTF extends AbstractInstruction {
 
 	/** The value given to ST, or null. */
 	private String givnStr = null;
+	/** The address to read from instead */
+	int addr = -1;
+	/** Number of words, or -1. */
+	int numWords = -1;
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
 		return givnStr == null ? lc + 1 : USI_CHAR
 				.padWord(givnStr.getBytes().length);
 	}
-	
-	/** @see assemblernator.AbstractInstruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler, assemblernator.Module) */
+
+	/**
+	 * @see assemblernator.AbstractInstruction#immediateCheck(assemblernator.ErrorReporting.ErrorHandler,
+	 *      assemblernator.Module)
+	 */
 	@Override public boolean immediateCheck(ErrorHandler hErr, Module module) {
 		Operand st = getOperandData("ST");
 		if (st != null) {
@@ -56,12 +64,31 @@ public class USI_PRINTF extends AbstractInstruction {
 			return true;
 		}
 		if (!hasOperand("FM")) {
-			//hErr.reportError(err, line, pos)
+			hErr.reportError(
+					makeError("instructionMissingOp", this.getOpId(), "FM"),
+					this.lineNum, -1);
+			return false;
+		}
+
+		Operand nw = getOperandData("NW");
+		if (nw != null) {
+			Value value = module.evaluate(nw.expression, false, Other, hErr,
+					this, this.getOperandData("NW").valueStartPosition);
+			if (!isValidNumWords(value.value)) {
+				hErr.reportError(makeError("OORnw", this.getOpId()),
+						this.lineNum, -1);
+				return false;
+			}
+			nw.value = value;
+			numWords = nw.value.value;
 		}
 		return true;
 	}
-	
-	/** @see assemblernator.Instruction#check(assemblernator.ErrorReporting.ErrorHandler, assemblernator.Module) */
+
+	/**
+	 * @see assemblernator.Instruction#check(assemblernator.ErrorReporting.ErrorHandler,
+	 *      assemblernator.Module)
+	 */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		return true;
 	}

@@ -93,15 +93,14 @@ public class LinkerTab extends JSplitPane {
 				LinkerModule lms[] = Linker.getModules(fnames,
 						warningOutput.hErr);
 				System.out.println("Received " + lms.length + " modules");
-				int i = 0;
 				for (LinkerModule lm : lms) {
 					linkTable.getRowCount();
 					DefaultTableModel tm = (DefaultTableModel) linkTable
 							.getModel();
-					System.out.println("Adding row: " + fnames[i] + ","
+					System.out.println("Adding row: " + lm.filename + ","
 							+ lm.progName + "," + lm.date + "," + lm.loadAddr
 							+ "," + lm.execStart);
-					tm.addRow(new Object[] { fnames[i++], lm.progName, lm.date,
+					tm.addRow(new Object[] { lm.filename, lm.progName, lm.date,
 							lm.loadAddr, lm.execStart });
 					linkMods.add(lm);
 				}
