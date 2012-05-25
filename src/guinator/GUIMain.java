@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +32,8 @@ import javax.swing.UIManager;
 
 import org.lateralgm.joshedit.JoshText;
 
+import assemblernator.Linker;
+import assemblernator.LinkerModule;
 import assemblernator.Module;
 
 /**
@@ -54,6 +57,8 @@ public class GUIMain {
 	static JMenuItem m_parse;
 	/** Our Compile menu item */
 	static JMenuItem m_compile;
+	/** Our Compile menu item */
+	static JMenuItem m_run;
 	/** A menu item to export the file as an HTML document */
 	static JMenuItem m_writeHTML;
 	/** A menu item to copy code, with HTML highlighting. */
@@ -144,6 +149,8 @@ public class GUIMain {
 		m_parse.addActionListener(ml);
 		filemenu.add(m_compile = new JMenuItem("Compile"));
 		m_compile.addActionListener(ml);
+		filemenu.add(m_run = new JMenuItem("Run in New Simulator"));
+		m_run.addActionListener(ml);
 		filemenu.addSeparator();
 
 		filemenu.add(m_writeHTML = new JMenuItem("Export as HTML"));
@@ -221,6 +228,53 @@ public class GUIMain {
 			GUIUtil.showException(
 					"An error occurred during object file generation", e,
 					mainWindow);
+		}
+	}
+
+	/**
+	 * Compiles the active code, reporting any errors, then builds an object
+	 * file in memory, "links" it to itself, and loads it into RAM in the
+	 * simulator tab.
+	 * 
+	 * @author Josh Ventura
+	 * @date May 24, 2012; 8:11:52 PM
+	 */
+	void runActive() {
+		FileTab ft = (FileTab) tabPane.getSelectedComponent();
+
+		if (ft == null)
+			return;
+		Module rm = ft.compile();
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			rm.writeObjectFile(baos);
+
+			ByteArrayInputStream bais = new ByteArrayInputStream(
+					baos.toByteArray());
+			LinkerModule lm = new LinkerModule(bais, ft.hErr);
+			if (!lm.success) {
+				GUIUtil.showError("General failure; bailing.", mainWindow);
+				return;
+			}
+
+			baos = new ByteArrayOutputStream();
+			Linker.link(new LinkerModule[] { lm }, baos, ft.hErr);
+
+			SimulatorTab st = new SimulatorTab();
+			tabPane.insertTab("Quick Run", null, st,
+					"Running " + ft.getFileName(),
+					tabPane.getComponentZOrder(ft) + 1);
+
+			bais = new ByteArrayInputStream(baos.toByteArray());
+			st.loadStream(bais);
+			
+			tabPane.setSelectedComponent(st);
+		} catch (Exception e) {
+			GUIUtil.showException(
+					"An error occurred during object file generation", e,
+					mainWindow);
+			return;
 		}
 	}
 
@@ -353,6 +407,10 @@ public class GUIMain {
 			}
 			if (e.getSource() == m_compile) {
 				compileActive();
+				return;
+			}
+			if (e.getSource() == m_run) {
+				runActive();
 				return;
 			}
 			if (e.getSource() == m_writeHTML) {

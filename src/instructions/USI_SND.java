@@ -48,8 +48,8 @@ public class USI_SND extends AbstractInstruction {
 	enum SampleType {
 		/** White noise */
 		WHITE(0),
-		/** Pink noise */
-		PINK(1),
+		/** Bass noise */
+		BASS(1),
 		/** Square wave */
 		SQUARE(2),
 		/** Saw wave */
@@ -106,12 +106,12 @@ public class USI_SND extends AbstractInstruction {
 				op.valueStartPosition, hErr).toLowerCase();
 		switch (sample.charAt(0)) {//@formatter:off
 		case 'w': if (sample.equals("white") ) { sampleType = SampleType.WHITE;  break; }
-		case 'p': if (sample.equals("pink")  ) { sampleType = SampleType.PINK;   break; }
 		          if (sample.equals("pluck") ) { sampleType = SampleType.PLUCK;  break; }
 		case 's': if (sample.equals("sine")  ) { sampleType = SampleType.SINE;   break; }
 		          if (sample.equals("saw")   ) { sampleType = SampleType.SAW;    break; }
 		          if (sample.equals("square")) { sampleType = SampleType.SQUARE; break; }
 		case 'b': if (sample.equals("boink") ) { sampleType = SampleType.BOINK;  break; }
+		          if (sample.equals("bass")  ) { sampleType = SampleType.BASS;   break; }
 		default:  hErr.reportError(makeError("unmatchedStr", sample, "any built-in sample"), lineNum, op.keywordStartPosition);
 		} //@formatter:on
 
@@ -161,7 +161,8 @@ public class USI_SND extends AbstractInstruction {
 	@Override public void execute(int instruction, Machine machine) {
 		int freq = (instruction & ~(0xFFFFFFFF >>> 23 << 23)) >> 9;
 		int dur = (instruction & (~(0xFFFFFFFF >>> 9 << 9))) * 10;
-		play(MakeTone.sine(freq, dur, 48000), 48000);
+		int sample = (instruction & ~(0xFFFFFFFF >>> 26 << 26)) >> 23;
+		play(samples[sample].generate(freq, dur, 48000), 48000);
 		try {
 			Thread.sleep(dur);
 		} catch (InterruptedException e) {}
@@ -173,7 +174,7 @@ public class USI_SND extends AbstractInstruction {
 	 * @author Josh Ventura
 	 * @date May 24, 2012; 1:41:07 AM
 	 */
-	static class MakeTone {
+	static interface ToneGenerator {
 		/**
 		 * @param freq
 		 *            The frequency of the tone.
@@ -183,12 +184,30 @@ public class USI_SND extends AbstractInstruction {
 		 *            Samples per second.
 		 * @return Bytes of this sample.
 		 */
-		public static byte[] sine(int freq, int dur, int sps) {
+		public byte[] generate(int freq, int dur, int sps);
+	}
+
+	/**
+	 * @author Josh Ventura
+	 * @date May 24, 2012; 7:59:03 PM
+	 */
+	static abstract class WaveFormTone implements ToneGenerator {
+		/**
+		 * Math function to get waveform value at a position
+		 * 
+		 * @param x
+		 *            The position.
+		 * @return The value of this waveform.
+		 */
+		abstract double waveform(double x);
+
+		/** Generate a sine tone. */
+		@Override final public byte[] generate(int freq, int dur, int sps) {
 			System.out.println("Generate sine tone " + freq + " * " + dur);
 			int buflen = (dur * sps) / 1000, i;
 			byte[] buf = new byte[buflen];
 			for (i = 0; i < buf.length - 1200; i++)
-				buf[i] = (byte) (Math.sin(2 * Math.PI
+				buf[i] = (byte) (waveform(2 * Math.PI
 						* (i / (double) sps * freq)) * 64);
 			byte frqat = buf[i - 1];
 			while (i < buf.length)
@@ -198,118 +217,83 @@ public class USI_SND extends AbstractInstruction {
 		}
 	}
 
-	/** Note Lengths. */
-	static enum Tone {//@formatter:off
-		/** G below C */ GbelowC(196), /** A */ A(220), /** A# */ Asharp(233), /** B */ B(247),
-		/** C */ C(262), /** C# */ Csharp(277), /** C */ D(294), /** D# */ Dsharp(311),
-		/** E */ E(330), /** F */ F(349), /** F# */ Fsharp(370), /** G */ G(392),
-		/** G# */ Gsharp(415), /** F5 */ F5(698), /** A5*/ A5(880), /** C6 */ C6(1046);
-		//@formatter:on
-		/** Frequency in Hz. */
-		public int freq;
+	/** Sine tone generator. */
+	static class SineTone extends WaveFormTone implements ToneGenerator {
+		/** Use system sine(). */
+		@Override double waveform(double x) {
+			return Math.sin(x);
+		}
+	}
 
+	/** Saw tone generator. */
+	static class SawTone extends WaveFormTone implements ToneGenerator {
+		/** Saw function. */
+		@Override double waveform(double x) {
+			return (x / (2 * Math.PI)) % 1;
+		}
+	}
+
+	/** Square tone generator. */
+	static class SquareTone extends WaveFormTone implements ToneGenerator {
 		/**
 		 * @param x
-		 *            Frequency of the note.
+		 *            The phase.
+		 * @return The saw value.
 		 */
-		Tone(int x) {
-			freq = x;
+		@Override double waveform(double x) {
+			return Math.min(.8, Math.max(-.8, Math.sin(x) * 10));
 		}
 	}
 
-	/** Note durations. */
-	static enum Duration {
-		/** 1/4 note. */
-		EIGHTH(125), /** 1/4 note. */
-		QUARTER(250), /** 1/2 note. */
-		HALF(500), /** 3/4 note. */
-		TQ(750), /** Whole note. */
-		WHOLE(1000);
-		/** Duration in milliseconds. */
-		int ms;
-
+	/** Square tone generator. */
+	static class WhiteNoise extends WaveFormTone implements ToneGenerator {
 		/**
 		 * @param x
-		 *            The duration, in milliseconds.
+		 *            The phase.
+		 * @return The noise value.
 		 */
-		Duration(int x) {
-			ms = x;
+		@Override double waveform(double x) {
+			return ((x / (2 * Math.PI)) % 1) * (1 - 2 * Math.random());
 		}
 	}
 
-	/** Tone + Duration = Note */
-	static class Note {
-		/** The tone */
-		Tone tone;
-		/** The duration */
-		Duration dur;
-
-		/**
-		 * @param t
-		 *            Tone.
-		 * @param d
-		 *            Duration.
-		 */
-		public Note(Tone t, Duration d) {
-			tone = t;
-			dur = d;
+	/** Warp a bass drum sample to a frequency. */
+	static class BassSample implements ToneGenerator {
+		/** Generate a sine tone. */
+		@Override public byte[] generate(int freq, int dur, int sps) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
-	/** Test audio. */
-	public static void test() {
-		byte buf[] = new byte[48000 * 10];
-		int bpos = 0;
-
-		Note[] mhall = { new Note(Tone.A5, Duration.EIGHTH),
-				new Note(Tone.A5, Duration.QUARTER),
-				new Note(Tone.A5, Duration.QUARTER),
-				new Note(Tone.F5, Duration.EIGHTH),
-				new Note(Tone.A5, Duration.QUARTER),
-				new Note(Tone.C6, Duration.HALF), };
-		/* { new Note(Tone.D, Duration.TQ),
-		 * new Note(Tone.F, Duration.TQ), new Note(Tone.D, Duration.TQ),
-		 * new Note(Tone.C, Duration.TQ),
-		 * new Note(Tone.A, Duration.WHOLE),
-		 * new Note(Tone.A, Duration.HALF), }; */
-		/* { new Note(Tone.B, Duration.QUARTER),
-		 * new Note(Tone.A, Duration.QUARTER),
-		 * new Note(Tone.GbelowC, Duration.QUARTER),
-		 * new Note(Tone.A, Duration.QUARTER),
-		 * new Note(Tone.B, Duration.QUARTER),
-		 * new Note(Tone.B, Duration.QUARTER),
-		 * new Note(Tone.B, Duration.HALF),
-		 * new Note(Tone.A, Duration.QUARTER),
-		 * new Note(Tone.A, Duration.QUARTER),
-		 * new Note(Tone.A, Duration.HALF),
-		 * new Note(Tone.B, Duration.QUARTER),
-		 * new Note(Tone.D, Duration.QUARTER),
-		 * new Note(Tone.D, Duration.HALF) }; */
-		for (int n = 0; n < mhall.length; n++) {
-			int bend = bpos + (mhall[n].dur.ms * 48000) / 1000;
-			int i;
-			for (i = bpos; i < bend - 1200; i++)
-				buf[i] = (byte) (Math.sin(2 * Math.PI
-						* ((i - bpos) / 48000.0 * mhall[n].tone.freq)) * 64);
-			byte frqat = buf[i - 1];
-			while (i <= bend)
-				buf[i++] = frqat = (byte) (frqat > 0 ? frqat - 1
-						: frqat < 0 ? frqat + 1 : 0);
-			bpos = bend;
+	/** Warp the BOINK sample to a frequency. */
+	static class BoinkSample implements ToneGenerator {
+		/** Generate a sine tone. */
+		@Override public byte[] generate(int freq, int dur, int sps) {
+			// TODO Auto-generated method stub
+			return null;
 		}
-		play(buf, 48000);
 	}
+
+	/** Generate a pluck with a frequency. */
+	static class PluckGenerator implements ToneGenerator {
+		/** Generate a sine tone. */
+		@Override public byte[] generate(int freq, int dur, int sps) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
+
+	/** All available samples. */
+	ToneGenerator samples[] = new ToneGenerator[] { new WhiteNoise(),
+			new BassSample(), new SquareTone(), new SawTone(), new SineTone(),
+			new BoinkSample(), new PluckGenerator() };
 
 	/**
 	 * Plays a sample buffer.
 	 * 
 	 * @author Josh Ventura
 	 * @date May 5, 2012; 2:26:44 AM
-	 * @modified UNMODIFIED
-	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
-	 * @codingStandards Awaiting signature
-	 * @testingStandards Awaiting signature
 	 * @param data
 	 *            The sample data to play.
 	 * @param sps
@@ -332,7 +316,9 @@ public class USI_SND extends AbstractInstruction {
 						do
 							Thread.sleep(99);
 						while (clip.isActive());
-					} catch (InterruptedException e) {}
+					} catch (InterruptedException e) {
+						System.err.println("INTERRUPT");
+					}
 					System.out.println("Clip done");
 					clip.stop();
 					clip.close();

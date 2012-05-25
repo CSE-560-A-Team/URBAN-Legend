@@ -159,8 +159,24 @@ public class GUIUtil {
 	public static void showException(String basicErr, Exception e,
 			Component mainWindow) {
 		String errmsg = basicErr + ":\n" + getExceptionString(e);
-		JOptionPane.showMessageDialog(mainWindow, errmsg);
+		JOptionPane.showMessageDialog(mainWindow, errmsg, "Exception Error",
+				JOptionPane.ERROR_MESSAGE);
 		e.printStackTrace();
+	}
+
+	/**
+	 * Display an error to the user.
+	 * 
+	 * @author Josh Ventura
+	 * @date May 24, 2012; 8:58:39 PM
+	 * @param errmsg
+	 *            The error string to display.
+	 * @param mainWindow
+	 *            The window that owns this message.
+	 */
+	public static void showError(String errmsg, Component mainWindow) {
+		JOptionPane.showMessageDialog(mainWindow, errmsg, "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**

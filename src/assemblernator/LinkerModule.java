@@ -20,6 +20,14 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	public Map<String, Integer> linkRecord = new HashMap<String, Integer>();
 	/** Contains all the mod and text records. */
 	public List<TextModRecord> textMod = new ArrayList<TextModRecord>();
+	/**Contains all the errors. */
+	public List<TextRecord> errorText = new ArrayList<TextRecord>();
+	/**Header record string */
+	String headerRecord = "";
+	/**End record string */
+	String endRecord = "";
+	/**Link record String */
+	public String linkerRecord = "";
 	/** Name of program. */
 	public String progName;
 	/** Program load address. */
@@ -75,6 +83,10 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		public int modHigh;
 		/** Number of modifications for low order bits */
 		public int modLow;
+		/** Text record String */
+		public String textRecord = "";
+		/** Mod record String */
+		public String modRecord = "";
 	}
 
 	/**
@@ -116,6 +128,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 
 		//String used for name
 		String ender = "";
+		String temp = "";
+		String errorMessage = "";
 
 		//Number of records
 		int mod = 0;
@@ -125,7 +139,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		//value checking 
 		boolean isValid = true;
 		boolean add = true;
-
+		
 		//checks for an H
 		String check = reader.readString(ScanWrap.notcolon, "loaderNoHeader");
 		if (!reader.go("disreguard"))
@@ -136,6 +150,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			this.progName = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
+			this.headerRecord = "H:" + this.progName+ ":";
 			this.loadAddr = reader.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
 			if (!reader.go("disreguard"))
 				return;
@@ -145,6 +160,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
 			}
+			this.headerRecord = this.headerRecord + ":" +this.loadAddr+ ":";
 			this.prgTotalLen = reader
 					.readInt(ScanWrap.hex4, "loaderHNoPrL", 16);
 			if (!reader.go("disreguard"))
@@ -155,6 +171,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
 			}
+			this.headerRecord = this.headerRecord + ":" +this.prgTotalLen + ":";
 			this.execStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
 			if (!reader.go("disreguard"))
 				return;
@@ -164,21 +181,26 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
 			}
+			this.headerRecord = this.headerRecord + ":" +this.execStart+ ":";
 			this.date = reader.readString(ScanWrap.datep, "loaderHNoDate");
 			if (!reader.go("disreguard"))
 				return;
+			this.headerRecord = this.headerRecord + ":" +this.date+ ":";
 			this.version = reader.readInt(ScanWrap.dec4, "loaderHNoVer", 10);
 			if (!reader.go("disreguard"))
 				return;
-			reader.readString(ScanWrap.notcolon, "loaderHNoLLMM");
+			this.headerRecord = this.headerRecord + ":" +this.version+ ":";
+			temp = reader.readString(ScanWrap.notcolon, "loaderHNoLLMM");
 			if (!reader.go("disreguard"))
 				return;
+			this.headerRecord = this.headerRecord + ":" +temp+ ":";
 			// some kind of error checking
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
 				return;
 			if(!ender.equals(this.progName)){
 				error.reportWarning(makeError("noMatch"), 0, 0);
+			this.headerRecord = this.headerRecord + ":" + ender + ":";
 			}
 		}else{
 			error.reportError(makeError("loaderNoHeader"),0,0); 
@@ -199,6 +221,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				entryLabel = reader.readString(ScanWrap.notcolon, "");
 				if (!reader.go("disreguard"))
 					return;
+				this.linkerRecord = this.linkerRecord + ":" + "L:"  + entryLabel + ":";
 				entryAddr = reader.readInt(ScanWrap.hex4, "loaderNoEXS",
 						16);
 				if (!reader.go("disreguard"))
@@ -209,12 +232,16 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					error.reportError(makeError("invalidValue"),0,0);
 					return;
 				}
+				this.linkerRecord = this.linkerRecord + ":"+ entryAddr + ":";
 				// some kind of error checking
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
-				if (!reader.go("disreguard"))
-					return;
+//				if (!reader.go("disreguard"))
+//					return;
 				if(!ender.equals(this.progName)){
 					error.reportWarning(makeError("noMatch"), 0, 0);
+					this.linkerRecord = this.linkerRecord + ":"+ ender + "\nLabel does not match Program Name \n";
+				}else{
+					this.linkerRecord = this.linkerRecord + ":"+ ender + "\n";
 				}
 				linkRecord.put(entryLabel, entryAddr);
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
@@ -224,56 +251,79 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			} else if (check.equals("T")) {
 				text++;
 				theRecordsForTextMod.text.assignedLC = reader.readInt(ScanWrap.hex4, "textLC", 16);
-				if (!reader.go("disreguard"))
-					return;
+				theRecordsForTextMod.text.textRecord = "T:" + theRecordsForTextMod.text.assignedLC + ":";
+				if (!reader.go("disreguard")){
+					errorMessage = "800: Text record missing valid program assigned location.";
+					add = false;
+				}
 				//error checking
 				isValid = OperandChecker.isValidMem(theRecordsForTextMod.text.assignedLC);
 				if(!isValid){
-					error.reportError(makeError("invalidValue"),0,0);
-					return;
+					errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+					add = false;
 				}
 				theRecordsForTextMod.text.instrData = reader.readString(ScanWrap.notcolon, "textData");
+				theRecordsForTextMod.text.textRecord = theRecordsForTextMod.text.textRecord + ":" + theRecordsForTextMod.text.instrData+ ":";
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMessage = "801: Text record missing valid assembled instruction/data.";
+					add = false;
+				}
 
 				theRecordsForTextMod.text.flagHigh = reader.readString(ScanWrap.notcolon, "textStatus").charAt(0);
+				theRecordsForTextMod.text.textRecord = theRecordsForTextMod.text.textRecord + ":" + theRecordsForTextMod.text.flagHigh + ":";
 				if (!reader.go("disreguard"))
-					return;
-				if(!(theRecordsForTextMod.text.flagHigh == 'A' || theRecordsForTextMod.text.flagHigh == 'R' || theRecordsForTextMod.text.flagHigh == 'E' || theRecordsForTextMod.text.flagHigh == 'C')){
-					error.reportError(makeError("modHLS"), 0, 0);
+				{
+					errorMessage = "802: Text record missing valid status flag.";
 					add = false;
-				}				
-				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus")
-
-						.charAt(0);
+				}
+				if(!(theRecordsForTextMod.text.flagHigh == 'A' || theRecordsForTextMod.text.flagHigh == 'R' || theRecordsForTextMod.text.flagHigh == 'E' || theRecordsForTextMod.text.flagHigh == 'C')){
+					errorMessage = "802: Text record missing valid status flag.";
+					add = false;
+				}		
+				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus").charAt(0);
+				theRecordsForTextMod.text.textRecord = theRecordsForTextMod.text.textRecord + ":" + theRecordsForTextMod.text.flagLow + ":";
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMessage = "802: Text record missing valid status flag.";
+					add = false;
+				}
 				if(!(theRecordsForTextMod.text.flagLow == 'A' || theRecordsForTextMod.text.flagLow == 'R' || theRecordsForTextMod.text.flagLow == 'E' || theRecordsForTextMod.text.flagLow == 'C')){
-					error.reportError(makeError("modHLS"), 0, 0);
+					errorMessage = "802: Text record missing valid status flag.";
 					add = false;
 				}
 				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
+				theRecordsForTextMod.text.textRecord = theRecordsForTextMod.text.textRecord + ":" + theRecordsForTextMod.text.modHigh + ":";
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMessage = "803: Text record missing valid number of modifications.";
+					add = false;
+				}
 				//check for mod high
 				if(theRecordsForTextMod.text.modHigh>16 || theRecordsForTextMod.text.modHigh<0)
 				{
-					error.reportError(makeError("invalidMods"),0,0);
-					return;
+					errorMessage = "803: Text record missing valid number of modifications.";
+					add = false;
 				}
 				theRecordsForTextMod.text.modLow = reader.readInt(ScanWrap.notcolon, "textMod", 16);
+				theRecordsForTextMod.text.textRecord = theRecordsForTextMod.text.textRecord + ":" + theRecordsForTextMod.text.modLow + ":";
 				if (!reader.go("disreguard"))
-					return;
+				{
+					errorMessage = "803: Text record missing valid number of modifications.";
+					add = false;
+				}
 				//check for mod low
 				if(theRecordsForTextMod.text.modLow>16 || theRecordsForTextMod.text.modLow<0)
 				{
-					error.reportError(makeError("invalidMods"),0,0);
-					return;
+					errorMessage = "803: Text record missing valid number of modifications.";
+					add = false;
 				}
 				// some kind of error checking
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
-				if (!reader.go("disreguard"))
-					return;
+				theRecordsForTextMod.text.textRecord = theRecordsForTextMod.text.textRecord + ":" + ender + ":\n" + errorMessage;
+				errorMessage = "";
+//				if (!reader.go("disreguard"))
+//					return;
 				if(!ender.equals(this.progName)){
 					error.reportWarning(makeError("noMatch"), 0, 0);
 				}
@@ -285,13 +335,17 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					ModRecord modification = new ModRecord();
 					mod++;
 					modification.hex = reader.readInt(ScanWrap.hex4, "modHex", 16);
+					theRecordsForTextMod.text.modRecord = theRecordsForTextMod.text.modRecord + "M:" + modification.hex + ":";
 					if (!reader.go("disreguard"))
-						return;
+					{
+						errorMessage = "804: Modification record missing 4 hex nybbles.";
+						add = false;
+					}
 					//error checking
 					isValid = OperandChecker.isValidMem(modification.hex);
 					if(!isValid){
-						error.reportError(makeError("invalidValue"),0,0);
-						return;
+						errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+						add = false;
 					}
 					boolean run = true;
 					String loop = "";
@@ -305,29 +359,44 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						}else{
 						midtemp.plusMin = loop.charAt(0);
 						}
+						theRecordsForTextMod.text.modRecord = theRecordsForTextMod.text.modRecord +":"+ midtemp.plusMin + ":";
 						if (!reader.go("disreguard"))
-							return;
+						{
+							errorMessage = "805: Modification record missing plus or minus sign.";
+							add = false;
+						}
 						//error checking
 						isValid = OperandChecker.isValidPlusMin(midtemp.plusMin);
 						if(!isValid){
-							error.reportError(makeError("invalidPlus"),0,0);
-							return;
+							errorMessage = "812: Modification records must contain plus or minus sign.";
+							add = false;
 						}
 						midtemp.addrType = reader.readString(ScanWrap.notcolon,
 								"modFlag").charAt(0);
+						theRecordsForTextMod.text.modRecord = theRecordsForTextMod.text.modRecord +":"+ midtemp.addrType + ":";
 						if (!reader.go("disreguard"))
-							return;
+						{
+							errorMessage = "806: Modification record missing correct flag R, E, or N.";
+							add = false;
+						}
 						if(!(midtemp.addrType == 'E' || midtemp.addrType == 'R' || midtemp.addrType == 'N')){
-							error.reportError(makeError("modFlag"), 0, 0);
+							errorMessage = "806: Modification record missing correct flag R, E, or N.";
 							add = false;
 						}
 						midtemp.linkerLabel = reader.readString(
 								ScanWrap.notcolon, "modLink");
+						theRecordsForTextMod.text.modRecord = theRecordsForTextMod.text.modRecord +":"+ midtemp.linkerLabel + ":";
 						if (!reader.go("disreguard"))
-							return;
+						{
+							errorMessage = "807: Modification record missing valid label for address.";
+							add = false;
+						}
 						loop = reader.readString(ScanWrap.notcolon, "modHLS");
 						if (!reader.go("disreguard"))
-							return;
+						{
+							errorMessage = "808: Modification record missing correct char H, L, or S.";
+							add = false;
+						}
 						if (loop.equals("")) {
 							run = false;
 						}
@@ -335,73 +404,85 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					}
 					loop = reader.readString(ScanWrap.notcolon, "modHLS");
 					if (!reader.go("disreguard"))
-						return;
-					modification.HLS = loop.charAt(0);
-					if(!(modification.HLS == 'H' || modification.HLS == 'L' || modification.HLS == 'S')){
-						error.reportError(makeError("modHLS"), 0, 0);
+					{
+						errorMessage = "808: Modification record missing correct char H, L, or S.";
 						add = false;
+					}
+					modification.HLS = loop.charAt(0);
+					theRecordsForTextMod.text.modRecord = theRecordsForTextMod.text.modRecord +":"+ modification.HLS + ":";
+					if(!(modification.HLS == 'H' || modification.HLS == 'L' || modification.HLS == 'S')){
+						errorMessage = "808: Modification record missing correct char H, L, or S.";
+							add = false;
 					}
 					// some kind of error checking
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
-					if (!reader.go("disreguard"))
-						return;
+					theRecordsForTextMod.text.modRecord = theRecordsForTextMod.text.modRecord +":"+ ender + ":\n" + errorMessage;
+//					if (!reader.go("disreguard"))
+//						return;
 					if(!ender.equals(this.progName)){
 						error.reportWarning(makeError("noMatch"), 0, 0);
 					}
 					theRecordsForTextMod.mods.add(modification);
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
-						return;
+					{
+						errorMessage = "809: Invalid Record. Records must start with valid record character.";
+						add = false;
+					}
 				}// end of mod record
 				if(add){
 					textMod.add(theRecordsForTextMod);
 				}else{
+					errorText.add(theRecordsForTextMod.text);
 					add = true;
 				}
 			}// end of text record
+			
 		}//end of while loop checking for linking records and text records
 
 		//checks for an end record
 		if (check.equals("E")) {
 			this.endRec = reader.readInt(ScanWrap.hex4, "endRecords", 16);
+			this.endRecord = "E:" + this.endRec + ":";
 			if (!reader.go("disreguard"))
-				return;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			//error checking
 			isValid = OperandChecker.isValidMem(this.endRec);
 			if(!isValid){
-				error.reportError(makeError("invalidValue"),0,0);
-				return;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			}
 			this.endLink = reader.readInt(ScanWrap.hex4, "endRecords", 16);
+			this.endRecord = this.endRecord + ":" + this.endLink + ":";
 			if (!reader.go("disreguard"))
-				return;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			//error checking
 			isValid = OperandChecker.isValidMem(this.endLink);
 			if(!isValid){
-				error.reportError(makeError("invalidValue"),0,0);
-				return;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			}
 			this.endText = reader.readInt(ScanWrap.hex4, "endRecords", 16);
+			this.endRecord = this.endRecord + ":" + this.endText + ":";
 			if (!reader.go("disreguard"))
-				return;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			//error checking
 			isValid = OperandChecker.isValidMem(this.endText);
 			if(!isValid){
-				error.reportError(makeError("invalidValue"),0,0);
-				return;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			}
 			this.endMod = reader.readInt(ScanWrap.hex4, "endRecords", 16);
+			this.endRecord = this.endRecord + ":" + this.endMod + ":";
 			if (!reader.go("disreguard"))
-				return;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			//error checking
 			isValid = OperandChecker.isValidMem(this.endMod);
 			if(!isValid){
-				error.reportError(makeError("invalidValue"),0,0);
-				return;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";;
 			}
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
-			if (!reader.go("disreguard"))
-				return;
+			this.endRecord = this.endRecord + ":" + ender +":\n" + errorMessage;
+			//error checking
+//			if (!reader.go("disreguard"))
+//				return;
 			if(!ender.equals(this.progName)){
 				error.reportWarning(makeError("noMatch"), 0, 0);
 			}

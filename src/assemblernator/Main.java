@@ -1,19 +1,11 @@
 package assemblernator;
 
 import guinator.GUIMain;
-import instructions.USI_EQU;
-import instructions.USI_EXT;
-import instructions.USI_SND;
-import instructions.USI_NUM;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import assemblernator.ErrorReporting.DefaultErrorHandler;
-import assemblernator.Instruction.Operand;
-import assemblernator.Instruction.Usage;
-import assemblernator.Module.Value;
-import assemblernator.Module.Value.BitLocation;
 
 /**
  * @file Main.java
@@ -31,52 +23,6 @@ public class Main {
 	 *            System-passed arguments to handle.
 	 */
 	public static void main(String[] args) {
-		System.out.println(IOFormat.formatHexInteger(Integer.MIN_VALUE, 8));
-		System.out.println(Integer.parseInt("-2147483648"));
-		
-		Module m = new Module();
-		String num[] = new String[] { "zero", "one", "two", "three", "four",
-				"five", "six", "seven" };
-		for (int i = 0; i < num.length; i++) {
-			Instruction in = USI_EQU.getInstance().getNewInstance();
-			in.label = num[i];
-			((USI_EQU) in).value = new Value(i, 'A');
-			in.usage = Usage.EQUATE;
-			m.getSymbolTable().addEntry(in, null);
-		}
-
-		{
-			Instruction in = USI_EXT.getInstance().getNewInstance();
-			for (int i = 0; i < 10; ++i)
-				in.operands.add(new Operand("LR", "exlabel" + i, 0, 0));
-			in.usage = Usage.EXTERNAL;
-			m.getSymbolTable().addEntry(in, null);
-			for (int i = 0; i < 10; ++i) {
-				in = USI_NUM.getInstance().getNewInstance();
-				in.label = "rlabel" + i;
-				in.usage = Usage.LABEL;
-				in.lc = i;
-				m.getSymbolTable().addEntry(in, null);
-			}
-		}
-
-		String x[] = new String[] { "1+1+2+3-5", "1+1", "1+1-1", "1+1+1",
-				"1+1+1+1+1-2", "1 + 3 + 5 + 7 - 2", "1 + 3 - 2 + 5 + 7 - 2",
-				"one + one", "two + two", "six + one", "two + six - one",
-				"one + two + 4 + six - 5 -one+8+*+ 0 + * + *", "rlabel1",
-				"rlabel1 + rlabel3", "rlabel5-rlabel1", "exlabel1",
-				"exlabel1-rlabel1", "exlabel1-rlabel1+rlabel2",
-				"exlabel1 + exlabel2", "exlabel1 + exlabel2 - exlabel2",
-				"exlabel2 + 10 - exlabel2" };
-		for (int i = 0; i < x.length; i++) {
-			Value a = m.evaluate(x[i], true, BitLocation.Literal, new DefaultErrorHandler(), USI_EQU
-					.getInstance().getNewInstance(), 0);
-			System.out.println(x[i] + " = " + a.value + ", flag = " + a.arec);
-		}
-
-
-		USI_SND.test();
-
 		if (args.length < 1) {
 			System.out.println("URBAN Legend v" + Assembler.VERSION);
 			System.out
