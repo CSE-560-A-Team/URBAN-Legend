@@ -5,6 +5,9 @@ import static assemblernator.Module.Value.BitLocation.Address;
 import static assemblernator.Module.Value.BitLocation.Other;
 import static assemblernator.OperandChecker.isValidMem;
 import static assemblernator.OperandChecker.isValidNumWords;
+
+import java.util.ArrayList;
+
 import simulanator.Deformatter;
 import simulanator.Deformatter.OpcodeBreakdown;
 import simulanator.Machine;
@@ -96,13 +99,21 @@ public class USI_PRINTF extends AbstractInstruction {
 	 */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		if (givnStr == null) {
-			Operand dm = getOperandData("DM");
-			Value v = module.evaluate(dm.expression, true, Address, hErr, this,
-					this.getOperandData("DM").valueStartPosition);
+			Operand fm = getOperandData("FM");
+			Value v = module.evaluate(fm.expression, true, Address, hErr, this,
+					fm.valueStartPosition);
+
 			if (!isValidMem(v.value)) {
-				hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()),
+				hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()),
 						this.lineNum, -1);
 				return false;
+			}
+			fm.value = v;
+
+			if (!hasOperand("NW")) {
+				Operand fnw = new Operand("NW", "0", 0, 0);
+				fnw.value = new Value(0, 'A');
+				operands.add(fnw);
 			}
 			addr = v.value;
 		}
@@ -129,10 +140,9 @@ public class USI_PRINTF extends AbstractInstruction {
 			for (int i = 0; i < subassembly.length; ++i)
 				assembly[i + 1] = subassembly[i];
 		}
-		else {
-			assembly = new int[1];
-			assembly[0] = InstructionFormatter.formatSrcMem(this)[0];
-		}
+		else
+			assembly = InstructionFormatter.formatSrcMem(this);
+		
 		return assembly;
 	}
 
@@ -141,13 +151,33 @@ public class USI_PRINTF extends AbstractInstruction {
 		OpcodeBreakdown breakDown = Deformatter.breakDownSrcRange(instruction);
 		int addr = breakDown.getEffectiveSrcAddress(machine);
 		int nw = breakDown.numWords;
-		byte[] b = new byte[nw << 2];
-		for (int i = 0; i < nw; ++i) {
-			int a = machine.getMemory(addr + i);
-			b[(i << 2) + 0] = ((byte) ((a & 0xFF000000) >>> 24));
-			b[(i << 2) + 1] = ((byte) ((a & 0x00FF0000) >>> 16));
-			b[(i << 2) + 2] = ((byte) ((a & 0x0000FF00) >>> 8));
-			b[(i << 2) + 3] = ((byte) ((a & 0x000000FF) >>> 0));
+		byte[] b;
+		if (nw == 0) {
+			ArrayList<Byte> bal = new ArrayList<Byte>();
+			for (int i = 0; i < 4096; ++i) {
+				int a = machine.getMemory(addr + i);
+				final int ni = i << 2;
+				bal.add((byte) ((a & 0xFF000000) >>> 24));
+				bal.add((byte) ((a & 0x00FF0000) >>> 16));
+				bal.add((byte) ((a & 0x0000FF00) >>> 8));
+				bal.add((byte) ((a & 0x000000FF) >>> 0));
+				if (bal.get(ni + 3) == 0 || bal.get(ni + 2) == 0 || bal.get(ni + 1) == 0
+						|| bal.get(ni) == 0)
+					break;
+			}
+			b = new byte[bal.size()];
+			for (int j = 0; j < bal.size(); ++j)
+				b[j] = bal.get(j);
+		}
+		else {
+			b = new byte[nw << 2];
+			for (int i = 0; i < nw; ++i) {
+				int a = machine.getMemory(addr + i);
+				b[(i << 2) + 0] = ((byte) ((a & 0xFF000000) >>> 24));
+				b[(i << 2) + 1] = ((byte) ((a & 0x00FF0000) >>> 16));
+				b[(i << 2) + 2] = ((byte) ((a & 0x0000FF00) >>> 8));
+				b[(i << 2) + 3] = ((byte) ((a & 0x000000FF) >>> 0));
+			}
 		}
 		StringBuilder raw = new StringBuilder(new String(b));
 		for (int i = 0; i < raw.length() - 1; ++i) {
