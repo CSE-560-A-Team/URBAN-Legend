@@ -187,7 +187,6 @@ public class Linker {
 	public static void link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
 		Map<String, Integer> linkerTable = new HashMap<String, Integer>();
 		boolean isValid = true;
-		String error;
 		//sort the modules by order of address of modules.
 		Arrays.sort(modules);
 		
@@ -197,6 +196,7 @@ public class Linker {
 			int totalTextRecords = 0;
 			int execStartAddr = modules[0].execStart;
 			int offset = 0;
+			int execStartErrorModule = 0;
 			modules[0].offset = offset;
 			//linkerTable.putAll(modules[0].linkRecord);// put all link records from first module.
 			for(Map.Entry<String, Integer> lr : modules[0].linkRecord.entrySet()) {
@@ -206,7 +206,6 @@ public class Linker {
 						"\t" + "Offset: " + offset + 
 						"\t" + "Adjusted Address: " + (lr.getValue() + offset) + "\n";
 				linkerTable.put(lr.getKey(), lr.getValue());
-				
 			}
 			//calc offset and adjust prog, linker record addr, and text record addr by offset.
 			//add LinkerModule with adjusted addresses to offsetModules.
@@ -223,6 +222,7 @@ public class Linker {
 					totalLen += modules[i+1].prgTotalLen;
 					if(modules[i+1].execStart > execStartAddr) {
 						execStartAddr = modules[i+1].execStart;
+						execStartErrorModule = i+1; //record module in which exec start was last updated.
 					}
 					//put all linker records of current module into linker table with offset.
 					for(Map.Entry<String, Integer> lr : modules[i+1].linkRecord.entrySet()) {
@@ -234,13 +234,23 @@ public class Linker {
 									"\t" + "Adjusted Address: " + (lr.getValue() + offset) + "\n";
 							linkerTable.put(lr.getKey(), lr.getValue() + offset);
 						} else {
+							//error: duplicate label for linking records.
 							hErr.reportError(makeError("dupLbl"), -1, -1);
+							modules[i+1].userRep.addType = LinkerModule.AddType.LINKER;
+							modules[i+1].userRep.add(lr.getValue(), makeError("dupLbl") + "\n");
 						}
 					}
 				}
-				
 				modules[i+1].offset = offset;
 			}
+			
+			//error invalid exec start.
+			if(execStartAddr > (modules[0].loadAddr + totalLen) || execStartAddr < modules[0].loadAddr) {
+				modules[execStartErrorModule].userRep.addType = LinkerModule.AddType.HEADER;
+				modules[execStartErrorModule].userRep.add(makeError("execStart") + "\n");
+				return;
+			}
+			
 			try {
 				//write header record.
 				out.write(LoaderHeader(modules[0].progName, modules[0].loadAddr, execStartAddr, totalLen, modules[0].date, modules[0].version));
@@ -249,6 +259,7 @@ public class Linker {
 					//iterate through entries in text and mod record map of a linker module.
 					for(LinkerModule.TextModRecord textMod
 							: offMod.textMod) {
+						int origLC = textMod.text.assignedLC; //used for error reporting.
 						textMod.text.assignedLC += offMod.offset; //offset text lc.
 						//if both high and low flags are 'A', no adjustments is necessary.
 						if(!(textMod.text.flagHigh == 'A' && textMod.text.flagLow == 'A')) {
@@ -286,6 +297,8 @@ public class Linker {
 										} else {
 											isValid = false;
 											hErr.reportError(makeError("noLbl"), -1, -1);
+											offMod.userRep.addType = LinkerModule.AddType.TEXT;
+											offMod.userRep.add(origLC, makeError("noLbl", midMod.linkerLabel) + "\n");
 											continue;
 										}
 									} else if(midMod.addrType == 'N') { 
@@ -344,15 +357,14 @@ public class Linker {
 										opcode &= (~memMaskLow); 
 									} else {
 										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-										error = makeError("lnkOORAddr");
-										textMod.text.textRecord = textMod.text.textRecord + error + "\n";
-										offMod.errorText.add(textMod.text);
+										offMod.userRep.addType = LinkerModule.AddType.TEXT;
+										offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
 									}
 								} else {
 									hErr.reportError(makeError("lnkOORLit12"), -1, -1);
-									error = makeError("lnkOORLit12");
-									textMod.text.textRecord = textMod.text.textRecord + error + "\n";
-									offMod.errorText.add(textMod.text);
+									offMod.userRep.addType = LinkerModule.AddType.TEXT;
+									offMod.userRep.add(origLC, makeError("lnkOORLit12") + "\n");
+									
 								}
 							} else if(litBit == '1') {
 								//get low literal value.
@@ -369,9 +381,8 @@ public class Linker {
 									opcode &= (~litMaskLow); 
 								} else {
 									hErr.reportError(makeError("lnkOORLit16"), -1, -1);
-									error = makeError("lnkOORLit16");
-									textMod.text.textRecord = textMod.text.textRecord + error + "\n";
-									offMod.errorText.add(textMod.text);
+									offMod.userRep.addType = LinkerModule.AddType.TEXT;
+									offMod.userRep.add(origLC, makeError("lnkOORLit16") + "\n");
 								}
 							} else if(formatBit == '1') {
 								//get high value.
@@ -401,15 +412,13 @@ public class Linker {
 										opcode &= (~memMaskLow); 
 									} else {
 										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-										error = makeError("lnkOORAddr");
-										textMod.text.textRecord = textMod.text.textRecord + error + "\n";
-										offMod.errorText.add(textMod.text);
+										offMod.userRep.addType = LinkerModule.AddType.TEXT;
+										offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
 									}
 								} else {
 									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-									error = makeError("lnkOORAddr");
-									textMod.text.textRecord = textMod.text.textRecord + error + "\n";
-									offMod.errorText.add(textMod.text);
+									offMod.userRep.addType = LinkerModule.AddType.TEXT;
+									offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
 								}
 							} else {
 								//get low memory value.
@@ -426,9 +435,8 @@ public class Linker {
 									opcode &= (~memMaskLow); 
 								} else {
 									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
-									error = makeError("lnkOORAddr");
-									textMod.text.textRecord = textMod.text.textRecord + error + "\n";
-									offMod.errorText.add(textMod.text);
+									offMod.userRep.addType = LinkerModule.AddType.TEXT;
+									offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
 								}
 							} 
 							
@@ -455,6 +463,9 @@ public class Linker {
 				//write end record
 				totalRecords += totalTextRecords;
 				out.write(LoaderEnd(totalRecords, totalTextRecords, modules[0].progName));
+				for(LinkerModule offMod : modules) {
+					System.out.println(offMod);
+				}
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
 				e.printStackTrace();

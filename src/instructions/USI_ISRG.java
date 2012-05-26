@@ -1,7 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatDestRange;
+import static assemblernator.InstructionFormatter.formatSrcMem;
 import static assemblernator.OperandChecker.isValidIndex;
 import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
@@ -10,6 +10,8 @@ import static assemblernator.OperandChecker.isValidReg;
 import static assemblernator.Module.Value.BitLocation.Literal;
 import static assemblernator.Module.Value.BitLocation.Address;
 import static assemblernator.Module.Value.BitLocation.Other;
+import simulanator.Deformatter;
+import simulanator.Deformatter.OpcodeBreakdown;
 import simulanator.Machine;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
@@ -115,12 +117,22 @@ public class USI_ISRG extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return formatDestRange(this);
+		return formatSrcMem(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		/*
+		OpcodeBreakdown brkdwn = Deformatter.breakDownDestRange(instruction);
+		int addr = source;
+		System.err.println(addr);
+		int word = 0;
+		//sum contents of memory from addr to addr + nw.
+		for(int i = 0; i < brkdwn.numWords; ++i) {
+			word += machine.getMemory(addr + i);
+		}
+		brkdwn.putToDest(word, machine);
+		*/
 	}
 
 	// =========================================================
