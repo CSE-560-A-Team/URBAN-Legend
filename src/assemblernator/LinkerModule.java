@@ -40,7 +40,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 	 * @author Noah
 	 * @date May 25, 2012; 7:09:53 PM
 	 */
-	private class UserReport {
+	public class UserReport {
 		/** what type of record being added to */
 		public AddType addType = AddType.HEADER;
 		/** the object file code for header record + errors in header record. */
