@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeMap;
 
 import assemblernator.ErrorReporting.ErrorHandler;
@@ -274,7 +273,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			this.loadAddr = reader.readInt(ScanWrap.hex4, "loaderHNoAddr", 16);
 			if (!reader.go("disreguard"))
 				return;
-			//error checking
 			isValid = OperandChecker.isValidMem(this.loadAddr);
 			if(!isValid){
 				error.reportError(makeError("invalidValue"),0,0);
@@ -468,7 +466,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				//end of text record
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if(!ender.equals(this.progName)){
-					error.reportWarning(makeError("noMatch"), 0, 0);
 					errorMessage = "Label does not match Program Name.";
 				}
 				completeString = completeString + ":" + ender + ":\n" + errorMessage +"\n";
@@ -567,17 +564,14 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					
 					//End of Modification Record
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
-					completeString = completeString +":"+ ender + ":\n" + errorMessage + "\n";
 					if(!ender.equals(this.progName)){
-						error.reportWarning(makeError("noMatch"), 0, 0);
+						errorMessage = "Label does not match Program Name.";
 					}
 					theRecordsForTextMod.mods.add(modification);
+					completeString = completeString +":"+ ender + ":\n" + errorMessage + "\n";
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
-					{
-						errorMessage = "809: Invalid Record. Records must start with valid record character.";
-						add = false;
-					}
+						return;
 				}// end of mod record
 				
 				//Adds to the User Report and linkerModule
@@ -635,13 +629,13 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			}
 			//End of end records
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
+			if(!ender.equals(this.progName)){
+				errorMessage = "Label does not match Program Name.";
+			}
 			completeString = completeString + ":" + ender +":\n" + errorMessage;
 			//adds info to user Report
 			this.userRep.addType = AddType.END;
 			this.userRep.add(completeString);
-			if(!ender.equals(this.progName)){
-				error.reportWarning(makeError("noMatch"), 0, 0);
-			}
 		}else{
 			error.reportError(makeError("loaderNoEnd"),0,0); 
 			return;
