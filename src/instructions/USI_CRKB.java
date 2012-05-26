@@ -37,13 +37,13 @@ public class USI_CRKB extends UIG_IO {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override 
 	public void execute(int instruction, Machine machine) {
-		OpcodeBreakdown breakDown = Deformatter.breakDownSrcRange(instruction);
-		int addr = breakDown.getEffectiveDestAddress(machine);
+		OpcodeBreakdown breakDown = Deformatter.breakDownDestRange(instruction);
 		int nw = breakDown.numWords;
+		int word;
 		for (int i = 0; i < nw; ++i) {
-			machine.input.getString();
+			word = Integer.valueOf(machine.input.getString());
+			breakDown.putToDest(word, machine);
 		}
-		
 	}
 
 	// =========================================================

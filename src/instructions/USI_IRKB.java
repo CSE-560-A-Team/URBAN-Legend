@@ -35,8 +35,7 @@ public class USI_IRKB extends UIG_IO {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		OpcodeBreakdown breakDown = Deformatter.breakDownSrcRange(instruction);
-		int addr = breakDown.getEffectiveDestAddress(machine);
+		OpcodeBreakdown breakDown = Deformatter.breakDownDestRange(instruction);
 		int nw = breakDown.numWords;
 		int word;
 		for (int i = 0; i < nw; ++i) {
