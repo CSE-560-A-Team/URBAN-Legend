@@ -187,7 +187,6 @@ public class Linker {
 	public static void link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
 		Map<String, Integer> linkerTable = new HashMap<String, Integer>();
 		boolean isValid = true;
-		String error;
 		//sort the modules by order of address of modules.
 		Arrays.sort(modules);
 		
@@ -242,15 +241,16 @@ public class Linker {
 						}
 					}
 				}
-				//error invalid exec start.
-				if(execStartAddr > modules[0].loadAddr + totalLen || execStartAddr < modules[0].loadAddr) {
-					modules[execStartErrorModule].userRep.addType = LinkerModule.AddType.HEADER;
-					modules[execStartErrorModule].userRep.add(makeError("execStart"));
-					return;
-				}
-				
 				modules[i+1].offset = offset;
 			}
+			
+			//error invalid exec start.
+			if(execStartAddr > (modules[0].loadAddr + totalLen) || execStartAddr < modules[0].loadAddr) {
+				modules[execStartErrorModule].userRep.addType = LinkerModule.AddType.HEADER;
+				modules[execStartErrorModule].userRep.add(makeError("execStart") + "\n");
+				return;
+			}
+			
 			try {
 				//write header record.
 				out.write(LoaderHeader(modules[0].progName, modules[0].loadAddr, execStartAddr, totalLen, modules[0].date, modules[0].version));
@@ -298,7 +298,7 @@ public class Linker {
 											isValid = false;
 											hErr.reportError(makeError("noLbl"), -1, -1);
 											offMod.userRep.addType = LinkerModule.AddType.TEXT;
-											offMod.userRep.add(origLC, makeError("noLbl") + "\n");
+											offMod.userRep.add(origLC, makeError("noLbl", midMod.linkerLabel) + "\n");
 											continue;
 										}
 									} else if(midMod.addrType == 'N') { 
