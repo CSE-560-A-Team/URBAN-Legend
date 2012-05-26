@@ -41,7 +41,6 @@ public class USI_IRKB extends UIG_IO {
 		int word;
 		for (int i = 0; i < nw; ++i) {
 			word = Integer.parseInt(machine.input.getString());
-			machine.setMemory(addr+ i, word);
 			breakDown.putToDest(word, machine);
 		}
 	}
