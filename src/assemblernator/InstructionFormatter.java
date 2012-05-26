@@ -242,7 +242,7 @@ public class InstructionFormatter {
 		String fmt;
 		String nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value.value, 4);
 		String dest;
-		String ixr = "0000";
+		String ixr = "";
 		String memLit; 
 		int[] assembled = new int[1];
 		
@@ -255,11 +255,13 @@ public class InstructionFormatter {
 			}
 		} else {
 			fmt = "00";
+			memLit = IOFormat.formatBinInteger(instr.getOperandData("FM").value.value, 12);
 			if(instr.hasOperand("FX")) {
 				ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value.value, 4);
+			} else {
+				ixr = "0000";
 			}
 			
-			memLit = IOFormat.formatBinInteger(instr.getOperandData("FM").value.value, 12);
 		}
 		
 		if(instr.hasOperand("DR")) {

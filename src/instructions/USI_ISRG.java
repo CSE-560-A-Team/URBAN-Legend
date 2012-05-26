@@ -118,7 +118,6 @@ public class USI_ISRG extends AbstractInstruction {
 			word += machine.getMemory(addr + i);
 		}
 		brkdwn.putToDest(word, machine);
-		
 	}
 
 	// =========================================================
