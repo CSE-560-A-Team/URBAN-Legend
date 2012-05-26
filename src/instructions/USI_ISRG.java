@@ -78,21 +78,9 @@ public class USI_ISRG extends AbstractInstruction {
 							isValid = isValidMem(value.value);
 							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
 							this.getOperandData("FM").value = value;
-						}
-//						else if(this.hasOperand("FL")) {
-//							value = module.evaluate(this.getOperand("FL"), false, Literal, hErr, this, this.getOperandData("FL").valueStartPosition);
-//							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
-//							if(!isValid) hErr.reportError(makeError("OORmemAddr", "FL", this.getOpId()), this.lineNum, -1);
-//							this.getOperandData("FL").value = value;
-//						} 
-						else if(this.hasOperand("EX")) {
-							value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").valueStartPosition);
-							isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
-							if(!isValid) hErr.reportError(makeError("OORmemAddr", "EX", this.getOpId()), this.lineNum, -1);
-							this.getOperandData("EX").value = value;
 						} else {
 							isValid = false;
-							hErr.reportError(makeError("instructionMissingOp3", this.getOpId(), "FM", "FL", "EX"), this.lineNum, -1);
+							hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "FM"), this.lineNum, -1);
 						}
 					}
 				} else {
@@ -122,17 +110,15 @@ public class USI_ISRG extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		/*
-		OpcodeBreakdown brkdwn = Deformatter.breakDownDestRange(instruction);
-		int addr = source;
-		System.err.println(addr);
+		OpcodeBreakdown brkdwn = Deformatter.breakDownSrcRange(instruction);
+		int addr = brkdwn.source;
 		int word = 0;
 		//sum contents of memory from addr to addr + nw.
 		for(int i = 0; i < brkdwn.numWords; ++i) {
 			word += machine.getMemory(addr + i);
 		}
 		brkdwn.putToDest(word, machine);
-		*/
+		
 	}
 
 	// =========================================================

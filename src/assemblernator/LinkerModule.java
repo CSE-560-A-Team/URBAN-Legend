@@ -46,13 +46,13 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		/** what type of record being added to */
 		public AddType addType = AddType.HEADER;
 		/** the object file code for header record + errors in header record. */
-		private String headerRecord;
+		private String headerRecord = "";
 		/** the object file codes for linker records + errors in the linker records. */
 		private Map<Integer, String> linkerRecords = new TreeMap<Integer, String>(); 
 		/** the object file codes for text records + errors in the text records. */
 		private Map<Integer, String> textRecords = new TreeMap<Integer, String>(); 
 		/** the object file code for end record + errors in end record. */
-		private String endRecord;
+		private String endRecord = "";
 		
 		/**
 		 * Adds content to the contents of record with addType with the key address.
@@ -72,6 +72,9 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			String newContent;
 			switch(this.addType) {
 			case LINKER:
+				if(this.linkerRecords.get(address) == null) {
+					
+				}
 				newContent = this.linkerRecords.get(address) + content;
 				this.linkerRecords.put(address, newContent);
 			break;
