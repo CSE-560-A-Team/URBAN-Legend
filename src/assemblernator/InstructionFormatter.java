@@ -205,40 +205,20 @@ public class InstructionFormatter {
 	 * @return bit code.
 	 * @specRef N/A
 	 */
-	public static int [] formatDestRange(Instruction instr) {
+	public static int [] formatDestMem(Instruction instr) {
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6);
 		String fmtLit = "00";
 		String nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value.value, 4);
-		String destReg = "0000";
+		String source = "1000";
 		String ixr = "0000";
-		String memLit = "";
+		String mem = IOFormat.formatBinInteger(instr.getOperandData("DM").value.value, 12);;
 		int[] assembled = new int[1];
 		
-		if(instr.hasOperand("FL") || instr.hasOperand("EX")) {
-			fmtLit = "01";
-			if(instr.hasOperand("FL")) {
-				memLit = IOFormat.formatBinInteger(instr.getOperandData("FL").value.value, 16);
-			} else {
-				memLit = IOFormat.formatBinInteger(instr.getOperandData("EX").value.value, 16);
-			}
-		} else if(instr.hasOperand("FM")) {
-			memLit = IOFormat.formatBinInteger(instr.getOperandData("FM").value.value, 12);
-		} else {
-			memLit = IOFormat.formatBinInteger(instr.getOperandData("DM").value.value, 12);
-		}
-		
 		if(instr.hasOperand("DX")) {
-			destReg = "1000";
-			ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value.value, 4);
-		} else if(instr.hasOperand("DR")) {
-			destReg = IOFormat.formatBinInteger(instr.getOperandData("DR").value.value, 4);
+			ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value.value, 4);
 		}
 		
-		if(memLit.length() == 16) {
-			code = code + fmtLit + nw + destReg +  memLit;
-		} else {
-			code = code + fmtLit + nw + destReg + ixr + memLit;
-		}
+		code = code + fmtLit + source + nw + ixr + mem;
 
 		assembled[0] = IOFormat.parseBin32Int(code);
 		return assembled;
@@ -257,32 +237,40 @@ public class InstructionFormatter {
 	 * @return bit code.
 	 * @specRef N/A
 	 */
-	public static int [] formatSrcRange(Instruction instr) {
+	public static int [] formatSrcMem(Instruction instr) {
 		String code = IOFormat.formatBinInteger(instr.getOpcode(), 6); //e.g. 011000
 		String fmt;
 		String nw = IOFormat.formatBinInteger(instr.getOperandData("NW").value.value, 4);
+		String dest;
 		String ixr = "0000";
-		int mem; 
+		String memLit; 
 		int[] assembled = new int[1];
 		
 		if(instr.hasOperand("FL") || instr.hasOperand("EX")) {
 			fmt = "01";
 			if(instr.hasOperand("FL")) {
-				mem = instr.getOperandData("FL").value.value;
+				memLit = IOFormat.formatBinInteger(instr.getOperandData("FL").value.value, 16);
 			} else {
-				mem = instr.getOperandData("EX").value.value;
+				memLit = IOFormat.formatBinInteger(instr.getOperandData("EX").value.value, 16);
 			}
-			code = code + fmt + "1000" + nw + IOFormat.formatBinInteger(mem, 16); 
-		} else { 
+		} else {
 			fmt = "00";
-			mem = instr.getOperandData("FM").value.value; //mem = value of fm operand.
-	
-			if(instr.hasOperand("FX")) { //operand = {DM, NW, DX}
-				 ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value.value, 4); //get index register decimal then format into binary integer string.
+			if(instr.hasOperand("FX")) {
+				ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value.value, 4);
 			}
 			
-			code = code + fmt + "1000"+  nw + ixr +  IOFormat.formatBinInteger(mem, 12); 
+			memLit = IOFormat.formatBinInteger(instr.getOperandData("FL").value.value, 12);
 		}
+		
+		if(instr.hasOperand("DR")) {
+			dest = IOFormat.formatBinInteger(instr.getOperandData("DR").value.value, 4);
+		} else if(instr.hasOperand("DX")){
+			dest = "1" + IOFormat.formatBinInteger(instr.getOperandData("DX").value.value, 3);
+		} else {
+			dest = "1000";
+		}
+		
+		code = code + fmt + nw + dest + ixr + memLit;
 		
 		assembled[0] = IOFormat.parseBin32Int(code);
 		return assembled;
