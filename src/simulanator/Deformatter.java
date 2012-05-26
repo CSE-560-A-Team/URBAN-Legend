@@ -355,7 +355,7 @@ public class Deformatter {
 	 * @return The breakdown.
 	 */
 	public static OpcodeBreakdown breakDownSrcRange(int instruction) {
-		return breakDownGeneric(instruction, false, false, true);
+		return breakDownGeneric(instruction, false, true, false);
 	}
 
 	/**
@@ -366,6 +366,6 @@ public class Deformatter {
 	 * @return The breakdown.
 	 */
 	public static OpcodeBreakdown breakDownDestRange(int instruction) {
-		return breakDownGeneric(instruction, false, true, false);
+		return breakDownGeneric(instruction, false, false, true);
 	}
 }
