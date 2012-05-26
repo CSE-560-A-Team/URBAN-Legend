@@ -255,6 +255,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		boolean isValid = true;
 		boolean add = true;
 		boolean addLink = true;
+		boolean addHeader = true;
 		
 		//checks for an H
 		String check = reader.readString(ScanWrap.notcolon, "loaderNoHeader");
@@ -319,14 +320,22 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			completeString = completeString + temp+ ":";
 			
 			//end of the header record
+			String errorMessage = "";
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
-			if (!reader.go("disreguard"))
-				return;
+			if (!reader.go("disreguard")){
+				addHeader = false;
+				errorMessage = "303: Program Name does not match end of record name.";
+			}
 			if(!ender.equals(this.progName)){
-				error.reportWarning(makeError("noMatch"), 0, 0);
+				addHeader = false;
+				errorMessage = "303: Program Name does not match end of record name.";
 			}
 			//Adding info to User Report
-			completeString = completeString + ender + ":";
+			if(addHeader){
+				completeString = completeString + ender + ":\n";
+			}else{
+				completeString = completeString + ender + ":\n" + errorMessage +"\n";
+			}
 			this.userRep.addType = AddType.HEADER;
 			this.userRep.add(completeString);
 		}else{
@@ -379,12 +388,14 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					addLink = false;
 				}
 				//add link record to user report and linkerModule
-				completeString =  completeString + ender + ":\n" +errorMessage;
-				this.userRep.addType = AddType.LINKER;
-				this.userRep.add(entryAddr, completeString);
 				if(addLink){
 				linkRecord.put(entryLabel, entryAddr);
+				completeString =  completeString + ender + ":\n";
+				}else{
+					completeString =  completeString + ender + ":\n" +errorMessage +"\n";
 				}
+				this.userRep.addType = AddType.LINKER;
+				this.userRep.add(entryAddr, completeString);
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 				if (!reader.go("disreguard"))
 					return;
@@ -468,7 +479,11 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				if(!ender.equals(this.progName)){
 					errorMessage = "Label does not match Program Name.";
 				}
-				completeString = completeString + ender + ":\n" + errorMessage +"\n";
+				if(add){
+					completeString = completeString + ender + ":\n";
+				}else{
+					completeString = completeString + ender + ":\n" + errorMessage +"\n";
+				}
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 				if (!reader.go("disreguard"))
 					return;
@@ -568,7 +583,11 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						errorMessage = "Label does not match Program Name.";
 					}
 					theRecordsForTextMod.mods.add(modification);
-					completeString = completeString +ender + ":\n" + errorMessage + "\n";
+					if(add){
+						completeString = completeString +ender + ":\n";
+					}else{
+						completeString = completeString +ender + ":\n" + errorMessage + "\n";	
+					}
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
 						return;
@@ -587,6 +606,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			
 		}//end of while loop checking for linking records and text records
 		
+		boolean addEnd = true;
 		//checks for an end record
 		if (check.equals("E")) {
 			String errorMessage = "";
@@ -594,45 +614,75 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			//Total number of records
 			this.endRec = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			completeString = "E:" + this.endRec + ":";
-			if (!reader.go("disreguard"))
+			if (!reader.go("disreguard")){
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				addEnd = false;
+			}
 			isValid = OperandChecker.isValidMem(this.endRec);
 			if(!isValid){
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				addEnd = false;
 			}
 			//Total number of Link records
 			this.endLink = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			completeString = completeString + this.endLink + ":";
-			if (!reader.go("disreguard"))
+			if (!reader.go("disreguard")){
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				addEnd = false;
+			}
 			isValid = OperandChecker.isValidMem(this.endLink);
 			if(!isValid){
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				addEnd = false;
 			}
 			//Total number of Text Records
 			this.endText = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			completeString = completeString + this.endText + ":";
-			if (!reader.go("disreguard"))
+			if (!reader.go("disreguard")){
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				addEnd = false;
+			}
 			isValid = OperandChecker.isValidMem(this.endText);
 			if(!isValid){
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				addEnd = false;
 			}
 			//Total number of Modification Records
 			this.endMod = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			completeString = completeString + this.endMod + ":";
-			if (!reader.go("disreguard"))
+			if (!reader.go("disreguard")){
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				addEnd = false;
+			}
 			isValid = OperandChecker.isValidMem(this.endMod);
 			if(!isValid){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";;
+				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				addEnd = false;
 			}
 			//End of end records
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if(!ender.equals(this.progName)){
 				errorMessage = "Label does not match Program Name.";
+				addEnd = false;
 			}
-			completeString = completeString + ender +":\n" + errorMessage;
+			if(link != this.endLink){
+				errorMessage = "304: Number of link records does not match end record amount.";
+				addEnd = false;
+			}else if(text != this.endText){
+				errorMessage = "306: Number of text records does not match end record amount.";
+				addEnd = false;
+			}else if(mod != this.endMod){
+				errorMessage = "305: Number of modification records does not match end record amount.";
+				addEnd = false;
+			}else if((link+text+mod+2) != this.endRec){
+				errorMessage = "307: Number of  total records does not match end record amount."; 
+				addEnd = false;
+			}
+			if(addEnd){
+				completeString = completeString + ender +":\n";
+			}else{
+				completeString = completeString + ender +":\n" + errorMessage + "\n";
+			}
 			//adds info to user Report
 			this.userRep.addType = AddType.END;
 			this.userRep.add(completeString);
@@ -641,16 +691,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			return;
 		}
 
-		//warnings for amount of mod text and link records
-		if(link != this.endLink){
-			error.reportWarning(makeError("linkMatch"), 0, 0);
-		}else if(text != this.endText){
-			error.reportWarning(makeError("textMatch"), 0, 0);
-		}else if(mod != this.endMod){
-			error.reportWarning(makeError("modMatch"), 0, 0); 
-		}else if((link+text+mod+2) != this.endRec){
-			error.reportWarning(makeError("totalMatch"), 0, 0); 
-		}
 		//program ran successful. Checks for more in file
 		this.success = true;
 		if (read.hasNext()) {
