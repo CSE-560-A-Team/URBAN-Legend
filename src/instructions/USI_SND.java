@@ -279,8 +279,8 @@ public class USI_SND extends AbstractInstruction {
 	static class PluckGenerator implements ToneGenerator {
 		/** Generate a sine tone. */
 		@Override public byte[] generate(int freq, int dur, int sps) {
-			// TODO Auto-generated method stub
-			return null;
+			byte[] res = new byte[dur * sps / 1000];
+			return res;
 		}
 	}
 

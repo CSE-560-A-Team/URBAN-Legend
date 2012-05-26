@@ -17,9 +17,7 @@ public class Deformatter {
 		/** An index register. */
 		INDEXREGISTER,
 		/** A memory address. */
-		MEMORY,
-		/** Not usually raw, but raw in this case. */
-		RAW
+		MEMORY
 	}
 
 	/**
@@ -83,10 +81,6 @@ public class Deformatter {
 						(memIXR == 0 ? destination : destination
 								+ mach.getIndexRegister(memIXR)), word);
 				break;
-			case RAW:
-				mach.hErr.reportError(
-						"Simulation error: Cannot put to raw value...", 0, 0);
-				break;
 			default:
 				mach.hErr.reportError(
 						"Simulation error: Invalid destination set...", 0, 0);
@@ -129,11 +123,6 @@ public class Deformatter {
 							0);
 				return mach.getMemory(memIXR == 0 ? source : source
 						+ mach.getIndexRegister(memIXR));
-			case RAW:
-				mach.hErr.reportError(
-						"Simulation error: Cannot read from raw value..."
-								+ " Should be queried directly", 0, 0);
-				return 0;
 			default:
 				mach.hErr.reportError(
 						"Simulation error: Invalid source set...",
@@ -176,10 +165,6 @@ public class Deformatter {
 							0);
 				return mach.getMemory(memIXR == 0 ? destination : destination
 						+ mach.getIndexRegister(memIXR));
-			case RAW:
-				mach.hErr.reportError(
-						"Simulation error: Cannot put to raw value...", 0, 0);
-				return 0;
 			default:
 				mach.hErr.reportError(
 						"Simulation error: Invalid destination set...",
@@ -276,17 +261,17 @@ public class Deformatter {
 	 * @param alwaysliteral
 	 *            True if this is always interpreted as format 0, literal true.
 	 *            Like HLT/DMP.
-	 * @param srcRaw
+	 * @param srcMemNW
 	 *            True if the source nybble is to be interpreted raw, as the
-	 *            number of words.
-	 * @param destRaw
+	 *            number of words, but that it should mean MEMORY.
+	 * @param destMemNW
 	 *            True if the destination nybble is to be interpreted raw, as
-	 *            the number of words.
+	 *            the number of words, but that it should mean MEMORY.
 	 * @return The breakdown of this instruction as formatOther.
 	 * @specRef N/A
 	 */
 	private static OpcodeBreakdown breakDownGeneric(int instruction,
-			boolean alwaysliteral, boolean srcRaw, boolean destRaw) {
+			boolean alwaysliteral, boolean srcMemNW, boolean destMemNW) {
 		OpcodeBreakdown res = new OpcodeBreakdown();
 		if (alwaysliteral)
 			res.literal = true;
@@ -297,47 +282,47 @@ public class Deformatter {
 
 		if (!res.format) // If we're source-destination-data-based
 		{
-			if (srcRaw) {
-				res.sourceKind = Location.RAW;
+			// Determine the source
+
+			if (srcMemNW) {
+				res.sourceKind = Location.MEMORY;
 				res.source = res.numWords = (instruction & RAWSRCBITS) >> SOURCEOFFS;
 			}
-			else // Source is compound boolean + three bit integer
-			{
+			else
 				res.sourceKind = ((instruction & SOURCEKBIT) == 0) ? Location.REGISTER
 						: ((instruction & SOURCEBITS) == 0) ? Location.MEMORY
 								: Location.INDEXREGISTER;
 
-				if (res.sourceKind == Location.MEMORY)
-					if (res.literal)
-						res.source = instruction & ALLDATABITS;
-					else {
-						res.source = instruction & ADDRESSBITS;
-						res.memIXR = (instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS;
-					}
-				else
-					res.source = (instruction & SOURCEBITS) >> SOURCEOFFS;
+			if (res.sourceKind == Location.MEMORY)
+				if (res.literal)
+					res.source = instruction & ALLDATABITS;
+				else {
+					res.source = instruction & ADDRESSBITS;
+					res.memIXR = (instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS;
+				}
+			else
+				res.source = (instruction & SOURCEBITS) >> SOURCEOFFS;
 
-			}
+			// Determine the destination
 
-			if (destRaw) {
-				res.destKind = Location.RAW;
-				res.destination = res.numWords = (instruction & RAWDESTBITS) >> DESTINOFFS;
+			if (destMemNW) {
+				res.destKind = Location.MEMORY;
+				res.numWords = (instruction & RAWDESTBITS) >> DESTINOFFS;
 			}
-			else // Destination is compound boolean + three bit integer
-			{
+			else
 				res.destKind = ((instruction & DESTINKBIT) == 0) ? Location.REGISTER
 						: ((instruction & DESTINBITS) == 0) ? Location.MEMORY
 								: Location.INDEXREGISTER;
-				if (res.destKind == Location.MEMORY)
-					if (res.literal)
-						res.destination = instruction & ALLDATABITS;
-					else {
-						res.destination = instruction & ADDRESSBITS;
-						res.memIXR = (instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS;
-					}
-				else
-					res.destination = (instruction & DESTINBITS) >> DESTINOFFS;
-			}
+
+			if (res.destKind == Location.MEMORY)
+				if (res.literal)
+					res.destination = instruction & ALLDATABITS;
+				else {
+					res.destination = instruction & ADDRESSBITS;
+					res.memIXR = (instruction & ADDRESSIXRBITS) >> ADDRESSIXROFFS;
+				}
+			else
+				res.destination = (instruction & DESTINBITS) >> DESTINOFFS;
 		}
 		else {
 			res.sourceKind = Location.MEMORY;
