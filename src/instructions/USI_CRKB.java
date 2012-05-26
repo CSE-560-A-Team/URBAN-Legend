@@ -1,6 +1,8 @@
 package instructions;
 
+import simulanator.Deformatter;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -35,7 +37,13 @@ public class USI_CRKB extends UIG_IO {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override 
 	public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		OpcodeBreakdown breakDown = Deformatter.breakDownSrcRange(instruction);
+		int addr = breakDown.getEffectiveDestAddress(machine);
+		int nw = breakDown.numWords;
+		for (int i = 0; i < nw; ++i) {
+			machine.input.getString();
+		}
+		
 	}
 
 	// =========================================================
