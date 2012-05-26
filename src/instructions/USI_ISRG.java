@@ -110,17 +110,15 @@ public class USI_ISRG extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		/*
-		OpcodeBreakdown brkdwn = Deformatter.breakDownDestRange(instruction);
-		int addr = source;
-		System.err.println(addr);
+		OpcodeBreakdown brkdwn = Deformatter.breakDownSrcRange(instruction);
+		int addr = brkdwn.source;
 		int word = 0;
 		//sum contents of memory from addr to addr + nw.
 		for(int i = 0; i < brkdwn.numWords; ++i) {
 			word += machine.getMemory(addr + i);
 		}
 		brkdwn.putToDest(word, machine);
-		*/
+		
 	}
 
 	// =========================================================
