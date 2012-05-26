@@ -215,7 +215,7 @@ public class InstructionFormatter {
 		int[] assembled = new int[1];
 		
 		if(instr.hasOperand("DX")) {
-			ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value.value, 4);
+			ixr = IOFormat.formatBinInteger(instr.getOperandData("DX").value.value, 4);
 		}
 		
 		code = code + fmtLit + source + nw + ixr + mem;
@@ -259,7 +259,7 @@ public class InstructionFormatter {
 				ixr = IOFormat.formatBinInteger(instr.getOperandData("FX").value.value, 4);
 			}
 			
-			memLit = IOFormat.formatBinInteger(instr.getOperandData("FL").value.value, 12);
+			memLit = IOFormat.formatBinInteger(instr.getOperandData("FM").value.value, 12);
 		}
 		
 		if(instr.hasOperand("DR")) {
