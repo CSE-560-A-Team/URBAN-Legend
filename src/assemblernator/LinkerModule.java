@@ -278,7 +278,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
 			}
-			completeString = completeString + ":" +this.loadAddr+ ":";
+			completeString = completeString + this.loadAddr+ ":";
 			//total length
 			this.prgTotalLen = reader
 					.readInt(ScanWrap.hex4, "loaderHNoPrL", 16);
@@ -290,7 +290,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
 			}
-			completeString = completeString + ":" +this.prgTotalLen + ":";
+			completeString = completeString + this.prgTotalLen + ":";
 			//excution start
 			this.execStart = reader.readInt(ScanWrap.hex4, "loaderNoEXS", 16);
 			if (!reader.go("disreguard"))
@@ -301,22 +301,22 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				error.reportError(makeError("invalidValue"),0,0);
 				return;
 			}
-			completeString = completeString + ":" +this.execStart+ ":";
+			completeString = completeString + this.execStart+ ":";
 			//date of program
 			this.date = reader.readString(ScanWrap.datep, "loaderHNoDate");
 			if (!reader.go("disreguard"))
 				return;
-			completeString = completeString + ":" +this.date+ ":";
+			completeString = completeString + this.date+ ":";
 			//version of program
 			this.version = reader.readInt(ScanWrap.dec4, "loaderHNoVer", 10);
 			if (!reader.go("disreguard"))
 				return;
-			completeString = completeString + ":" +this.version+ ":";
+			completeString = completeString + this.version+ ":";
 			//filler stuff
 			temp = reader.readString(ScanWrap.notcolon, "loaderHNoLLMM");
 			if (!reader.go("disreguard"))
 				return;
-			completeString = completeString + ":" +temp+ ":";
+			completeString = completeString + temp+ ":";
 			
 			//end of the header record
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
@@ -326,7 +326,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				error.reportWarning(makeError("noMatch"), 0, 0);
 			}
 			//Adding info to User Report
-			completeString = completeString + ":" + ender + ":";
+			completeString = completeString + ender + ":";
 			this.userRep.addType = AddType.HEADER;
 			this.userRep.add(completeString);
 		}else{
@@ -370,7 +370,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 					addLink = false;
 				}
-				completeString = completeString + ":"+ entryAddr + ":";
+				completeString = completeString + entryAddr + ":";
 
 				//end of link record
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
@@ -379,7 +379,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					addLink = false;
 				}
 				//add link record to user report and linkerModule
-				completeString =  completeString + ":"+ ender + ":\n" +errorMessage;
+				completeString =  completeString + ender + ":\n" +errorMessage;
 				this.userRep.addType = AddType.LINKER;
 				this.userRep.add(entryAddr, completeString);
 				if(addLink){
@@ -407,7 +407,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}
 				//assembled hex
 				theRecordsForTextMod.text.instrData = reader.readString(ScanWrap.notcolon, "textData");
-				completeString = completeString + ":" + theRecordsForTextMod.text.instrData+ ":";
+				completeString = completeString + theRecordsForTextMod.text.instrData+ ":";
 				if (!reader.go("disreguard"))
 				{
 					errorMessage = "801: Text record missing valid assembled instruction/data.";
@@ -415,7 +415,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}
 				//flag for high order
 				theRecordsForTextMod.text.flagHigh = reader.readString(ScanWrap.notcolon, "textStatus").charAt(0);
-				completeString = completeString + ":" + theRecordsForTextMod.text.flagHigh + ":";
+				completeString = completeString + theRecordsForTextMod.text.flagHigh + ":";
 				if (!reader.go("disreguard"))
 				{
 					errorMessage = "802: Text record missing valid status flag.";
@@ -427,7 +427,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}		
 				//flag for low order
 				theRecordsForTextMod.text.flagLow = reader.readString(ScanWrap.notcolon, "textStatus").charAt(0);
-				completeString = completeString + ":" + theRecordsForTextMod.text.flagLow + ":";
+				completeString = completeString + theRecordsForTextMod.text.flagLow + ":";
 				if (!reader.go("disreguard"))
 				{
 					errorMessage = "802: Text record missing valid status flag.";
@@ -439,7 +439,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}
 				//mods for high order
 				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
-				completeString = completeString + ":" + theRecordsForTextMod.text.modHigh + ":";
+				completeString = completeString + theRecordsForTextMod.text.modHigh + ":";
 				if (!reader.go("disreguard"))
 				{
 					errorMessage = "803: Text record missing valid number of modifications.";
@@ -452,7 +452,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}
 				//mods for low order
 				theRecordsForTextMod.text.modLow = reader.readInt(ScanWrap.notcolon, "textMod", 16);
-				completeString = completeString + ":" + theRecordsForTextMod.text.modLow + ":";
+				completeString = completeString + theRecordsForTextMod.text.modLow + ":";
 				if (!reader.go("disreguard"))
 				{
 					errorMessage = "803: Text record missing valid number of modifications.";
@@ -468,7 +468,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				if(!ender.equals(this.progName)){
 					errorMessage = "Label does not match Program Name.";
 				}
-				completeString = completeString + ":" + ender + ":\n" + errorMessage +"\n";
+				completeString = completeString + ender + ":\n" + errorMessage +"\n";
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 				if (!reader.go("disreguard"))
 					return;
@@ -503,7 +503,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						}else{
 						midtemp.plusMin = loop.charAt(0);
 						}
-						completeString = completeString +":"+ midtemp.plusMin + ":";
+						completeString = completeString +midtemp.plusMin + ":";
 						if (!reader.go("disreguard"))
 						{
 							errorMessage = "805: Modification record missing plus or minus sign.";
@@ -517,7 +517,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						//Address type
 						midtemp.addrType = reader.readString(ScanWrap.notcolon,
 								"modFlag").charAt(0);
-						completeString = completeString +":"+ midtemp.addrType + ":";
+						completeString = completeString + midtemp.addrType + ":";
 						if (!reader.go("disreguard"))
 						{
 							errorMessage = "806: Modification record missing correct flag R, E, or N.";
@@ -530,7 +530,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						//Linker Label
 						midtemp.linkerLabel = reader.readString(
 								ScanWrap.notcolon, "modLink");
-						completeString = completeString +":"+ midtemp.linkerLabel + ":";
+						completeString = completeString +midtemp.linkerLabel + ":";
 						if (!reader.go("disreguard"))
 						{
 							errorMessage = "807: Modification record missing valid label for address.";
@@ -556,7 +556,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						add = false;
 					}
 					modification.HLS = loop.charAt(0);
-					completeString = completeString +":"+ modification.HLS + ":";
+					completeString = completeString +modification.HLS + ":";
 					if(!(modification.HLS == 'H' || modification.HLS == 'L' || modification.HLS == 'S')){
 						errorMessage = "808: Modification record missing correct char H, L, or S.";
 							add = false;
@@ -568,7 +568,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						errorMessage = "Label does not match Program Name.";
 					}
 					theRecordsForTextMod.mods.add(modification);
-					completeString = completeString +":"+ ender + ":\n" + errorMessage + "\n";
+					completeString = completeString +ender + ":\n" + errorMessage + "\n";
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
 						return;
@@ -602,7 +602,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			}
 			//Total number of Link records
 			this.endLink = reader.readInt(ScanWrap.hex4, "endRecords", 16);
-			completeString = completeString + ":" + this.endLink + ":";
+			completeString = completeString + this.endLink + ":";
 			if (!reader.go("disreguard"))
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			isValid = OperandChecker.isValidMem(this.endLink);
@@ -611,7 +611,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			}
 			//Total number of Text Records
 			this.endText = reader.readInt(ScanWrap.hex4, "endRecords", 16);
-			completeString = completeString + ":" + this.endText + ":";
+			completeString = completeString + this.endText + ":";
 			if (!reader.go("disreguard"))
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			isValid = OperandChecker.isValidMem(this.endText);
@@ -620,7 +620,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			}
 			//Total number of Modification Records
 			this.endMod = reader.readInt(ScanWrap.hex4, "endRecords", 16);
-			completeString = completeString + ":" + this.endMod + ":";
+			completeString = completeString + this.endMod + ":";
 			if (!reader.go("disreguard"))
 				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
 			isValid = OperandChecker.isValidMem(this.endMod);
@@ -632,7 +632,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			if(!ender.equals(this.progName)){
 				errorMessage = "Label does not match Program Name.";
 			}
-			completeString = completeString + ":" + ender +":\n" + errorMessage;
+			completeString = completeString + ender +":\n" + errorMessage;
 			//adds info to user Report
 			this.userRep.addType = AddType.END;
 			this.userRep.add(completeString);
