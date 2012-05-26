@@ -41,7 +41,7 @@ public class USI_CRKB extends UIG_IO {
 		int nw = breakDown.numWords;
 		int word;
 		for (int i = 0; i < nw; ++i) {
-			word = Integer.valueOf(machine.input.getString());
+			word = Integer.parseInt(machine.input.getString());
 			breakDown.putToDest(word, machine);
 		}
 	}
