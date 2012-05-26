@@ -360,6 +360,8 @@ public class Machine {
 	 * @return The word at the given address.
 	 */
 	public int getMemory(int addr) {
+		if (addr < 0 || addr > memorySizeInWords)
+			hErr.reportError(makeError("runMemOOR", IOFormat.formatHexInteger(addr,4)), -1, -1);
 		return memory[addr];
 	}
 
