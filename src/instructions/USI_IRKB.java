@@ -36,12 +36,11 @@ public class USI_IRKB extends UIG_IO {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdown breakDown = Deformatter.breakDownSrcRange(instruction);
-		int addr = breakDown.getEffectiveDestAddress(machine);
 		int nw = breakDown.numWords;
 		int word;
 		for (int i = 0; i < nw; ++i) {
 			word = Integer.parseInt(machine.input.getString());
-			machine.setMemory(addr+ i, word);
+			//machine.setMemory(addr+ i, word);
 			breakDown.putToDest(word, machine);
 		}
 	}
