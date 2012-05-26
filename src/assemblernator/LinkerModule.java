@@ -101,7 +101,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		/** 
 		 * Returns a string representation of the object
 		 * 
-		 * Requires:addType = HEADER or END.
 		 * @author Ratul Khosla
 		 * @date May 25, 2012; 8:23:09 PM
 		 * @modified UNMODIFIED
@@ -643,6 +642,23 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		}else{
 			return 0;
 		}
+	}
+	
+	/** 
+	 * Returns a string representation of the object
+	 * 
+	 * @author Ratul Khosla
+	 * @date May 25, 2012; 8:25:27 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @specRef N/A
+	 */
+	@Override
+	public String toString() {
+		return userRep.toString();
 	}
 
 }
