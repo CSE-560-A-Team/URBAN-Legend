@@ -31,6 +31,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		LINKER, 
 		/**Text Record*/
 		TEXT, 
+		/** Mod Record */
+		MOD,
 		/**End Record*/
 		END;
 	}

@@ -125,13 +125,13 @@ public class USI_PRINTF extends AbstractInstruction {
 		if (givnStr != null) {
 			int[] subassembly = USI_CHAR.strToIntArray(givnStr.getBytes());
 			assembly = new int[subassembly.length + 1];
-			assembly[0] = InstructionFormatter.formatSrcRange(this)[0];
+			assembly[0] = InstructionFormatter.formatSrcMem(this)[0];
 			for (int i = 0; i < subassembly.length; ++i)
 				assembly[i + 1] = subassembly[i];
 		}
 		else {
 			assembly = new int[1];
-			assembly[0] = InstructionFormatter.formatSrcRange(this)[0];
+			assembly[0] = InstructionFormatter.formatSrcMem(this)[0];
 		}
 		return assembly;
 	}
