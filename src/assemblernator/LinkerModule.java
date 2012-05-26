@@ -73,12 +73,15 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			switch(this.addType) {
 			case LINKER:
 				if(this.linkerRecords.get(address) == null) {
-					
+					this.linkerRecords.put(address, "");
 				}
 				newContent = this.linkerRecords.get(address) + content;
 				this.linkerRecords.put(address, newContent);
 			break;
 			case TEXT:
+				if(this.textRecords.get(address) == null) {
+					this.textRecords.put(address, "");
+				}
 				newContent = this.textRecords.get(address) + content;
 				this.textRecords.put(address, newContent);
 			}

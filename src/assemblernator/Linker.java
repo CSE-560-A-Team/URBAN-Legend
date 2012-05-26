@@ -216,7 +216,8 @@ public class Linker {
 					modules[i+1].loadAddr += offset;
 					//error if module loadAddr + offset > max addr
 					if(modules[i+1].loadAddr > 4095) {
-						hErr.reportError(makeError("OOM"), -1, -1);
+						modules[i+1].userRep.addType = LinkerModule.AddType.HEADER;
+						modules[i+1].userRep.add(makeError("OOM") + "\n");
 						break;
 					}
 					totalLen += modules[i+1].prgTotalLen;
@@ -235,7 +236,6 @@ public class Linker {
 							linkerTable.put(lr.getKey(), lr.getValue() + offset);
 						} else {
 							//error: duplicate label for linking records.
-							hErr.reportError(makeError("dupLbl"), -1, -1);
 							modules[i+1].userRep.addType = LinkerModule.AddType.LINKER;
 							modules[i+1].userRep.add(lr.getValue(), makeError("dupLbl") + "\n");
 						}
@@ -356,12 +356,10 @@ public class Linker {
 										//zero out low mem bits to fill in later.
 										opcode &= (~memMaskLow); 
 									} else {
-										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 										offMod.userRep.addType = LinkerModule.AddType.TEXT;
 										offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
 									}
 								} else {
-									hErr.reportError(makeError("lnkOORLit12"), -1, -1);
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORLit12") + "\n");
 									
@@ -380,7 +378,6 @@ public class Linker {
 									//zero out low mem bits to later fill in.
 									opcode &= (~litMaskLow); 
 								} else {
-									hErr.reportError(makeError("lnkOORLit16"), -1, -1);
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORLit16") + "\n");
 								}
@@ -411,12 +408,10 @@ public class Linker {
 										//zero out low mem bits to later fill in.
 										opcode &= (~memMaskLow); 
 									} else {
-										hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 										offMod.userRep.addType = LinkerModule.AddType.TEXT;
 										offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
 									}
 								} else {
-									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
 								}
@@ -434,7 +429,6 @@ public class Linker {
 									//zero out low mem bits to later fill in.
 									opcode &= (~memMaskLow); 
 								} else {
-									hErr.reportError(makeError("lnkOORAddr"), -1, -1);
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
 								}
