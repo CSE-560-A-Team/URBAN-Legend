@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 
 import assemblernator.ErrorReporting.ErrorHandler;
@@ -101,6 +102,40 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				this.endRecord = this.endRecord + content;
 			break;
 			}
+		}
+		
+		
+		/** 
+		 * Returns a string representation of the object
+		 * 
+		 * @author Ratul Khosla
+		 * @date May 25, 2012; 8:23:09 PM
+		 * @modified UNMODIFIED
+		 * @tested UNTESTED
+		 * @errors NO ERRORS REPORTED
+		 * @codingStandards Awaiting signature
+		 * @testingStandards Awaiting signature
+		 * @specRef N/A
+		 */
+		@Override
+		public String toString() {
+			String report;
+			report = "" + headerRecord;
+			
+			Map<Integer, String> contents = this.linkerRecords;
+			
+			for(Map.Entry<Integer, String> record : contents.entrySet()) { 		
+				report += record.getValue();  
+			}
+			
+			contents = this.textRecords;
+			
+			for(Map.Entry<Integer, String> record : contents.entrySet()) { 		
+				report += record.getValue();				
+			}
+			
+			report += endRecord; 
+			return report;
 		}
 	}
 
@@ -640,6 +675,23 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		}else{
 			return 0;
 		}
+	}
+	
+	/** 
+	 * Returns a string representation of the object
+	 * 
+	 * @author Ratul Khosla
+	 * @date May 25, 2012; 8:25:27 PM
+	 * @modified UNMODIFIED
+	 * @tested UNTESTED
+	 * @errors NO ERRORS REPORTED
+	 * @codingStandards Awaiting signature
+	 * @testingStandards Awaiting signature
+	 * @specRef N/A
+	 */
+	@Override
+	public String toString() {
+		return userRep.toString();
 	}
 
 }
