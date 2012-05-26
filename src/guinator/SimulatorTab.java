@@ -310,7 +310,8 @@ public class SimulatorTab extends JSplitPane {
 				int firstRegister, int lastRegister) {
 			for (int i = firstRegister; i <= lastRegister; ++i)
 				registerFields[index ? 1 : 0][i].setText(IOFormat
-						.formatHexInteger(machine.getRegister(i), 8));
+						.formatHexInteger(index ? machine.getIndexRegister(i)
+								: machine.getRegister(i), 8));
 		}
 
 		/** Update memory table */
