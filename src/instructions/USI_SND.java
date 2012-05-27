@@ -338,7 +338,7 @@ public class USI_SND extends AbstractInstruction {
 		/** Generate a sine tone. */
 		@Override public byte[] generate(int freq, int dur, int sps) {
 			byte[] buf = new byte[dur * sps / 1000];
-			byte[] burst = new byte[(int) (sps / freq * 1.25)];
+			byte[] burst = new byte[(int) (sps / freq)];
 			for (int i = 0; i < burst.length; ++i)
 				burst[i] = (byte) (50 - Math.random() * 100);
 			for (int i = 0; i < buf.length; ++i)

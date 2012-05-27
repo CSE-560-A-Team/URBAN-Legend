@@ -17,6 +17,7 @@ import instructions.USI_ENT;
 import instructions.USI_EQU;
 import instructions.USI_EQUE;
 import instructions.USI_EXT;
+import instructions.USI_FORK;
 import instructions.USI_HLT;
 import instructions.USI_IAA;
 import instructions.USI_IADD;
@@ -48,6 +49,7 @@ import instructions.USI_ROL;
 import instructions.USI_ROR;
 import instructions.USI_SKIPS;
 import instructions.USI_SKT;
+import instructions.USI_SLEEP;
 import instructions.USI_SND;
 import instructions.USI_TR;
 import instructions.USI_TRDR;
@@ -159,8 +161,10 @@ public class Assembler {
 		USI_DMP.getInstance();
 		USI_HLT.getInstance();
 		Comment.getInstance();
-		
+
 		USI_SND.getInstance();
+		USI_FORK.getInstance();
+		USI_SLEEP.getInstance();
 		USI_PRINTF.getInstance();
 	}
 
@@ -225,7 +229,8 @@ public class Assembler {
 		boolean firstKICKO = false, valid = true, hasEnd = false;
 		String line = new String();
 
-		hasNextLineLoop: while (source.hasNextLine()) {
+		hasNextLineLoop:
+		while (source.hasNextLine()) {
 			try {
 				lineNum += skipls + 1;
 				skipls = 0;
@@ -236,14 +241,17 @@ public class Assembler {
 				for (;;) {
 					try {
 						instr = Instruction.parse(line);
-						if(instr != null && hasEnd) {
-							instr.errors.add(instr.errors.size(), makeError("OOM")); //add error into list of errors.
+						if (instr != null && hasEnd) {
+							instr.errors.add(instr.errors.size(),
+									makeError("OOM")); // add error into list of
+														// errors.
 							hErr.reportWarning("LinePastEnd", lineNum, -1);
 						}
 						break;
 					} catch (IOException e) {
 						if (!source.hasNextLine()) {
-							hErr.reportError(makeError("expSemiEOF"), lineNum, 0);
+							hErr.reportError(makeError("expSemiEOF"), lineNum,
+									0);
 							break hasNextLineLoop;
 						}
 						line += "\n" + source.nextLine();
@@ -252,44 +260,49 @@ public class Assembler {
 				}
 				if (instr == null) {
 					continue;
-				} 
-					
+				}
+
 
 				instr.origSrcLine = line; // Gives instruction source line.
 				instr.lineNum = lineNum;
 
-				if(instr.getOpId().equalsIgnoreCase("END")) {
+				if (instr.getOpId().equalsIgnoreCase("END")) {
 					hasEnd = true;
 				}
 
-				/* if start of module, record execStartAddr of module.*/
+				/* if start of module, record execStartAddr of module. */
 				if (instr.getOpId().equalsIgnoreCase("KICKO") && !firstKICKO) {
-					//instr.immediateCheck(instr.getHErr(hErr), module);
+					// instr.immediateCheck(instr.getHErr(hErr), module);
 					module.programName = instr.label;
 					firstKICKO = true;
-				} 
-				
+				}
+
 				if (!firstKICKO) {
 					hErr.reportError(makeError("KICKOlineNum"), lineNum, -1);
 					break;
 				}
-				
+
 				instr.lc = module.highLC;
 
 				// checks for operand errors in instruction.
 				valid = instr.immediateCheck(instr.getHErr(hErr), module);
 				// Get new lc for next instruction.
 				module.highLC = instr.getNewLC(module.highLC, module);
-				
-				//assign execStartAddr.
-				if(instr.getOpId().equalsIgnoreCase("KICKO")) {
+
+				// assign execStartAddr.
+				if (instr.getOpId().equalsIgnoreCase("KICKO")) {
 					module.execStartAddr = module.highLC;
 					module.loadAddr = module.highLC;
 				}
 
 				System.err.println(module.execStartAddr);
 				if (instr.lc > 4095 && module.highLC > instr.lc) {
-					instr.errors.add(instr.errors.size(), makeError("OOM")); //add error into list of errors.
+					instr.errors.add(instr.errors.size(), makeError("OOM")); // add
+																				// error
+																				// into
+																				// list
+																				// of
+																				// errors.
 					hErr.reportError(makeError("OOM"), lineNum, -1);
 				}
 
@@ -298,25 +311,26 @@ public class Assembler {
 					module.getSymbolTable().addEntry(instr, hErr);
 				}
 
-				
-				if(valid) {
+
+				if (valid) {
 					module.addInstruction(instr, hErr);
-				} else {
+				}
+				else {
 					Instruction temp = USI_NOP.getInstance().getNewInstance();
 					temp.lc = instr.lc;
 					temp.errors = instr.errors;
 					temp.lineNum = instr.lineNum;
 					temp.origSrcLine = instr.origSrcLine;
 					module.addInstruction(temp, hErr);
-					
+
 				}
-				
+
 
 			} catch (URBANSyntaxException e) {
 				hErr.reportError(e.getMessage(), lineNum, e.index);
 				if (e.getMessage() == null || e.getMessage().length() <= 5)
 					e.printStackTrace();
-				
+
 				Instruction temp = USI_NOP.getInstance().getNewInstance();
 				temp.lc = ++module.highLC;
 				temp.errors.add(e.getMessage());
@@ -332,19 +346,22 @@ public class Assembler {
 		// Pass two
 		for (Instruction i : module.assembly) {
 			valid = i.check(i.getHErr(hErr), module);
-			if(valid) {
-				//module.execStartAddr = execStartAddr;
-				i.assembled = i.assemble(); //for now.  should replace all assemble w/ directly changing self's field.
-			} else {
+			if (valid) {
+				// module.execStartAddr = execStartAddr;
+				i.assembled = i.assemble(); // for now. should replace all
+											// assemble w/ directly changing
+											// self's field.
+			}
+			else {
 				i.assembled = USI_NOP.getInstance().assemble();
 				i.operands.clear();
 			}
 		}
-		
-		if(!hasEnd && module.assembly.size() > 0) {
+
+		if (!hasEnd && module.assembly.size() > 0) {
 			hErr.reportWarning(makeError("NoEnd"), lineNum, -1);
 		}
-		
+
 		return module;
 	}
 

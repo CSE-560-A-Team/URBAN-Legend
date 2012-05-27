@@ -156,8 +156,20 @@ public class USI_TR extends AbstractInstruction {
 	private USI_TR(boolean ignored) {
 		super(opId, opCode);
 	}
+	
+	/**
+	 * Invokes parent's constructor.
+	 * 
+	 * @param opid
+	 *            The opId of child instructions.
+	 * @param opcode
+	 *            The distinguishing opcode of child instructions.
+	 */
+	USI_TR(String opid, int opcode) {
+		super(opid, opcode);
+	}
 
 	/** Default constructor; does nothing. */
-	private USI_TR() {}
+	protected USI_TR() {}
 }
 
