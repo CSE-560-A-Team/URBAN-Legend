@@ -80,6 +80,8 @@ public class InstructionFormatter {
 			}else if(instr.hasOperand("DX")){
 				String dindex = IOFormat.formatBinInteger(instr.getOperandData("DX").value.value,3);
 				code= code+fmt+"10001"+dindex+lit;
+			}else{
+				code = code+fmt+srcReg+destReg+lit;
 			}
 			//formats all other combos
 		} else {
