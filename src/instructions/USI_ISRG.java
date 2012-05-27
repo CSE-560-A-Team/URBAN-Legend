@@ -2,14 +2,12 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatSrcMem;
+import static assemblernator.Module.Value.BitLocation.Address;
+import static assemblernator.Module.Value.BitLocation.Other;
 import static assemblernator.OperandChecker.isValidIndex;
-import static assemblernator.OperandChecker.isValidLiteral;
 import static assemblernator.OperandChecker.isValidMem;
 import static assemblernator.OperandChecker.isValidNumWords;
 import static assemblernator.OperandChecker.isValidReg;
-import static assemblernator.Module.Value.BitLocation.Literal;
-import static assemblernator.Module.Value.BitLocation.Address;
-import static assemblernator.Module.Value.BitLocation.Other;
 import simulanator.Deformatter;
 import simulanator.Deformatter.OpcodeBreakdown;
 import simulanator.Machine;

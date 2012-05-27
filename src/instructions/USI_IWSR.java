@@ -1,6 +1,8 @@
 package instructions;
 
+import simulanator.Deformatter;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.Instruction;
 import assemblernator.Module;
 
@@ -35,7 +37,17 @@ public class USI_IWSR extends UIG_IO {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override 
 	public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		OpcodeBreakdown breakDown = Deformatter.breakDownSrcRange(instruction);
+		int nw = breakDown.numWords;
+		String outContent;
+		for (int i = 0; i < nw; ++i) {
+			if(breakDown.literal) {
+				outContent = Integer.toString(breakDown.source);
+			} else {
+				outContent = Integer.toString(machine.getMemory(breakDown.getEffectiveSrcAddress(machine) + i));
+			}
+			machine.output.putString(outContent);
+		}
 	}
 
 	// =========================================================
