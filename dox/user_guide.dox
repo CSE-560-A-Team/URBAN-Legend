@@ -959,13 +959,34 @@ The following instructions are unique to URBAN Legend:
     <td><span style="color:red" title="opcode">000100</span><span style="color:green" title="type">0000</span><span style="color:blue" title="Frequency">00000000000000</span><span style="color:purple" title="Duration">00000000</span></td>
     </tr><tr><td colspan="6"> Outputs a sound to any attached speaker. This requires re-intepretation of the pre-defined URBAN 
          keywords. The new interpretations are as follow:
-         <ul><li>ST: <span style="color:green"><b>S</b>ample <b>T</b>ype</span>. A case-insensitive string containing any of SINE, SQUARE, SAW, WHITE, PLUCK, BOINK, BASS, KICK, HAT, SNARE.</li>
+         <ul><li>ST: <span style="color:green"><b>S</b>ample <b>T</b>ype</span>. A case-insensitive string containing any of the sample names below.</li>
              <li>FR: <span style="color:blue"><b>Fr</b>equency</span>. The frequency of the note to play, between 50 and 20,000 (Roughly the range of human hearing)</li>
              <li>DM: <span style="color:purple"><b>D</b>uration in <b>M</b>illiseconds</span>. Between 25 and 6400 milliseconds; must be a multiple of 25 or it will be rounded as such.</li>
          </ul>
+         
+         <table>
+		<tr><th>white</th>           <td>White noise. Largely unaffected by frequency.</td>    <th>hihat</th>           <td ROWSPAN="2">A highhat sample.</td>                    </tr>
+		<tr><th>square</th>          <td>A square wave with the given frequency.</td>          <th>hat</th>                                                                       </tr>
+		<tr><th>saw</th>             <td>A saw wave with the given frequency.</td>             <th>distortedkick</th>   <td ROWSPAN="2">A distorted kick drum sample.</td>        </tr>
+		<tr><th>sine</th>            <td>A sine wave with the given frequency.</td>            <th>dkick</th>                                                                     </tr>
+		<tr><th>pluck</th>           <td>A guitar pluck generated at the given frequency.</td> <th>kickdrum</th>        <td ROWSPAN="2">A kick drum sample.</td>                  </tr>
+		<tr><th>boink</th>           <td>The TF2 BOINK! sample.</td>                           <th>kick</th>                                                                      </tr>
+		<tr><th>bonk</th>            <td>The TF2 BONK! sample.</td>                            <th>snaredrum</th>       <td ROWSPAN="2">A snare drum sample.</td>                 </tr>
+		<tr><th>bassdrum</th>        <td ROWSPAN="2">A bass drum sample.</td>                  <th>snare</th>                                                                     </tr>
+		<tr><th>bass</th>                                                                      <th>tomtomdrum</th>      <td ROWSPAN="3">A tomtom drum sample.</td>                </tr>
+		<tr><th>cowbell</th>         <td>A cowbell sample.</td>                                <th>tomtom</th>                                                                    </tr>
+		<tr><th>cymbal</th>          <td>A cymbol sample.</td>                                 <th>tom</th>                                                                       </tr>
+		<tr><th>distortedsnare</th>  <td ROWSPAN="2">A distorted snare drum sample.</td>       <td COLSPAN="2" ROWSPAN="2" class="stripebg"></td>                                 </tr>
+		<tr><th>dsnare</th>                                                                                                                                                       </tr>
+	</table>
     </td>
 </td></tr>
-<tr><td rowspan="2" class="stripebg">UL2</td><td> FORK </td><td>(<b>Fork</b>) </td><td> 111100 </td><td>{DM}, {DM,DX}</td><td></td>
+<tr><td rowspan="2" class="stripebg">UL2</td><td> SLP </td><td>(<b>Sl</b>ee<b>p</b>)</td><td> 111011 </td><td>{FC}</td><td></td>
+    <td>Literal</td>
+    </tr><tr><td colspan="6"> Suspends the current thread for the given number of milliseconds.
+    </td>
+</td></tr>
+<tr><td rowspan="2" class="stripebg">UL3</td><td> FORK </td><td>(<b>Fork</b>) </td><td> 111100 </td><td>{DM}, {DM,DX}</td><td></td>
     <td>Memory</td>
     </tr><tr><td colspan="6"> Forks the machine, similar to the UNIX standard. 
        Memory and registers are shared between all forks; only thelocation counter
@@ -975,7 +996,7 @@ The following instructions are unique to URBAN Legend:
        register).
     </td>
 </td></tr>
-<tr><td rowspan="2" class="stripebg">UL3</td><td> PRINTF </td><td>(<b>Print F</b>ormatted Data) </td><td> 111000 </td><td>{FM}, {FM,FX}, {FM,NW}, {FM,FX,NW}, {ST}</td><td></td>
+<tr><td rowspan="2" class="stripebg">UL4</td><td> PRINTF </td><td>(<b>Print F</b>ormatted Data) </td><td> 111000 </td><td>{FM}, {FM,FX}, {FM,NW}, {FM,FX,NW}, {ST}</td><td></td>
     <td>Source-Range</td>
     </tr><tr><td colspan="6"> <p>Similar to the C function printf(), PRINTF prints a string in the following format:</p>
       <p style="color:blue">"%0 bottles of beer on the wall, %0 bottles of beer!"</p>
