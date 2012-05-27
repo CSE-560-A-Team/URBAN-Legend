@@ -108,7 +108,7 @@ public class USI_PWR extends AbstractInstruction {
 		double regVal = brkDwn.readFromDest(machine);
 		regVal = pow(regVal, (double) power);
 		if(regVal > Integer.MAX_VALUE || regVal < Integer.MIN_VALUE) {
-			//warning overflow.
+			machine.hErr.reportError(makeError("runOverflow"), machine.getLC(), -1);
 		}
 		
 		brkDwn.putToDest((int)regVal, machine);
