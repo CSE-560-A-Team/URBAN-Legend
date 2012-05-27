@@ -61,7 +61,13 @@ public class USI_RET extends AbstractInstruction {
 				this.getOperandData("DM").value = constantSize;
 				isValid = OperandChecker.isValidMem(constantSize.value);
 				if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
-			}else{
+			} else if(this.hasOperand("DR")) {
+				this.getOperandData("DR").value = 
+						module.evaluate(this.getOperandData("DR").expression, 
+								false, BitLocation.Other, hErr, this, this.getOperandData("DR").valueStartPosition);
+				isValid = OperandChecker.isValidReg(this.getOperandData("DR").value.value);
+				if(!isValid) hErr.reportError(makeError("OORarithReg", "DR", this.getOpId()), this.lineNum, -1);
+			} else{
 				isValid=false;
 				hErr.reportError(makeError("instructionMissingOp", this.getOpId(), "DM"), this.lineNum, -1);
 			}
