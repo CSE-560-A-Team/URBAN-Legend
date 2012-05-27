@@ -161,17 +161,17 @@ public abstract class UIG_IO extends AbstractInstruction{
 					}
 				} else if(this.operandType.literal){
 					//evaluate value of operand.
-					value = module.evaluate(this.getOperand("FL"), false, Address, hErr, this, this.getOperandData("FL").valueStartPosition); 
-					isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
+					value = module.evaluate(this.getOperand("FL"), false, Literal, hErr, this, this.getOperandData("FL").valueStartPosition); 
+					isValid = isValidLiteral(value.value, ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(), 
-							Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
 					this.getOperandData("FL").value = value;
 				} else if(this.operandType.expression) {
 					//evaluate value of operand.
 					value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").valueStartPosition); 
-					isValid = isValidLiteral(value.value, ConstantRange.RANGE_ADDR);
+					isValid = isValidLiteral(value.value, ConstantRange.RANGE_16_TC);
 					if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(), 
-							Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+							Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
 					this.getOperandData("EX").value = value;
 				} else {
 					//evaluate value of operand.
