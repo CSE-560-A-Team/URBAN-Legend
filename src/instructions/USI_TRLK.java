@@ -137,8 +137,8 @@ public class USI_TRLK extends AbstractInstruction {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdown brkDwn = breakDownOther(instruction);
-		int addr = brkDwn.destination;
-		brkDwn.putToDest(machine.getLC(), machine);
+		int addr = brkDwn.getEffectiveDestAddress(machine);
+		machine.setRegister(brkDwn.source, machine.getLC());
 		machine.setLC(addr);
 	}
 

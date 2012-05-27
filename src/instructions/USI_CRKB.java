@@ -45,7 +45,7 @@ public class USI_CRKB extends UIG_IO {
 		for (int i = 0; i < nw; ++i) {
 			input = machine.input.getString();
 			if(input.length() > 1) {
-				machine.hErr.reportError("runInputChar", -1, -1);
+				machine.hErr.reportError("runInputChar", machine.getLC(), -1);
 			}
 			word = input.charAt(0);
 			machine.setMemory(addr + i, word);

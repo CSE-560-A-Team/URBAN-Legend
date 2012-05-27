@@ -44,7 +44,7 @@ public class USI_IRKB extends UIG_IO {
 			try {
 				word = Integer.parseInt(machine.input.getString());
 			} catch(NumberFormatException e) {
-				machine.hErr.reportError(makeError("runInputInt"), -1, -1);
+				machine.hErr.reportError(makeError("runInputInt"), machine.getLC(), -1);
 			}
 			machine.setMemory(addr + i, word);
 		}
