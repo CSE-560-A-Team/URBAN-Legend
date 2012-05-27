@@ -2,11 +2,17 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import simulanator.Machine;
 import assemblernator.AbstractInstruction;
@@ -48,18 +54,36 @@ public class USI_SND extends AbstractInstruction {
 	enum SampleType {
 		/** White noise */
 		WHITE(0),
-		/** Bass noise */
-		BASS(1),
 		/** Square wave */
-		SQUARE(2),
+		SQUARE(1),
 		/** Saw wave */
-		SAW(3),
+		SAW(2),
 		/** Sine wave */
-		SINE(4),
-		/** BOINK! */
-		BOINK(5),
+		SINE(3),
 		/** Guitar Pluck */
-		PLUCK(6);
+		PLUCK(4),
+		/** BOINK! sample */
+		BOINK(5),
+		/** BONK! sample */
+		BONK(6),
+		/** Bass sample */
+		BASS(7),
+		/** Bass sample */
+		COWBELL(8),
+		/** Cymbal sample */
+		CYMBAL(9),
+		/** Distorted snare sample */
+		DSNARE(10),
+		/** Hihat sample */
+		HIHAT(11),
+		/** Distorted kick sample */
+		DKICK(12),
+		/** Kick sample */
+		KICKDRUM(13),
+		/** Snare sample */
+		SNAREDRUM(14),
+		/** Tomtom sample */
+		TOMTOMDRUM(15);
 
 		/** The integer ID for this sample */
 		public int id;
@@ -104,16 +128,7 @@ public class USI_SND extends AbstractInstruction {
 		}
 		String sample = IOFormat.escapeString(op.expression, lineNum,
 				op.valueStartPosition, hErr).toLowerCase();
-		switch (sample.charAt(0)) {//@formatter:off
-		case 'w': if (sample.equals("white") ) { sampleType = SampleType.WHITE;  break; }
-		          if (sample.equals("pluck") ) { sampleType = SampleType.PLUCK;  break; }
-		case 's': if (sample.equals("sine")  ) { sampleType = SampleType.SINE;   break; }
-		          if (sample.equals("saw")   ) { sampleType = SampleType.SAW;    break; }
-		          if (sample.equals("square")) { sampleType = SampleType.SQUARE; break; }
-		case 'b': if (sample.equals("boink") ) { sampleType = SampleType.BOINK;  break; }
-		          if (sample.equals("bass")  ) { sampleType = SampleType.BASS;   break; }
-		default:  hErr.reportError(makeError("unmatchedStr", sample, "any built-in sample"), lineNum, op.keywordStartPosition);
-		} //@formatter:on
+		sampleType = samplenames.get(sample);
 
 		op = getOperandData("FR");
 		if (op == null) {
@@ -152,16 +167,16 @@ public class USI_SND extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#assemble() */
 	@Override public int[] assemble() {
-		return new int[] { (opCode << 26) | (sampleType.id << 23)
-				| (getOperandData("FR").value.value << 9)
+		return new int[] { (opCode << 26) | (sampleType.id << 22)
+				| (getOperandData("FR").value.value << 8)
 				| (getOperandData("DM").value.value / 25) };
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		int freq = (instruction & ~(0xFFFFFFFF >>> 23 << 23)) >> 9;
-		int dur = (instruction & (~(0xFFFFFFFF >>> 9 << 9))) * 25;
-		int sample = (instruction & ~(0xFFFFFFFF >>> 26 << 26)) >> 23;
+		int freq = (instruction & ~(0xFFFFFFFF >>> 22 << 22)) >> 8;
+		int dur = (instruction & (~(0xFFFFFFFF >>> 8 << 8))) * 24;
+		int sample = (instruction & ~(0xFFFFFFFF >>> 26 << 26)) >> 22;
 		play(samples[sample].generate(freq, dur, 48000), 48000);
 		try {
 			Thread.sleep(dur);
@@ -257,21 +272,64 @@ public class USI_SND extends AbstractInstruction {
 		}
 	}
 
-	/** Warp a bass drum sample to a frequency. */
-	static class BassSample implements ToneGenerator {
-		/** Generate a sine tone. */
-		@Override public byte[] generate(int freq, int dur, int sps) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	}
-
 	/** Warp the BOINK sample to a frequency. */
-	static class BoinkSample implements ToneGenerator {
+	static class WavSourceSample implements ToneGenerator {
+		/** The data from this sample. */
+		byte[] rawData = null;
+		/** The name of this sample. */
+		String name;
+		/** Base frequency */
+		double baseFreq = 440; // A440
+
+		/**
+		 * Default constructor.
+		 * 
+		 * @param sampleName
+		 *            The name of the wav file for this sample.
+		 */
+		public WavSourceSample(String sampleName) {
+			name = sampleName;
+			InputStream a = getClass().getResourceAsStream("/samples/" + name);
+			if (a == null) {
+				System.err.println("Failed to open sample, " + name);
+				return;
+			}
+			try {
+				AudioInputStream ais = AudioSystem.getAudioInputStream(a);
+				int spf = ais.getFormat().getFrameSize();
+				byte[] buf = new byte[(int) (spf * ais.getFrameLength())];
+				ais.read(buf);
+				if (spf == 1)
+					rawData = buf;
+				else {
+					int ri = 0;
+					rawData = new byte[(buf.length + spf - 1) / spf];
+					for (int i = 0; i < buf.length; i += spf)
+						rawData[ri++] = buf[i + spf - 1];
+				}
+				System.out.println("Loaded " + name + " successfully ["
+						+ rawData.length + " bytes, " + spf + " sps].");
+			} catch (UnsupportedAudioFileException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		/** Generate a sine tone. */
 		@Override public byte[] generate(int freq, int dur, int sps) {
-			// TODO Auto-generated method stub
-			return null;
+			byte[] res = new byte[(int) (rawData.length * baseFreq / freq)];
+			int compl = dur * sps;
+			int minl = Math.min(res.length, compl);
+			int i;
+			for (i = 0; i < minl; ++i)
+				res[i] = rawData[(int) (i * freq / baseFreq)];
+			while (i < res.length)
+				res[i] = (byte) ((i * freq / baseFreq) * Math.min(1,
+						10 / (i - compl)));
+			return res;
 		}
 	}
 
@@ -279,15 +337,71 @@ public class USI_SND extends AbstractInstruction {
 	static class PluckGenerator implements ToneGenerator {
 		/** Generate a sine tone. */
 		@Override public byte[] generate(int freq, int dur, int sps) {
-			byte[] res = new byte[dur * sps / 1000];
-			return res;
+			byte[] buf = new byte[dur * sps / 1000];
+			byte[] burst = new byte[(int) (sps / freq * 1.25)];
+			for (int i = 0; i < burst.length; ++i)
+				burst[i] = (byte) (50 - Math.random() * 100);
+			for (int i = 0; i < buf.length; ++i)
+				buf[i] = (byte) (burst[i % burst.length] * Math.min(1,
+						2000.0 / i));
+			return buf;
 		}
 	}
 
 	/** All available samples. */
-	ToneGenerator samples[] = new ToneGenerator[] { new WhiteNoise(),
-			new BassSample(), new SquareTone(), new SawTone(), new SineTone(),
-			new BoinkSample(), new PluckGenerator() };
+	static ToneGenerator samples[] = new ToneGenerator[16];
+
+	/** A map of our sample names to their sample ID. */
+	static HashMap<String, SampleType> samplenames = new HashMap<String, SampleType>();
+
+	static {
+		samples[SampleType.WHITE.id] = new WhiteNoise(); // WHITE
+		samples[SampleType.SQUARE.id] = new SquareTone(); // SQUARE
+		samples[SampleType.SAW.id] = new SawTone(); // SAW
+		samples[SampleType.SINE.id] = new SineTone(); // SINE
+		samples[SampleType.PLUCK.id] = new PluckGenerator(); // PLUCK
+		
+		samples[SampleType.BOINK.id] = new WavSourceSample("boink.wav"); // BOINK
+		samples[SampleType.BONK.id] = new WavSourceSample("bonk.wav"); // BONK
+		samples[SampleType.BASS.id] = new WavSourceSample("bassdrum3.wav"); // BASS
+		samples[SampleType.COWBELL.id] = new WavSourceSample("cowbell5.wav"); // COWBELL
+		samples[SampleType.CYMBAL.id] = new WavSourceSample("cymbal1.wav"); // CYMBAL
+		samples[SampleType.DSNARE.id] = new WavSourceSample(
+				"distortedsnare1.wav"); // DSNARE
+		samples[SampleType.HIHAT.id] = new WavSourceSample("hihat1.wav"); // HIHAT
+		samples[SampleType.DKICK.id] = new WavSourceSample("kick4_dkick.wav"); // DKICK
+		samples[SampleType.KICKDRUM.id] = new WavSourceSample("kickdrum1.wav"); // KICKDRUM
+		samples[SampleType.SNAREDRUM.id] = new WavSourceSample(
+				"snaredrum14.wav"); // SNAREDRUM
+		samples[SampleType.TOMTOMDRUM.id] = new WavSourceSample(
+				"tomtomdrum1.wav"); // TOMTOMDRUM
+
+		samplenames.put("white", SampleType.WHITE);
+		samplenames.put("square", SampleType.SQUARE);
+		samplenames.put("saw", SampleType.SAW);
+		samplenames.put("sine", SampleType.SINE);
+		samplenames.put("pluck", SampleType.PLUCK);
+		
+		samplenames.put("boink", SampleType.BOINK);
+		samplenames.put("bonk", SampleType.BONK);
+		samplenames.put("bassdrum", SampleType.BASS);
+		samplenames.put("bass", SampleType.BASS);
+		samplenames.put("cowbell", SampleType.COWBELL);
+		samplenames.put("cymbal", SampleType.CYMBAL);
+		samplenames.put("distortedsnare", SampleType.DSNARE);
+		samplenames.put("dsnare", SampleType.DSNARE);
+		samplenames.put("hihat", SampleType.HIHAT);
+		samplenames.put("hat", SampleType.HIHAT);
+		samplenames.put("distortedkick", SampleType.DKICK);
+		samplenames.put("dkick", SampleType.DKICK);
+		samplenames.put("kickdrum", SampleType.KICKDRUM);
+		samplenames.put("kick", SampleType.KICKDRUM);
+		samplenames.put("snaredrum", SampleType.SNAREDRUM);
+		samplenames.put("snare", SampleType.SNAREDRUM);
+		samplenames.put("tomtomdrum", SampleType.TOMTOMDRUM);
+		samplenames.put("tomtom", SampleType.TOMTOMDRUM);
+		samplenames.put("tom", SampleType.TOMTOMDRUM);
+	}
 
 	/**
 	 * Plays a sample buffer.
