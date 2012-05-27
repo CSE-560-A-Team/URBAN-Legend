@@ -296,7 +296,7 @@ public class Linker {
 											tempAdjustVal = linkerTable.get(midMod.linkerLabel);
 										} else {
 											isValid = false;
-											hErr.reportError(makeError("noLbl"), -1, -1);
+											hErr.reportError(makeError("noLbl", midMod.linkerLabel), -1, -1);
 											offMod.userRep.addType = LinkerModule.AddType.TEXT;
 											offMod.userRep.add(origLC, makeError("noLbl", midMod.linkerLabel) + "\n");
 											continue;

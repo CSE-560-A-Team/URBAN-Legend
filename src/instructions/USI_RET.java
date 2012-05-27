@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
 import static simulanator.Deformatter.breakDownOther;
+import simulanator.Deformatter;
 import simulanator.Machine;
 import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.AbstractInstruction;
@@ -111,7 +112,12 @@ public class USI_RET extends AbstractInstruction {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdown brkDwn = breakDownOther(instruction);
-		int addr = brkDwn.destination;
+		int addr = 0;
+		if(brkDwn.destKind == Deformatter.Location.MEMORY) {
+			addr = brkDwn.destination;
+		} else {
+			addr = brkDwn.readFromDest(machine);
+		}
 		machine.setLC(addr);
 	}
 
