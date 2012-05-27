@@ -259,10 +259,11 @@ public class SimulatorTab extends JSplitPane {
 	 */
 	class InputReader implements URBANInputStream {
 		/** @see simulanator.Machine.URBANInputStream#getString() */
-		@Override public String getString() {
+		@Override public synchronized String getString() {
 			inputField.lock();
 			try {
 				inputField.setEnabled(true);
+				inputField.setEditable(true);
 				while (!inputField.submitted)
 					try {
 						wait();

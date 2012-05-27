@@ -57,7 +57,7 @@ public class USI_POP extends AbstractInstruction {
 			this.getOperandData("DR").value = value;
 		} else if(this.hasOperand("DM") && this.hasOperand("DX") && this.operands.size() == 2){
 			//range checking
-			value = module.evaluate(this.getOperand("DM"), false, BitLocation.Address, hErr, this, this.getOperandData("DM").valueStartPosition);
+			value = module.evaluate(this.getOperand("DM"), true, BitLocation.Address, hErr, this, this.getOperandData("DM").valueStartPosition);
 			isValid = OperandChecker.isValidMem(value.value);
 			if(!isValid){
 				hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
@@ -69,7 +69,7 @@ public class USI_POP extends AbstractInstruction {
 			if(!isValid) hErr.reportError(makeError("OORidxReg", "DX", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("DX").value = value;
 		} else if(this.hasOperand("DM") && this.operands.size() == 1) {
-			value = module.evaluate(this.getOperand("DM"), false, BitLocation.Address, hErr, this, this.getOperandData("DM").valueStartPosition);
+			value = module.evaluate(this.getOperand("DM"), true, BitLocation.Address, hErr, this, this.getOperandData("DM").valueStartPosition);
 			isValid = OperandChecker.isValidMem(value.value);
 			if(!isValid) hErr.reportError(makeError("OORmemAddr", "DM", this.getOpId()), this.lineNum, -1);
 			this.getOperandData("DM").value = value;

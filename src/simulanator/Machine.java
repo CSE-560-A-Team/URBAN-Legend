@@ -31,7 +31,7 @@ public class Machine {
 	/** Our entire memory; all 16 kibibytes of it. */
 	private int[] memory;
 	/** The program stack: a Stack of Integers. */
-	public Stack<Integer> stack;
+	public Stack<Integer> stack = new Stack<Integer>();
 
 
 	// ========================================================================
