@@ -2,6 +2,7 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -294,8 +295,9 @@ public class USI_SND extends AbstractInstruction {
 				System.err.println("Failed to open sample, " + name);
 				return;
 			}
+			BufferedInputStream bis = new BufferedInputStream(a);
 			try {
-				AudioInputStream ais = AudioSystem.getAudioInputStream(a);
+				AudioInputStream ais = AudioSystem.getAudioInputStream(bis);
 				int spf = ais.getFormat().getFrameSize();
 				byte[] buf = new byte[(int) (spf * ais.getFrameLength())];
 				ais.read(buf);

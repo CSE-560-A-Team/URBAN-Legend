@@ -111,7 +111,8 @@ public class SimulatorTab extends JSplitPane {
 		}
 
 		/** Enter pressed */
-		@Override public void actionPerformed(ActionEvent e) {
+		@Override public synchronized void actionPerformed(ActionEvent e) {
+			System.out.println("Submitted");
 			submitted = true;
 		}
 
@@ -266,7 +267,7 @@ public class SimulatorTab extends JSplitPane {
 				inputField.setEditable(true);
 				while (!inputField.submitted)
 					try {
-						wait();
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

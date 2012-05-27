@@ -55,9 +55,9 @@ public class USI_SLEEP extends AbstractInstruction {
 		}
 		op.value = module.evaluate(op.expression, false, BitLocation.Other,
 				hErr, this, op.valueStartPosition);
-		if (op.value.value < 25 || op.value.value > 6400) {
+		if (op.value.value < 1 || op.value.value > 65535) {
 			hErr.reportError(
-					makeError("OORconstant", "DM", opId, "25", "6400"),
+					makeError("OORconstant", "FC", opId, "1", "65535"),
 					lineNum, op.valueStartPosition);
 			return false;
 		}
