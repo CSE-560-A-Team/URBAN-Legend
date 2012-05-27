@@ -5,6 +5,7 @@ import simulanator.Machine;
 import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import static assemblernator.ErrorReporting.makeError;
 
 /**
  * The IRKB instruction.
@@ -37,10 +38,15 @@ public class USI_IRKB extends UIG_IO {
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdown breakDown = Deformatter.breakDownDestRange(instruction);
 		int nw = breakDown.numWords;
-		int word;
+		int addr = breakDown.getEffectiveDestAddress(machine);
+		int word = 0;
 		for (int i = 0; i < nw; ++i) {
-			word = Integer.parseInt(machine.input.getString());
-			breakDown.putToDest(word, machine);
+			try {
+				word = Integer.parseInt(machine.input.getString());
+			} catch(NumberFormatException e) {
+				machine.hErr.reportError(makeError("runInputInt"), -1, -1);
+			}
+			machine.setMemory(addr + i, word);
 		}
 	}
 

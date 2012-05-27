@@ -38,13 +38,15 @@ public class USI_IWSR extends UIG_IO {
 	@Override 
 	public void execute(int instruction, Machine machine) {
 		OpcodeBreakdown breakDown = Deformatter.breakDownSrcRange(instruction);
-		int addr = breakDown.readFromSource(machine);
 		int nw = breakDown.numWords;
-		
+		String outContent;
 		for (int i = 0; i < nw; ++i) {
-			int a = machine.getMemory(addr + i);
-
-			machine.output.putString(String.valueOf(a));
+			if(breakDown.literal) {
+				outContent = Integer.toString(breakDown.source);
+			} else {
+				outContent = Integer.toString(machine.getMemory(breakDown.getEffectiveSrcAddress(machine) + i));
+			}
+			machine.output.putString(outContent);
 		}
 	}
 

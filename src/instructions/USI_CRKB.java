@@ -40,9 +40,15 @@ public class USI_CRKB extends UIG_IO {
 		OpcodeBreakdown breakDown = Deformatter.breakDownDestRange(instruction);
 		int nw = breakDown.numWords;
 		int word;
+		int addr = breakDown.getEffectiveDestAddress(machine);
+		String input;
 		for (int i = 0; i < nw; ++i) {
-			word = Integer.parseInt(machine.input.getString());
-			breakDown.putToDest(word, machine);
+			input = machine.input.getString();
+			if(input.length() > 1) {
+				machine.hErr.reportError("runInputChar", -1, -1);
+			}
+			word = input.charAt(0);
+			machine.setMemory(addr + i, word);
 		}
 	}
 
