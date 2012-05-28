@@ -57,7 +57,7 @@ public class USI_CLRX extends AbstractInstruction {
 	@Override public void execute(int instruction, Machine machine) {
 
 		int word = 0;
-		for(int i = 0; i<7 ; i++){ 
+		for(int i = 1; i<=7 ; i++){ 
 			machine.setIndexRegister(i, word);
 		}	
 	}

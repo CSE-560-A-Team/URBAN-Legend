@@ -57,7 +57,7 @@ public class USI_CLRA extends AbstractInstruction {
 	@Override public void execute(int instruction, Machine machine) {
 
 		int word = 0;
-		for(int i = 0; i<7 ; i++){ 
+		for(int i = 0; i <= 7 ; i++){ 
 			machine.setRegister(i, word);
 		}
 	}
