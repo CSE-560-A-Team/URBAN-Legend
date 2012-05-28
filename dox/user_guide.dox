@@ -20,6 +20,7 @@ The exact specifications of this language can be seen below.
   <li><a href="#keywords">Operand Keywords</a></li>
   <li><a href="#instructions">Instructions</a></li>
   <li><a href="#objfile">Object File Specification</a></li>
+  <li><a href="#loadfile">Load File Specification</a></li>
   <li><a href="#sampleio">URBAN Legend Input and Output Description and Format</a></li>
 </ol>
 
@@ -1386,6 +1387,190 @@ Object files exported by URBAN-Legend contain chunks according to the following 
     </tr>
 </table>
 
+<h1 id="loadfile">Load File Specification<a href="#toc" class="backlink">Back to Top</a></h1>
+
+Loader files exported by URBAN-Legend contain chunks according to the following specification.
+
+<table>
+  <tr>
+    <th colspan="4">Spec Ref</th>
+    <th width="15%">Format</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td colspan="4" id="LM1">LM1</td>
+    <td>Header Record</td>
+    <td>Appears only once, at the beginning of the Load file.</td>
+  </tr>
+    <tr>
+      <td rowspan="17" class="stripebg"></td>
+      <td colspan="3" id="LM1.1">LM1.1</td>
+      <td>Byte('H')</td>
+      <td>Header record indicator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.2">LM1.2</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.3">LM1.3</td>
+      <td>LABEL, 1-32 bytes</td>
+      <td>Module name from the first object file</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.4">LM1.4</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.5">LM1.5</td>
+      <td>Short, HHHH</td>
+      <td>Combined Module Load Address.</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.6">LM1.6</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.7">LM1.7</td>
+      <td>Long, HHHH</td>
+      <td>Module Execution Start Address.</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.8">LM1.8</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.9">LM1.9</td>
+      <td>Long, HHHH</td>
+      <td>Total length of the Module</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.10">LM1.10</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.11">LM1.11</td>
+      <td>yearda,hh:mm:ss</td>
+      <td>Date and Time of Assembly. Example Jan 7, 2011 10AM would be 2011007,10:00:00 </td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.12">LM1.12</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.13">LM1.13</td>
+      <td>9 character String</td>
+      <td>URBAN-LLM</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.14">LM1.14</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.15">LM1.15</td>
+      <td>4 didgit Number</td>
+      <td>Version Number #</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.16">LM1.16</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM1.17">LM1.17</td>
+      <td>LABEL, 1-32 bytes</td>
+      <td>Program Name from the First Object File</td>
+    </tr>	
+	  <tr>
+		<td colspan="4" id="LM2">LM2</td>
+		<td>Text Record</td>
+		<td>Created for each entry point into the program.</td>
+	  </tr>
+		<tr>
+		  <td rowspan="7" class="stripebg"></td>
+		  <td colspan="3" id="LM2.1">LM2.1</td>
+		  <td>Byte('T')</td>
+		  <td>Text record indicator</td>
+		</tr>
+		<tr>
+		  <td colspan="3" id="LM2.2">LM2.2</td>
+		  <td>Byte(':')</td>
+		  <td>Standard separator</td>
+		</tr>
+		<tr>
+		  <td colspan="3" id="LM2.3">LM2.3</td>
+		  <td>6 didgit Hex, HHHHHH</td>
+		  <td>Program Assigned Location(6 hex nibbles)</td>
+		</tr>
+		<tr>
+		  <td colspan="3" id="LM2.4">LM2.4</td>
+		  <td>Byte(':')</td>
+		  <td>Standard separator</td>
+		</tr>
+		<tr>
+		  <td colspan="3" id="LM2.5">LM2.5</td>
+		  <td>8 digit Hex HHHH HHHH</td>
+		  <td>Instruction/ Data in Text Record (8 hex nybbles)</td>
+		</tr>
+		<tr>
+		  <td colspan="3" id="LM2.6">LM2.6</td>
+		  <td>Byte(':')</td>
+		  <td>Standard separator</td>
+		</tr>
+		<tr>
+		  <td colspan="3" id="LM2.7">LM2.7</td>
+		  <td>LABEL, 1-32 bytes</td>
+		  <td>Program Name, same as <a href="#LM1.17">LM1.17</a></td>
+		</tr>
+	<tr>
+    <td colspan="4" id="OB5">OB5</td>
+    <td>End Record</td>
+    <td>Appears only once, as the last record in the file.</td>
+  </tr>
+    <tr>
+      <td rowspan="11" class="stripebg"></td>
+      <td colspan="3" id="OB5.1">OB5.1</td>
+      <td>Byte('E')</td>
+      <td>End record indicator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM5.2">LM5.2</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM5.3">LM5.3</td>
+      <td>Short, HHHH</td>
+      <td>Total Number of Records</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM5.4">LM5.4</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="LM5.5">LM5.5</td>
+      <td>Short, HHHH</td>
+      <td>Total Number of Text records</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB5.6">OB5.6</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
+    <tr>
+      <td colspan="3" id="OB5.7">OB5.7</td>
+      <td>LABEL, 1-32 bytes</td>
+      <td>Program Name, same as <a href="#LM1.17">LM1.17</a></td>
+    </tr>
+</table>
 
 <h1 id="sampleio">URBAN Legend Input and Output Description and Format<a href="#toc" class="backlink">Back to Top</a></h1>
 <p>
