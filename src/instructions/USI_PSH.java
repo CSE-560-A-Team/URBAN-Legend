@@ -109,13 +109,9 @@ public class USI_PSH extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		
 		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromSource(machine);
-		System.err.println(wordOrig);
 		machine.stack.push(wordOrig);
-		System.err.println(machine.stack.size());
-	
 	}
 
 	// =========================================================
