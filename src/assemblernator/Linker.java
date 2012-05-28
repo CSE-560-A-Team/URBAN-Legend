@@ -28,8 +28,6 @@ import assemblernator.Instruction.ConstantRange;
  * @date May 12, 2012; 1:37:15 PM
  */
 public class Linker {
-	/** shut up */
-	public static String linkerTableString = "";
 	
 	/**
 	 * Returns the loader header record.
@@ -159,16 +157,20 @@ public class Linker {
 	 * @param modules an array of LinkerModules.
 	 * @param filename name of file to output to.
 	 * @param hErr error handler
+	 * @return the linker symbol table.
 	 * @specRef N/A
 	 */
-	public static void link(LinkerModule[] modules, String filename, ErrorHandler hErr) {
+	public static String link(LinkerModule[] modules, String filename, ErrorHandler hErr) {
+		String linkerSymbolTable = "";
 		try {
 			OutputStream out = new FileOutputStream(filename);
-			link(modules, out, hErr);
+			linkerSymbolTable = link(modules, out, hErr);
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
+		
+		return linkerSymbolTable;
 	}
 	/**
 	 * Takes an array of LinkerModules and outputs a loader file.
@@ -182,10 +184,12 @@ public class Linker {
 	 * @param modules an array of LinkerModules.
 	 * @param out output stream to output load file.
 	 * @param hErr error handler.
+	 * @return the linker symbol table.
 	 * @specRef N/A
 	 */
-	public static void link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
+	public static String link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
 		Map<String, Integer> linkerTable = new HashMap<String, Integer>();
+		String linkerSymbolTable = "";
 		boolean isValid = true;
 		//sort the modules by order of address of modules.
 		Arrays.sort(modules);
@@ -200,7 +204,7 @@ public class Linker {
 			modules[0].offset = offset;
 			//linkerTable.putAll(modules[0].linkRecord);// put all link records from first module.
 			for(Map.Entry<String, Integer> lr : modules[0].linkRecord.entrySet()) {
-				linkerTableString = linkerTableString + 
+				linkerSymbolTable = linkerSymbolTable + 
 						"label: " + lr.getKey() + 
 						"\t" + "Original Address: " + lr.getValue() + 
 						"\t" + "Offset: " + offset + 
@@ -229,7 +233,7 @@ public class Linker {
 					//put all linker records of current module into linker table with offset.
 					for(Map.Entry<String, Integer> lr : modules[i+1].linkRecord.entrySet()) {
 						if(!linkerTable.containsKey(lr.getKey())) {
-							linkerTableString = linkerTableString + 
+							linkerSymbolTable = linkerSymbolTable + 
 									"label: " + lr.getKey() + 
 									"\t" + "Original Address: " + lr.getValue() + 
 									"\t" + "Offset: " + offset + 
@@ -251,7 +255,7 @@ public class Linker {
 				modules[execStartErrorModule].userRep.addType = LinkerModule.AddType.HEADER;
 				modules[execStartErrorModule].userRep.add(makeError("execStart") + "\n");
 				hErr.reportError(makeError("execStart",  Integer.toString(execStartAddr)), -1, -1);
-				return;
+				return linkerSymbolTable;
 			}
 			
 			try {
@@ -472,6 +476,8 @@ public class Linker {
 			}
 			
 		}
+		
+		return linkerSymbolTable;
 	}
 	
 	/**
