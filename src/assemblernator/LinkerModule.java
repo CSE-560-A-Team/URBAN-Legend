@@ -332,17 +332,17 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard")){
 				addHeader = false;
-				errorMessage = "303: Program Name does not match end of record name.";
+				errorMessage = "\n303: Program Name does not match end of record name.";
 			}
 			if(!ender.equals(this.progName)){
 				addHeader = false;
-				errorMessage = "303: Program Name does not match end of record name.";
+				errorMessage = "\n303: Program Name does not match end of record name.";
 			}
 			//Adding info to User Report
 			if(addHeader){
 				completeString = completeString + ender + ":\n";
 			}else{
-				completeString = completeString + ender + ":\n" + errorMessage +"\n";
+				completeString = completeString + ender + ":" + errorMessage +"\n";
 			}
 			this.userRep.addType = AddType.HEADER;
 			this.userRep.add(completeString);
@@ -370,7 +370,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				entryLabel = reader.readString(ScanWrap.notcolon, "");
 				if (!reader.go("disreguard"))
 				{
-					errorMessage = "814: Invalid label in linker record.";
+					errorMessage = errorMessage + "\n814: Invalid label in linker record.";
 					addLink = false;
 				}
 				completeString = "L:"  + entryLabel + ":";
@@ -380,27 +380,32 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				if (!reader.go("disreguard"))
 				{
 					addLink = false;
-					errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+					errorMessage =errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				}
 				isValid = OperandChecker.isValidMem(entryAddr);
 				if(!isValid){
-					errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+					errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 					addLink = false;
 				}
 				completeString = completeString + entryAddr + ":";
 
 				//end of link record
+				boolean hack = true;
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 				if(!ender.equals(this.progName)){
-					errorMessage = "Label does not match Program Name";
-					addLink = false;
+					errorMessage = errorMessage + "\nLabel does not match Program Name";
+					hack = false;
 				}
 				//add link record to user report and linkerModule
 				if(addLink){
-				linkRecord.put(entryLabel, entryAddr);
-				completeString =  completeString + ender + ":\n";
+					linkRecord.put(entryLabel, entryAddr);
+					if(hack){
+						completeString =  completeString + ender + ":" +errorMessage +"\n";
+					}else{
+					completeString =  completeString + ender + ":\n";
+					}
 				}else{
-					completeString =  completeString + ender + ":\n" +errorMessage +"\n";
+					completeString =  completeString + ender + ":" +errorMessage +"\n";
 				}
 				this.userRep.addType = AddType.LINKER;
 				this.userRep.add(entryAddr, completeString);
@@ -416,12 +421,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				theRecordsForTextMod.text.assignedLC = reader.readInt(ScanWrap.hex4, "textLC", 16);
 				completeString = "T:" + theRecordsForTextMod.text.assignedLC + ":";
 				if (!reader.go("disreguard")){
-					errorMessage = "800: Text record missing valid program assigned location.";
+					errorMessage = errorMessage + "\n800: Text record missing valid program assigned location.";
 					add = false;
 				}
 				isValid = OperandChecker.isValidMem(theRecordsForTextMod.text.assignedLC);
 				if(!isValid){
-					errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+					errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 					add = false;
 				}
 				//assembled hex
@@ -429,7 +434,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				completeString = completeString + theRecordsForTextMod.text.instrData+ ":";
 				if (!reader.go("disreguard"))
 				{
-					errorMessage = "801: Text record missing valid assembled instruction/data.";
+					errorMessage = errorMessage + "\n801: Text record missing valid assembled instruction/data.";
 					add = false;
 				}
 				//flag for high order
@@ -437,11 +442,11 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				completeString = completeString + theRecordsForTextMod.text.flagHigh + ":";
 				if (!reader.go("disreguard"))
 				{
-					errorMessage = "802: Text record missing valid status flag.";
+					errorMessage = errorMessage + "\n802: Text record missing valid status flag.";
 					add = false;
 				}
 				if(!(theRecordsForTextMod.text.flagHigh == 'A' || theRecordsForTextMod.text.flagHigh == 'R' || theRecordsForTextMod.text.flagHigh == 'E' || theRecordsForTextMod.text.flagHigh == 'C')){
-					errorMessage = "802: Text record missing valid status flag.";
+					errorMessage = errorMessage + "\n802: Text record missing valid status flag.";
 					add = false;
 				}		
 				//flag for low order
@@ -449,11 +454,11 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				completeString = completeString + theRecordsForTextMod.text.flagLow + ":";
 				if (!reader.go("disreguard"))
 				{
-					errorMessage = "802: Text record missing valid status flag.";
+					errorMessage = errorMessage + "\n802: Text record missing valid status flag.";
 					add = false;
 				}
 				if(!(theRecordsForTextMod.text.flagLow == 'A' || theRecordsForTextMod.text.flagLow == 'R' || theRecordsForTextMod.text.flagLow == 'E' || theRecordsForTextMod.text.flagLow == 'C')){
-					errorMessage = "802: Text record missing valid status flag.";
+					errorMessage = errorMessage + "\n802: Text record missing valid status flag.";
 					add = false;
 				}
 				//mods for high order
@@ -461,12 +466,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				completeString = completeString + theRecordsForTextMod.text.modHigh + ":";
 				if (!reader.go("disreguard"))
 				{
-					errorMessage = "803: Text record missing valid number of modifications.";
+					errorMessage = errorMessage + "\n803: Text record missing valid number of modifications.";
 					add = false;
 				}
 				if(theRecordsForTextMod.text.modHigh>16 || theRecordsForTextMod.text.modHigh<0)
 				{
-					errorMessage = "803: Text record missing valid number of modifications.";
+					errorMessage = errorMessage + "\n803: Text record missing valid number of modifications.";
 					add = false;
 				}
 				//mods for low order
@@ -474,23 +479,26 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				completeString = completeString + theRecordsForTextMod.text.modLow + ":";
 				if (!reader.go("disreguard"))
 				{
-					errorMessage = "803: Text record missing valid number of modifications.";
+					errorMessage = errorMessage + "\n803: Text record missing valid number of modifications.";
 					add = false;
 				}
 				if(theRecordsForTextMod.text.modLow>16 || theRecordsForTextMod.text.modLow<0)
 				{
-					errorMessage = "803: Text record missing valid number of modifications.";
+					errorMessage = errorMessage + "\n803: Text record missing valid number of modifications.";
 					add = false;
 				}
 				//end of text record
 				ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
+				boolean hack = true;
 				if(!ender.equals(this.progName)){
-					errorMessage = "Label does not match Program Name.";
+					errorMessage = errorMessage + "\nLabel does not match Program Name.";
+					hack = false;
 				}
-				if(add){
+				if(add && hack){
 					completeString = completeString + ender + ":\n";
 				}else{
-					completeString = completeString + ender + ":\n" + errorMessage +"\n";
+					completeString = completeString + ender + ":" + errorMessage +"\n";
+					errorMessage = "";
 				}
 				check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 				if (!reader.go("disreguard"))
@@ -504,12 +512,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					completeString = completeString + "M:" + modification.hex + ":";
 					if (!reader.go("disreguard"))
 					{
-						errorMessage = "804: Modification record missing 4 hex nybbles.";
+						errorMessage = errorMessage + "\n804: Modification record missing 4 hex nybbles.";
 						add = false;
 					}
 					isValid = OperandChecker.isValidMem(modification.hex);
 					if(!isValid){
-						errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+						errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 						add = false;
 					}
 					boolean run = true;
@@ -529,12 +537,12 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						completeString = completeString +midtemp.plusMin + ":";
 						if (!reader.go("disreguard"))
 						{
-							errorMessage = "805: Modification record missing plus or minus sign.";
+							errorMessage = errorMessage + "\n805: Modification record missing plus or minus sign.";
 							add = false;
 						}
 						isValid = OperandChecker.isValidPlusMin(midtemp.plusMin);
 						if(!isValid){
-							errorMessage = "812: Modification records must contain plus or minus sign.";
+							errorMessage = errorMessage + "\n812: Modification records must contain plus or minus sign.";
 							add = false;
 						}
 						//Address type
@@ -543,11 +551,11 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						completeString = completeString + midtemp.addrType + ":";
 						if (!reader.go("disreguard"))
 						{
-							errorMessage = "806: Modification record missing correct flag R, E, or N.";
+							errorMessage = errorMessage + "\n806: Modification record missing correct flag R, E, or N.";
 							add = false;
 						}
 						if(!(midtemp.addrType == 'E' || midtemp.addrType == 'R' || midtemp.addrType == 'N')){
-							errorMessage = "806: Modification record missing correct flag R, E, or N.";
+							errorMessage = errorMessage + "\n806: Modification record missing correct flag R, E, or N.";
 							add = false;
 						}
 						//Linker Label
@@ -556,14 +564,14 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						completeString = completeString +midtemp.linkerLabel + ":";
 						if (!reader.go("disreguard"))
 						{
-							errorMessage = "807: Modification record missing valid label for address.";
+							errorMessage = errorMessage + "\n807: Modification record missing valid label for address.";
 							add = false;
 						}
 						//either another plus/minus or HLS
 						loop = reader.readString(ScanWrap.notcolon, "modHLS");
 						if (!reader.go("disreguard"))
 						{
-							errorMessage = "808: Modification record missing correct char H, L, or S.";
+							errorMessage = errorMessage + "\n808: Modification record missing correct char H, L, or S.";
 							add = false;
 						}
 						if (loop.equals("")) {
@@ -575,26 +583,28 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					loop = reader.readString(ScanWrap.notcolon, "modHLS");
 					if (!reader.go("disreguard"))
 					{
-						errorMessage = "808: Modification record missing correct char H, L, or S.";
+						errorMessage = errorMessage + "\n808: Modification record missing correct char H, L, or S.";
 						add = false;
 					}
 					modification.HLS = loop.charAt(0);
 					completeString = completeString +modification.HLS + ":";
 					if(!(modification.HLS == 'H' || modification.HLS == 'L' || modification.HLS == 'S')){
-						errorMessage = "808: Modification record missing correct char H, L, or S.";
+						errorMessage = errorMessage + "\n808: Modification record missing correct char H, L, or S.";
 							add = false;
 					}
 					
 					//End of Modification Record
+					boolean boobies = true;
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 					if(!ender.equals(this.progName)){
-						errorMessage = "Label does not match Program Name.";
+						errorMessage = "\nLabel does not match Program Name.";
+						boobies = false;
 					}
 					theRecordsForTextMod.mods.add(modification);
-					if(add){
+					if(add && boobies){
 						completeString = completeString +ender + ":\n";
 					}else{
-						completeString = completeString +ender + ":\n" + errorMessage + "\n";	
+						completeString = completeString +ender + ":" + errorMessage + "\n";	
 					}
 					check = reader.readString(ScanWrap.notcolon, "invalidRecord");
 					if (!reader.go("disreguard"))
@@ -623,73 +633,76 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			this.endRec = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			completeString = "E:" + this.endRec + ":";
 			if (!reader.go("disreguard")){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				addEnd = false;
 			}
 			isValid = OperandChecker.isValidMem(this.endRec);
 			if(!isValid){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				addEnd = false;
 			}
 			//Total number of Link records
 			this.endLink = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			completeString = completeString + this.endLink + ":";
 			if (!reader.go("disreguard")){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				addEnd = false;
 			}
 			isValid = OperandChecker.isValidMem(this.endLink);
 			if(!isValid){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				addEnd = false;
 			}
 			//Total number of Text Records
 			this.endText = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			completeString = completeString + this.endText + ":";
 			if (!reader.go("disreguard")){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				addEnd = false;
 			}
 			isValid = OperandChecker.isValidMem(this.endText);
 			if(!isValid){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				addEnd = false;
 			}
 			//Total number of Modification Records
 			this.endMod = reader.readInt(ScanWrap.hex4, "endRecords", 16);
 			completeString = completeString + this.endMod + ":";
 			if (!reader.go("disreguard")){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				addEnd = false;
 			}
 			isValid = OperandChecker.isValidMem(this.endMod);
 			if(!isValid){
-				errorMessage = "811: Invalid value. Records values must be from 0 - 4095.";
+				errorMessage = errorMessage + "\n811: Invalid value. Records values must be from 0 - 4095.";
 				addEnd = false;
 			}
 			//End of end records
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if(!ender.equals(this.progName)){
-				errorMessage = "Label does not match Program Name.";
+				errorMessage = errorMessage + "\nLabel does not match Program Name.";
 				addEnd = false;
 			}
 			if(link != this.endLink){
-				errorMessage = "304: Number of link records does not match end record amount.";
+				errorMessage = errorMessage + "\n304: Number of link records does not match end record amount.";
 				addEnd = false;
-			}else if(text != this.endText){
-				errorMessage = "306: Number of text records does not match end record amount.";
+			}
+			if(text != this.endText){
+				errorMessage = errorMessage + "\n306: Number of text records does not match end record amount.";
 				addEnd = false;
-			}else if(mod != this.endMod){
-				errorMessage = "305: Number of modification records does not match end record amount.";
+			}
+			if(mod != this.endMod){
+				errorMessage = errorMessage + "\n305: Number of modification records does not match end record amount.";
 				addEnd = false;
-			}else if((link+text+mod+2) != this.endRec){
-				errorMessage = "307: Number of  total records does not match end record amount."; 
+			}
+			if((link+text+mod+2) != this.endRec){
+				errorMessage = errorMessage + "\n307: Number of  total records does not match end record amount."; 
 				addEnd = false;
 			}
 			if(addEnd){
 				completeString = completeString + ender +":\n";
 			}else{
-				completeString = completeString + ender +":\n" + errorMessage + "\n";
+				completeString = completeString + ender +":" + errorMessage + "\n";
 			}
 			//adds info to user Report
 			this.userRep.addType = AddType.END;
@@ -698,7 +711,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			error.reportError(makeError("loaderNoEnd"),0,0); 
 			return;
 		}
-
+		System.out.println(this.userRep.toString());
 		//program ran successful. Checks for more in file
 		this.success = true;
 		if (read.hasNext()) {
