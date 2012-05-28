@@ -69,8 +69,8 @@ public class USI_PST extends AbstractInstruction {
 						Value constantSize1 = module.evaluate(o1.expression, false, BitLocation.Literal, hErr, this,
 								o1.valueStartPosition);
 						this.getOperandData("FL").value = constantSize1;
-						isValid = OperandChecker.isValidLiteral(constantSize1.value,ConstantRange.RANGE_13_TC);
-						if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),"-2^12", "2^12 - 1"), this.lineNum, -1);
+						isValid = OperandChecker.isValidLiteral(constantSize1.value,ConstantRange.RANGE_16_TC);
+						if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),"-2^15", "2^15 - 1"), this.lineNum, -1);
 					}else if (this.hasOperand("FM")){
 						//error checking
 						Operand o1 = getOperandData("FM");
