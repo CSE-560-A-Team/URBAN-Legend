@@ -28,8 +28,6 @@ import assemblernator.Instruction.ConstantRange;
  * @date May 12, 2012; 1:37:15 PM
  */
 public class Linker {
-	/** shut up */
-	public static String linkerTableString = "";
 	
 	/**
 	 * Returns the loader header record.
@@ -159,16 +157,20 @@ public class Linker {
 	 * @param modules an array of LinkerModules.
 	 * @param filename name of file to output to.
 	 * @param hErr error handler
+	 * @return the linker symbol table.
 	 * @specRef N/A
 	 */
-	public static void link(LinkerModule[] modules, String filename, ErrorHandler hErr) {
+	public static String link(LinkerModule[] modules, String filename, ErrorHandler hErr) {
+		String linkerSymbolTable = "";
 		try {
 			OutputStream out = new FileOutputStream(filename);
-			link(modules, out, hErr);
+			linkerSymbolTable = link(modules, out, hErr);
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
+		
+		return linkerSymbolTable;
 	}
 	/**
 	 * Takes an array of LinkerModules and outputs a loader file.
@@ -182,10 +184,12 @@ public class Linker {
 	 * @param modules an array of LinkerModules.
 	 * @param out output stream to output load file.
 	 * @param hErr error handler.
+	 * @return the linker symbol table.
 	 * @specRef N/A
 	 */
-	public static void link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
+	public static String link(LinkerModule[] modules, OutputStream out, ErrorHandler hErr) {
 		Map<String, Integer> linkerTable = new HashMap<String, Integer>();
+		String linkerSymbolTable = "";
 		boolean isValid = true;
 		//sort the modules by order of address of modules.
 		Arrays.sort(modules);
@@ -200,7 +204,7 @@ public class Linker {
 			modules[0].offset = offset;
 			//linkerTable.putAll(modules[0].linkRecord);// put all link records from first module.
 			for(Map.Entry<String, Integer> lr : modules[0].linkRecord.entrySet()) {
-				linkerTableString = linkerTableString + 
+				linkerSymbolTable = linkerSymbolTable + 
 						"label: " + lr.getKey() + 
 						"\t" + "Original Address: " + lr.getValue() + 
 						"\t" + "Offset: " + offset + 
@@ -218,6 +222,7 @@ public class Linker {
 					if(modules[i+1].loadAddr > 4095) {
 						modules[i+1].userRep.addType = LinkerModule.AddType.HEADER;
 						modules[i+1].userRep.add(makeError("OOM") + "\n");
+						hErr.reportError(makeError("OOM"), modules[i+1].loadAddr, -1);
 						break;
 					}
 					totalLen += modules[i+1].prgTotalLen;
@@ -228,7 +233,7 @@ public class Linker {
 					//put all linker records of current module into linker table with offset.
 					for(Map.Entry<String, Integer> lr : modules[i+1].linkRecord.entrySet()) {
 						if(!linkerTable.containsKey(lr.getKey())) {
-							linkerTableString = linkerTableString + 
+							linkerSymbolTable = linkerSymbolTable + 
 									"label: " + lr.getKey() + 
 									"\t" + "Original Address: " + lr.getValue() + 
 									"\t" + "Offset: " + offset + 
@@ -238,6 +243,7 @@ public class Linker {
 							//error: duplicate label for linking records.
 							modules[i+1].userRep.addType = LinkerModule.AddType.LINKER;
 							modules[i+1].userRep.add(lr.getValue(), makeError("dupLbl") + "\n");
+							hErr.reportError(makeError("dupLbl", lr.getKey()), lr.getValue(), -1);
 						}
 					}
 				}
@@ -248,7 +254,8 @@ public class Linker {
 			if(execStartAddr > (modules[0].loadAddr + totalLen) || execStartAddr < modules[0].loadAddr) {
 				modules[execStartErrorModule].userRep.addType = LinkerModule.AddType.HEADER;
 				modules[execStartErrorModule].userRep.add(makeError("execStart") + "\n");
-				return;
+				hErr.reportError(makeError("execStart",  Integer.toString(execStartAddr)), -1, -1);
+				return linkerSymbolTable;
 			}
 			
 			try {
@@ -296,7 +303,7 @@ public class Linker {
 											tempAdjustVal = linkerTable.get(midMod.linkerLabel);
 										} else {
 											isValid = false;
-											hErr.reportError(makeError("noLbl"), -1, -1);
+											hErr.reportError(makeError("noLbl", midMod.linkerLabel), -1, -1);
 											offMod.userRep.addType = LinkerModule.AddType.TEXT;
 											offMod.userRep.add(origLC, makeError("noLbl", midMod.linkerLabel) + "\n");
 											continue;
@@ -358,10 +365,12 @@ public class Linker {
 									} else {
 										offMod.userRep.addType = LinkerModule.AddType.TEXT;
 										offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
+										hErr.reportError(makeError("lnkOORAddr"), origLC, -1);
 									}
 								} else {
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORLit12") + "\n");
+									hErr.reportError(makeError("lnkOORLit12"), origLC, -1);
 									
 								}
 							} else if(litBit == '1') {
@@ -380,6 +389,7 @@ public class Linker {
 								} else {
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORLit16") + "\n");
+									hErr.reportError(makeError("lnkOORLit16"), origLC, -1);
 								}
 							} else if(formatBit == '1') {
 								//get high value.
@@ -410,10 +420,12 @@ public class Linker {
 									} else {
 										offMod.userRep.addType = LinkerModule.AddType.TEXT;
 										offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
+										hErr.reportError(makeError("lnkOORAddr"), origLC, -1);
 									}
 								} else {
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
+									hErr.reportError(makeError("lnkOORAddr"), origLC, -1);
 								}
 							} else {
 								//get low memory value.
@@ -431,6 +443,7 @@ public class Linker {
 								} else {
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
+									hErr.reportError(makeError("lnkOORAddr"), origLC, -1);
 								}
 							} 
 							
@@ -463,6 +476,8 @@ public class Linker {
 			}
 			
 		}
+		
+		return linkerSymbolTable;
 	}
 	
 	/**

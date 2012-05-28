@@ -42,7 +42,10 @@ public class USI_IWSR extends UIG_IO {
 		String outContent;
 		for (int i = 0; i < nw; ++i) {
 			if(breakDown.literal) {
-				outContent = Integer.toString(breakDown.source);
+				int val = breakDown.source;
+				val <<= 16; 
+				val >>= 16; //convert 16 bit source to 32 bit.
+				outContent = Integer.toString(val);
 			} else {
 				outContent = Integer.toString(machine.getMemory(breakDown.getEffectiveSrcAddress(machine) + i));
 			}

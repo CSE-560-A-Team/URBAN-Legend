@@ -94,6 +94,7 @@ public class IOPane extends JTextPane {
 	public void appendPlain(String str) {
 		try {
 			StringBuilder asPlain = new StringBuilder(str.length() * 4);
+			asPlain.append("<pre>");
 			for (int i = 0; i < str.length(); ++i) {
 				switch (str.charAt(i)) {
 				case '\r':
@@ -101,10 +102,10 @@ public class IOPane extends JTextPane {
 						asPlain.append("<br/>\n");
 					continue;
 				case '\n':
-					asPlain.append("<br/>\n");
+					asPlain.append("\n");
 					continue;
 				case '\t':
-					asPlain.append("&tab;");
+					asPlain.append("\t");
 					continue;
 				case ' ':
 					asPlain.append("&nbsp;");
@@ -126,6 +127,7 @@ public class IOPane extends JTextPane {
 					continue;
 				}
 			}
+			asPlain.append("</pre>");
 			htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), asPlain.toString(), 0, 0, null);
 		} catch (BadLocationException e) {
 			e.printStackTrace();

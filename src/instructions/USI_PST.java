@@ -51,7 +51,7 @@ public class USI_PST extends AbstractInstruction {
 				isValid = false;
 				hErr.reportError(makeError("tooFewOperandsIns", this.getOpId()), this.lineNum, -1);
 				//checks combo for 2 operands if no DR error if dr and no FL or FM error
-			}else if(this.operands.size() == 2){
+			}else if(this.operands.size() == 2) {
 				if(this.hasOperand("DR")){
 					//error checking
 					Operand o = getOperandData("DR");
@@ -69,8 +69,8 @@ public class USI_PST extends AbstractInstruction {
 						Value constantSize1 = module.evaluate(o1.expression, false, BitLocation.Literal, hErr, this,
 								o1.valueStartPosition);
 						this.getOperandData("FL").value = constantSize1;
-						isValid = OperandChecker.isValidLiteral(constantSize1.value,ConstantRange.RANGE_13_TC);
-						if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),"-2^12", "2^12 - 1"), this.lineNum, -1);
+						isValid = OperandChecker.isValidLiteral(constantSize1.value,ConstantRange.RANGE_16_TC);
+						if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),"-2^15", "2^15 - 1"), this.lineNum, -1);
 					}else if (this.hasOperand("FM")){
 						//error checking
 						Operand o1 = getOperandData("FM");
@@ -79,6 +79,14 @@ public class USI_PST extends AbstractInstruction {
 						this.getOperandData("FM").value = constantSize1;
 						isValid = OperandChecker.isValidMem(constantSize1.value);
 						if(!isValid) hErr.reportError(makeError("OORmemAddr", "FM", this.getOpId()), this.lineNum, -1);
+					} else if(this.hasOperand("EX")){
+						//error checking
+						Operand o1 = getOperandData("EX");
+						Value constantSize1 = module.evaluate(o1.expression, false, BitLocation.Literal, hErr, this,
+								o1.valueStartPosition);
+						this.getOperandData("EX").value = constantSize1;
+						isValid = OperandChecker.isValidLiteral(constantSize1.value,ConstantRange.RANGE_16_TC);
+						if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(),"-2^15", "2^15 - 1"), this.lineNum, -1);
 					}else{
 						isValid = false;
 						hErr.reportError(makeError("operandInsNeedAdd", this.getOpId(), "FM or FL", "DR"), this.lineNum, -1);

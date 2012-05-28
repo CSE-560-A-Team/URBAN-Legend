@@ -3,6 +3,7 @@ package instructions;
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
 import static simulanator.Deformatter.breakDownOther;
+import simulanator.Deformatter;
 import simulanator.Machine;
 import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.AbstractInstruction;
@@ -160,10 +161,16 @@ public class USI_TRDR extends AbstractInstruction {
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdown brkDwn = breakDownOther(instruction);
 		int reg = brkDwn.readFromSource(machine);
-		int addr = brkDwn.destination;
+		int addr = brkDwn.getEffectiveDestAddress(machine);
 		reg--;
-		brkDwn.putToDest(reg, machine);
-		machine.setLC(addr);
+		if(brkDwn.sourceKind == Deformatter.Location.INDEXREGISTER) {
+			machine.setIndexRegister(brkDwn.source, reg);
+		} else {
+			machine.setRegister(brkDwn.source, reg);
+		}
+		if(reg == 0) {
+			machine.setLC(addr);
+		}
 	}
 
 	// =========================================================

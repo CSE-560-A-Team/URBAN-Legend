@@ -116,8 +116,11 @@ public class Deformatter {
 							mach.getLC(), 0);
 				return mach.getRegister(source);
 			case MEMORY:
-				if (literal)
+				if (literal) {
+					source <<= 16;
+					source >>= 16; //convert 16 bit source to 32 bit.
 					return source;
+				}
 				if (source < 0 || source > 4095)
 					mach.hErr.reportError(makeError("runMemOOR"), mach.getLC(),
 							0);

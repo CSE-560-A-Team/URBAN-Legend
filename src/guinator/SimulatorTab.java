@@ -265,6 +265,9 @@ public class SimulatorTab extends JSplitPane {
 			try {
 				inputField.setEnabled(true);
 				inputField.setEditable(true);
+				inputField.grabFocus();
+				inputField.setText("Enter a string");
+				inputField.selectAll();
 				while (!inputField.submitted)
 					try {
 						Thread.sleep(100);
@@ -273,9 +276,10 @@ public class SimulatorTab extends JSplitPane {
 					}
 				String ret = inputField.getText();
 				inputField.setText("");
-				inputField.setEnabled(false);
 				return ret;
 			} finally {
+				inputField.setEnabled(false);
+				inputField.submitted = false;
 				inputField.unlock();
 			}
 		}

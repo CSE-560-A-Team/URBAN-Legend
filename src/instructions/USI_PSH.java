@@ -59,17 +59,24 @@ public class USI_PSH extends AbstractInstruction {
 		} else if(this.hasOperand("FC")) {
 			//range checking
 			value = module.evaluate(this.getOperand("FC"), false, BitLocation.Literal, hErr, this, this.getOperandData("FC").valueStartPosition);
-			isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_ADDR);
+			isValid = OperandChecker.isValidConstant(value.value, ConstantRange.RANGE_16_TC);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FC", this.getOpId(),
-					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+					Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
 			this.getOperandData("FC").value = value;
 		} else if(this.hasOperand("FL")){
 			//range checking
 			value = module.evaluate(this.getOperand("FL"), false, BitLocation.Literal,  hErr, this, this.getOperandData("FL").valueStartPosition);
-			isValid = OperandChecker.isValidLiteral(value.value,ConstantRange.RANGE_ADDR);
+			isValid = OperandChecker.isValidLiteral(value.value,ConstantRange.RANGE_16_TC);
 			if(!isValid) hErr.reportError(makeError("OORconstant", "FL", this.getOpId(),
-					Integer.toString(ConstantRange.RANGE_ADDR.min), Integer.toString(ConstantRange.RANGE_ADDR.max)), this.lineNum, -1);
+					Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
 			this.getOperandData("FL").value = value;
+		} else if(this.hasOperand("EX")) {
+			//range checking
+			value = module.evaluate(this.getOperand("EX"), false, BitLocation.Literal,  hErr, this, this.getOperandData("EX").valueStartPosition);
+			isValid = OperandChecker.isValidLiteral(value.value,ConstantRange.RANGE_16_TC);
+			if(!isValid) hErr.reportError(makeError("OORconstant", "EX", this.getOpId(),
+					Integer.toString(ConstantRange.RANGE_16_TC.min), Integer.toString(ConstantRange.RANGE_16_TC.max)), this.lineNum, -1);
+			this.getOperandData("EX").value = value;
 		} else{
 			isValid = false;
 			if(this.hasOperand("FR")){
@@ -85,9 +92,7 @@ public class USI_PSH extends AbstractInstruction {
 			} else if(this.hasOperand("LR")){
 				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "LR"), this.lineNum, -1);				
 			} else if(this.hasOperand("FM")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FM"), this.lineNum, -1);				
-			} else if(this.hasOperand("EX")){
-				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "EX"), this.lineNum, -1);				
+				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "FM"), this.lineNum, -1);							
 			} else if(this.hasOperand("NW")){
 				hErr.reportError(makeError("operandInsWrong", this.getOpId(), "NW"), this.lineNum, -1);					
 			} else if(this.hasOperand("ST")){
@@ -104,13 +109,9 @@ public class USI_PSH extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		
 		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromSource(machine);
-		System.err.println(wordOrig);
 		machine.stack.push(wordOrig);
-		System.err.println(machine.stack.size());
-	
 	}
 
 	// =========================================================
