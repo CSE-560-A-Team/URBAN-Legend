@@ -1403,7 +1403,7 @@ Loader files exported by URBAN-Legend contain chunks according to the following 
     <td>Appears only once, at the beginning of the Load file.</td>
   </tr>
     <tr>
-      <td rowspan="17" class="stripebg"></td>
+      <td rowspan="18" class="stripebg"></td>
       <td colspan="3" id="LM1.1">LM1.1</td>
       <td>Byte('H')</td>
       <td>Header record indicator</td>
@@ -1499,7 +1499,7 @@ Loader files exported by URBAN-Legend contain chunks according to the following 
 		<td>Created for each entry point into the program.</td>
 	  </tr>
 		<tr>
-		  <td rowspan="7" class="stripebg"></td>
+		  <td rowspan="8" class="stripebg"></td>
 		  <td colspan="3" id="LM2.1">LM2.1</td>
 		  <td>Byte('T')</td>
 		  <td>Text record indicator</td>
@@ -1545,7 +1545,7 @@ Loader files exported by URBAN-Legend contain chunks according to the following 
     <td>Appears only once, as the last record in the file.</td>
   </tr>
     <tr>
-      <td rowspan="11" class="stripebg"></td>
+      <td rowspan="8" class="stripebg"></td>
       <td colspan="3" id="OB5.1">OB5.1</td>
       <td>Byte('E')</td>
       <td>End record indicator</td>
