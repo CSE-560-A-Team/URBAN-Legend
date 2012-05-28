@@ -218,6 +218,7 @@ public class Linker {
 					if(modules[i+1].loadAddr > 4095) {
 						modules[i+1].userRep.addType = LinkerModule.AddType.HEADER;
 						modules[i+1].userRep.add(makeError("OOM") + "\n");
+						hErr.reportError(makeError("OOM"), modules[i+1].loadAddr, -1);
 						break;
 					}
 					totalLen += modules[i+1].prgTotalLen;
@@ -238,6 +239,7 @@ public class Linker {
 							//error: duplicate label for linking records.
 							modules[i+1].userRep.addType = LinkerModule.AddType.LINKER;
 							modules[i+1].userRep.add(lr.getValue(), makeError("dupLbl") + "\n");
+							hErr.reportError(makeError("dupLbl", lr.getKey()), lr.getValue(), -1);
 						}
 					}
 				}
@@ -248,6 +250,7 @@ public class Linker {
 			if(execStartAddr > (modules[0].loadAddr + totalLen) || execStartAddr < modules[0].loadAddr) {
 				modules[execStartErrorModule].userRep.addType = LinkerModule.AddType.HEADER;
 				modules[execStartErrorModule].userRep.add(makeError("execStart") + "\n");
+				hErr.reportError(makeError("execStart",  Integer.toString(execStartAddr)), -1, -1);
 				return;
 			}
 			
@@ -358,10 +361,12 @@ public class Linker {
 									} else {
 										offMod.userRep.addType = LinkerModule.AddType.TEXT;
 										offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
+										hErr.reportError(makeError("lnkOORAddr"), origLC, -1);
 									}
 								} else {
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORLit12") + "\n");
+									hErr.reportError(makeError("lnkOORLit12"), origLC, -1);
 									
 								}
 							} else if(litBit == '1') {
@@ -380,6 +385,7 @@ public class Linker {
 								} else {
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORLit16") + "\n");
+									hErr.reportError(makeError("lnkOORLit16"), origLC, -1);
 								}
 							} else if(formatBit == '1') {
 								//get high value.
@@ -410,10 +416,12 @@ public class Linker {
 									} else {
 										offMod.userRep.addType = LinkerModule.AddType.TEXT;
 										offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
+										hErr.reportError(makeError("lnkOORAddr"), origLC, -1);
 									}
 								} else {
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
+									hErr.reportError(makeError("lnkOORAddr"), origLC, -1);
 								}
 							} else {
 								//get low memory value.
@@ -431,6 +439,7 @@ public class Linker {
 								} else {
 									offMod.userRep.addType = LinkerModule.AddType.TEXT;
 									offMod.userRep.add(origLC, makeError("lnkOORAddr") + "\n");
+									hErr.reportError(makeError("lnkOORAddr"), origLC, -1);
 								}
 							} 
 							
