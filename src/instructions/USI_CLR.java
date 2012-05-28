@@ -99,15 +99,8 @@ public class USI_CLR extends AbstractInstruction {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 	
-		OpcodeBreakdown brkdwn = Deformatter.breakDownDestRange(machine.instruction);
-
-		int word = brkdwn.readFromDest(machine); 	
-		int zero = 0;
-		if(brkdwn.literal) {
-			machine.setIndexRegister(word, zero);
-		} else {
-			machine.setRegister(word, zero);
-		}
+		OpcodeBreakdown brkdwn = Deformatter.breakDownOther(machine.instruction);
+		brkdwn.putToDest(0, machine);
 		
 	}
 

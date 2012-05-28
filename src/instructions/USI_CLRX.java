@@ -56,7 +56,6 @@ public class USI_CLRX extends AbstractInstruction {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 
-		OpcodeBreakdown brkdwn = Deformatter.breakDownOther(machine.instruction);
 		int word = 0;
 		for(int i = 0; i<7 ; i++){ 
 			machine.setIndexRegister(i, word);
