@@ -36,9 +36,9 @@ public class USI_TRLT extends UIG_TransferCond {
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdown brkDwn = breakDownOther(instruction);
-		int reg = brkDwn.destination;
+		int reg = brkDwn.readFromSource(machine);
 		
-		int addr = brkDwn.readFromDest(machine);
+		int addr = brkDwn.destination;
 		if(reg < 0) {
 			machine.setLC(addr);
 		}
