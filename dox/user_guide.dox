@@ -184,25 +184,7 @@ An illustration of the breakdown of these formats is given in the two following 
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
   </tr>
   <tr style="background:#DAE0FF">
-    <th rowspan="2">DEST-Range</th>
-    <td colspan="6"><b>OP Code</b></td>
-    <td colspan="2"><b>Format</b></td>
-    <td colspan="4"><b><i>Word Count</i></b></td>
-    <td colspan="1"><b>Index?</b></td>
-    <td colspan="3"><b>Register</b></td>
-    <td colspan="4"><b>IXR</b></td>
-    <td colspan="12"><b>Memory address</b></td>
-  </tr>
-  <tr>
-    <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-    <td><b>0</b></td><td><b>0</b></td>
-    <td>0</td><td>0</td><td>0</td><td>1</td>
-    <td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>0</td><td>0</td><td>0</td>
-    <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-  </tr>
-  <tr style="background:#DAE0FF">
-    <th rowspan="2">SRC-Range</th>
+    <th rowspan="2">DEST-Mem</th>
     <td colspan="6"><b>OP Code</b></td>
     <td colspan="2"><b>Format</b></td>
     <td colspan="1"><b>Index?</b></td>
@@ -215,7 +197,25 @@ An illustration of the breakdown of these formats is given in the two following 
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
     <td><b>0</b></td><td><b>0</b></td>
     <td>1</td><td>0</td><td>0</td><td>0</td>
+    <td>0</td><td>0</td><td>0</td><td>0</td>
+    <td>0</td><td>0</td><td>0</td><td>0</td>
+    <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+  </tr>
+  <tr style="background:#DAE0FF">
+    <th rowspan="2">SRC-Mem</th>
+    <td colspan="6"><b>OP Code</b></td>
+    <td colspan="2"><b>Format</b></td>
+    <td colspan="4"><b><i>Word Count</i></b></td>
+    <td colspan="1"><b>Index?</b></td>
+    <td colspan="3"><b>Register</b></td>
+    <td colspan="4"><b>IXR</b></td>
+    <td colspan="12"><b>Memory address</b></td>
+  </tr>
+  <tr>
+    <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+    <td><b>0</b></td><td><b>0</b></td>
     <td>0</td><td>0</td><td>0</td><td>1</td>
+    <td>1</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td>
     <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
   </tr>
@@ -916,7 +916,7 @@ The following tables describe the various instructions with their formats and th
 <tr><td>IA0        </td><td> IADD  </td><td>(<b>I</b>nteger <b>Add</b>)                                 </td><td> 001000 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> Mem,Lit,Mem + Mem,Mem + Lit     </td><td> Adds memory loc and a register together or a register and a register                                                                                                    </td></tr>
 <tr><td>IA1        </td><td> IMAD  </td><td>(<b>I</b>nteger <b>M</b>ultiply and <b>Ad</b>d)             </td><td> 001001 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> Mem,Lit,Mem + Mem,Mem + Lit     </td><td> Multiplys memory loc or register with a register or memory loc and adds memory loc or register to total                                                                 </td></tr>
 <tr><td>IA2        </td><td> IAA   </td><td>(<b>I</b>nteger <b>A</b>dd <b>A</b>bsolute)                 </td><td> 001010 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> Mem,Lit,Mem + Mem,Mem + Lit     </td><td> Adds absolute value of memory loc to a register or absolute value register to memory loc or absolute register to register                                               </td></tr>
-<tr><td>IA3        </td><td> ISRG  </td><td>(<b>I</b>nteger <b>S</b>um <b>R</b>ang<b>e</b>)             </td><td> 001011 </td><td> {NW,FM,DR},{NW,FM,DX},{NW,FL,DR},{NW,FL,DX},{NW,EX,DR},{NW,EX,DX}                                                                                                              </td><td> FL,EX:[-4096,4095]                       </td><td> Dest-Range                      </td><td> Sums all the numbers from mref to mref+NW                                                                                                                               </td></tr>
+<tr><td>IA3        </td><td> ISRG  </td><td>(<b>I</b>nteger <b>S</b>um <b>R</b>ang<b>e</b>)             </td><td> 001011 </td><td> {NW,FM,DR},{NW,FM,DX}                                                                                                                                                          </td><td> FL,EX:[-4096,4095]                       </td><td> Dest-Range                      </td><td> Sums all the numbers from mref to mref+NW                                                                                                                               </td></tr>
 <tr><td>IA4        </td><td> ISUB  </td><td>(<b>I</b>nteger <b>Sub</b>traction)                         </td><td> 001100 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> Mem,Lit,Mem + Mem,Mem + Lit     </td><td> Subtracts memory loc and a register together or a register and another register                                                                                         </td></tr>
 <tr><td>IA5        </td><td> IMUL  </td><td>(<b>I</b>nteger <b>Mul</b>tiplication)                      </td><td> 001101 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> Mem,Lit,Mem + Mem,Mem + Lit     </td><td> Mulitplys memory loc and a register together or a register and another register                                                                                         </td></tr>
 <tr><td>IA6        </td><td> IDIV  </td><td>(<b>I</b>nteger <b>Div</b>ision)                            </td><td> 001110 </td><td> {FR,DM},{FM,DR},{FX,DM},{FM,DX},{FR,DM,DX},{FX,DM,DX},{FM,FX,DX},{FM,FX,DR},{FR,DR},{FR,DX},{FX,DR},{FX,DX},{FR,DM},{FL,DR},{FL,DX},{FM,DM},{FL,DM},{EX,DR},{EX,DX},{EX,DM}    </td><td> FL,EX:[-32768,32767]{DM,FL}:[-2048,2047] </td><td> Mem,Lit,Mem + Mem,Mem + Lit     </td><td> Divides memory loc and a register together or a register and anotherregister                                                                                            </td></tr>
@@ -936,7 +936,7 @@ The following tables describe the various instructions with their formats and th
 <tr><td>JT1        </td><td> TRLT  </td><td>(<b>Tr</b>ansfer if <b>L</b>ess <b>T</b>han Zero)           </td><td> 100001 </td><td> {FR,DM},{FR,DM,DX}                                                                                                                                                             </td><td>                                          </td><td> Memory                          </td><td> if contents of register < 0, then jump to address given.                                                                                                                </td></tr>
 <tr><td>JT2        </td><td> TRGT  </td><td>(<b>Tr</b>ansfer if <b>G</b>reater <b>t</b>han Zero)        </td><td> 100010 </td><td> {FR,DM},{FR,DM,DX}                                                                                                                                                             </td><td>                                          </td><td> Memory                          </td><td> if contents of register > 0, then jump to address given.                                                                                                                </td></tr>
 <tr><td>JT3        </td><td> TR    </td><td>(<b>Tr</b>ansfer Unconditionally)                           </td><td> 100011 </td><td> {DM},{DM,DX}                                                                                                                                                                   </td><td>                                          </td><td> Memory                          </td><td> Jumps to address given.                                                                                                                                                 </td></tr>
-<tr><td>JT4        </td><td> TRDR  </td><td>(<b>Tr</b>ansfer or <b>D</b>ecrement <b>R</b>egister)       </td><td> 100100 </td><td> {FR,DM},{FR,DM,DX},{FX,DM},{FX,DM,DX}                                                                                                                                          </td><td>                                          </td><td> Memory                          </td><td> Decrements contents of register and jumps to address given.                                                                                                             </td></tr>
+<tr><td>JT4        </td><td> TRDR  </td><td>(<b>Tr</b>ansfer or <b>D</b>ecrement <b>R</b>egister)       </td><td> 100100 </td><td> {FR,DM},{FR,DM,DX},{FX,DM},{FX,DM,DX}                                                                                                                                          </td><td>                                          </td><td> Memory                          </td><td> Decrements contents of register, and if decremented register = 0, jumps to address given.                                                                                                             </td></tr>
 <tr><td>JT5        </td><td> TRLK  </td><td>(<b>Tr</b>ansfer and <b>L</b>ink)                           </td><td> 100101 </td><td> {DM,DR},{DM,DX,DR}                                                                                                                                                             </td><td>                                          </td><td> Memory                          </td><td> The Return address of the instruction is stored in register, and the instruction jumps to address given.                                                                </td></tr>
 <tr><td>JT6        </td><td> RET   </td><td>(<b>Ret</b>urn to Calling Program)                          </td><td> 100110 </td><td> {DM},{DM,DX},{DR}                                                                                                                                                              </td><td>                                          </td><td> Memory                          </td><td> Jumps to address given; can take a register.                                                                                                                                                 </td></tr>
 <tr><td>JT7        </td><td> SKT   </td><td>(<b>S</b>tac<b>k</b> <b>T</b>est)                           </td><td> 100111 </td><td> {DR}                                                                                                                                                                           </td><td>                                          </td><td> Memory                          </td><td> Register given is set to size of stack.                                                                                                                                 </td></tr>
