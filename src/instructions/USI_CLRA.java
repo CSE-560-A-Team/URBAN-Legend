@@ -2,7 +2,10 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOPOnly;
+import static simulanator.Deformatter.breakDownOther;
+import simulanator.Deformatter;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -52,7 +55,12 @@ public class USI_CLRA extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+
+		OpcodeBreakdown brkdwn = Deformatter.breakDownOther(machine.instruction);
+		int word = 0;
+		for(int i = 0; i<7 ; i++){ 
+			machine.setRegister(i, word);
+		}
 	}
 
 	// =========================================================
