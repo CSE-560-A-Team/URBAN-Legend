@@ -1488,6 +1488,11 @@ Loader files exported by URBAN-Legend contain chunks according to the following 
       <td>LABEL, 1-32 bytes</td>
       <td>Program Name from the First Object File</td>
     </tr>	
+	<tr>
+      <td colspan="3" id="LM1.18">LM1.18</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
+    </tr>
 	  <tr>
 		<td colspan="4" id="LM2">LM2</td>
 		<td>Text Record</td>
@@ -1529,6 +1534,11 @@ Loader files exported by URBAN-Legend contain chunks according to the following 
 		  <td>LABEL, 1-32 bytes</td>
 		  <td>Program Name, same as <a href="#LM1.17">LM1.17</a></td>
 		</tr>
+		<tr>
+        <td colspan="3" id="LM2.8">LM2.8</td>
+          <td>Byte(':')</td>
+		  <td>Standard separator</td>
+		</tr>
 	<tr>
     <td colspan="4" id="OB5">OB5</td>
     <td>End Record</td>
@@ -1569,6 +1579,11 @@ Loader files exported by URBAN-Legend contain chunks according to the following 
       <td colspan="3" id="OB5.7">OB5.7</td>
       <td>LABEL, 1-32 bytes</td>
       <td>Program Name, same as <a href="#LM1.17">LM1.17</a></td>
+    </tr>
+	<tr>
+      <td colspan="3" id="LM5.8">LM5.8</td>
+      <td>Byte(':')</td>
+      <td>Standard separator</td>
     </tr>
 </table>
 
