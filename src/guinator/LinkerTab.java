@@ -3,6 +3,7 @@ package guinator;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -83,8 +84,16 @@ public class LinkerTab extends JSplitPane {
 						0, 0);
 				String saveto = GUIUtil.getSaveFname(LinkerTab.this,
 						"URBAN Legend Executables", ".ulx");
-				Linker.link(linkMods.toArray(new LinkerModule[0]), saveto,
+				String linktable = Linker.link(
+						linkMods.toArray(new LinkerModule[0]), saveto,
 						warningOutput.hErr);
+				for (LinkerModule lm : linkMods)
+					warningOutput.appendPlain("================= Object File "
+							+ (new File(lm.filename)).getName()
+							+ " =================\n" + lm.toString() + "\n\n");
+				warningOutput
+						.appendPlain("================= Joint Symbol Table =================\n"
+								+ linktable + "\n\n");
 			}
 			else if (e.getSource() == addFiles) {
 				String[] fnames = GUIUtil.getLoadFnames(LinkerTab.this,
