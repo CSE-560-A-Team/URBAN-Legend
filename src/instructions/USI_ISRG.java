@@ -121,7 +121,7 @@ public class USI_ISRG extends AbstractInstruction {
 				word = 0;
 			}
 		}else{
-			machine.hErr.reportError(makeError("runMemOOR","1000"), machine.getLC(), -1);
+			machine.hErr.reportError(makeError("runMemOOR"), machine.getLC(), -1);
 		}
 		brkdwn.putToDest((int)word, machine);
 	}

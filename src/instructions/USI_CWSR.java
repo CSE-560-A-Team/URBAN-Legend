@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import simulanator.Deformatter;
 import simulanator.Deformatter.OpcodeBreakdown;
 import simulanator.Machine;
@@ -40,6 +41,10 @@ public class USI_CWSR extends UIG_IO {
 		int nw = breakDown.numWords;
 		byte[] b = new byte[nw << 2];
 		for (int i = 0; i < nw; ++i) {
+			if(addr + i > 4095) {
+				machine.hErr.reportError(makeError("runMemOOR"), machine.getLC(), -1);
+				break; //if address to read from is out of range stop reading.
+			}
 			int a = machine.getMemory(addr + i);
 			b[(i << 2) + 0] = ((byte) ((a & 0xFF000000) >>> 24));
 			b[(i << 2) + 1] = ((byte) ((a & 0x00FF0000) >>> 16));

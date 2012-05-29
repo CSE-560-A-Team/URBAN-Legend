@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import simulanator.Deformatter;
 import simulanator.Machine;
 import simulanator.Deformatter.OpcodeBreakdown;
@@ -47,7 +48,12 @@ public class USI_IWSR extends UIG_IO {
 				val >>= 16; //convert 16 bit source to 32 bit.
 				outContent = Integer.toString(val);
 			} else {
-				outContent = Integer.toString(machine.getMemory(breakDown.getEffectiveSrcAddress(machine) + i));
+				int addr = breakDown.getEffectiveSrcAddress(machine);
+				if(addr + i > 4095) {
+					machine.hErr.reportError(makeError("runMemOOR"), machine.getLC(), -1);
+					return; //if address to read from is out of range stop reading.
+				}
+				outContent = Integer.toString(machine.getMemory(addr + i));
 			}
 			machine.output.putString(outContent);
 		}

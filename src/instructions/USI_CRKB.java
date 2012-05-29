@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import simulanator.Deformatter;
 import simulanator.Machine;
 import simulanator.Deformatter.OpcodeBreakdown;
@@ -43,6 +44,10 @@ public class USI_CRKB extends UIG_IO {
 		int addr = breakDown.getEffectiveDestAddress(machine);
 		String input;
 		for (int i = 0; i < nw; ++i) {
+			if(addr + i > 4095) {
+				machine.hErr.reportError(makeError("runMemOOR"), machine.getLC(), -1);
+				return; //if address to read from is out of range stop reading.
+			}
 			input = machine.input.getString();
 			if(input.length() != 1) {
 				machine.hErr.reportError("runInputChar", machine.getLC(), -1);

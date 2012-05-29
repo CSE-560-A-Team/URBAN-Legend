@@ -41,6 +41,10 @@ public class USI_IRKB extends UIG_IO {
 		int addr = breakDown.getEffectiveDestAddress(machine);
 		int word = 0;
 		for (int i = 0; i < nw; ++i) {
+			if(addr + i > 4095) {
+				machine.hErr.reportError(makeError("runMemOOR"), machine.getLC(), -1);
+				return; //if address to read from is out of range stop reading.
+			}
 			try {
 				word = Integer.parseInt(machine.input.getString());
 			} catch(NumberFormatException e) {
