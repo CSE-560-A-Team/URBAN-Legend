@@ -408,9 +408,9 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				if(addLink){
 					linkRecord.put(entryLabel, entryAddr);
 					if(hack){
-						completeString =  completeString + ender + ":" +errorMessage +"\n";
+						completeString =  completeString + ender + ":\n";
 					}else{
-					completeString =  completeString + ender + ":\n";
+						completeString =  completeString + ender + ":" +errorMessage +"\n";
 					}
 				}else{
 					completeString =  completeString + ender + ":" +errorMessage +"\n";
