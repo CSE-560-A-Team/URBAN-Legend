@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -34,7 +35,13 @@ public class USI_MOVDN extends UIG_Arithmetic {
 
 	/** Returns value to arithmetic */
 	@Override int operate(int destValue, int srcValue, ErrorHandler hErr) {
-		return -srcValue;
+		long x = (long)-srcValue;
+		if(x > Integer.MAX_VALUE){
+			hErr.reportError(makeError("runOverflow"),0,0);
+			return 0;
+		}else{
+			return -srcValue;
+		}
 	}
 
 	// =========================================================

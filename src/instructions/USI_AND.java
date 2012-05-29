@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
 import assemblernator.Module;
@@ -33,7 +34,13 @@ public class USI_AND extends UIG_Arithmetic {
 
 	/** Returns value to arithmetic */
 	@Override int operate(int left, int right, ErrorHandler hErr) {
-		return left & right;
+		long x = (long)left&(long)right;
+		if(x > Integer.MAX_VALUE || x < Integer.MIN_VALUE){
+			hErr.reportError(makeError("runOverflow"),0,0);
+			return 0;
+		}else{
+			return left & right;
+		}
 	}
 
 	// =========================================================

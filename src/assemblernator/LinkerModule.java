@@ -273,6 +273,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		//Runs through header record
 		if (check.equalsIgnoreCase("H")) {
 			String completeString = "";
+			String errorMessage = "";
 			//Program Name
 			this.progName = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard"))
@@ -313,30 +314,35 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			completeString = completeString + this.execStart+ ":";
 			//date of program
 			this.date = reader.readString(ScanWrap.datep, "loaderHNoDate");
-			if (!reader.go("disreguard"))
-				return;
+			if (!reader.go("disreguard")){
+				errorMessage = "Invalid Date";
+				addHeader = false;
+			}
 			completeString = completeString + this.date+ ":";
 			//version of program
 			this.version = reader.readInt(ScanWrap.dec4, "loaderHNoVer", 10);
-			if (!reader.go("disreguard"))
-				return;
+			if (!reader.go("disreguard")){
+				errorMessage = errorMessage + "\nInvalid Version Number";
+				addHeader = false;
+			}
 			completeString = completeString + this.version+ ":";
 			//filler stuff
 			temp = reader.readString(ScanWrap.notcolon, "loaderHNoLLMM");
-			if (!reader.go("disreguard"))
-				return;
+			if (!reader.go("disreguard")){
+				errorMessage = errorMessage + "\nInvalid must read URBAN-ASM";
+				addHeader = false;
+			}
 			completeString = completeString + temp+ ":";
 			
 			//end of the header record
-			String errorMessage = "";
 			ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 			if (!reader.go("disreguard")){
 				addHeader = false;
-				errorMessage = "\n303: Program Name does not match end of record name.";
+				errorMessage = errorMessage + "\n303: Program Name does not match end of record name.";
 			}
 			if(!ender.equals(this.progName)){
 				addHeader = false;
-				errorMessage = "\n303: Program Name does not match end of record name.";
+				errorMessage = errorMessage + "\n303: Program Name does not match end of record name.";
 			}
 			//Adding info to User Report
 			if(addHeader){
@@ -711,7 +717,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 			error.reportError(makeError("loaderNoEnd"),0,0); 
 			return;
 		}
-		System.out.println(this.userRep.toString());
 		//program ran successful. Checks for more in file
 		this.success = true;
 		if (read.hasNext()) {

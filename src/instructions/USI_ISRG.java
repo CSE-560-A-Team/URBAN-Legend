@@ -110,12 +110,20 @@ public class USI_ISRG extends AbstractInstruction {
 	@Override public void execute(int instruction, Machine machine) {
 		OpcodeBreakdown brkdwn = Deformatter.breakDownSrcRange(instruction);
 		int addr = brkdwn.source;
-		int word = 0;
-		//sum contents of memory from addr to addr + nw.
-		for(int i = 0; i < brkdwn.numWords; ++i) {
-			word += machine.getMemory(addr + i);
+		long word = 0;
+		if(brkdwn.numWords + addr <= 4095){
+			//sum contents of memory from addr to addr + nw.
+			for(int i = 0; i < brkdwn.numWords; ++i) {
+				word += machine.getMemory(addr + i);
+			}
+			if(word > Integer.MAX_VALUE || word < Integer.MIN_VALUE){
+				machine.hErr.reportError(makeError("runOverflow"), machine.getLC(), -1);
+				word = 0;
+			}
+		}else{
+			machine.hErr.reportError(makeError("runMemOOR","1000"), machine.getLC(), -1);
 		}
-		brkdwn.putToDest(word, machine);
+		brkdwn.putToDest((int)word, machine);
 	}
 
 	// =========================================================
