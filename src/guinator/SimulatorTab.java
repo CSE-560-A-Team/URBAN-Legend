@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.EventObject;
 import java.util.Map.Entry;
 import java.util.SortedMap;
+import java.util.regex.Pattern;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.BoundedRangeModel;
@@ -497,5 +498,13 @@ public class SimulatorTab extends JSplitPane {
 				machine.runThread(machine.getLC());
 			}
 		}
+	}
+
+	/** @return The HTML content of the output box. */
+	public String getOutputHTML() {
+		Pattern p = Pattern.compile(".*<body>(.*)<\\/body>.*",
+				Pattern.MULTILINE | Pattern.DOTALL);
+		String res = outputBox.getText();
+		return p.matcher(res).replaceAll("$1").replaceAll("<\\/pre><pre>", "");
 	}
 }

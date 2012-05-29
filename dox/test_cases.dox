@@ -178,6 +178,19 @@ Test cases used in the SP2 benchmark:
   </tr>
 </table>
 
+Test cases used in the SP4 benchmark:
+<table>
+  <tr>
+    <th>Test case</th>
+    <th>Author</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>\subpage testcase20</td>
+    <td>Josh</td>
+    <td>Prints the lyrics to 99 Bottles.</td>
+  </tr>
+</table>
 
 Test cases developed by third parties:
 
