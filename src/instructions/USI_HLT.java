@@ -1,7 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatHaltDump;
+import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.OperandChecker.isValidConstant;
 import static assemblernator.Module.Value.BitLocation.Literal;
 import static simulanator.Deformatter.breakDownOther;
@@ -72,7 +72,7 @@ public class USI_HLT extends AbstractInstruction {
 	 */
 	@Override 
 	public int[] assemble() {
-		return formatHaltDump(this);
+		return formatOther(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */

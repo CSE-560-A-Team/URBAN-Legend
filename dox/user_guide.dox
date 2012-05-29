@@ -949,8 +949,8 @@ The following tables describe the various instructions with their formats and th
 <tr><td>S1         </td><td> POP   </td><td>(<b>Pop</b>)                                                </td><td> 110001 </td><td> {DR},{DM}                                                                                                                                                                      </td><td>                                          </td><td> Memory,Literal                  </td><td> pops the top stack element into memory or register.                                                                                                                     </td></tr>
 <tr><td>S2         </td><td> PST   </td><td>(<b>P</b>op and Te<b>st</b>)                                </td><td> 110010 </td><td> {FM,DR},{FM,FX,DR},{FL,DR},{EX,DR}                                                                                                                                             </td><td> FL,EX:[-32768,32767]                     </td><td> Memory,Literal                  </td><td> pops the top stack element, and compares the element with memory or literal: if = then load DR with 0; if < load DR with 2; if > load DR with 3.  </td></tr>
 <tr><td>C0         </td><td> NOP   </td><td>(<b>N</b>on-<b>op</b>erative)                               </td><td> 111101 </td><td> {}                                                                                                                                                                             </td><td>                                          </td><td> OP Only                         </td><td> no operation.                                                                                                                                                           </td></tr>
-<tr><td>C2         </td><td> HLT   </td><td>(<b>H</b>a<b>lt</b>)                                        </td><td> 111110 </td><td> {FC},{EX}                                                                                                                                                                      </td><td> FC:[-4096, 4095]                         </td><td> Halt/Dump                       </td><td> halts the program, and displays the constant to screen.                                                                                                                 </td></tr>
-<tr><td>C1         </td><td> DMP   </td><td>(<b>D</b>u<b>mp</b>)                                        </td><td> 111111 </td><td> {FC},{EX}                                                                                                                                                                      </td><td> FC:[1,3]                                 </td><td> Halt/Dump                       </td><td> displays register and memory contents to screen.  if fc = 1, then level 1 dump; if fc = 2, then level 2 dump; if fc = 3, then level 3 dump.                             </td></tr>
+<tr><td>C2         </td><td> HLT   </td><td>(<b>H</b>a<b>lt</b>)                                        </td><td> 111110 </td><td> {FC},{EX}                                                                                                                                                                      </td><td> FC,EX:[-4096, 4095]                      </td><td> Memory                          </td><td> halts the program, and displays the constant to screen.                                                                                                                 </td></tr>
+<tr><td>C1         </td><td> DMP   </td><td>(<b>D</b>u<b>mp</b>)                                        </td><td> 111111 </td><td> {FC},{EX}                                                                                                                                                                      </td><td> FC,EX:[1,3]                              </td><td> Memory                          </td><td> displays register and memory contents to screen.  if fc = 1, then level 1 dump; if fc = 2, then level 2 dump; if fc = 3, then level 3 dump.                             </td></tr>
 </table>
 
 The following instructions are unique to URBAN Legend:
@@ -1594,6 +1594,7 @@ Loader files exported by URBAN-Legend contain chunks according to the following 
 </p>
  
 <h5>URBAN Legend output format:</h5>
+<h2>Assembler:</h2>
 "URBAN Legend" followed by version number.
 e.g. URBAN Legend v1
 
@@ -1637,7 +1638,64 @@ each instruction breakdown is as follows: <br>
         if there are less than 4 operands, however many operands there are in the instruction are displayed. 
         errors is a list of errors separated by new line.<br>
 </p>
-</p> 
+<h2>Linker</h2>
+A sequence of "================= Object File ProgName.ulo =================", where ProgName is the name of the program, followed by the contents<br>
+of the object file as read in in order of load address and with error messages printed underneath the record that caused the error.<br>
+Then "================= Joint Symbol Table =================" followed by a sequence of <br>
+<pre>label: lbl\tOriginal Address: origAddr\t Offset: off\tAdjusted Address: adj\n.</pre><br>
+where lbl is label of a linker record, origAddr is address of linker record, offset is the offset given to the address of linker record, and <br>
+the adjusted address is the original address adjusted by offset.<br>
+</pre>
+example:
+<pre>
+================= Object File gcdMain.ulo =================
+H:gcdMain:0:10:0:2012148,22:43:16:1:URBAN-ASM:gcdMain:
+T:0:A4820007:A:R:0:0:gcdMain:
+T:1:00860007:A:R:0:0:gcdMain:
+T:2:00850008:A:R:0:0:gcdMain:
+T:3:94780000:A:E:0:1:gcdMain:
+M:3:+:E:gcd:S:gcdMain:
+T:4:00680009:A:R:0:0:gcdMain:
+T:5:A0180009:A:R:0:0:gcdMain:
+T:6:FC000000:A:A:0:0:gcdMain:
+E:10:0:7:1:gcdMain:
+
+
+
+================= Object File gcd.ulo =================
+H:gcd:0:9:0:2012148,23:54:06:1:URBAN-ASM:gcd:
+L:gcd:0:gcd:
+T:0:00790000:A:A:0:0:gcd:
+T:1:80580008:A:R:0:0:gcd:
+T:2:00540000:A:A:0:0:gcd:
+T:3:94780000:A:E:0:1:gcd:
+M:3:+:E:modulo:S:gcd:
+T:4:00970000:A:A:0:0:gcd:
+T:5:00650000:A:A:0:0:gcd:
+T:6:00460000:A:A:0:0:gcd:
+T:7:8C880000:A:R:0:0:gcd:
+T:8:98870000:A:A:0:0:gcd:
+E:13:1:9:1:gcd:
+
+
+
+================= Object File modulo.ulo =================
+H:modulo:0:6:0:2012148,18:55:01:1:URBAN-ASM:modulo:
+L:modulo:0:modulo:
+T:0:00510000:A:A:0:0:modulo:
+T:1:00620000:A:A:0:0:modulo:
+T:2:38120000:A:A:0:0:modulo:
+T:3:34520000:A:A:0:0:modulo:
+T:4:30260000:A:A:0:0:modulo:
+T:5:98870000:A:A:0:0:modulo:
+E:9:1:6:0:modulo:
+
+
+
+================= Joint Symbol Table =================
+label: gcd	Original Address: 0	Offset: 10	Adjusted Address: 10
+label: modulo	Original Address: 0	Offset: 19	Adjusted Address: 19
+</pre> 
 <p>
 <a href="#toc">Back to Menu</a>
 </p> 

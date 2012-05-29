@@ -223,6 +223,7 @@ public class Linker {
 						modules[i+1].userRep.addType = LinkerModule.AddType.HEADER;
 						modules[i+1].userRep.add(makeError("OOM") + "\n");
 						hErr.reportError(makeError("OOM"), modules[i+1].loadAddr, -1);
+						modules = Arrays.copyOf(modules, i+1); //only take modules <  mem range.
 						break;
 					}
 					totalLen += modules[i+1].prgTotalLen;
@@ -253,7 +254,7 @@ public class Linker {
 			//error invalid exec start.
 			if(execStartAddr > (modules[0].loadAddr + totalLen) || execStartAddr < modules[0].loadAddr) {
 				modules[execStartErrorModule].userRep.addType = LinkerModule.AddType.HEADER;
-				modules[execStartErrorModule].userRep.add(makeError("execStart") + "\n");
+				modules[execStartErrorModule].userRep.add(makeError("execStart", Integer.toString(execStartAddr)) + "\n");
 				hErr.reportError(makeError("execStart",  Integer.toString(execStartAddr)), -1, -1);
 				return linkerSymbolTable;
 			}
