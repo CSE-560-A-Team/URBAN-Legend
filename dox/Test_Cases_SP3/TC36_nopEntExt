@@ -1,0 +1,177 @@
+/*!
+
+\page testcase36 Valid dual memory access with adjustements and multiple external labels.
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">justNop</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">nop</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">justNop</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>justNop</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+justNop	 0000	PROGNAME
+
+<h1>Input</h1>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>entLabels</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl1</td>
+    <td>0000</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl2</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl3</td>
+    <td>0002</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+entLabels	 0000	PROGNAME
+lbl1	 0000	LABEL
+lbl2	 0001	LABEL
+lbl3	 0002	LABEL
+
+<h1>Input</h1>
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>extUse</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl1</td>
+    <td>0000</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl2</td>
+    <td>0000</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>lbl3</td>
+    <td>0000</td>
+    <td>EXTERNAL</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+extUse	 0000	PROGNAME
+lbl1	 0000	EXTERNAL
+lbl2	 0000	EXTERNAL
+lbl3	 0000	EXTERNAL
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	--------	src: A,dest:-	1	extUse kicko fc:0;
+
+0000	00800000	src: E,dest:-	2	movd fm:lbl3, dr:0;
+
+0001	00810000	src: C,dest:-	3	movd fm:lbl1 + lbl2, dr:1;
+
+0002	00820000	src: C,dest:-	4	movd fm:lbl3-lbl1+lbl2, dr:2;
+
+0003	02000000	src: C,dest:R	5	movd fm:lbl3-lbl2+lbl1, dm:lbl3-lbl3;
+
+0004	--------	src: A,dest:-	6	ext lr:lbl1, lr:lbl2, lr:lbl3;
+
+0004	--------	src: A,dest:-	7	end lr:extUse;
+
+
+<h1>Linker Load Phase</h1>
+
+H:entLabels:0:3:0:2012149,14:52:49:1:URBAN-ASM:entLabels:
+L:lbl1:0:entLabels:
+L:lbl2:1:entLabels:
+L:lbl3:2:entLabels:
+T:0:00000000:A:A:0:0:entLabels:
+T:1:00000001:A:A:0:0:entLabels:
+T:2:00000002:A:A:0:0:entLabels:
+E:8:3:3:0:entLabels:
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+label: lbl3	Original Address: 2	Offset: 0	Adjusted Address: 2
+label: lbl2	Original Address: 1	Offset: 0	Adjusted Address: 1
+label: lbl1	Original Address: 0	Offset: 0	Adjusted Address: 0
+H:extUse:0:4:0:2012149,15:00:12:1:URBAN-ASM:extUse:
+T:0:00800000:A:E:0:1:extUse:
+M:0:+:E:lbl3:S:extUse:
+T:1:00810000:A:C:0:2:extUse:
+M:1:+:E:lbl1:+:E:lbl2:S:extUse:
+T:2:00820000:A:C:0:3:extUse:
+M:2:+:E:lbl3:-:E:lbl1:+:E:lbl2:S:extUse:
+T:3:02000000:C:R:3:0:extUse:
+M:3:+:E:lbl3:-:E:lbl2:+:E:lbl1:H:extUse:
+E:10:0:4:4:extUse:
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+label: lbl3	Original Address: 2	Offset: 0	Adjusted Address: 2
+label: lbl2	Original Address: 1	Offset: 0	Adjusted Address: 1
+label: lbl1	Original Address: 0	Offset: 0	Adjusted Address: 0
+H:justNop:0:1:0:2012149,15:14:34:1:URBAN-ASM:justNop:
+T:0:F4000000:A:A:0:0:justNop:
+E:3:0:1:0:justNop:
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+label: lbl3	Original Address: 2	Offset: 0	Adjusted Address: 2
+label: lbl2	Original Address: 1	Offset: 0	Adjusted Address: 1
+label: lbl1	Original Address: 0	Offset: 0	Adjusted Address: 0
+*/
