@@ -185,7 +185,6 @@ public class Simulator {
 				//os.write("Reading the Program Name ...\n");
 				if (!crcStr.equals(progName)) { // LM2.7, continued
 					hErr.reportError(makeError("datafileCRCFail"), -1, -1);
-					
 				}
 				++numRecords;
 			
