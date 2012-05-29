@@ -1,7 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatHaltDump;
+import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.Module.Value.BitLocation.Literal;
 import static assemblernator.OperandChecker.isValidConstant;
 import static simulanator.Deformatter.breakDownOther;
@@ -37,42 +37,57 @@ public class USI_HLT extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+1;
+		return lc + 1;
 	}
 
 	/** @see assemblernator.Instruction#check(ErrorHandler, Module) */
 	@Override public boolean check(ErrorHandler hErr, Module module) {
 		boolean isValid = true;
-		if((!(this.hasOperand("FC") || this.hasOperand("EX"))) || this.operands.size() > 1) {
-			hErr.reportError(makeError("instructionMissingOp2", this.getOpId(), "FC", "EX"), this.lineNum, -1);
+		if ((!(this.hasOperand("FC") || this.hasOperand("EX")))
+				|| this.operands.size() > 1) {
+			hErr.reportError(
+					makeError("instructionMissingOp2", this.getOpId(), "FC",
+							"EX"), this.lineNum, -1);
 			isValid = false;
-		} else {
+		}
+		else {
 			Value value;
 			String errOperand;
-			if(this.hasOperand("FC")) {
-				value = module.evaluate(this.getOperand("FC"), false, Literal, hErr, this, this.getOperandData("FC").valueStartPosition);
+			if (this.hasOperand("FC")) {
+				value = module.evaluate(this.getOperand("FC"), false, Literal,
+						hErr, this,
+						this.getOperandData("FC").valueStartPosition);
 				errOperand = "FC";
-			} else {
-				value = module.evaluate(this.getOperand("EX"), true, Literal, hErr, this, this.getOperandData("EX").valueStartPosition);
+			}
+			else {
+				value = module.evaluate(this.getOperand("EX"), true, Literal,
+						hErr, this,
+						this.getOperandData("EX").valueStartPosition);
 				errOperand = "EX";
 			}
-			if(!isValidConstant(value.value, ConstantRange.RANGE_13_TC)) {
-				hErr.reportError(makeError("OORconstant", errOperand, this.getOpId(), 
-						Integer.toString(ConstantRange.RANGE_13_TC.min), Integer.toString(ConstantRange.RANGE_13_TC.max)), this.lineNum, -1);
+			if (!isValidConstant(value.value, ConstantRange.RANGE_13_TC)) {
+				hErr.reportError(
+						makeError(
+								"OORconstant",
+								errOperand,
+								this.getOpId(),
+								Integer.toString(ConstantRange.RANGE_13_TC.min),
+								Integer.toString(ConstantRange.RANGE_13_TC.max)),
+						this.lineNum, -1);
 				isValid = false;
 			}
 			this.operands.get(0).value = value;
 		}
-		
+
 		return isValid;
 	}
 
-	/** @see assemblernator.Instruction#assemble() 
-	 *  @modified Apr 27, 2012; 8:00:17 use InstructionFormatter.
+	/**
+	 * @see assemblernator.Instruction#assemble()
+	 * @modified Apr 27, 2012; 8:00:17 use InstructionFormatter.
 	 */
-	@Override 
-	public int[] assemble() {
-		return formatHaltDump(this);
+	@Override public int[] assemble() {
+		return formatOther(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
@@ -128,4 +143,3 @@ public class USI_HLT extends AbstractInstruction {
 	/** Default constructor; does nothing. */
 	private USI_HLT() {}
 }
-

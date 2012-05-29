@@ -120,9 +120,12 @@ public class USI_POP extends AbstractInstruction {
 		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 
 		int s= 0;
-		s = machine.stack.pop();
-		
-		brkdwn.putToDest(s, machine);
+		if(!machine.stack.empty()) {
+			s = machine.stack.pop();
+			brkdwn.putToDest(s, machine);
+		} else {
+			machine.hErr.reportError(makeError("runEmptyStack"), machine.getLC(), -1);
+		}
 		
 	}
 

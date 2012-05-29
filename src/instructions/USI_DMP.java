@@ -1,7 +1,7 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
-import static assemblernator.InstructionFormatter.formatHaltDump;
+import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.Module.Value.BitLocation.Literal;
 import static assemblernator.OperandChecker.isValidConstant;
 import simulanator.Machine;
@@ -73,7 +73,7 @@ public class USI_DMP extends AbstractInstruction {
 	 *  @modified Apr 27, 2012; 7:59:50 use InstructionFormatter.
 	 */
 	@Override public int[] assemble() {
-		return formatHaltDump(this);
+		return formatOther(this);
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */

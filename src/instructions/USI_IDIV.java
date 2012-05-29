@@ -38,7 +38,13 @@ public class USI_IDIV extends UIG_Arithmetic {
 			hErr.reportError(makeError("runDivZero"), -1, -1);
 			return 0;
 		}
-		return left / right;
+		long x = (long)left/(long)right;
+		if(x > Integer.MAX_VALUE || x < Integer.MIN_VALUE){
+			hErr.reportError(makeError("runOverflow"),0,0);
+			return 0;
+		}else{
+			return left / right;
+		}
 	}
 
 	// =========================================================

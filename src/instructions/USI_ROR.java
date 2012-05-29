@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Deformatter.OpcodeBreakdown;
 import simulanator.Machine;
@@ -39,8 +40,13 @@ public class USI_ROR extends UIG_ShiftManipulate {
 		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromDest(machine);
 		int rotateVal = brkdwn.readFromSource(machine);
-		
-		int rotated = Integer.rotateRight(wordOrig, rotateVal);
+		int rotated;
+		if(rotateVal >= 0 || rotateVal <= 31) { 
+			rotated = Integer.rotateRight(wordOrig, rotateVal);
+		} else {
+			machine.hErr.reportError(makeError("runOverRotate"), machine.getLC(), -1);
+			rotated = 0;
+		}
 		brkdwn.putToDest(rotated, machine);
 	}
 

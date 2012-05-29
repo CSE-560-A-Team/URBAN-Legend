@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Deformatter.OpcodeBreakdown;
 import simulanator.Machine;
@@ -30,16 +31,24 @@ public class USI_ISRA extends UIG_ShiftManipulate {
 
 	/** @see assemblernator.Instruction#getNewLC(int, Module) */
 	@Override public int getNewLC(int lc, Module mod) {
-		return lc+1;
+		return lc + 1;
 	}
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		
-		
+
+
 		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromDest(machine);
-		wordOrig >>= brkdwn.readFromSource(machine); //right shift and assign.
+		int srcword = brkdwn.readFromSource(machine);
+		if (srcword >= 0 || srcword <= 31) {
+			wordOrig >>= srcword; // right shift and assign.
+		}
+		else {
+			machine.hErr.reportError(makeError("runOverShift"),
+					machine.getLC(), -1);
+			srcword = 0;
+		}
 		brkdwn.putToDest(wordOrig, machine);
 	}
 
@@ -88,4 +97,3 @@ public class USI_ISRA extends UIG_ShiftManipulate {
 	/** Default constructor; does nothing. */
 	private USI_ISRA() {}
 }
-
