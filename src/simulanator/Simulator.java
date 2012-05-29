@@ -58,27 +58,31 @@ public class Simulator {
 		int progLen;
 		int asmVer;
 
-		os.write("Reading loader file...\n");
 		try {
 			Scanner s = new Scanner(loaderFile);
 			String crcStr;
 			String progName;
-
+			String userReportLine = "";
+			String element;
 			ScanWrap rd = new ScanWrap(s, hErr);
-			if (!rd.go(rd.readString(ScanWrap.notcolon, "loaderNoHeader")
-					.equals("H"))) // LM1.1, LM1.2
+			
+			element = rd.readString(ScanWrap.notcolon, "loaderNoHeader");
+			
+			if (!rd.go(element.equals("H"))) // LM1.1, LM1.2
 				return;
-			os.write("Reading header record...\n");
-
+			//os.write("Reading header record...\n");
+			userReportLine = userReportLine + element + ":";
+			
 			if (!rd.go(progName = rd.readString(ScanWrap.notcolon,
 					"loaderNoName"))){  // LM1.3 
-				os.write("Reading the the first Modules name..\n");
 				return;
 			}
+			userReportLine = userReportLine + progName + ":";
 			
 			if (!IOFormat.isValidLabel(progName)) {
 				hErr.reportError(makeError("loaderInvName"), -1, -1);
-				os.write("Invalid Loader name...\n");
+				//I guess we don't need to add to user report line? test before sticking with this. else look below.
+				//userReportLine = "\n" + userReportLine + makeError("loaderInvName") + "\n";
 				return;
 			}
 				
@@ -86,45 +90,37 @@ public class Simulator {
 			if (!rd.go(loadAddr = rd
 					.readInt(ScanWrap.hex4, "loaderHNoAddr", 16))) // LM1.5
 				return;
-			os.write("Reading the combined module load address... \n");
 			
 			if (!rd.go(execStart = rd.readInt(ScanWrap.hex4, "loaderNoEXS", 16))) // LM1.7
 				return;
-			os.write("Reading the Modules Execution start address...\n");
 			
 			if (!rd.go(progLen = rd.readInt(ScanWrap.hex4, "loaderHNoPrL", 16))) // LM1.9
 				return;
-			os.write("Reading the Program Length...\n");
 			
 			if (progLen > 4096) {
 				hErr.reportError(makeError("loaderPrLnOOR", "" + progLen), -1,
 						-1);
 				return;
 			}
-			os.write(" Program Length out of Bounds  \n");
 			
 			if (!rd.go(rd.readString(ScanWrap.datep, "loaderHNoPrL"))) // LM1.11
 				return;
-			os.write("Reading the Date and Time of Assembly...");
 			if (!rd.go(rd.readString(ScanWrap.notcolon, "loaderHNoLLMM") 
 					.equals("URBAN-LLM"))) // LM1.13
 				return;
-			os.write("Reading URBAN-LLM...\n");
 			
 			if (!rd.go(asmVer = rd.readInt(ScanWrap.dec4, "loaderHNoVer", 10))) // LM1.15
 				return;
-			os.write("Reading the Version Number...\n");
 			
 			if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon, "loaderNoCRC"))) // LM1.17
 				return;
-			os.write("Reading the Program Name from first Object File...\n");
 			
 			if (!crcStr.equals(progName)) { // LM1.17, continued
 				hErr.reportError(makeError("datafileCRCFail"), -1, -1);
-				os.write("Program name does not match previously specified label ...\n");
 				return;
 			}
-			
+			os.write("========Program Name: " + progName + "========");
+			os.write(userReportLine);
 			String recname;
 			int numRecords = 0;
 			for (;;) { // LM2
