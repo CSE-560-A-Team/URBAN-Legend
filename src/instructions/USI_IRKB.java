@@ -42,7 +42,7 @@ public class USI_IRKB extends UIG_IO {
 		int word = 0;
 		for (int i = 0; i < nw; ++i) {
 			if(addr + i > 4095) {
-				machine.hErr.reportError(makeError("runMemOOR"), machine.getLC(), -1);
+				machine.hErr.reportError(makeError("runMemOOR", Integer.toString(addr + i)), machine.getLC(), -1);
 				return; //if address to read from is out of range stop reading.
 			}
 			try {

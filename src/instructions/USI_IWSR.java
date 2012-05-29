@@ -50,7 +50,7 @@ public class USI_IWSR extends UIG_IO {
 			} else {
 				int addr = breakDown.getEffectiveSrcAddress(machine);
 				if(addr + i > 4095) {
-					machine.hErr.reportError(makeError("runMemOOR"), machine.getLC(), -1);
+					machine.hErr.reportError(makeError("runMemOOR", Integer.toString(addr + i)), machine.getLC(), -1);
 					return; //if address to read from is out of range stop reading.
 				}
 				outContent = Integer.toString(machine.getMemory(addr + i));
