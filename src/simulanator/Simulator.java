@@ -6,9 +6,10 @@ import guinator.GUIUtil;
 import java.io.InputStream;
 import java.util.Scanner;
 
+import ulutil.HTMLOutputStream;
+import ulutil.IOFormat;
 import assemblernator.Assembler;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.IOFormat;
 
 /**
  * @author Josh Ventura
@@ -27,7 +28,8 @@ public class Simulator {
 	 * @param hErr
 	 *            An error handler to which any problems in the load will be
 	 *            reported.
-	 * @param machine
+	 * @param os The HTMLOutputStream to write info to.
+ 	 * @param machine
 	 *            The URBAN Machine into which memory is loaded.
 	 * @specRef LM1
 	 * @specRef LM1.1
@@ -50,22 +52,23 @@ public class Simulator {
 	 * @specRef LM1.18
 	 */
 	public static void load(InputStream loaderFile, ErrorHandler hErr,
-			Machine machine) {
+			HTMLOutputStream os, Machine machine) {
 		int loadAddr;
 		int execStart;
 		int progLen;
 		int asmVer;
 
+		os.write("Reading loader file...\n");
 		try {
 			Scanner s = new Scanner(loaderFile);
 			String crcStr;
 			String progName;
 
-
 			ScanWrap rd = new ScanWrap(s, hErr);
 			if (!rd.go(rd.readString(ScanWrap.notcolon, "loaderNoHeader")
 					.equals("H"))) // LM1.1, LM1.2
 				return;
+			os.write("Reading header record...\n");
 
 			if (!rd.go(progName = rd.readString(ScanWrap.notcolon,
 					"loaderNoName"))) // LM1.3
@@ -126,14 +129,16 @@ public class Simulator {
 									Integer.toString(addr, 16)), -1, -1);
 
 				String words; // LM2.5
-				if (!rd.go(words = rd
-						.readString(ScanWrap.hexArb, "loaderTNoWord")))
+				if (!rd.go(words = rd.readString(ScanWrap.hexArb,
+						"loaderTNoWord")))
 					return;
 				if (words.length() % 8 != 0)
-					hErr.reportError(makeError("loaderTNoWord") + " [Extra information: Invalid word size]", -1, -1);
+					hErr.reportError(makeError("loaderTNoWord")
+							+ " [Extra information: Invalid word size]", -1, -1);
 
 				for (int i = 0; i < words.length(); i += 8) {
-					machine.setMemory(addr++, IOFormat.parseHex32Int(words.substring(i,i+8)));
+					machine.setMemory(addr++,
+							IOFormat.parseHex32Int(words.substring(i, i + 8)));
 				}
 
 				if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon,
@@ -171,7 +176,8 @@ public class Simulator {
 			if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon, "loaderNoCRC"))) // LM2.7
 				return;
 			if (!crcStr.equals(progName)) { // LM2.7, continued
-				hErr.reportError(makeError("datafileCRCFail") + ": " + progName, -1, -1);
+				hErr.reportError(
+						makeError("datafileCRCFail") + ": " + progName, -1, -1);
 				return;
 			}
 

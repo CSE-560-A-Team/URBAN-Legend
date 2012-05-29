@@ -1,11 +1,11 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import simulanator.Deformatter;
-import simulanator.Machine;
 import simulanator.Deformatter.OpcodeBreakdown;
+import simulanator.Machine;
 import assemblernator.Instruction;
 import assemblernator.Module;
-import static assemblernator.ErrorReporting.makeError;
 
 /**
  * The IRKB instruction.

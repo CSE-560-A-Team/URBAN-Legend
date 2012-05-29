@@ -7,7 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-import assemblernator.IOFormat;
+import ulutil.IOFormat;
+
 
 /**
  * @author Josh Ventura

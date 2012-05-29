@@ -2,9 +2,9 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.Module.Value.BitLocation;
 import assemblernator.Instruction;
 import assemblernator.Module;
+import assemblernator.Module.Value.BitLocation;
 
 /**
  * The EQU instruction.

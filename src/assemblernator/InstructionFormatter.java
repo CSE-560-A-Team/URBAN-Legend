@@ -1,5 +1,7 @@
 package assemblernator;
 
+import ulutil.IOFormat;
+
 /**
  * 
  * @author Noah

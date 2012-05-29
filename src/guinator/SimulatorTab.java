@@ -43,7 +43,7 @@ import simulanator.Machine;
 import simulanator.Machine.URBANInputStream;
 import simulanator.Machine.URBANOutputStream;
 import simulanator.Simulator;
-import assemblernator.IOFormat;
+import ulutil.IOFormat;
 
 /**
  * Tab containing a simulator pane.
@@ -465,7 +465,7 @@ public class SimulatorTab extends JSplitPane {
 	 *            The input stream to load.
 	 */
 	public void loadStream(InputStream is) {
-		Simulator.load(is, outputBox.hErr, machine);
+		Simulator.load(is, outputBox.hErr, outputBox.hos, machine);
 		for (int addr = 0; addr < Machine.memorySizeInWords; ++addr)
 			memTable.setValueAt(
 					IOFormat.formatHexInteger(machine.getMemory(addr), 8),

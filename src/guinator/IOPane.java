@@ -7,6 +7,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import ulutil.HTMLOutputStream;
+
 import assemblernator.ErrorReporting.ErrorHandler;
 
 /**
@@ -21,6 +23,28 @@ public class IOPane extends JTextPane {
 	HTMLDocument htmlDoc;
 	/** The HTML kit to print stuff to. */
 	HTMLEditorKit htmlKit;
+
+	/** Bitches& */
+	HTMLOutputStream hos = new HTMLOutputStream() {
+		@Override public void writeSource(String x) {
+			try {
+				htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), x, 0, 0, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override public void write(int b) throws IOException {
+			try {
+				htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), new String(
+						new byte[] { (byte) b }), 0, 0, null);
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	};
 
 	/** Default constructor. */
 	public IOPane() {
@@ -75,13 +99,7 @@ public class IOPane extends JTextPane {
 	 * @specRef N/A
 	 */
 	public void append(String html) {
-		try {
-			htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), html, 0, 0, null);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		hos.writeHTML(html);
 	}
 
 	/**
@@ -93,45 +111,8 @@ public class IOPane extends JTextPane {
 	 */
 	public void appendPlain(String str) {
 		try {
-			StringBuilder asPlain = new StringBuilder(str.length() * 4);
-			asPlain.append("<pre>");
-			for (int i = 0; i < str.length(); ++i) {
-				switch (str.charAt(i)) {
-				case '\r':
-					if (i + 1 < str.length() && str.charAt(i + 1) != '\n')
-						asPlain.append("<br/>\n");
-					continue;
-				case '\n':
-					asPlain.append("\n");
-					continue;
-				case '\t':
-					asPlain.append("\t");
-					continue;
-				case ' ':
-					asPlain.append("&nbsp;");
-					continue;
-				case '&':
-					asPlain.append("&amp;");
-					continue;
-				case '"':
-					asPlain.append("&quot;");
-					continue;
-				case '<':
-					asPlain.append("&lt;");
-					continue;
-				case '>':
-					asPlain.append("&gt;");
-					continue;
-				default:
-					asPlain.append(str.charAt(i));
-					continue;
-				}
-			}
-			asPlain.append("</pre>");
-			htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), asPlain.toString(), 0, 0, null);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			hos.write(str);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -2,8 +2,8 @@ package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatHaltDump;
-import static assemblernator.OperandChecker.isValidConstant;
 import static assemblernator.Module.Value.BitLocation.Literal;
+import static assemblernator.OperandChecker.isValidConstant;
 import simulanator.Machine;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;

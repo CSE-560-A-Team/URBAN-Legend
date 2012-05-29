@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import ulutil.IOFormat;
+
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction.ConstantRange;
 

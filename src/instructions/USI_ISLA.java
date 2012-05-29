@@ -1,7 +1,7 @@
 package instructions;
 
-import simulanator.Deformatter.OpcodeBreakdown;
 import static simulanator.Deformatter.breakDownOther;
+import simulanator.Deformatter.OpcodeBreakdown;
 import simulanator.Machine;
 import assemblernator.Instruction;
 import assemblernator.Module;

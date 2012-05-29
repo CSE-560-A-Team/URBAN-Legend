@@ -18,7 +18,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
-import assemblernator.IOFormat;
+import ulutil.IOFormat;
+
 
 /** JTable extension to give a column and row header. */
 public class RowNumberTable extends JTable implements ChangeListener,

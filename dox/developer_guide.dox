@@ -113,6 +113,201 @@
     <td>Josh, Noah, Eric, Ratul</td>
     <td>Continuing IRC conversation.  Collaborative work day; each member completed his work and asked for help or further work as needed (Breaks were taken by each individual at a different time).</td>
   </tr>
+  <tr>
+    <td>Mon April 16, 2012/8:00PM - 2:00AM</td>
+    <td>Noah, Josh, Eric, Ratul </td>
+    <td>IRC Conversation. Discussed new documentation and syntax checking</td>
+  </tr>
+  <tr>
+    <td>Tue April 17, 2012/11:00 AM - 12:20 PM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed report mechanism</td>
+  </tr>
+  <tr>
+    <td>Wed April 18, 2012/12:40 PM - 2:10 PM</td>
+    <td>Noah, Josh, Ratul</td>
+    <td>IRC Conversation. Handled operand syntax checking and evaluation.</td>
+  </tr>
+  <tr>
+    <td>Wed April 18, 2012/2:30 PM - 5:00 PM</td>
+    <td>Noah, Josh, Eric</td>
+    <td>IRC Conversation. Handled operand syntax checking and evaluation.</td>
+  </tr>
+  <tr>
+    <td>Fri April 27, 2012/5:30 PM - 6:30 PM</td>
+    <td>Noah, Josh, Ratul, Eric</td>
+    <td>IRC Conversation. Began implementing assembler methods for each instruction.</td>
+  </tr>
+  <tr>
+    <td>Fri April 27, 2012/6:30 PM - 9:00 PM</td>
+    <td>Noah, Josh, Eric</td>
+    <td>Continuing IRC Conversation. Continued implementing assembler methods for instructions.</td>
+  </tr>
+  <tr>
+    <td>Fri April 27, 2012/9:00 PM - 11:30 PM</td>
+    <td>Noah, Josh</td>
+    <td>Continuing IRC Conversation. Discussed general planning for SP2 and any leftover work from SP1 that was not essential to our performance at the time.</td>
+  </tr>
+  <tr>
+    <td>Sat April 28, 2012/10:45 AM - 5:00 PM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed a large refactor to the centralized expression evaluation system and revised documentation to remove copying from the specification.</td>
+  </tr>
+  <tr>
+    <td>Sat April 28, 2012/5:00 PM - 6:30 PM</td>
+    <td>Noah, Josh, Ratul</td>
+    <td>Continuing IRC Conversation. Distributed work on re-documenting instructions.</td>
+  </tr>
+  <tr>
+    <td>Sat April 28, 2012/8:00 PM - 12:00 AM</td>
+    <td>Noah, Josh, Eric</td>
+    <td>IRC Conversation. Discussed quirks in evaluation system and more about documentation.</td>
+  </tr>
+  <tr>
+    <td>Sun Apr 29, 2012/10:15 AM - 11:30 PM</td>
+    <td>Noah, Josh, Eric</td>
+    <td>IRC Conversation. Discussed behavior of the Arithmetic superclass. Discussed more documentation. Discussed implications of the new instruction formats.</td>
+  </tr>
+  <tr>
+    <td>Sun Apr 29, 2012/11:30 PM - 12:45 AM</td>
+    <td>Noah, Josh</td>
+    <td>Continuing IRC Conversation. Discussed features in the specification that had not been reviewed in class and the implications of said features on the central evaluator. </td>
+  </tr>
+  <tr>
+    <td>Tue May 1, 2012/5:15 PM - 6:45 PM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed text records, modification records, and the relationship between the two by which they would be stored and retrieved. </td>
+  </tr>
+  <tr>
+    <td>Tue May 1, 2012/10:30 PM - 2:00 AM</td>
+    <td>Noah, Josh, Ratul, Eric</td>
+    <td>IRC Conversation. Discussed modification flags and changes made to the central evaluation system to account for and ultimately generate them.</td>
+  </tr>
+  <tr>
+    <td>Thu May 3, 2012/6:30 PM - 12:15 AM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed AREC flags in detail, along with tests for them and the implications of literals in an MREF.</td>
+  </tr>
+  <tr>
+    <td>Fri May 4, 2012/2:30 PM - 11:00 PM</td>
+    <td>Noah, Josh, Eric</td>
+    <td>IRC Conversation. Generic work day; kept in contact via IRC while implementing individual methods.</td>
+  </tr>
+  <tr>
+    <td>Sat May 5, 2012/7:30 PM - 12:30 AM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed output writers and finalized corrections to specification to make object format readable.</td>
+  </tr>
+  <tr>
+    <td>Sun May 6, 2012/1:00 PM - 2:00 PM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed problems with the object file format in general and due to our modifications. Devised an N flag to replace sign bit in 12 bit addresses until link time.</td>
+  </tr>
+  <tr>
+    <td>Mon May 7, 2012/9:30 PM - 3:00 AM</td>
+    <td>Noah, Josh, Eric, Ratul</td>
+    <td>IRC Conversation. Big, general work day during which aspects of SP2 were finalized.</td>
+  </tr>
+  <tr>
+    <td>Tue May 8, 2012/9:30 PM - 3:45 AM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Verified everything was working acceptably and smoothed everything else over.</td>
+  </tr>
+  <tr>
+    <td>Wed May 9, 2012/1:45 PM - 3:30 PM</td>
+    <td>Noah, Eric, Josh</td>
+    <td>IRC Conversation. Put finishing touches on the project for SP2.</td>
+  </tr>
+  <tr>
+    <td>Sat May 12 2012/1:30 PM - 7:00 PM</td>
+    <td>Noah, Josh, Eric</td>
+    <td>IRC Conversation. Discussed object file loading and storage of data read until link.</td>
+  </tr>
+  <tr>
+    <td>Thu May 17, 2012/7:20 PM - 8:40 PM</td>
+    <td>Josh, Eric</td>
+    <td>IRC Conversation. Discussed error reporting while loading object files.</td>
+  </tr>
+  <tr>
+    <td>Fri May 18, 2012/11:40 AM - 1:10 PM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed packing for modules at link time, and what constitutes errors and warnings during link phase.</td>
+  </tr>
+  <tr>
+    <td>Sat May 19, 2012/1:30 PM - 3:30 PM</td>
+    <td>Noah, Eric, Josh</td>
+    <td>IRC Conversation. Corrected issues in the generic scanner wrapper and worked on implementing more instruction execute() methods.</td>
+  </tr>
+  <tr>
+    <td>Sat May 19, 2012/3:30 PM - 5:30 PM</td>
+    <td>Noah, Eric, Ratul</td>
+    <td>Continuing IRC Conversation. Further instruction execution implementations.</td>
+  </tr>
+  <tr>
+    <td>Sat May 19, 2012/5:30 PM - 9:00 PM</td>
+    <td>Noah, Eric, Ratul, Josh </td>
+    <td>Continuing IRC Conversation. Began bug fixes for linking phase and the integration of the linker with the GUI.</td>
+  </tr>
+  <tr>
+    <td>Sun May 20, 2012/4:30 PM - 6:30 PM</td>
+    <td>Josh, Noah, Eric, Ratul</td>
+    <td>IRC Conversation. Work day; discussed stack and rotate operations.</td>
+  </tr>
+  <tr>
+    <td>Sun May 20, 2012/6:30 PM - 1:30 AM</td>
+    <td>Josh, Noah, Eric</td>
+    <td>Continuing IRC Conversation. Continued work day; discussed text record ordering in final load module and how to deal with our new M Record flags.</td>
+  </tr>
+  <tr>
+    <td>Mon May 21, 2012/6:30 PM - 7:30 PM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed final steps for linking phase and start of simulation phase. </td>
+  </tr>
+  <tr>
+    <td>Mon May 21, 2012/10:30 PM - 12:30 AM</td>
+    <td>Noah, Josh, Eric, Ratul</td>
+    <td>IRC Conversation. Worked out final quirks in dual-address modification and verified distribution of error checks.</td>
+  </tr>
+  <tr>
+    <td>Tue May 22, 2012/9:30 PM - 1:15 AM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed issues with literals vs zero-value differences in memory expressions (which are normally relocatable). Discussed a refactor of the Machine class to keep the calling class informed on state changes.</td>
+  </tr>
+  <tr>
+    <td>Wed May 23, 2012/6:00 PM - 6:45 PM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed potential caveats with the implementation of Arithmetic instructions' execute() method and corrected them. Found and corrected problem with simulator's main run method.</td>
+  </tr>
+  <tr>
+    <td>Wed May 23, 2012/7:00 PM - 2:00 AM</td>
+    <td>Noah, Josh, Eric, Ratul</td>
+    <td>IRC Conversation. Very general work/test day. Further execute() implementation, object file and loader file stress tests, error reporting schemes, etcetera.</td>
+  </tr>
+  <tr>
+    <td>Thu May 24, 2012/5:45 PM - 7:45 PM</td>
+    <td>Noah, Josh, Ratul</td>
+    <td>IRC Conversation. Reviewed progress and tested for error reporting in module loader; further testing on linker and simulator.</td>
+  </tr>
+  <tr>
+    <td>Thu May 24, 2012/7:45 PM - 1:45 AM</td>
+    <td>Noah, Josh, Eric</td>
+    <td>Continuing IRC Conversation. Discussed what constitutes error fatality in reading object files and implemented changes accordingly. Fixed several exceptions and smoothed over existing code, virtually completing linker, but agreed to shoot for 10% early deadline to ensure the project's quality.</td>
+  </tr>
+  <tr>
+    <td>Fri May 25, 2012/5:00 PM - 10:20 PM</td>
+    <td>Josh, Noah, Eric, Ratul</td>
+    <td>IRC Conversation. Went in-depth on more complicated execute() methods. </td>
+  </tr>
+  <tr>
+    <td>Sat May 26, 2012/2:00 PM - 3:00 PM</td>
+    <td>Noah, Josh</td>
+    <td>IRC Conversation. Discussed change to convention behind formats involving NW.</td>
+  </tr>
+  <tr>
+    <td>Sat May 26, 2012/3:00 PM - 4:00 PM</td>
+    <td>Noah, Josh, Eric</td>
+    <td>Continuing IRC Conversation. Implemented changes to the formats. Began work on user report generation.</td>
+  </tr>
 </table>
 
 <center><h1>Errata Report</h1></center>

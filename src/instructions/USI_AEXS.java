@@ -1,9 +1,9 @@
 package instructions;
 
 import static assemblernator.ErrorReporting.makeError;
+import ulutil.IOFormat;
 import assemblernator.AbstractDirective;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.IOFormat;
 import assemblernator.Instruction;
 import assemblernator.Module;
 import assemblernator.Module.Value;

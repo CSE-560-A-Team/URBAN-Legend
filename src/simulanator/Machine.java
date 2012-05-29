@@ -9,9 +9,10 @@ import java.util.SortedMap;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import ulutil.IOFormat;
+
 import assemblernator.Assembler;
 import assemblernator.ErrorReporting.ErrorHandler;
-import assemblernator.IOFormat;
 import assemblernator.Instruction;
 
 /**

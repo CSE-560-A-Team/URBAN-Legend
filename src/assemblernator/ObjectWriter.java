@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
+import ulutil.IOFormat;
+
 /**
  * I/O class for generated object files.
  * 
