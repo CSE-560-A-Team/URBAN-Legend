@@ -256,6 +256,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 
 		//Number of records
 		int mod = 0;
+		int totalMod = 0;
+		int numberOfMod = 0;
 		int link = 0;
 		int text = 0;
 
@@ -469,6 +471,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}
 				//mods for high order
 				theRecordsForTextMod.text.modHigh = reader.readInt(ScanWrap.notcolon, "textMod", 16);
+				totalMod = theRecordsForTextMod.text.modHigh;
 				completeString = completeString + theRecordsForTextMod.text.modHigh + ":";
 				if (!reader.go("disreguard"))
 				{
@@ -482,6 +485,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}
 				//mods for low order
 				theRecordsForTextMod.text.modLow = reader.readInt(ScanWrap.notcolon, "textMod", 16);
+				totalMod = totalMod + theRecordsForTextMod.text.modLow;
 				completeString = completeString + theRecordsForTextMod.text.modLow + ":";
 				if (!reader.go("disreguard"))
 				{
@@ -531,6 +535,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					boolean firstRun = true;
 					//gets the middle of modification records
 					while (run) {
+						numberOfMod++;
 						MiddleMod midtemp = new MiddleMod();
 						//Plus or minus sign
 						if(firstRun){
@@ -603,7 +608,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					boolean boobies = true;
 					ender = reader.readString(ScanWrap.notcolon, "loaderNoName");
 					if(!ender.equals(this.progName)){
-						errorMessage = "\nLabel does not match Program Name.";
+						errorMessage = errorMessage + "\nLabel does not match Program Name.";
 						boobies = false;
 					}
 					theRecordsForTextMod.mods.add(modification);
@@ -617,6 +622,10 @@ public class LinkerModule implements Comparable<LinkerModule>{
 						return;
 				}// end of mod record
 				
+				if(totalMod != numberOfMod){
+					errorMessage = "WARNING:Number of modifications done to a text record is not same in text record.\n";
+					completeString = completeString + errorMessage;
+				}
 				//Adds to the User Report and linkerModule
 				this.userRep.addType = AddType.TEXT;
 				this.userRep.add(theRecordsForTextMod.text.assignedLC, completeString);
