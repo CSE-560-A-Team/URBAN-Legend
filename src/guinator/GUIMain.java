@@ -620,6 +620,20 @@ public class GUIMain {
 				System.exit(0);
 				return;
 			}
+			
+			if (e.getSource() == m_newlinker) {
+				LinkerTab lt = new LinkerTab();
+				tabPane.add("Linker",lt);
+				tabPane.setSelectedComponent(lt);
+				return;
+			}
+			
+			if (e.getSource() == m_newsimulator) {
+				SimulatorTab st = new SimulatorTab();
+				tabPane.add("Simulator",st);
+				tabPane.setSelectedComponent(st);
+				return;
+			}
 		}
 	}
 
