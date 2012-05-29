@@ -88,8 +88,10 @@ public class Simulator {
 				
 			
 			if (!rd.go(loadAddr = rd
-					.readInt(ScanWrap.hex4, "loaderHNoAddr", 16))) // LM1.5
+					.readInt(ScanWrap.hex4, "loaderHNoAddr", 16))) {// LM1.5
+				userReportLine += loadAddr + ":"; 
 				return;
+		}
 			
 			if (!rd.go(execStart = rd.readInt(ScanWrap.hex4, "loaderNoEXS", 16))) // LM1.7
 				return;
@@ -126,107 +128,108 @@ public class Simulator {
 			for (;;) { // LM2
 				System.out.println("Reading record");
 				if (!rd.go(recname = rd.readString(ScanWrap.notcolon,
-						"loaderNoHeader"))) // LM1.1, LM1.2
+						"loaderNoHeader"))) {// LM1.1, LM1.2
+					os.write("Reading the goddamn Text Records...\n ");
 					return;
-				os.write("Reading the goddamn Text Records...\n ");
-				
-				if (!recname.equals("T")) // LM2.1
+			}
+				if (!recname.equals("T")) {// LM2.1
+					os.write("Readin T - signifying text record..\n");
 					break;
-				os.write("\n");
-				
+			}
 				int addr; // LM2.3
 				if (!rd.go(addr = rd
-						.readInt(ScanWrap.hex6, "loaderTNoAddr", 16)))
-					return;
-				os.write("Reading the Program Assigned Location...\n");
-				
-				if (addr > 4095)
+						.readInt(ScanWrap.hex6, "loaderTNoAddr", 16))) {
+					os.write("Reading the Program Assigned Location...\n");
+						return;
+			}
+				if (addr > 4095) {
 					hErr.reportError(
 							makeError("loaderTAddOOR",
 									Integer.toString(addr, 16)), -1, -1);
 				os.write("Text record contains invalid address ...\n");
+				}
 				
 				String words; // LM2.5
 				if (!rd.go(words = rd.readString(ScanWrap.hexArb,
-						"loaderTNoWord")))
-					return;
-				os.write(" Reading the Instruction.../n");
-				
-				if (words.length() % 8 != 0)
+						"loaderTNoWord"))) {
+					os.write(" Reading the Instruction.../n");
+						return;
+			}
+				if (words.length() % 8 != 0) {
 					hErr.reportError(makeError("loaderTNoWord")
 							+ " [Extra information: Invalid word size]", -1, -1);
 				os.write("NOT Reading a word.../n");
-				
+				}
 				for (int i = 0; i < words.length(); i += 8) {
 					machine.setMemory(addr++,
 							IOFormat.parseHex32Int(words.substring(i, i + 8)));
 				}
 				
 				if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon,
-						"loaderNoCRC"))) // LM2.7
+						"loaderNoCRC"))) {// LM2.7
+					os.write("Reading the Program Name .../n");
 					return;
-				os.write("Reading the Program Name .../n");
-				
+			}
 				if (!crcStr.equals(progName)) { // LM2.7, continued
 					hErr.reportError(makeError("datafileCRCFail"), -1, -1);
+					os.write("Program name does not match previously specified label .../n");
 					return;
 				}
-				os.write("Program name does not match previously specified label .../n");
-				
 				++numRecords;
 			}
 
 			if (!recname.equals("E")) { // LM3.1
-				hErr.reportError(makeError("missingEndR"), -1, -1);
+				hErr.reportError(makeError("missingEndR"), -1, -1);			
+				os.write("Missing the End Record .../n");
 				return;
 			}
-			os.write("Missing the End Record .../n");
 
 			int predNR; // LM3.3
-			if (!rd.go(predNR = rd.readInt(ScanWrap.hex4, "loaderTNoAddr", 16)))
+			if (!rd.go(predNR = rd.readInt(ScanWrap.hex4, "loaderTNoAddr", 16))) {
+				os.write("Reading the Total Number of Records.../n");
 				return;
-			os.write("Reading the Total Number of Records.../n");
-			
-			if (predNR != numRecords + 2)
+		}
+			if (predNR != numRecords + 2) {
 				hErr.reportError(
 						makeError("loaderInvRecC", "" + (numRecords + 2), ""
 								+ predNR), -1, -1);
 			os.write("The Record Count is invalid .../n"); 
-			
-			if (!rd.go(predNR = rd.readInt(ScanWrap.hex4, "loaderTNoAddr", 16)))//LM3.5
+		}
+			if (!rd.go(predNR = rd.readInt(ScanWrap.hex4, "loaderTNoAddr", 16))) {//LM3.5
+				os.write("reading th eTotal Number of Text Records.../n");	
 				return;
-			os.write("reading th eTotal Number of Text Records.../n");
-			
-			if (predNR != numRecords)
+		}
+			if (predNR != numRecords){
 				hErr.reportError(
 						makeError("loaderInvRecC", "" + numRecords, "" + predNR),
 						0, 0);
-			os.write("The Record Count is invalid.../n");
-			
-			if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon, "loaderNoCRC"))) // LM2.7
+				os.write("The Record Count is invalid.../n");
+			}
+			if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon, "loaderNoCRC"))) {// LM2.7
+				os.write("Reading the Program Name.../n");
 				return;
-			os.write("Reading the Program Name.../n");
+			}
 			
 			if (!crcStr.equals(progName)) { // LM2.7, continued
 				hErr.reportError(
 						makeError("datafileCRCFail") + ": " + progName, -1, -1);
+				os.write("Program name does not match previously specified label .../n");
 				return;
 			}
-			os.write("Program name does not match previously specified label .../n");
 			
 		} catch (Exception e) {
 			hErr.reportError(makeError("loaderReadFail"), -1, -1);
 			hErr.reportError(GUIUtil.getExceptionString(e), -1, -1);
+			os.write("Failed to load Loader File...\n");
 			return;
 		}
-		os.write("Failed to load Loader File...\n");
 		
-		if (asmVer > Assembler.VERSION)
+		if (asmVer > Assembler.VERSION){
 			machine.hErr.reportWarning(
 					makeError("newerAssemler", "" + Assembler.VERSION, ""
 							+ asmVer), -1, -1);
 		os.write(" WARNING: This program was compiled with a newer assembler version than you are using....\n");
-		
+		}
 		machine.output.putString("Loaded file.");
 		machine.setLC(loadAddr);
 		machine.setLC(execStart);
