@@ -626,6 +626,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					errorMessage = "WARNING:Number of modifications done to a text record is not same in text record.\n";
 					completeString = completeString + errorMessage;
 				}
+				totalMod = 0;
+				numberOfMod = 0;
 				//Adds to the User Report and linkerModule
 				this.userRep.addType = AddType.TEXT;
 				this.userRep.add(theRecordsForTextMod.text.assignedLC, completeString);
