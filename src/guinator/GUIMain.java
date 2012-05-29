@@ -30,6 +30,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import simulanator.SimulatorTest;
 import assemblernator.AssemblerTest;
@@ -73,6 +75,20 @@ public class GUIMain {
 	static JMenuItem m_copyHTMLTest;
 	/** Our exit menu item */
 	static JMenuItem m_exit;
+
+	/** Button to create a new linker tab. */
+	static JMenuItem m_newlinker;
+	/** A menu item to export a test case as an HTML document */
+	static JMenuItem m_writeHTMLTest2;
+	/** A menu item to copy a test case to the clipboard as HTML */
+	static JMenuItem m_copyHTMLTest2;
+
+	/** Button to create a new simulator tab. */
+	static JMenuItem m_newsimulator;
+	/** A menu item to export a test case as an HTML document */
+	static JMenuItem m_writeHTMLTest3;
+	/** A menu item to copy a test case to the clipboard as HTML */
+	static JMenuItem m_copyHTMLTest3;
 
 	// ===============================================================
 	// == COMPONENTS =================================================
@@ -138,7 +154,7 @@ public class GUIMain {
 
 		JMenuBar mb = new JMenuBar();
 		JMenu filemenu = new JMenu("File");
-		MenuListener ml = new MenuListener();
+		GUIMenuListener ml = new GUIMenuListener();
 		filemenu.add(m_new = new JMenuItem("New"));
 		m_new.addActionListener(ml);
 		filemenu.add(m_save = new JMenuItem("Save"));
@@ -165,14 +181,63 @@ public class GUIMain {
 				"Copy code with highlighting"));
 		m_copyFormatted.addActionListener(ml);
 		filemenu.add(m_writeHTMLTest = new JMenuItem("Write HTML Test Case"));
-		m_writeHTML.addActionListener(ml);
+		m_writeHTMLTest.addActionListener(ml);
 		filemenu.add(m_copyHTMLTest = new JMenuItem("Copy HTML Test Case"));
 		m_copyHTMLTest.addActionListener(ml);
 		filemenu.addSeparator();
 		filemenu.add(m_exit = new JMenuItem("Exit"));
 		m_exit.addActionListener(ml);
+
+
+		JMenu linkmenu = new JMenu("Link");
+		linkmenu.add(m_newlinker = new JMenuItem("New Linker Tab"));
+		m_newlinker.addActionListener(ml);
+		linkmenu.add(m_writeHTMLTest2 = new JMenuItem("Write HTML Test Case"));
+		m_writeHTMLTest2.addActionListener(ml);
+		linkmenu.add(m_copyHTMLTest2 = new JMenuItem("Copy HTML Test Case"));
+		m_copyHTMLTest2.addActionListener(ml);
+
+		JMenu simumenu = new JMenu("Simulator");
+		simumenu.add(m_newsimulator = new JMenuItem("New Simulator Tab"));
+		m_newsimulator.addActionListener(ml);
+		simumenu.add(m_writeHTMLTest3 = new JMenuItem("Write HTML Test Case"));
+		m_writeHTMLTest3.addActionListener(ml);
+		simumenu.add(m_copyHTMLTest3 = new JMenuItem("Copy HTML Test Case"));
+		m_copyHTMLTest3.addActionListener(ml);
+
+
 		mb.add(filemenu);
+		mb.add(linkmenu);
+		mb.add(simumenu);
 		mainWindow.setJMenuBar(mb);
+
+		filemenu.addMenuListener(new MenuListener() {
+
+			@Override public void menuSelected(MenuEvent arg0) {
+				Component tab = tabPane.getSelectedComponent();
+				System.out.println("assess asses");
+				if (tab instanceof FileTab) {
+					m_parse.setEnabled(true);
+					m_compile.setEnabled(true);
+					m_run.setEnabled(true);
+					m_fulltestcase.setEnabled(true);
+					m_copyFormatted.setEnabled(true);
+					m_writeHTML.setEnabled(true);
+				}
+				else {
+					m_parse.setEnabled(false);
+					m_compile.setEnabled(false);
+					m_run.setEnabled(false);
+					m_fulltestcase.setEnabled(false);
+					m_copyFormatted.setEnabled(false);
+					m_writeHTML.setEnabled(false);
+				}
+			}
+
+			@Override public void menuDeselected(MenuEvent arg0) {}
+
+			@Override public void menuCanceled(MenuEvent arg0) {}
+		});
 
 		FileTab ft = new FileTab(tabPane);
 		tabPane.addTab("Untitled", ft);
@@ -381,9 +446,8 @@ public class GUIMain {
 			return LinkerTest.getTestCase(
 					lt.linkMods.toArray(new LinkerModule[0]), null);
 		}
-		else if (a instanceof SimulatorTab)
-		{
-			SimulatorTab st = (SimulatorTab)a;
+		else if (a instanceof SimulatorTab) {
+			SimulatorTab st = (SimulatorTab) a;
 			return st.getOutputHTML();
 		}
 		else {
@@ -401,7 +465,7 @@ public class GUIMain {
 	 * @author Josh Ventura
 	 * @date Apr 9, 2012; 12:56:30 AM
 	 */
-	class MenuListener implements ActionListener {
+	class GUIMenuListener implements ActionListener {
 
 
 		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
@@ -507,7 +571,9 @@ public class GUIMain {
 				}
 				return;
 			}
-			if (e.getSource() == m_writeHTMLTest) {
+			if (e.getSource() == m_writeHTMLTest
+					|| e.getSource() == m_writeHTMLTest2
+					|| e.getSource() == m_writeHTMLTest3) {
 				JFileChooser jfc = new JFileChooser();
 				jfc.setMultiSelectionEnabled(false);
 				if (jfc.showSaveDialog(mainWindow) == JFileChooser.APPROVE_OPTION) {
@@ -517,13 +583,9 @@ public class GUIMain {
 									"Overwrite existing file?") == JOptionPane.YES_OPTION) {
 						try {
 							FileWriter fw = new FileWriter(f);
-							FileTab ft = (FileTab) tabPane
-									.getSelectedComponent();
-							if (ft != null) {
-								fw.write("<html>\n<body>\n");
-								fw.write(getBasicTestCase(null, null));
-								fw.write("</body>\n</html>\n");
-							}
+							fw.write("<html>\n<body>\n");
+							fw.write(getBasicTestCase(null, null));
+							fw.write("</body>\n</html>\n");
 							fw.close();
 						} catch (FileNotFoundException e1) {
 							JOptionPane.showMessageDialog(mainWindow,
@@ -536,7 +598,9 @@ public class GUIMain {
 				}
 				return;
 			}
-			if (e.getSource() == m_copyHTMLTest) {
+			if (e.getSource() == m_copyHTMLTest
+					|| e.getSource() == m_copyHTMLTest2
+					|| e.getSource() == m_copyHTMLTest3) {
 				StringSelection ss = new StringSelection(getBasicTestCase(null,
 						null));
 				Toolkit.getDefaultToolkit().getSystemClipboard()
@@ -554,6 +618,20 @@ public class GUIMain {
 			}
 			if (e.getSource() == m_exit) {
 				System.exit(0);
+				return;
+			}
+			
+			if (e.getSource() == m_newlinker) {
+				LinkerTab lt = new LinkerTab();
+				tabPane.add("Linker",lt);
+				tabPane.setSelectedComponent(lt);
+				return;
+			}
+			
+			if (e.getSource() == m_newsimulator) {
+				SimulatorTab st = new SimulatorTab();
+				tabPane.add("Simulator",st);
+				tabPane.setSelectedComponent(st);
 				return;
 			}
 		}
