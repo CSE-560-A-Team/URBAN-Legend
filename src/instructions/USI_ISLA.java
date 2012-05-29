@@ -1,6 +1,7 @@
 package instructions;
 
 import simulanator.Deformatter.OpcodeBreakdown;
+import static assemblernator.ErrorReporting.makeError;
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
 import assemblernator.Instruction;
@@ -39,7 +40,13 @@ public class USI_ISLA extends UIG_ShiftManipulate {
 		
 		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 		int wordOrig = brkdwn.readFromDest(machine);
-		wordOrig <<= brkdwn.readFromSource(machine); //left shift and assign.
+		int srcword = brkdwn.readFromSource(machine);
+		if(srcword >=0 || srcword <= 31) {
+			wordOrig <<= srcword; //left shift and assign.			
+		} else {
+			machine.hErr.reportError(makeError("runOverShift"), machine.getLC(), -1);
+			srcword = 0;
+		}
 		brkdwn.putToDest(wordOrig, machine);
 	}
 

@@ -44,7 +44,7 @@ public class USI_ROR extends UIG_ShiftManipulate {
 		if(rotateVal >= 0 || rotateVal <= 31) { 
 			rotated = Integer.rotateRight(wordOrig, rotateVal);
 		} else {
-			machine.hErr.reportError(makeError("runOverShift"), machine.getLC(), -1);
+			machine.hErr.reportError(makeError("runOverRotate"), machine.getLC(), -1);
 			rotated = 0;
 		}
 		brkdwn.putToDest(rotated, machine);

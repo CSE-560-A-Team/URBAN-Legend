@@ -1,5 +1,6 @@
 package instructions;
 
+import static assemblernator.ErrorReporting.makeError;
 import static simulanator.Deformatter.breakDownOther;
 import simulanator.Machine;
 import simulanator.Deformatter.OpcodeBreakdown;
@@ -39,7 +40,13 @@ public class USI_ISHR extends UIG_ShiftManipulate {
 		
 		OpcodeBreakdown brkdwn = breakDownOther(machine.instruction);
 		int signbit = 0;
-		signbit >>>= brkdwn.readFromSource(machine); //right shift and assign.
+		int srcword = brkdwn.readFromSource(machine);
+		if(srcword >=0 || srcword <= 31) {
+			signbit >>>= srcword; //right shift and assign.
+		} else {
+			machine.hErr.reportError(makeError("runOverShift"), machine.getLC(), -1);
+			srcword = 0;
+		}
 		brkdwn.putToDest(signbit, machine);
 	}
 
