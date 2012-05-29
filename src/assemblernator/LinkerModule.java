@@ -127,7 +127,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 		@Override
 		public String toString() {
 			String report;
-			report = "" + headerRecord;
+			report = headerRecord;
 			
 			Map<Integer, String> contents = this.linkerRecords;
 			
