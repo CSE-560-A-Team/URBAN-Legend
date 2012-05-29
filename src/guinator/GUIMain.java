@@ -160,7 +160,7 @@ public class GUIMain {
 		m_compile.addActionListener(ml);
 		filemenu.add(m_run = new JMenuItem("Run in New Simulator"));
 		m_run.addActionListener(ml);
-		filemenu.add(m_fulltestcase = new JMenuItem("Run in New Simulator"));
+		filemenu.add(m_fulltestcase = new JMenuItem("Run NOW and copy"));
 		m_fulltestcase.addActionListener(ml);
 		filemenu.addSeparator();
 
@@ -294,7 +294,7 @@ public class GUIMain {
 	 * @date May 29, 2012; 1:15:36 AM
 	 */
 	class FrankenOutput extends HTMLOutputStream implements URBANOutputStream,
-			ErrorHandler {
+			URBANInputStream, ErrorHandler {
 		/** Sum of buffered HTML */
 		public String appme = "";
 
@@ -321,6 +321,16 @@ public class GUIMain {
 		/** @see assemblernator.ErrorReporting.ErrorHandler#reportWarning(String,int,int) */
 		@Override public void reportWarning(String warn, int line, int pos) {
 			appme += "<span color=\"#FF8000\">" + warn + "</span>";
+		}
+
+		/** @see simulanator.Machine.URBANInputStream#getString() */
+		@Override public String getString() {
+			String res = (String) JOptionPane.showInputDialog(mainWindow,
+					"Application requests input", "Application input",
+					JOptionPane.PLAIN_MESSAGE, null, null, "");
+			appme += "<i><b>Prompted for user input. User entered </b><dd>"
+					+ res + "</dd></i>";
+			return res;
 		}
 	};
 
@@ -380,13 +390,7 @@ public class GUIMain {
 
 			tcHTML += "\n\n<h1>Simulator Output</h1>\n\n";
 
-			Machine m = new Machine(uos, new URBANInputStream() {
-				@Override public String getString() {
-					return (String) JOptionPane.showInputDialog(mainWindow,
-							"Application requests input", "Application input",
-							JOptionPane.PLAIN_MESSAGE, null, null, "");
-				}
-			}, uos);
+			Machine m = new Machine(uos, uos, uos);
 
 			Simulator.load(new ByteArrayInputStream(loaderFile), ft.hErr, uos,
 					m);
