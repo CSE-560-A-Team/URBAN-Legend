@@ -346,6 +346,10 @@
     <td>The specification is unclear whether the constant to AEXS is relative to KICKO, or if it
     must lie between KICKO FC and program end. No checking is done.</td>
   </tr>
+  <tr>
+    <td>USI_*</td>
+    <td>Another quirk of modifier flags is that exlabel - exlabel is treated the same as rlabel-rlabel, being <i>R</i> ("relocatable") even though the result is zero.</td>
+  </tr>
 </table>
   
 */
