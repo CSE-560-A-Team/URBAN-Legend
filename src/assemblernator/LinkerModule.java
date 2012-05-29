@@ -408,9 +408,9 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				if(addLink){
 					linkRecord.put(entryLabel, entryAddr);
 					if(hack){
-						completeString =  completeString + ender + ":" +errorMessage +"\n";
+						completeString =  completeString + ender + ":\n";
 					}else{
-					completeString =  completeString + ender + ":\n";
+						completeString =  completeString + ender + ":" +errorMessage +"\n";
 					}
 				}else{
 					completeString =  completeString + ender + ":" +errorMessage +"\n";
@@ -626,6 +626,8 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					errorMessage = "WARNING:Number of modifications done to a text record is not same in text record.\n";
 					completeString = completeString + errorMessage;
 				}
+				totalMod = 0;
+				numberOfMod = 0;
 				//Adds to the User Report and linkerModule
 				this.userRep.addType = AddType.TEXT;
 				this.userRep.add(theRecordsForTextMod.text.assignedLC, completeString);

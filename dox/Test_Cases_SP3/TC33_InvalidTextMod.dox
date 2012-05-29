@@ -1,0 +1,46 @@
+/*!
+
+\page testcase33 Invalid Number of TextRecord modifications
+
+<pre>
+H:LinkTest1:0000:0003:0000:2012144,21:51:26:0001:URBAN-ASM:LinkTest1:T:0000:00800001:A:R:12:12:LinkTest1:T:0001:00810002:A:A:00:00:LinkTest1:T:0002:00820003:A:R:00:12:LinkTest1:E:0005:0000:0003:0000:LinkTest1:H:start:0FA0:000C:0FA0:2012141,16:20:12:0001:URBAN-ASM:start:T:0FA0:00080000:R:A:00:00:start:T:0FA1:00800000:A:R:00:00:start:T:0FA2:01803FFF:A:A:00:00:start:T:0FA3:01893FFF:A:A:00:00:start:T:0FA4:00081000:R:A:00:00:start:T:0FA5:00801000:A:A:00:00:start:T:0FA6:00010000:A:A:00:00:start:T:0FA7:00090000:R:A:00:00:start:T:0FA8:00900000:A:A:00:00:start:T:0FA9:009A0000:A:A:00:00:start:T:0FAA:02001000:R:A:00:00:start:T:0FAB:031C7000:R:A:00:00:start:E:000E:0000:000C:0000:start:
+</pre>
+
+<h1>Linker Load Phase</h1>
+
+H:LinkTest1:0:3:0:2012144,21:51:26:1:URBAN-ASM:LinkTest1:
+T:0:00800001:A:R:18:18:LinkTest1:
+803: Text record missing valid number of modifications.
+803: Text record missing valid number of modifications.
+WARNING:Number of modifications done to a text record is not same in text record.
+T:1:00810002:A:A:0:0:LinkTest1:
+T:2:00820003:A:R:0:18:LinkTest1:
+803: Text record missing valid number of modifications.
+WARNING:Number of modifications done to a text record is not same in text record.
+E:5:0:3:0:LinkTest1:
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+<i>&lt;The combined symbol table is empty.&gt;</i>H:start:4000:12:4000:2012141,16:20:12:1:URBAN-ASM:start:
+T:4000:00080000:R:A:0:0:start:
+T:4001:00800000:A:R:0:0:start:
+T:4002:01803FFF:A:A:0:0:start:
+T:4003:01893FFF:A:A:0:0:start:
+T:4004:00081000:R:A:0:0:start:
+T:4005:00801000:A:A:0:0:start:
+T:4006:00010000:A:A:0:0:start:
+T:4007:00090000:R:A:0:0:start:
+T:4008:00900000:A:A:0:0:start:
+T:4009:009A0000:A:A:0:0:start:
+T:4010:02001000:R:A:0:0:start:
+T:4011:031C7000:R:A:0:0:start:
+E:14:0:12:0:start:
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+<i>&lt;The combined symbol table is empty.&gt;</i>
+
+
+*/

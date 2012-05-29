@@ -389,9 +389,7 @@ public class GUIMain {
 			tcHTML += LinkerTest.getTestCase(lma, baos);
 
 			byte[] loaderFile = baos.toByteArray();
-			tcHTML += "\n\n<h2>Complete loader file</h2>\n\n<pre>"
-					+ (new String(loaderFile)).replaceAll(mods[0].programName
-							+ ":", mods[0].programName + ":\n") + "</pre>";
+
 
 			tcHTML += "\n\n<h1>Simulator Output</h1>\n\n"
 					+ SimulatorTest.getTestCase(loaderFile, mainWindow);
