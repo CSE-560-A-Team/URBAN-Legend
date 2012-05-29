@@ -98,55 +98,64 @@ public class Simulator {
 
 			if (!rd.go(execStart = rd.readInt(ScanWrap.hex4, "loaderNoEXS", 16))) // LM1.7
 				return;
+			userReportLine += execStart + ":"; 
 
 			if (!rd.go(progLen = rd.readInt(ScanWrap.hex4, "loaderHNoPrL", 16))) // LM1.9
 				return;
-
+			userReportLine += progLen + ":";
+			
 			if (progLen > 4096) {
 				hErr.reportError(makeError("loaderPrLnOOR", "" + progLen), -1,
 						-1);
 				return;
 			}
 
-			if (!rd.go(rd.readString(ScanWrap.datep, "loaderHNoPrL"))) // LM1.11
+			String date;
+			if (!rd.go(date = rd.readString(ScanWrap.datep, "loaderHNoPrL"))) // LM1.11
 				return;
+			userReportLine += date + ":";
+			
 			if (!rd.go(rd.readString(ScanWrap.notcolon, "loaderHNoLLMM")
 					.equals("URBAN-LLM"))) // LM1.13
 				return;
-
+			userReportLine += "URBAN-LLM" + ":";
+			
 			if (!rd.go(asmVer = rd.readInt(ScanWrap.dec4, "loaderHNoVer", 10))) // LM1.15
 				return;
-
+			userReportLine += asmVer + ":";
+			
 			if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon, "loaderNoCRC"))) // LM1.17
 				return;
-
+			userReportLine += crcStr + ":\n";
+			
 			if (!crcStr.equals(progName)) { // LM1.17, continued
 				hErr.reportError(makeError("datafileCRCFail"), -1, -1);
 				return;
 			}
 
 			os.write("======== Program Name: " + progName + " ========");
-			os.write(userReportLine);
+			//os.write(userReportLine);
 			String recname;
 			int numRecords = 0;
 			for (;;) { // LM2
-				os.write("Reading record\n");
+				
 				if (!rd.go(recname = rd.readString(ScanWrap.notcolon,
 						"loaderNoHeader"))) // LM1.1, LM1.2
 					return;
 
-				os.write("Reading Text Records...\n ");
+				//os.write("Reading Text Records...\n ");
 
 				if (!recname.equals("T")) // LM2.1
 					break;
+				userReportLine += "T" + ":";
 
-				os.write("Readin T - signifying text record..\n");
+				//os.write("Readin T - signifying text record..\n");
 				int addr; // LM2.3
 				if (!rd.go(addr = rd
 						.readInt(ScanWrap.hex6, "loaderTNoAddr", 16)))
 					return;
-
-				os.write("Reading the Program Assigned Location...\n");
+				userReportLine += addr + ":";
+				//os.write("Reading the Program Assigned Location...\n");
 
 				if (addr > 4095)
 					hErr.reportError(
@@ -157,8 +166,8 @@ public class Simulator {
 				if (!rd.go(words = rd.readString(ScanWrap.hexArb,
 						"loaderTNoWord")))
 					return;
-
-				os.write(" Reading the Instruction...\n");
+				userReportLine += words + ":";
+				//os.write(" Reading the Instruction...\n");
 
 				if (words.length() % 8 != 0)
 					hErr.reportError(makeError("loaderTNoWord")
@@ -172,25 +181,30 @@ public class Simulator {
 				if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon,
 						"loaderNoCRC"))) // LM2.7
 					return;
-
-				os.write("Reading the Program Name ...\n");
+				userReportLine += crcStr + ":\n";
+				//os.write("Reading the Program Name ...\n");
 				if (!crcStr.equals(progName)) { // LM2.7, continued
 					hErr.reportError(makeError("datafileCRCFail"), -1, -1);
-					return;
+					
 				}
 				++numRecords;
-			}
+			
 
+			}
+			os.write(userReportLine);	
+			
 			if (!recname.equals("E")) { // LM3.1
 				hErr.reportError(makeError("loaderNoEnd"), -1, -1);
 				return;
 			}
+			userReportLine = "E" + ":";
 
 			int predNR; // LM3.3
 			if (!rd.go(predNR = rd.readInt(ScanWrap.hex4, "loaderTNoAddr", 16)))
 				return;
-			os.write("Reading the Total Number of Records...\n");
-
+			//os.write("Reading the Total Number of Records...\n");
+			userReportLine += predNR + ":";
+			
 			if (predNR != numRecords + 2)
 				hErr.reportError(
 						makeError("loaderInvRecC", "" + (numRecords + 2), ""
@@ -198,8 +212,9 @@ public class Simulator {
 
 			if (!rd.go(predNR = rd.readInt(ScanWrap.hex4, "loaderTNoAddr", 16))) // LM3.5
 				return;
-			os.write("reading th eTotal Number of Text Records...\n");
-
+			//os.write("reading th eTotal Number of Text Records...\n");
+			userReportLine += predNR + ":";
+			
 			if (predNR != numRecords)
 				hErr.reportError(
 						makeError("loaderInvRecC", "" + numRecords, "" + predNR),
@@ -207,20 +222,21 @@ public class Simulator {
 
 			if (!rd.go(crcStr = rd.readString(ScanWrap.notcolon, "loaderNoCRC"))) // LM2.7
 				return;
-			os.write("Reading the Program Name...\n");
-
+			//os.write("Reading the Program Name...\n");
+			userReportLine += crcStr + ":\n";
 
 			if (!crcStr.equals(progName)) { // LM2.7, continued
 				hErr.reportError(
 						makeError("datafileCRCFail") + ": " + progName, -1, -1);
-				os.write("Program name does not match previously specified label ...\n");
-				return;
+				//os.write("Program name does not match previously specified label ...\n");
+				
 			}
-
+			os.write(userReportLine);
+			
 		} catch (Exception e) {
 			hErr.reportError(makeError("loaderReadFail"), -1, -1);
 			hErr.reportError(GUIUtil.getExceptionString(e), -1, -1);
-			os.write("Failed to load Loader File...\n");
+			//os.write("Failed to load Loader File...\n");
 			return;
 		}
 
@@ -228,8 +244,9 @@ public class Simulator {
 			machine.hErr.reportWarning(
 					makeError("newerAssemler", "" + Assembler.VERSION, ""
 							+ asmVer), -1, -1);
-			os.write(" WARNING: This program was compiled with a newer assembler version than you are using....\n");
+			//os.write(" WARNING: This program was compiled with a newer assembler version than you are using....\n");
 		}
+		
 		machine.output.putString("Loaded file.");
 		machine.setLC(loadAddr);
 		machine.setLC(execStart);
