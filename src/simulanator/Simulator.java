@@ -182,7 +182,7 @@ public class Simulator {
 			}
 
 			if (!recname.equals("E")) { // LM3.1
-				hErr.reportError(makeError("missingEndR"), -1, -1);
+				hErr.reportError(makeError("loaderNoEnd"), -1, -1);
 				return;
 			}
 
