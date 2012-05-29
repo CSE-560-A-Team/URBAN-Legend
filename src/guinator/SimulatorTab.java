@@ -498,4 +498,9 @@ public class SimulatorTab extends JSplitPane {
 			}
 		}
 	}
+
+	/** @return The HTML content of the output box. */
+	public String getOutputHTML() {
+		return outputBox.getText();
+	}
 }

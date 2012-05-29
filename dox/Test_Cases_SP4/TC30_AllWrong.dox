@@ -1,0 +1,420 @@
+/*!
+
+\page testcase31 99 Bottles
+
+<h1>Input</h1>
+<pre><span style="font-style:italic;color:#800080;">the99bottlessong</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span> <span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">movd</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">99</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">annoying</span> <span style="font-weight:bold;color:#000080;">printf</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'%0 bottles of beer on the wall, %0 bottles of beer;'</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">printf</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'Take one down, pass it around;'</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">isub</span> <span style="color:#0000ff;">FL</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+         <span style="font-weight:bold;color:#000080;">printf</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">'%0 bottles of beer on the wall!'</span><span style="color:#ff0000;">;</span>
+     <span style="font-weight:bold;color:#000080;">TRGT</span> <span style="color:#0000ff;">FR</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">DM</span><span style="color:#ff0000;">:</span> <span style="font-style:italic;color:#800080;">annoying</span><span style="color:#ff0000;">;</span>
+     <span style="font-weight:bold;color:#000080;">printf</span> <span style="color:#0000ff;">st</span><span style="color:#ff0000;">:</span><span style="color:#0000ff;">':('</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">hlt</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
+<span style="font-weight:bold;color:#000080;">end</span> <span style="color:#0000ff;">lr</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">the99bottlessong</span><span style="color:#ff0000;">;</span>
+</pre>
+<br />
+<h1>Symbol table</h1>
+<table>
+  <tr>
+    <th>Label</th>
+    <th>LC</th>
+    <th>Usage</th>
+    <th>Equate</th>
+  </tr>  <tr>
+    <td>annoying</td>
+    <td>0001</td>
+    <td>LABEL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>the99bottlessong</td>
+    <td>0000</td>
+    <td>PROGNAME</td>
+    <td></td>
+  </tr>
+</table>
+<br />
+<h1>User report</h1>
+<pre>Symbol Table:
+Label:	LC:	Usage:	EquString:
+annoying	 0001	LABEL
+the99bottlessong	 0000	PROGNAME
+
+Instruction breakdowns:
+LC	Object Code	Address Status	Line Num	Source Line
+(hex)	(hex)	src:, dest:	(dec)
+0000	--------	src: A,dest:-	1	the99bottlessong kicko fc: 0;
+
+0000	01800063	src: A,dest:-	2	movd FL:99, DR:0;
+
+0001	E1D80002	, 25302062	, 6F74746C	, 6573206F	, 66206265	, 6572206F	, 6E207468	, 65207761	, 6C6C2C20	, 25302062	, 6F74746C	, 6573206F	, 66206265	, 65723B20	src: R,dest:-	3	annoying printf st:'%0 bottles of beer on the wall, %0 bottles of beer;';
+
+000F	E1880010	, 54616B65	, 206F6E65	, 20646F77	, 6E2C2070	, 61737320	, 69742061	, 726F756E	, 643B2020	src: R,dest:-	4	         printf st:'Take one down, pass it around;';
+
+0018	31800001	src: A,dest:-	5	         isub FL:1, DR:0;
+
+0019	E188001A	, 25302062	, 6F74746C	, 6573206F	, 66206265	, 6572206F	, 6E207468	, 65207761	, 6C6C2120	src: R,dest:-	6	         printf st:'%0 bottles of beer on the wall!';
+
+0022	88080001	src: A,dest:R	7	     TRGT FR:0, DM: annoying;
+
+0023	E1180024	, 3A282020	src: R,dest:-	8	     printf st:':(';
+
+0025	FD880000	src: A,dest:-	9	hlt fc:0;
+
+0026	--------	src: A,dest:-	10	end lr:the99bottlessong;
+
+</pre>
+<h1>Object file:</h1>
+<pre>H:the99bottlessong:
+0000:0026:0000:2012150,11:06:31:0001:URBAN-ASM:the99bottlessong:
+T:0000:01800063:A:A:00:00:the99bottlessong:
+T:0001:E1D80002253020626F74746C6573206F662062656572206F6E207468652077616C6C2C20253020626F74746C6573206F6620626565723B20:A:A:00:00:the99bottlessong:
+T:000F:E188001054616B65206F6E6520646F776E2C20706173732069742061726F756E643B2020:A:A:00:00:the99bottlessong:
+T:0018:31800001:A:A:00:00:the99bottlessong:
+T:0019:E188001A253020626F74746C6573206F662062656572206F6E207468652077616C6C2120:A:A:00:00:the99bottlessong:
+T:0022:88080001:A:R:00:00:the99bottlessong:
+T:0023:E11800243A282020:A:A:00:00:the99bottlessong:
+T:0025:FD880000:A:A:00:00:the99bottlessong:
+E:000A:0000:0008:0000:the99bottlessong:
+</pre>
+
+
+<h1>Linker Load Phase</h1>
+
+H:the99bottlessong:0:38:0:2012150,11:06:31:1:URBAN-ASM:the99bottlessong:
+T:0:01800063:A:A:0:0:the99bottlessong:
+T:1:E1D80002253020626F74746C6573206F662062656572206F6E207468652077616C6C2C20253020626F74746C6573206F6620626565723B20:A:A:0:0:the99bottlessong:
+T:15:E188001054616B65206F6E6520646F776E2C20706173732069742061726F756E643B2020:A:A:0:0:the99bottlessong:
+T:24:31800001:A:A:0:0:the99bottlessong:
+T:25:E188001A253020626F74746C6573206F662062656572206F6E207468652077616C6C2120:A:A:0:0:the99bottlessong:
+T:34:88080001:A:R:0:0:the99bottlessong:
+T:35:E11800243A282020:A:A:0:0:the99bottlessong:
+T:37:FD880000:A:A:0:0:the99bottlessong:
+E:10:0:8:0:the99bottlessong:
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+
+
+<h2>Complete loader file</h2>
+
+<pre>H:the99bottlessong:
+0000:0000:0026:2012150,11:06:31:URBAN-LLM:0001:the99bottlessong:
+T:0000:01800063:the99bottlessong:
+T:0001:E1D80002253020626F74746C6573206F662062656572206F6E207468652077616C6C2C20253020626F74746C6573206F6620626565723B20:the99bottlessong:
+T:000F:E188001054616B65206F6E6520646F776E2C20706173732069742061726F756E643B2020:the99bottlessong:
+T:0018:31800001:the99bottlessong:
+T:0019:E188001A253020626F74746C6573206F662062656572206F6E207468652077616C6C2120:the99bottlessong:
+T:0022:88080001:the99bottlessong:
+T:0023:E11800243A282020:the99bottlessong:
+T:0025:FD880000:the99bottlessong:
+E:000A:0008:the99bottlessong:
+</pre>
+
+<h1>Simulator Output</h1>
+
+<pre>========Program Name: the99bottlessong========</pre><pre>H:the99bottlessong:</pre><pre>Readin T - signifying text record..
+</pre><pre>Loaded file.</pre><pre>99 bottles of beer on the wall, 99 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>98 bottles of beer on the wall! 
+</pre><pre>98 bottles of beer on the wall, 98 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>97 bottles of beer on the wall! 
+</pre><pre>97 bottles of beer on the wall, 97 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>96 bottles of beer on the wall! 
+</pre><pre>96 bottles of beer on the wall, 96 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>95 bottles of beer on the wall! 
+</pre><pre>95 bottles of beer on the wall, 95 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>94 bottles of beer on the wall! 
+</pre><pre>94 bottles of beer on the wall, 94 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>93 bottles of beer on the wall! 
+</pre><pre>93 bottles of beer on the wall, 93 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>92 bottles of beer on the wall! 
+</pre><pre>92 bottles of beer on the wall, 92 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>91 bottles of beer on the wall! 
+</pre><pre>91 bottles of beer on the wall, 91 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>90 bottles of beer on the wall! 
+</pre><pre>90 bottles of beer on the wall, 90 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>89 bottles of beer on the wall! 
+</pre><pre>89 bottles of beer on the wall, 89 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>88 bottles of beer on the wall! 
+</pre><pre>88 bottles of beer on the wall, 88 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>87 bottles of beer on the wall! 
+</pre><pre>87 bottles of beer on the wall, 87 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>86 bottles of beer on the wall! 
+</pre><pre>86 bottles of beer on the wall, 86 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>85 bottles of beer on the wall! 
+</pre><pre>85 bottles of beer on the wall, 85 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>84 bottles of beer on the wall! 
+</pre><pre>84 bottles of beer on the wall, 84 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>83 bottles of beer on the wall! 
+</pre><pre>83 bottles of beer on the wall, 83 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>82 bottles of beer on the wall! 
+</pre><pre>82 bottles of beer on the wall, 82 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>81 bottles of beer on the wall! 
+</pre><pre>81 bottles of beer on the wall, 81 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>80 bottles of beer on the wall! 
+</pre><pre>80 bottles of beer on the wall, 80 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>79 bottles of beer on the wall! 
+</pre><pre>79 bottles of beer on the wall, 79 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>78 bottles of beer on the wall! 
+</pre><pre>78 bottles of beer on the wall, 78 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>77 bottles of beer on the wall! 
+</pre><pre>77 bottles of beer on the wall, 77 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>76 bottles of beer on the wall! 
+</pre><pre>76 bottles of beer on the wall, 76 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>75 bottles of beer on the wall! 
+</pre><pre>75 bottles of beer on the wall, 75 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>74 bottles of beer on the wall! 
+</pre><pre>74 bottles of beer on the wall, 74 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>73 bottles of beer on the wall! 
+</pre><pre>73 bottles of beer on the wall, 73 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>72 bottles of beer on the wall! 
+</pre><pre>72 bottles of beer on the wall, 72 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>71 bottles of beer on the wall! 
+</pre><pre>71 bottles of beer on the wall, 71 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>70 bottles of beer on the wall! 
+</pre><pre>70 bottles of beer on the wall, 70 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>69 bottles of beer on the wall! 
+</pre><pre>69 bottles of beer on the wall, 69 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>68 bottles of beer on the wall! 
+</pre><pre>68 bottles of beer on the wall, 68 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>67 bottles of beer on the wall! 
+</pre><pre>67 bottles of beer on the wall, 67 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>66 bottles of beer on the wall! 
+</pre><pre>66 bottles of beer on the wall, 66 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>65 bottles of beer on the wall! 
+</pre><pre>65 bottles of beer on the wall, 65 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>64 bottles of beer on the wall! 
+</pre><pre>64 bottles of beer on the wall, 64 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>63 bottles of beer on the wall! 
+</pre><pre>63 bottles of beer on the wall, 63 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>62 bottles of beer on the wall! 
+</pre><pre>62 bottles of beer on the wall, 62 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>61 bottles of beer on the wall! 
+</pre><pre>61 bottles of beer on the wall, 61 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>60 bottles of beer on the wall! 
+</pre><pre>60 bottles of beer on the wall, 60 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>59 bottles of beer on the wall! 
+</pre><pre>59 bottles of beer on the wall, 59 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>58 bottles of beer on the wall! 
+</pre><pre>58 bottles of beer on the wall, 58 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>57 bottles of beer on the wall! 
+</pre><pre>57 bottles of beer on the wall, 57 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>56 bottles of beer on the wall! 
+</pre><pre>56 bottles of beer on the wall, 56 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>55 bottles of beer on the wall! 
+</pre><pre>55 bottles of beer on the wall, 55 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>54 bottles of beer on the wall! 
+</pre><pre>54 bottles of beer on the wall, 54 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>53 bottles of beer on the wall! 
+</pre><pre>53 bottles of beer on the wall, 53 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>52 bottles of beer on the wall! 
+</pre><pre>52 bottles of beer on the wall, 52 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>51 bottles of beer on the wall! 
+</pre><pre>51 bottles of beer on the wall, 51 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>50 bottles of beer on the wall! 
+</pre><pre>50 bottles of beer on the wall, 50 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>49 bottles of beer on the wall! 
+</pre><pre>49 bottles of beer on the wall, 49 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>48 bottles of beer on the wall! 
+</pre><pre>48 bottles of beer on the wall, 48 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>47 bottles of beer on the wall! 
+</pre><pre>47 bottles of beer on the wall, 47 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>46 bottles of beer on the wall! 
+</pre><pre>46 bottles of beer on the wall, 46 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>45 bottles of beer on the wall! 
+</pre><pre>45 bottles of beer on the wall, 45 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>44 bottles of beer on the wall! 
+</pre><pre>44 bottles of beer on the wall, 44 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>43 bottles of beer on the wall! 
+</pre><pre>43 bottles of beer on the wall, 43 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>42 bottles of beer on the wall! 
+</pre><pre>42 bottles of beer on the wall, 42 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>41 bottles of beer on the wall! 
+</pre><pre>41 bottles of beer on the wall, 41 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>40 bottles of beer on the wall! 
+</pre><pre>40 bottles of beer on the wall, 40 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>39 bottles of beer on the wall! 
+</pre><pre>39 bottles of beer on the wall, 39 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>38 bottles of beer on the wall! 
+</pre><pre>38 bottles of beer on the wall, 38 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>37 bottles of beer on the wall! 
+</pre><pre>37 bottles of beer on the wall, 37 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>36 bottles of beer on the wall! 
+</pre><pre>36 bottles of beer on the wall, 36 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>35 bottles of beer on the wall! 
+</pre><pre>35 bottles of beer on the wall, 35 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>34 bottles of beer on the wall! 
+</pre><pre>34 bottles of beer on the wall, 34 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>33 bottles of beer on the wall! 
+</pre><pre>33 bottles of beer on the wall, 33 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>32 bottles of beer on the wall! 
+</pre><pre>32 bottles of beer on the wall, 32 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>31 bottles of beer on the wall! 
+</pre><pre>31 bottles of beer on the wall, 31 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>30 bottles of beer on the wall! 
+</pre><pre>30 bottles of beer on the wall, 30 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>29 bottles of beer on the wall! 
+</pre><pre>29 bottles of beer on the wall, 29 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>28 bottles of beer on the wall! 
+</pre><pre>28 bottles of beer on the wall, 28 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>27 bottles of beer on the wall! 
+</pre><pre>27 bottles of beer on the wall, 27 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>26 bottles of beer on the wall! 
+</pre><pre>26 bottles of beer on the wall, 26 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>25 bottles of beer on the wall! 
+</pre><pre>25 bottles of beer on the wall, 25 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>24 bottles of beer on the wall! 
+</pre><pre>24 bottles of beer on the wall, 24 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>23 bottles of beer on the wall! 
+</pre><pre>23 bottles of beer on the wall, 23 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>22 bottles of beer on the wall! 
+</pre><pre>22 bottles of beer on the wall, 22 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>21 bottles of beer on the wall! 
+</pre><pre>21 bottles of beer on the wall, 21 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>20 bottles of beer on the wall! 
+</pre><pre>20 bottles of beer on the wall, 20 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>19 bottles of beer on the wall! 
+</pre><pre>19 bottles of beer on the wall, 19 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>18 bottles of beer on the wall! 
+</pre><pre>18 bottles of beer on the wall, 18 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>17 bottles of beer on the wall! 
+</pre><pre>17 bottles of beer on the wall, 17 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>16 bottles of beer on the wall! 
+</pre><pre>16 bottles of beer on the wall, 16 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>15 bottles of beer on the wall! 
+</pre><pre>15 bottles of beer on the wall, 15 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>14 bottles of beer on the wall! 
+</pre><pre>14 bottles of beer on the wall, 14 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>13 bottles of beer on the wall! 
+</pre><pre>13 bottles of beer on the wall, 13 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>12 bottles of beer on the wall! 
+</pre><pre>12 bottles of beer on the wall, 12 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>11 bottles of beer on the wall! 
+</pre><pre>11 bottles of beer on the wall, 11 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>10 bottles of beer on the wall! 
+</pre><pre>10 bottles of beer on the wall, 10 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>9 bottles of beer on the wall! 
+</pre><pre>9 bottles of beer on the wall, 9 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>8 bottles of beer on the wall! 
+</pre><pre>8 bottles of beer on the wall, 8 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>7 bottles of beer on the wall! 
+</pre><pre>7 bottles of beer on the wall, 7 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>6 bottles of beer on the wall! 
+</pre><pre>6 bottles of beer on the wall, 6 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>5 bottles of beer on the wall! 
+</pre><pre>5 bottles of beer on the wall, 5 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>4 bottles of beer on the wall! 
+</pre><pre>4 bottles of beer on the wall, 4 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>3 bottles of beer on the wall! 
+</pre><pre>3 bottles of beer on the wall, 3 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>2 bottles of beer on the wall! 
+</pre><pre>2 bottles of beer on the wall, 2 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>1 bottles of beer on the wall! 
+</pre><pre>1 bottles of beer on the wall, 1 bottles of beer; 
+</pre><pre>Take one down, pass it around;  
+</pre><pre>0 bottles of beer on the wall! 
+</pre><pre>:(  
+</pre><pre>0</pre>
+
+*/

@@ -1,6 +1,7 @@
 package guinator;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -30,17 +31,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
-import org.lateralgm.joshedit.JoshText;
-
-import simulanator.Machine;
-import simulanator.Machine.URBANInputStream;
-import simulanator.Machine.URBANOutputStream;
-import simulanator.Simulator;
-import ulutil.HTMLOutputStream;
-
-import assemblernator.ErrorReporting.ErrorHandler;
+import simulanator.SimulatorTest;
+import assemblernator.AssemblerTest;
 import assemblernator.Linker;
 import assemblernator.LinkerModule;
+import assemblernator.LinkerTest;
 import assemblernator.Module;
 
 /**
@@ -290,51 +285,6 @@ public class GUIMain {
 	}
 
 	/**
-	 * @author Josh Ventura
-	 * @date May 29, 2012; 1:15:36 AM
-	 */
-	class FrankenOutput extends HTMLOutputStream implements URBANOutputStream,
-			URBANInputStream, ErrorHandler {
-		/** Sum of buffered HTML */
-		public String appme = "";
-
-		/** @see java.io.OutputStream#write(int) */
-		@Override public void write(int b) throws IOException {
-			appme += (char) b;
-		}
-
-		/** @see ulutil.HTMLOutputStream#writeSource(java.lang.String) */
-		@Override public void writeSource(String x) {
-			appme += x;
-		}
-
-		/** @see simulanator.Machine.URBANOutputStream#putString(java.lang.String) */
-		@Override public void putString(String str) {
-			appme += escape(str);
-		}
-
-		/** @see assemblernator.ErrorReporting.ErrorHandler#reportError(String,int,int) */
-		@Override public void reportError(String err, int line, int pos) {
-			appme += "<span color=\"red\">" + err + "</span>";
-		}
-
-		/** @see assemblernator.ErrorReporting.ErrorHandler#reportWarning(String,int,int) */
-		@Override public void reportWarning(String warn, int line, int pos) {
-			appme += "<span color=\"#FF8000\">" + warn + "</span>";
-		}
-
-		/** @see simulanator.Machine.URBANInputStream#getString() */
-		@Override public String getString() {
-			String res = (String) JOptionPane.showInputDialog(mainWindow,
-					"Application requests input", "Application input",
-					JOptionPane.PLAIN_MESSAGE, null, null, "");
-			appme += "<i><b>Prompted for user input. User entered </b><dd>"
-					+ res + "</dd></i>";
-			return res;
-		}
-	};
-
-	/**
 	 * Compiles the active code, reporting any errors, then builds an object
 	 * file in memory, "links" it to itself, and loads it into RAM in the
 	 * simulator tab.
@@ -362,7 +312,6 @@ public class GUIMain {
 			LinkerModule[] lma = new LinkerModule[1];
 			lma[0] = new LinkerModule(new Scanner(new ByteArrayInputStream(
 					objectFile)), ft.hErr);
-			tcHTML += "\n\n<h1>Linker Load Phase</h1>\n\n";
 
 			if (!lma[0].success) {
 				GUIUtil.showError("General failure; bailing.", mainWindow);
@@ -371,32 +320,16 @@ public class GUIMain {
 						+ "\n<br/>\n<br/>\n<p>Testing bailed due to prior errors.</p>";
 			}
 
-			FrankenOutput uos = new FrankenOutput();
-
 			baos = new ByteArrayOutputStream();
-			String cst = Linker.link(lma, baos, uos);
-			tcHTML += lma[0].toString()
-					+ "\n\n<h1>Linking Phase: Combined Symbol Table</h1>\n\n"
-					+ cst;
-
-			if (!uos.appme.isEmpty())
-				tcHTML += "\n\n<h2>Isolated Linker Errors</h2>\n" + uos.appme;
-			uos.appme = "";
+			tcHTML += LinkerTest.getTestCase(lma, baos);
 
 			byte[] loaderFile = baos.toByteArray();
 			tcHTML += "\n\n<h2>Complete loader file</h2>\n\n<pre>"
 					+ (new String(loaderFile)).replaceAll(mods[0].programName
 							+ ":", mods[0].programName + ":\n") + "</pre>";
 
-			tcHTML += "\n\n<h1>Simulator Output</h1>\n\n";
-
-			Machine m = new Machine(uos, uos, uos);
-
-			Simulator.load(new ByteArrayInputStream(loaderFile), ft.hErr, uos,
-					m);
-			m.runAnchored();
-
-			tcHTML += uos.appme;
+			tcHTML += "\n\n<h1>Simulator Output</h1>\n\n"
+					+ SimulatorTest.getTestCase(loaderFile, mainWindow);
 
 			return tcHTML;
 
@@ -422,58 +355,44 @@ public class GUIMain {
 	 * @return HTML test case report.
 	 */
 	String getBasicTestCase(Module retmod[], ByteArrayOutputStream objectfile) {
-		FileTab ft = (FileTab) tabPane.getSelectedComponent();
-		if (ft == null)
+		Component a = tabPane.getSelectedComponent();
+		if (a == null)
 			return "";
-		String res = "<h1>Input</h1>\n<pre>";
 
-		Module m = ft.compile();
-		if (retmod != null)
-			retmod[0] = m;
+		if (a instanceof FileTab) {
+			FileTab ft = (FileTab) a;
+			String res = "<h1>Input</h1>\n<pre>";
 
-		if (m == null)
-			return "";
-		res += ft.jt.getHTML();
-		res += "</pre>\n<br />\n";
+			Module m = ft.compile();
+			if (retmod != null)
+				retmod[0] = m;
 
-		String[][] table = m.getSymbolTable().toStringTable();
-		res += "<h1>Symbol table</h1>\n";
-		res += "<table>\n";
-		res += "  <tr>\n";
-		for (int i = 0; i < table[0].length; i++)
-			res += "    <th>" + table[0][i] + "</th>\n";
-		res += "  </tr>";
+			if (m == null)
+				return "";
 
-		for (int i = 1; i < table.length; i++) {
-			res += "  <tr>\n";
-			for (int j = 0; j < table[i].length; j++)
-				res += "    <td>" + JoshText.htmlSpecialChars(table[i][j])
-						+ "</td>\n";
-			res += "  </tr>\n";
+			res += ft.jt.getHTML();
+			res += "</pre>\n<br />\n";
+			res += AssemblerTest.getTestCase(m, objectfile);
+
+			return res;
 		}
-		res += "</table>\n<br />\n";
-
-		res += "<h1>User report</h1>\n";
-		res += "<pre>";
-		res += m.toString();
-		res += "</pre>\n";
-
-		res += "<h1>Object file:</h1>\n";
-		res += "<pre>";
-		ByteArrayOutputStream baos = objectfile == null ? new ByteArrayOutputStream()
-				: objectfile;
-		try {
-			m.writeObjectFile(baos);
-			res += baos.toString().replaceAll(":" + m.programName + ":",
-					":" + m.programName + ":\n");
-		} catch (IOException e) {
-			res += "<i>The object file could not be generated for this program.</i>";
-		} catch (Exception e) {
-			res += "<i>The object file could not be generated for this program.</i>";
+		else if (a instanceof LinkerTab) {
+			LinkerTab lt = (LinkerTab) a;
+			return LinkerTest.getTestCase(
+					lt.linkMods.toArray(new LinkerModule[0]), null);
 		}
-		res += "</pre>\n";
+		else if (a instanceof SimulatorTab)
+		{
+			SimulatorTab st = (SimulatorTab)a;
+			return st.getOutputHTML();
+		}
+		else {
+			GUIUtil.showError(
+					"A test case cannot be generated for the current tab.",
+					mainWindow);
+		}
 
-		return res;
+		return "";
 	}
 
 	/**
