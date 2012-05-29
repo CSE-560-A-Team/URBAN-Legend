@@ -36,8 +36,6 @@ public class LinkerTest {
 
 		String cst = Linker.link(lma, baos, uos);
 		
-		System.err.println("SYMTABLE[" + cst + "]");
-		
 		for (LinkerModule lm : lma)
 			res += lm.toString()
 					+ "\n\n<h1>Linking Phase: Combined Symbol Table</h1>\n\n"

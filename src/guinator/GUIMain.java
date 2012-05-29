@@ -629,9 +629,9 @@ public class GUIMain {
 			}
 			
 			if (e.getSource() == m_newsimulator) {
-				SimulatorTab st = new SimulatorTab();
-				tabPane.add("Simulator",st);
-				tabPane.setSelectedComponent(st);
+				SimulatorTab lt = new SimulatorTab();
+				tabPane.add("Simulator",lt);
+				tabPane.setSelectedComponent(lt);
 				return;
 			}
 		}
