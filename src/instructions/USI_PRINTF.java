@@ -142,7 +142,7 @@ public class USI_PRINTF extends AbstractInstruction {
 		}
 		else
 			assembly = InstructionFormatter.formatSrcMem(this);
-		
+
 		return assembly;
 	}
 
@@ -161,8 +161,8 @@ public class USI_PRINTF extends AbstractInstruction {
 				bal.add((byte) ((a & 0x00FF0000) >>> 16));
 				bal.add((byte) ((a & 0x0000FF00) >>> 8));
 				bal.add((byte) ((a & 0x000000FF) >>> 0));
-				if (bal.get(ni + 3) == 0 || bal.get(ni + 2) == 0 || bal.get(ni + 1) == 0
-						|| bal.get(ni) == 0)
+				if (bal.get(ni + 3) == 0 || bal.get(ni + 2) == 0
+						|| bal.get(ni + 1) == 0 || bal.get(ni) == 0)
 					break;
 			}
 			b = new byte[bal.size()];
@@ -198,7 +198,7 @@ public class USI_PRINTF extends AbstractInstruction {
 							.getIndexRegister(Character.digit(c, 10))));
 			}
 		}
-		machine.output.putString(raw.toString());
+		machine.output.putString(raw.toString() + "\n");
 		if (breakDown.literal)
 			machine.setLC(machine.getLC() + nw);
 	}

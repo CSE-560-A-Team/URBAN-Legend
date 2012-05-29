@@ -32,6 +32,13 @@ import javax.swing.UIManager;
 
 import org.lateralgm.joshedit.JoshText;
 
+import simulanator.Machine;
+import simulanator.Machine.URBANInputStream;
+import simulanator.Machine.URBANOutputStream;
+import simulanator.Simulator;
+import ulutil.HTMLOutputStream;
+
+import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Linker;
 import assemblernator.LinkerModule;
 import assemblernator.Module;
@@ -59,6 +66,8 @@ public class GUIMain {
 	static JMenuItem m_compile;
 	/** Our Compile menu item */
 	static JMenuItem m_run;
+	/** Menu item to generate a complete test case */
+	static JMenuItem m_fulltestcase;
 	/** A menu item to export the file as an HTML document */
 	static JMenuItem m_writeHTML;
 	/** A menu item to copy code, with HTML highlighting. */
@@ -151,6 +160,8 @@ public class GUIMain {
 		m_compile.addActionListener(ml);
 		filemenu.add(m_run = new JMenuItem("Run in New Simulator"));
 		m_run.addActionListener(ml);
+		filemenu.add(m_fulltestcase = new JMenuItem("Run in New Simulator"));
+		m_fulltestcase.addActionListener(ml);
 		filemenu.addSeparator();
 
 		filemenu.add(m_writeHTML = new JMenuItem("Export as HTML"));
@@ -268,7 +279,7 @@ public class GUIMain {
 
 			bais = new ByteArrayInputStream(baos.toByteArray());
 			st.loadStream(bais);
-			
+
 			tabPane.setSelectedComponent(st);
 		} catch (Exception e) {
 			GUIUtil.showException(
@@ -279,6 +290,189 @@ public class GUIMain {
 	}
 
 	/**
+	 * @author Josh Ventura
+	 * @date May 29, 2012; 1:15:36 AM
+	 */
+	class FrankenOutput extends HTMLOutputStream implements URBANOutputStream,
+			ErrorHandler {
+		/** Sum of buffered HTML */
+		public String appme = "";
+
+		/** @see java.io.OutputStream#write(int) */
+		@Override public void write(int b) throws IOException {
+			appme += (char) b;
+		}
+
+		/** @see ulutil.HTMLOutputStream#writeSource(java.lang.String) */
+		@Override public void writeSource(String x) {
+			appme += x;
+		}
+
+		/** @see simulanator.Machine.URBANOutputStream#putString(java.lang.String) */
+		@Override public void putString(String str) {
+			appme += escape(str);
+		}
+
+		/** @see assemblernator.ErrorReporting.ErrorHandler#reportError(String,int,int) */
+		@Override public void reportError(String err, int line, int pos) {
+			appme += "<span color=\"red\">" + err + "</span>";
+		}
+
+		/** @see assemblernator.ErrorReporting.ErrorHandler#reportWarning(String,int,int) */
+		@Override public void reportWarning(String warn, int line, int pos) {
+			appme += "<span color=\"#FF8000\">" + warn + "</span>";
+		}
+	};
+
+	/**
+	 * Compiles the active code, reporting any errors, then builds an object
+	 * file in memory, "links" it to itself, and loads it into RAM in the
+	 * simulator tab.
+	 * 
+	 * @author Josh Ventura
+	 * @return The complete test case for this run.
+	 * @date May 24, 2012; 8:11:52 PM
+	 */
+	String makeBigTestCase() {
+		FileTab ft = (FileTab) tabPane.getSelectedComponent();
+
+		if (ft == null)
+			return "";
+
+		String tcHTML = "";
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			Module mods[] = new Module[1];
+			baos = new ByteArrayOutputStream();
+			tcHTML = getBasicTestCase(mods, baos);
+
+			// This is already printed by our previous test case generator
+			byte objectFile[] = baos.toByteArray();
+
+			LinkerModule[] lma = new LinkerModule[1];
+			lma[0] = new LinkerModule(new Scanner(new ByteArrayInputStream(
+					objectFile)), ft.hErr);
+			tcHTML += "\n\n<h1>Linker Load Phase</h1>\n\n";
+
+			if (!lma[0].success) {
+				GUIUtil.showError("General failure; bailing.", mainWindow);
+				return tcHTML
+						+ lma[0].toString()
+						+ "\n<br/>\n<br/>\n<p>Testing bailed due to prior errors.</p>";
+			}
+
+			FrankenOutput uos = new FrankenOutput();
+
+			baos = new ByteArrayOutputStream();
+			String cst = Linker.link(lma, baos, uos);
+			tcHTML += lma[0].toString()
+					+ "\n\n<h1>Linking Phase: Combined Symbol Table</h1>\n\n"
+					+ cst;
+
+			if (!uos.appme.isEmpty())
+				tcHTML += "\n\n<h2>Isolated Linker Errors</h2>\n" + uos.appme;
+			uos.appme = "";
+
+			byte[] loaderFile = baos.toByteArray();
+			tcHTML += "\n\n<h2>Complete loader file</h2>\n\n<pre>"
+					+ (new String(loaderFile)).replaceAll(mods[0].programName
+							+ ":", mods[0].programName + ":\n") + "</pre>";
+
+			tcHTML += "\n\n<h1>Simulator Output</h1>\n\n";
+
+			Machine m = new Machine(uos, new URBANInputStream() {
+				@Override public String getString() {
+					return (String) JOptionPane.showInputDialog(mainWindow,
+							"Application requests input", "Application input",
+							JOptionPane.PLAIN_MESSAGE, null, null, "");
+				}
+			}, uos);
+
+			Simulator.load(new ByteArrayInputStream(loaderFile), ft.hErr, uos,
+					m);
+			m.runAnchored();
+
+			tcHTML += uos.appme;
+
+			return tcHTML;
+
+		} catch (Exception e) {
+			GUIUtil.showException(
+					"An error occurred during object file generation", e,
+					mainWindow);
+			return tcHTML
+					+ "\n\n<br/><br/><p>Bailing due to program errors. <i>This is bad</i>.</p>";
+		}
+	}
+
+	/**
+	 * Format compiler output as a test case.
+	 * 
+	 * @author Josh Ventura
+	 * @date Apr 18, 2012; 3:41:55 AM
+	 * @modified UNMODIFIEDO
+	 * @param retmod
+	 *            Array in which to output module; null for no return.
+	 * @param objectfile
+	 *            Output parameter for object file; null to use its own.
+	 * @return HTML test case report.
+	 */
+	String getBasicTestCase(Module retmod[], ByteArrayOutputStream objectfile) {
+		FileTab ft = (FileTab) tabPane.getSelectedComponent();
+		if (ft == null)
+			return "";
+		String res = "<h1>Input</h1>\n<pre>";
+
+		Module m = ft.compile();
+		if (retmod != null)
+			retmod[0] = m;
+
+		if (m == null)
+			return "";
+		res += ft.jt.getHTML();
+		res += "</pre>\n<br />\n";
+
+		String[][] table = m.getSymbolTable().toStringTable();
+		res += "<h1>Symbol table</h1>\n";
+		res += "<table>\n";
+		res += "  <tr>\n";
+		for (int i = 0; i < table[0].length; i++)
+			res += "    <th>" + table[0][i] + "</th>\n";
+		res += "  </tr>";
+
+		for (int i = 1; i < table.length; i++) {
+			res += "  <tr>\n";
+			for (int j = 0; j < table[i].length; j++)
+				res += "    <td>" + JoshText.htmlSpecialChars(table[i][j])
+						+ "</td>\n";
+			res += "  </tr>\n";
+		}
+		res += "</table>\n<br />\n";
+
+		res += "<h1>User report</h1>\n";
+		res += "<pre>";
+		res += m.toString();
+		res += "</pre>\n";
+
+		res += "<h1>Object file:</h1>\n";
+		res += "<pre>";
+		ByteArrayOutputStream baos = objectfile == null ? new ByteArrayOutputStream()
+				: objectfile;
+		try {
+			m.writeObjectFile(baos);
+			res += baos.toString().replaceAll(":" + m.programName + ":",
+					":" + m.programName + ":\n");
+		} catch (IOException e) {
+			res += "<i>The object file could not be generated for this program.</i>";
+		} catch (Exception e) {
+			res += "<i>The object file could not be generated for this program.</i>";
+		}
+		res += "</pre>\n";
+
+		return res;
+	}
+
+	/**
 	 * Class to handle menu selections.
 	 * 
 	 * @author Josh Ventura
@@ -286,64 +480,6 @@ public class GUIMain {
 	 */
 	class MenuListener implements ActionListener {
 
-		/**
-		 * Format compiler output as a test case.
-		 * 
-		 * @author Josh Ventura
-		 * @date Apr 18, 2012; 3:41:55 AM
-		 * @modified UNMODIFIED
-		 * @return HTML test case report.
-		 */
-		String getTestCase() {
-			FileTab ft = (FileTab) tabPane.getSelectedComponent();
-			if (ft == null)
-				return "";
-			String res = "<h1>Input</h1>\n<pre>";
-			Module m = ft.compile();
-			if (m == null)
-				return "";
-			res += ft.jt.getHTML();
-			res += "</pre>\n<br />\n";
-
-			String[][] table = m.getSymbolTable().toStringTable();
-			res += "<h1>Symbol table</h1>\n";
-			res += "<table>\n";
-			res += "  <tr>\n";
-			for (int i = 0; i < table[0].length; i++)
-				res += "    <th>" + table[0][i] + "</th>\n";
-			res += "  </tr>";
-
-			for (int i = 1; i < table.length; i++) {
-				res += "  <tr>\n";
-				for (int j = 0; j < table[i].length; j++)
-					res += "    <td>" + JoshText.htmlSpecialChars(table[i][j])
-							+ "</td>\n";
-				res += "  </tr>\n";
-			}
-			res += "</table>\n<br />\n";
-
-			res += "<h1>User report</h1>\n";
-			res += "<pre>";
-			res += m.toString();
-			res += "</pre>\n";
-
-			res += "<h1>Object file:</h1>\n";
-			res += "<pre>";
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			try {
-				m.writeObjectFile(baos);
-				res += baos.toString().replaceAll(":" + m.programName + ":",
-						":" + m.programName + ":\n");
-			} catch (IOException e) {
-				res += "<i>The object file could not be generated for this program.</i>";
-			} catch (Exception e) {
-				res += "<i>The object file could not be generated for this program.</i>";
-			}
-			res += "</pre>\n";
-
-
-			return res;
-		}
 
 		/** @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
 		@Override public void actionPerformed(ActionEvent e) {
@@ -413,6 +549,12 @@ public class GUIMain {
 				runActive();
 				return;
 			}
+			if (e.getSource() == m_fulltestcase) {
+				StringSelection ss = new StringSelection(makeBigTestCase());
+				Toolkit.getDefaultToolkit().getSystemClipboard()
+						.setContents(ss, null);
+				return;
+			}
 			if (e.getSource() == m_writeHTML) {
 				JFileChooser jfc = new JFileChooser();
 				jfc.setMultiSelectionEnabled(false);
@@ -456,7 +598,7 @@ public class GUIMain {
 									.getSelectedComponent();
 							if (ft != null) {
 								fw.write("<html>\n<body>\n");
-								fw.write(getTestCase());
+								fw.write(getBasicTestCase(null, null));
 								fw.write("</body>\n</html>\n");
 							}
 							fw.close();
@@ -472,7 +614,8 @@ public class GUIMain {
 				return;
 			}
 			if (e.getSource() == m_copyHTMLTest) {
-				StringSelection ss = new StringSelection(getTestCase());
+				StringSelection ss = new StringSelection(getBasicTestCase(null,
+						null));
 				Toolkit.getDefaultToolkit().getSystemClipboard()
 						.setContents(ss, null);
 				return;

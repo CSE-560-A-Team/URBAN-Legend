@@ -267,20 +267,35 @@ public class Machine {
 	 * @date May 18, 2012; 7:50:40 PM
 	 * @modified UNMODIFIED
 	 * @tested UNTESTED
-	 * @errors NO ERRORS REPORTED
 	 * @codingStandards Awaiting signature
 	 * @testingStandards Awaiting signature
-	 * @param execStart
-	 *            The starting LC from which to run.
 	 */
-	public void runThread(final int execStart) {
+	public void runThread() {
 		(new Thread() {
 			@Override public void run() {
-				lc = execStart;
 				Machine m = new Machine(Machine.this, lc);
 				m.run();
 			}
 		}).start();
+	}
+
+	/**
+	 * @author Josh Ventura
+	 * @date May 29, 2012; 1:36:39 AM
+	 */
+	public void runAnchored() {
+		run();
+	}
+
+	/**
+	 * @author Josh Ventura
+	 * @date May 29, 2012; 1:24:53 AM
+	 * @param execStart
+	 *            The start LC.
+	 */
+	public void runThread(int execStart) {
+		lc = execStart;
+		runThread();
 	}
 
 	/**
@@ -362,7 +377,9 @@ public class Machine {
 	 */
 	public int getMemory(int addr) {
 		if (addr < 0 || addr > memorySizeInWords)
-			hErr.reportError(makeError("runMemOOR", IOFormat.formatHexInteger(addr,4)), -1, -1);
+			hErr.reportError(
+					makeError("runMemOOR", IOFormat.formatHexInteger(addr, 4)),
+					-1, -1);
 		return memory[addr];
 	}
 

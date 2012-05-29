@@ -31,12 +31,6 @@ public abstract class HTMLOutputStream extends OutputStream {
 				if (i + 1 < str.length() && str.charAt(i + 1) != '\n')
 					asPlain.append("<br/>\n");
 				continue;
-			case '\n':
-				asPlain.append("\n");
-				continue;
-			case ' ':
-				asPlain.append("&nbsp;");
-				continue;
 			case '&':
 				asPlain.append("&amp;");
 				continue;
@@ -49,7 +43,13 @@ public abstract class HTMLOutputStream extends OutputStream {
 			case '>':
 				asPlain.append("&gt;");
 				continue;
-				/* case '\t':
+				// case ' ':
+				// asPlain.append("&nbsp;");
+				// continue;
+				/* case '\n':
+				 * asPlain.append("\n");
+				 * continue;
+				 * case '\t':
 				 * asPlain.append("\t");
 				 * continue; */
 			default:
