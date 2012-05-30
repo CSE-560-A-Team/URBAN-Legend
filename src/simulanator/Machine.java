@@ -244,6 +244,12 @@ public class Machine {
 				res += "R" + i + "="
 						+ IOFormat.formatHexInteger(registers[i], 8)
 						+ (i % 4 == 3 ? "\n" : " ");
+			
+			for (int i = 1; i < 8; ++i)
+				res += "XR" + i + "="
+						+ IOFormat.formatHexInteger(registers[i], 8)
+						+ (i == 4 || i == 7 ? "\n" : " ");
+			
 			res += "\n";
 		}
 		if ((level & 2) != 0) {
