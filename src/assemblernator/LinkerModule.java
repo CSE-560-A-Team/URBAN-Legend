@@ -406,7 +406,9 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}
 				//add link record to user report and linkerModule
 				if(addLink){
+					System.out.println("boobs");
 					linkRecord.put(entryLabel, entryAddr);
+					System.err.println(linkRecord.size());
 					if(hack){
 						completeString =  completeString + ender + ":\n";
 					}else{

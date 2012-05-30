@@ -196,6 +196,7 @@ public class Linker {
 		//sort the modules by order of address of modules.
 		Arrays.sort(modules);
 		
+		System.err.println("main" + modules.length);
 		if(modules.length > 0) {
 			int totalLen = modules[0].prgTotalLen;
 			int totalRecords = 2;
@@ -204,6 +205,8 @@ public class Linker {
 			int offset = 0;
 			int execStartErrorModule = 0;
 			modules[0].offset = offset;
+
+			System.err.println("elem0: "+modules[0].linkRecord.size());
 			//linkerTable.putAll(modules[0].linkRecord);// put all link records from first module.
 			for(Map.Entry<String, Integer> lr : modules[0].linkRecord.entrySet()) {
 				linkerSymbolTable = linkerSymbolTable + 
@@ -212,13 +215,17 @@ public class Linker {
 						"\t" + "Offset: " + offset + 
 						"\t" + "Adjusted Address: " + (lr.getValue() + offset) + "\n";
 				linkerTable.put(lr.getKey(), lr.getValue());
+				System.err.println("skize: " + linkerTable.size());
+				
 			}
+			
 			//calc offset and adjust prog, linker record addr, and text record addr by offset.
 			//add LinkerModule with adjusted addresses to offsetModules.
 			for(int i = 0; i < modules.length - 1; ++i) {
 				if(modules[i+1].loadAddr <= modules[i].loadAddr) {
 					//calc offset
 					offset = ((modules[i].loadAddr + modules[i].prgTotalLen) - modules[i+1].loadAddr);
+				
 					modules[i+1].loadAddr += offset;
 					//error if module loadAddr + offset > max addr
 					if(modules[i+1].loadAddr > 4095) {
@@ -228,13 +235,17 @@ public class Linker {
 						modules = Arrays.copyOf(modules, i+1); //only take modules <  mem range.
 						break;
 					}
+				
 					totalLen += modules[i+1].prgTotalLen;
 					if(modules[i+1].execStart > execStartAddr) {
 						execStartAddr = modules[i+1].execStart;
 						execStartErrorModule = i+1; //record module in which exec start was last updated.
 					}
+				}
+					System.err.println("elem"+(i+1)+": "+modules[i+1].linkRecord.size());
 					//put all linker records of current module into linker table with offset.
 					for(Map.Entry<String, Integer> lr : modules[i+1].linkRecord.entrySet()) {
+						
 						if(!linkerTable.containsKey(lr.getKey())) {
 							linkerSymbolTable = linkerSymbolTable + 
 									"label: " + lr.getKey() + 
@@ -242,6 +253,7 @@ public class Linker {
 									"\t" + "Offset: " + offset + 
 									"\t" + "Adjusted Address: " + (lr.getValue() + offset) + "\n";
 							linkerTable.put(lr.getKey(), lr.getValue() + offset);
+							
 						} else {
 							//error: duplicate label for linking records.
 							modules[i+1].userRep.addType = LinkerModule.AddType.LINKER;
@@ -249,7 +261,7 @@ public class Linker {
 							hErr.reportError(makeError("dupLbl", lr.getKey()), lr.getValue(), -1);
 						}
 					}
-				}
+				
 				modules[i+1].offset = offset;
 			}
 			
@@ -511,6 +523,7 @@ public class Linker {
 					temp = new LinkerModule(input, hErr);
 					if(temp.success) { //add to list of linker modules only if object file is valid.
 						temp.filename = fileNames[fileIndex];
+						System.err.println("test:" + temp.linkRecord.size());
 						modules.add(temp);
 					}
 					hasNext = !temp.done; 
