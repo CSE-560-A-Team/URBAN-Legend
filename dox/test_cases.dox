@@ -230,6 +230,31 @@ Test cases used in the SP3 benchmark:
   	<td>Noah</td>
   	<td>Tests valid execution start address.</td>
   </tr>
+  <tr>
+  	<td>\subpage testcase45</td>
+  	<td>Ratul</td>
+  	<td>Tests for Invalid Header Record Symbol.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase46</td>
+  	<td>Ratul</td>
+  	<td>Tests if Program Name does not match Header Program Name.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase47</td>
+  	<td>Ratul</td>
+  	<td>Tests what happends if End Record Missing.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase48</td>
+  	<td>Ratul</td>
+  	<td>Tests Text Record missing 'T' in object file.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase49</td>
+  	<td>Ratul</td>
+  	<td>Tests End Record missing 'E' in object file.</td>
+  </tr>
 </table>
 
 Test cases used in the SP4 benchmark:
