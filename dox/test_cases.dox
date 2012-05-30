@@ -299,6 +299,18 @@ Test cases used in the SP4 benchmark:
     <td>Noah</td>
     <td>Tests for correctness of isrg instruction.</td>
   </tr>
+  </tr>
+    <tr>
+    <td>\subpage testcase58</td>
+    <td>Ratul</td>
+    <td>Tests for correctness of stacks.</td>
+  </tr>
+  </tr>
+    <tr>
+    <td>\subpage testcase59</td>
+    <td>Ratul</td>
+    <td>Tests for out of range shift/manipulate instructions.</td>
+  </tr>
 </table>
 
 Test cases developed by third parties:
