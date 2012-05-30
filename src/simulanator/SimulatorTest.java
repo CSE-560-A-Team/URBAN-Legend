@@ -27,7 +27,7 @@ public class SimulatorTest {
 	private static String getDump(String time, Machine m) {
 		return "<h2>"
 				+ time
-				+ " Machine Dump</h2><pre style=\"width:75%; height: 256px; overflow: auto; white-space:pre;\">"
+				+ " Machine Dump</h2><pre class=\"MemoryDumpPre\">"
 				+ m.dump(3).replaceAll("\n\n", "<br>\n") + "</pre>";
 	}
 
