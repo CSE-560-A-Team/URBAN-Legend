@@ -343,13 +343,17 @@ public class SimulatorTab extends JSplitPane {
 		@Override public void createThread(int threadID) {
 			DefaultTableModel tm = (DefaultTableModel) threadList.getModel();
 			SortedMap<Integer, Machine> threads = machine.getThreadData();
-			tm.setRowCount(threads.size());
-			int row = 0;
-			for (Entry<Integer, Machine> thread : threads.entrySet()) {
-				tm.setValueAt(thread.getKey(), row, 0);
-				tm.setValueAt(thread.getValue().getLC(), row, 1);
-				++row;
+			
+			synchronized (tm) {
+				tm.setRowCount(threads.size());
+				int row = 0;
+				for (Entry<Integer, Machine> thread : threads.entrySet()) {
+					tm.setValueAt(thread.getKey(), row, 0);
+					tm.setValueAt(thread.getValue().getLC(), row, 1);
+					++row;
+				}
 			}
+
 		}
 
 		/** A thread in our list has died */
