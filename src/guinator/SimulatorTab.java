@@ -70,6 +70,10 @@ public class SimulatorTab extends JSplitPane {
 	private JButton loadButton;
 	/** Button to reset the module */
 	private JButton runButton;
+	/** Button to reset the module */
+	private JButton pauseButton;
+	/** Button to take a single step */
+	private JButton stepButton;
 	/** How long to sleep after each instruction */
 	private JSpinner delaySpinbox;
 
@@ -79,6 +83,11 @@ public class SimulatorTab extends JSplitPane {
 	private JScrollPane outSP;
 	/** Output Stream Display */
 	private IOPane outputBox;
+	
+	/** True if this system is paused; false otherwise */
+	private boolean pausing = false;
+	/** True if a single step should be taken */
+	private boolean singlestep = false;
 
 	/** The machine we are running in this simulator. */
 	Machine machine;
@@ -189,6 +198,8 @@ public class SimulatorTab extends JSplitPane {
 		bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 		toolbar.add(loadButton = new JButton("Load"));
 		toolbar.add(runButton = new JButton("Run"));
+		toolbar.add(pauseButton = new JButton("Pause"));
+		toolbar.add(stepButton = new JButton("Step"));
 		toolbar.add(delaySpinbox = new JSpinner(new SpinnerNumberModel(400, 0,
 				4000, 10)));
 		toolbar.add(inputField = new JLTextField());
@@ -220,6 +231,10 @@ public class SimulatorTab extends JSplitPane {
 		SimulatorListener sl = new SimulatorListener();
 		loadButton.addActionListener(sl);
 		runButton.addActionListener(sl);
+		pauseButton.addActionListener(sl);
+		pauseButton.setPreferredSize(new Dimension(72,-1));
+		stepButton.addActionListener(sl);
+		stepButton.setEnabled(false);
 		memTable.setCellSelectionEnabled(true);
 		memTable.setRowSelectionAllowed(true);
 
@@ -310,6 +325,12 @@ public class SimulatorTab extends JSplitPane {
 				try {
 					Thread.sleep(d);
 				} catch (InterruptedException e) {}
+			while (pausing && !singlestep)
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 		}
 
 		/** Update register display */
@@ -335,7 +356,7 @@ public class SimulatorTab extends JSplitPane {
 			DefaultTableModel tm = (DefaultTableModel) threadList.getModel();
 			if (threadID >= 0 && threadID < tm.getRowCount()) {
 				tm.setValueAt(threadID, threadID, 0);
-				tm.setValueAt(newlc, threadID, 1);
+				tm.setValueAt(Integer.toString(newlc,16), threadID, 1);
 			}
 		}
 
@@ -511,6 +532,15 @@ public class SimulatorTab extends JSplitPane {
 					machine.stopAll();
 					runButton.setText("Run");
 				}
+			}
+			else if (e.getSource() == pauseButton) {
+				pausing = pausing ? false : true;
+				pauseButton.setText(pausing? "Continue" : "Pause");
+				stepButton.setEnabled(pausing);
+				singlestep = false;
+			}
+			else if (e.getSource() == stepButton) {
+				singlestep = true;
 			}
 		}
 	}
