@@ -2,6 +2,7 @@
 
 \page testcase38 Duplicate Entry Labels
 <h1>Linker Load Phase</h1>
+<pre>
 entLabels
 H:entLabels:0:3:0:2012149,14:52:49:1:URBAN-ASM:entLabels:
 L:lbl1:0:entLabels:
@@ -24,15 +25,15 @@ T:0:00000000:A:A:0:0:entLabels:
 T:1:00000001:A:A:0:0:entLabels:
 T:2:00000002:A:A:0:0:entLabels:
 E:8:3:3:0:entLabels:
-
+</pre>
 
 
 <h1>Linking Phase: Combined Symbol Table</h1>
-
+<pre>
 label: lbl3	Original Address: 2	Offset: 0	Adjusted Address: 2
 label: lbl2	Original Address: 1	Offset: 0	Adjusted Address: 1
 label: lbl1	Original Address: 0	Offset: 0	Adjusted Address: 0
-
+</pre>
 
 <h2>Complete loader file</h2>
 

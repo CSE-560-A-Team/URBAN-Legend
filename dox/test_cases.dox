@@ -181,6 +181,11 @@ Test cases used in the SP2 benchmark:
 Test cases used in the SP3 benchmark:
 <table>
   <tr>
+    <th>Test case</th>
+    <th>Author</th>
+    <th>Description</th>
+  </tr>
+  <tr>
   	<td>\subpage testcase36</td>
   	<td>Noah</td>
   	<td>Tests dual memory access with external labels and address arithmetic. Shared load address.</td>

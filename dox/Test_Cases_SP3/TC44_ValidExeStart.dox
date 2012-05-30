@@ -2,7 +2,7 @@
 
 \page testcase44 Valid Execution Start
 <h1>Linker Load Phase</h1>
-
+<pre>
 justNop
 H:justNop:0:1:0:2012149,15:14:34:1:URBAN-ASM:justNop:
 T:0:F4000000:A:A:0:0:justNop:
@@ -11,13 +11,13 @@ E:3:0:1:0:justNop:
 offExeStart
 H:offExeStart:10:0:0:2012149,16:01:26:1:URBAN-ASM:offExeStart:
 E:2:0:0:0:offExeStart:
-
+</pre>
 
 
 <h1>Linking Phase: Combined Symbol Table</h1>
-
+<pre>
 <i>&lt;The combined symbol table is empty.&gt;</i>
-
+</pre>
 <h2>Complete loader file</h2>
 
 <pre>H:justNop:

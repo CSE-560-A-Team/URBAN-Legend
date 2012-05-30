@@ -2,6 +2,7 @@
 
 \page testcase37 Valid Ext offset Address Arith 
 <h1>Linker Load Phase</h1>
+<pre>
 justNop
 H:justNop:0:1:0:2012149,15:14:34:1:URBAN-ASM:justNop:
 T:0:F4000000:A:A:0:0:justNop:
@@ -28,15 +29,14 @@ T:0:00000000:A:A:0:0:entLabels:
 T:1:00000001:A:A:0:0:entLabels:
 T:2:00000002:A:A:0:0:entLabels:
 E:8:3:3:0:entLabels:
-
-
+</pre>
 
 <h1>Linking Phase: Combined Symbol Table</h1>
-
+<pre>
 label: lbl3	Original Address: 2	Offset: 5	Adjusted Address: 7
 label: lbl2	Original Address: 1	Offset: 5	Adjusted Address: 6
 label: lbl1	Original Address: 0	Offset: 5	Adjusted Address: 5
-
+</pre>
 
 <h2>Complete loader file</h2>
 

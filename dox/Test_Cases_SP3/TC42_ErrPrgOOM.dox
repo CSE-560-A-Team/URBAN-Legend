@@ -2,7 +2,7 @@
 
 \page testcase42 Program OOM
 <h1>Linker Load Phase</h1>
-
+<pre>
 lc4095
 H:lc4095:4095:1:4095:2012149,16:37:59:1:URBAN-ASM:lc4095:
 T:4095:F4000000:A:A:0:0:lc4095:
@@ -13,16 +13,17 @@ H:lc4095:4095:1:4095:2012149,16:37:59:1:URBAN-ASM:lc4095:
 152: Out of Memory.
 T:4095:F4000000:A:A:0:0:lc4095:
 E:3:0:1:0:lc4095:
-
+</pre>
 
 
 <h1>Linking Phase: Combined Symbol Table</h1>
-
+<pre>
 <i>&lt;The combined symbol table is empty.&gt;</i>
-
+</pre>
 <h2>Isolated Linker Errors</h2>
+<pre>
 <span color="red">152: Out of Memory.</span>
-
+</pre>
 <h2>Complete loader file</h2>
 
 <pre>H:lc4095:

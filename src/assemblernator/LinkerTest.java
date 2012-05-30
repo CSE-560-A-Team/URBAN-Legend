@@ -35,13 +35,15 @@ public class LinkerTest {
 			baos = new ByteArrayOutputStream();
 
 		String cst = Linker.link(lma, baos, uos);
-
+		res += "<pre>";
 		for (LinkerModule lm : lma)
 			res += lm.progName + "\n" + lm.toString() + "\n";
 
-		res += "\n\n<h1>Linking Phase: Combined Symbol Table</h1>\n\n"
+		res += "</pre>";
+		res += "\n\n<h1>Linking Phase: Combined Symbol Table</h1>\n\n<pre>"
 				+ (cst.isEmpty() ? "<i>&lt;The combined symbol table is empty.&gt;</i>"
 						: cst);
+		res += "</pre>";
 		if (!uos.appme.isEmpty())
 			res += "\n\n<h2>Isolated Linker Errors</h2>\n" + uos.appme;
 

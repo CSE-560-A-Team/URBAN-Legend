@@ -2,7 +2,7 @@
 
 \page testcase41 Negative Address
 <h1>Linker Load Phase</h1>
-
+<pre>
 neg
 H:neg:0:3:0:2012149,14:53:32:1:URBAN-ASM:neg:
 T:0:8C880001:A:R:0:1:neg:
@@ -17,16 +17,17 @@ M:2:+:N:NEGATE:+:E:lbl1:S:neg:
 700: No corresponding linker record for label, lbl1.
 702: Non-literal value must be within range: [0, 4095].
 E:8:0:3:3:neg:
-
+</pre>
 
 
 <h1>Linking Phase: Combined Symbol Table</h1>
-
+<pre>
 <i>&lt;The combined symbol table is empty.&gt;</i>
-
+</pre>
 <h2>Isolated Linker Errors</h2>
+<pre>
 <span color="red">702: Non-literal value must be within range: [0, 4095].</span><span color="red">700: No corresponding linker record for label, lbl1.</span><span color="red">700: No corresponding linker record for label, lbl2.</span><span color="red">700: No corresponding linker record for label, lbl1.</span><span color="red">702: Non-literal value must be within range: [0, 4095].</span>
-
+</pre>
 <h2>Complete loader file</h2>
 
 <pre>H:neg:
