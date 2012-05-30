@@ -1,0 +1,17 @@
+/*!
+ 
+\page testcase46 Mismatched Program Name 
+<h1>Linker Load Phase</h1>
+<h2>Object Files</h2>
+<pre>
+H:LinkerTest1:0064:0003:0064:2012144,22:10:10:0001:URBAN-ASM:LinkerTest2:
+T:0064:00810001:A:R:00:00:LinkerTest2:
+T:0065:00820003:A:R:00:00:LinkerTest2:
+T:0066:00120000:R:A:00:00:LinkerTest2:
+E:0005:0000:0003:0000:LinkerTest2:
+</pre>
+<h2>Errors</h2>
+<pre>
+WARNING: 303: Program Name does not match end of record name.
+</pre>
+*/

@@ -1,0 +1,26 @@
+/*!
+ 
+\page testcase48 Text Record missing 'T' 
+<h1>Linker Load Phase</h1>
+<h2>Object Files</h2>
+<pre>
+H:LinkerTest4:0004:000A:0004:2012145,18:45:49:0001:URBAN-ASM:LinkerTest4:
+T:0004:A0800FFF:A:R:00:00:LinkerTest4:
+T:0005:A0881000:A:R:00:00:LinkerTest4:
+T:0006:A1870FFF:A:R:00:00:LinkerTest4:
+T:0007:A4680000:A:R:00:00:LinkerTest4:
+T:0008:A4582020:A:R:00:00:LinkerTest4:
+T:0009:A8840040:A:R:00:00:LinkerTest4:
+T:000A:A8833080:A:R:00:00:LinkerTest4:
+T:000B:A9820000:A:R:00:00:LinkerTest4:
+T:000C:B0180200:A:R:00:00:LinkerTest4:
+:000D:B0F87FFF:A:R:00:00:LinkerTest4:
+E:000C:0000:000A:0000:LinkerTest4:
+
+
+</pre>
+<h2>Errors</h2>
+<pre>
+ERROR: 911: End record missing from loader file: file invalid
+</pre>
+*/

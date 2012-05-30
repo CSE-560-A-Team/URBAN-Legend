@@ -1,0 +1,29 @@
+/*!
+ 
+\page testcase49 End Record missing 'E' 
+<h1>Linker Load Phase</h1>
+<h2>Object Files</h2>
+<pre>
+H:LinkerTest5:
+0004:000C:0004:2012145,18:38:21:0001:URBAN-ASM:LinkerTest5:
+T:0004:C0880000:A:R:00:00:LinkerTest5:
+T:0005:C0880FFF:A:R:00:00:LinkerTest5:
+T:0006:00000030:A:A:00:00:LinkerTest5:
+T:0007:00000030:A:A:00:00:LinkerTest5:
+T:0008:00000030:A:A:00:00:LinkerTest5:
+T:0009:00000030:A:A:00:00:LinkerTest5:
+T:000A:C4880000:A:R:00:00:LinkerTest5:
+T:000B:C4880FFF:A:R:00:00:LinkerTest5:
+T:000C:C4881000:A:R:00:00:LinkerTest5:
+T:000D:C4887000:A:R:00:00:LinkerTest5:
+T:000E:C4800000:A:A:00:00:LinkerTest5:
+T:000F:C4870000:A:A:00:00:LinkerTest5:
+:000E:0000:000C:0000:LinkerTest5:
+
+
+</pre>
+<h2>Errors</h2>
+<pre>
+ERROR: 911: End record missing from loader file: file invalid
+</pre>
+*/

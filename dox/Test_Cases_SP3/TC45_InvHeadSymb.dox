@@ -1,0 +1,17 @@
+/*!
+ 
+\page testcase45 Invalid Header Reord symbol
+<h1>Linker Load Phase</h1>
+<h2>Object Files</h2>
+<pre>
+Q:LinkTest1:0000:0003:0000:2012144,22:29:28:0001:URBAN-ASM:LinkTest1:
+T:0000:00800001:A:R:00:00:LinkTest1:
+T:0001:00810002:A:R:00:00:LinkTest1:
+T:0002:00820003:A:R:00:00:LinkTest1:
+E:0005:0000:0003:0000:LinkTest1:
+</pre>
+<h2>Errors</h2>
+<pre>
+ERROR: 901: Header record missing from loader file: file invalid
+</pre>
+*/
