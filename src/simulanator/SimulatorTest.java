@@ -3,17 +3,34 @@ package simulanator;
 import java.awt.Component;
 import java.io.ByteArrayInputStream;
 
-import assemblernator.ErrorReporting.ErrorHandler;
-
 import simulanator.Machine.URBANInputStream;
 import simulanator.Machine.URBANOutputStream;
 import ulutil.FrankenOutput;
+import assemblernator.ErrorReporting.ErrorHandler;
 
 /**
  * @author Josh Ventura
  * @date May 29, 2012; 11:33:43 AM
  */
 public class SimulatorTest {
+	/**
+	 * Get HTML dump.
+	 * 
+	 * @author Josh Ventura
+	 * @date May 30, 2012; 12:33:03 AM
+	 * @param time
+	 *            Eg, "Initial" or "Final".
+	 * @param m
+	 *            The machine to dump.
+	 * @return The dump of the machine, in a scrollable div.
+	 */
+	private static String getDump(String time, Machine m) {
+		return "<h2>"
+				+ time
+				+ " Machine Dump</h2><pre style=\"width:75%; height: 256px; overflow: auto; white-space:pre;\">"
+				+ m.dump(3).replaceAll("\n\n", "<br>\n") + "</pre>";
+	}
+
 	/**
 	 * @param loaderFile
 	 *            The executable file to load.
@@ -27,7 +44,9 @@ public class SimulatorTest {
 		Machine m = new Machine(uos, uos, uos);
 
 		Simulator.load(new ByteArrayInputStream(loaderFile), uos, uos, m);
+		uos.writeHTML(getDump("Initial", m));
 		m.runAnchored();
+		uos.writeHTML(getDump("Final", m));
 
 		return uos.appme;
 	}
@@ -63,7 +82,9 @@ public class SimulatorTest {
 		m.output = fo;
 		m.input = fo;
 		m.hErr = fo;
+		fo.writeHTML(getDump("Initial", m));
 		m.runAnchored();
+		fo.writeHTML(getDump("Final", m));
 		m.output = uos_orig;
 		m.input = uis_orig;
 		m.hErr = hErr_orig;
