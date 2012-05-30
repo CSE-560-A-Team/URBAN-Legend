@@ -406,7 +406,6 @@ public class LinkerModule implements Comparable<LinkerModule>{
 				}
 				//add link record to user report and linkerModule
 				if(addLink){
-					System.out.println("boobs");
 					linkRecord.put(entryLabel, entryAddr);
 					System.err.println(linkRecord.size());
 					if(hack){
@@ -416,6 +415,7 @@ public class LinkerModule implements Comparable<LinkerModule>{
 					}
 				}else{
 					completeString =  completeString + ender + ":" +errorMessage +"\n";
+					addLink = true;
 				}
 				this.userRep.addType = AddType.LINKER;
 				this.userRep.add(entryAddr, completeString);
