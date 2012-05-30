@@ -343,7 +343,7 @@ public class SimulatorTab extends JSplitPane {
 		@Override public void createThread(int threadID) {
 			DefaultTableModel tm = (DefaultTableModel) threadList.getModel();
 			SortedMap<Integer, Machine> threads = machine.getThreadData();
-			
+
 			synchronized (tm) {
 				tm.setRowCount(threads.size());
 				int row = 0;
@@ -357,7 +357,11 @@ public class SimulatorTab extends JSplitPane {
 		}
 
 		/** A thread in our list has died */
-		@Override public void destroyThread(int threadID) {}
+		@Override public void destroyThread(int threadID) {
+			System.out.println("Thread stopped");
+			if (machine.getThreadData().isEmpty())
+				runButton.setText("Run");
+		}
 
 
 		/** Aborted edit. */
@@ -498,8 +502,15 @@ public class SimulatorTab extends JSplitPane {
 				}
 			}
 			else if (e.getSource() == runButton) {
-				outputBox.append("<i>Starting main thread...</i><br/>");
-				machine.runThread(machine.getLC());
+				if (machine.getThreadData().isEmpty()) {
+					outputBox.append("<i>Starting main thread...</i><br/>");
+					machine.runThread(machine.getLC());
+					runButton.setText("Stop");
+				}
+				else {
+					machine.stopAll();
+					runButton.setText("Run");
+				}
 			}
 		}
 	}

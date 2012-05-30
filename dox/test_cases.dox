@@ -186,6 +186,31 @@ Test cases used in the SP3 benchmark:
     <th>Description</th>
   </tr>
   <tr>
+  	<td>\subpage testcase31</td>
+  	<td>Eric</td>
+  	<td>Tests result of linker/loader when program name CRC does not match.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase32</td>
+  	<td>Eric</td>
+  	<td>Tests result of linker/loader when number of records is incorrect.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase33</td>
+  	<td>Eric</td>
+  	<td>Tests result of linker when the number of modification records is incorrect.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase34</td>
+  	<td>Eric</td>
+  	<td>Tests result of linker module reader when text records contain invalid status flags.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase35</td>
+  	<td>Eric</td>
+  	<td>Invalid Linker,Text, and Modification Records.</td>
+  </tr>
+  <tr>
   	<td>\subpage testcase36</td>
   	<td>Noah</td>
   	<td>Tests dual memory access with external labels and address arithmetic. Shared load address.</td>
@@ -265,7 +290,7 @@ Test cases used in the SP4 benchmark:
     <th>Description</th>
   </tr>
   <tr>
-    <td>\subpage testcase20</td>
+    <td>\subpage testcase51</td>
     <td>Josh</td>
     <td>Prints the lyrics to 99 Bottles.</td>
   </tr>
@@ -327,15 +352,16 @@ Test cases used in the SP4 benchmark:
     <td>Tests for error segmentation fault with the cause being number of words + address - 1 > 4095.</td>
   </tr>
   <tr>
-    <td>\subpage testcase70</td>
+    <td>\subpage testcase63</td>
     <td>BossMan</td>
     <td>Correct Arthmetic simulation</td>
   </tr>
   <tr>
-    <td>\subpage testcase71</td>
+    <td>\subpage testcase64</td>
     <td>Eric</td>
     <td>Tests for errors on overflow in arthimetic</td>
   </tr>
+  
 </table>
 
 Test cases developed by third parties:

@@ -1,11 +1,11 @@
 /*!
 
-\page testcase71 Invalid Arithmetic Test
+\page testcase63 Arithmetic Simulate
 
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">theGuyWithTupac</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
-<span style="font-style:italic;color:#800080;">yellow</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2147483647</span><span style="color:#ff0000;">;</span>
-<span style="font-style:italic;color:#800080;">orange</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2147483647</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">yellow</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
+<span style="font-style:italic;color:#800080;">orange</span> <span style="font-weight:bold;color:#000080;">num</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">movd</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">yellow</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">movd</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">orange</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">movdn</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">yellow</span><span style="color:#ff0000;">;</span>
@@ -17,7 +17,6 @@
 <span style="font-weight:bold;color:#000080;">isrg</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">isub</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">4</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">idiv</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">3</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
-<span style="font-weight:bold;color:#000080;">idiv</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">pwr</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">movd</span> <span style="color:#0000ff;">fr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">2</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">20</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">iwsr</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span><span style="color:#0000ff;">fm</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">20</span><span style="color:#ff0000;">;</span>
@@ -64,9 +63,9 @@ LC	Object Code	Address Status	Line Num	Source Line
 (hex)	(hex)	src:, dest:	(dec)
 0000	--------	src: A,dest:-	1	theGuyWithTupac kicko fc:0;
 
-0000	7FFFFFFF	src: A,dest:-	2	yellow num fc:2147483647;
+0000	00000001	src: A,dest:-	2	yellow num fc:1;
 
-0001	7FFFFFFF	src: A,dest:-	3	orange num fc:2147483647;
+0001	00000002	src: A,dest:-	3	orange num fc:2;
 
 0002	00810000	src: R,dest:-	4	movd dr:1,fm:yellow;
 
@@ -90,24 +89,22 @@ LC	Object Code	Address Status	Line Num	Source Line
 
 000C	38230000	src: A,dest:-	14	idiv dr:3,fr:2;
 
-000D	38110000	src: A,dest:-	15	idiv dr:1,fr:1;
+000D	3D820002	src: A,dest:-	15	pwr fc:2,dr:2;
 
-000E	3D820002	src: A,dest:-	16	pwr fc:2,dr:2;
+000E	00280014	src: A,dest:R	16	movd fr:2,dm:20;
 
-000F	00280014	src: A,dest:R	17	movd fr:2,dm:20;
+000F	A0180014	src: R,dest:-	17	iwsr nw:1,fm:20;
 
-0010	A0180014	src: R,dest:-	18	iwsr nw:1,fm:20;
+0010	FD880010	src: A,dest:-	18	hlt Ex:*;
 
-0011	FD880011	src: A,dest:-	19	hlt Ex:*;
-
-0012	--------	src: A,dest:-	20	end lr:theGuyWithTupac;
+0011	--------	src: A,dest:-	19	end lr:theGuyWithTupac;
 
 </pre>
 <h2>Object File</h2>
 <pre>H:theGuyWithTupac:
-0000:0012:0000:2012151,16:15:42:0001:URBAN-ASM:theGuyWithTupac:
-T:0000:7FFFFFFF:A:A:00:00:theGuyWithTupac:
-T:0001:7FFFFFFF:A:A:00:00:theGuyWithTupac:
+0000:0011:0000:2012151,16:12:45:0001:URBAN-ASM:theGuyWithTupac:
+T:0000:00000001:A:A:00:00:theGuyWithTupac:
+T:0001:00000002:A:A:00:00:theGuyWithTupac:
 T:0002:00810000:A:R:00:00:theGuyWithTupac:
 T:0003:00820001:A:R:00:00:theGuyWithTupac:
 T:0004:04830000:A:R:00:00:theGuyWithTupac:
@@ -119,21 +116,20 @@ T:0009:28130000:A:A:00:00:theGuyWithTupac:
 T:000A:2C240000:A:R:00:00:theGuyWithTupac:
 T:000B:30240000:A:A:00:00:theGuyWithTupac:
 T:000C:38230000:A:A:00:00:theGuyWithTupac:
-T:000D:38110000:A:A:00:00:theGuyWithTupac:
-T:000E:3D820002:A:A:00:00:theGuyWithTupac:
-T:000F:00280014:A:R:00:00:theGuyWithTupac:
-T:0010:A0180014:A:R:00:00:theGuyWithTupac:
-T:0011:FD880011:A:A:00:00:theGuyWithTupac:
-E:0014:0000:0012:0000:theGuyWithTupac:
+T:000D:3D820002:A:A:00:00:theGuyWithTupac:
+T:000E:00280014:A:R:00:00:theGuyWithTupac:
+T:000F:A0180014:A:R:00:00:theGuyWithTupac:
+T:0010:FD880010:A:A:00:00:theGuyWithTupac:
+E:0013:0000:0011:0000:theGuyWithTupac:
 </pre>
 
 
 <h1>Linker Load Phase</h1>
 
 <pre>theGuyWithTupac
-H:theGuyWithTupac:0:18:0:2012151,16:15:42:1:URBAN-ASM:theGuyWithTupac:
-T:0:7FFFFFFF:A:A:0:0:theGuyWithTupac:
-T:1:7FFFFFFF:A:A:0:0:theGuyWithTupac:
+H:theGuyWithTupac:0:17:0:2012151,16:12:45:1:URBAN-ASM:theGuyWithTupac:
+T:0:00000001:A:A:0:0:theGuyWithTupac:
+T:1:00000002:A:A:0:0:theGuyWithTupac:
 T:2:00810000:A:R:0:0:theGuyWithTupac:
 T:3:00820001:A:R:0:0:theGuyWithTupac:
 T:4:04830000:A:R:0:0:theGuyWithTupac:
@@ -145,12 +141,11 @@ T:9:28130000:A:A:0:0:theGuyWithTupac:
 T:10:2C240000:A:R:0:0:theGuyWithTupac:
 T:11:30240000:A:A:0:0:theGuyWithTupac:
 T:12:38230000:A:A:0:0:theGuyWithTupac:
-T:13:38110000:A:A:0:0:theGuyWithTupac:
-T:14:3D820002:A:A:0:0:theGuyWithTupac:
-T:15:00280014:A:R:0:0:theGuyWithTupac:
-T:16:A0180014:A:R:0:0:theGuyWithTupac:
-T:17:FD880011:A:A:0:0:theGuyWithTupac:
-E:20:0:18:0:theGuyWithTupac:
+T:13:3D820002:A:A:0:0:theGuyWithTupac:
+T:14:00280014:A:R:0:0:theGuyWithTupac:
+T:15:A0180014:A:R:0:0:theGuyWithTupac:
+T:16:FD880010:A:A:0:0:theGuyWithTupac:
+E:19:0:17:0:theGuyWithTupac:
 
 </pre>
 
@@ -161,9 +156,9 @@ E:20:0:18:0:theGuyWithTupac:
 <h2>Complete loader file</h2>
 
 <pre>H:theGuyWithTupac:
-0000:0000:0012:2012151,16:15:42:URBAN-LLM:0001:theGuyWithTupac:
-T:0000:7FFFFFFF:theGuyWithTupac:
-T:0001:7FFFFFFF:theGuyWithTupac:
+0000:0000:0011:2012151,16:12:45:URBAN-LLM:0001:theGuyWithTupac:
+T:0000:00000001:theGuyWithTupac:
+T:0001:00000002:theGuyWithTupac:
 T:0002:00810000:theGuyWithTupac:
 T:0003:00820001:theGuyWithTupac:
 T:0004:04830000:theGuyWithTupac:
@@ -175,19 +170,18 @@ T:0009:28130000:theGuyWithTupac:
 T:000A:2C240000:theGuyWithTupac:
 T:000B:30240000:theGuyWithTupac:
 T:000C:38230000:theGuyWithTupac:
-T:000D:38110000:theGuyWithTupac:
-T:000E:3D820002:theGuyWithTupac:
-T:000F:00280014:theGuyWithTupac:
-T:0010:A0180014:theGuyWithTupac:
-T:0011:FD880011:theGuyWithTupac:
-E:0014:0012:theGuyWithTupac:
+T:000D:3D820002:theGuyWithTupac:
+T:000E:00280014:theGuyWithTupac:
+T:000F:A0180014:theGuyWithTupac:
+T:0010:FD880010:theGuyWithTupac:
+E:0013:0011:theGuyWithTupac:
 </pre>
 
 <h1>Simulator Output</h1>
 
-<pre>======== Program Name: theGuyWithTupac ========</pre><pre>H:theGuyWithTupac:0:0:18:2012151,16:15:42:URBAN-LLM:1:theGuyWithTupac:
-T:0:7FFFFFFF:theGuyWithTupac:
-T:1:7FFFFFFF:theGuyWithTupac:
+<pre>======== Program Name: theGuyWithTupac ========</pre><pre>H:theGuyWithTupac:0:0:17:2012151,16:12:45:URBAN-LLM:1:theGuyWithTupac:
+T:0:00000001:theGuyWithTupac:
+T:1:00000002:theGuyWithTupac:
 T:2:00810000:theGuyWithTupac:
 T:3:00820001:theGuyWithTupac:
 T:4:04830000:theGuyWithTupac:
@@ -199,20 +193,19 @@ T:9:28130000:theGuyWithTupac:
 T:10:2C240000:theGuyWithTupac:
 T:11:30240000:theGuyWithTupac:
 T:12:38230000:theGuyWithTupac:
-T:13:38110000:theGuyWithTupac:
-T:14:3D820002:theGuyWithTupac:
-T:15:00280014:theGuyWithTupac:
-T:16:A0180014:theGuyWithTupac:
-T:17:FD880011:theGuyWithTupac:
-</pre><pre>E:20:18:theGuyWithTupac:
+T:13:3D820002:theGuyWithTupac:
+T:14:00280014:theGuyWithTupac:
+T:15:A0180014:theGuyWithTupac:
+T:16:FD880010:theGuyWithTupac:
+</pre><pre>E:19:17:theGuyWithTupac:
 </pre><pre>Loaded file.</pre><h2>Initial Machine Dump</h2><pre class="MemoryDumpPre">LC 0  WORD=00000000
 R0=00000000 R1=00000000 R2=00000000 R3=00000000
 R4=00000000 R5=00000000 R6=00000000 R7=00000000
 XR1=00000000 XR2=00000000 XR3=00000000 XR4=00000000
 XR5=00000000 XR6=00000000 XR7=00000000<br>
-0000:  7FFFFFFF 7FFFFFFF 00810000 00820001 04830000 20210000 34110000 24230000
-0008:  20830000 28130000 2C240000 30240000 38230000 38110000 3D820002 00280014
-0010:  A0180014 FD880011 00000000 00000000 00000000 00000000 00000000 00000000
+0000:  00000001 00000002 00810000 00820001 04830000 20210000 34110000 24230000
+0008:  20830000 28130000 2C240000 30240000 38230000 3D820002 00280014 A0180014
+0010:  FD880010 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0018:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0020:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0028:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -722,14 +715,14 @@ XR5=00000000 XR6=00000000 XR7=00000000<br>
 0FE8:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0FF0:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0FF8:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-</pre><span color="red">1009: Arithmetic overflow.</span><span color="red">1009: Arithmetic overflow.</span><span color="red">1009: Arithmetic overflow.</span><span color="red">1003: Arithmetic overflow: Division by zero.</span><span color="red">1009: Arithmetic overflow.</span><pre>2147483647</pre><pre>17</pre><h2>Final Machine Dump</h2><pre class="MemoryDumpPre">LC 18  WORD=FD880011
-R0=00000000 R1=00000000 R2=7FFFFFFF R3=00000001
-R4=80000001 R5=00000000 R6=00000000 R7=00000000
+</pre><pre>4</pre><pre>16</pre><h2>Final Machine Dump</h2><pre class="MemoryDumpPre">LC 17  WORD=FD880010
+R0=00000000 R1=00000009 R2=00000004 R3=00000005
+R4=00000001 R5=00000000 R6=00000000 R7=00000000
 XR1=00000000 XR2=00000000 XR3=00000000 XR4=00000000
 XR5=00000000 XR6=00000000 XR7=00000000<br>
-0000:  7FFFFFFF 7FFFFFFF 00810000 00820001 04830000 20210000 34110000 24230000
-0008:  20830000 28130000 2C240000 30240000 38230000 38110000 3D820002 00280014
-0010:  A0180014 FD880011 00000000 00000000 7FFFFFFF 00000000 00000000 00000000
+0000:  00000001 00000002 00810000 00820001 04830000 20210000 34110000 24230000
+0008:  20830000 28130000 2C240000 30240000 38230000 3D820002 00280014 A0180014
+0010:  FD880010 00000000 00000000 00000000 00000004 00000000 00000000 00000000
 0018:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0020:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0028:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -1238,8 +1231,9 @@ XR5=00000000 XR6=00000000 XR7=00000000<br>
 0FE0:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0FE8:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0FF0:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0FF8:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000FFF
+0FF8:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 </pre>
+
 
 
 */

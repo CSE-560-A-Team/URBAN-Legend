@@ -1,6 +1,7 @@
 /*!
 
 \page testcase61 Correct Clears
+
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">clearRun</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">movd</span> <span style="color:#0000ff;">fl</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">dr</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">1</span><span style="color:#ff0000;">;</span>
@@ -1190,3 +1191,5 @@ XR5=00000000 XR6=00000000 XR7=00000000<br>
 0FF0:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0FF8:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 </pre>
+
+*/

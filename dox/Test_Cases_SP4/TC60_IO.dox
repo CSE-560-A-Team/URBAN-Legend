@@ -1,6 +1,7 @@
 /*!
 
-\page testcase60 IO
+\page testcase60 I/O
+
 <h1>Input</h1>
 <pre><span style="font-style:italic;color:#800080;">inputOutputRun</span> <span style="font-weight:bold;color:#000080;">kicko</span> <span style="color:#0000ff;">fc</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">0</span><span style="color:#ff0000;">;</span>
 <span style="font-weight:bold;color:#000080;">irkb</span> <span style="color:#0000ff;">dm</span><span style="color:#ff0000;">:</span><span style="font-style:italic;color:#800080;">inInt</span><span style="color:#ff0000;">,</span> <span style="color:#0000ff;">nw</span><span style="color:#ff0000;">:</span><span style="color:#00e1af;">5</span><span style="color:#ff0000;">;</span>
@@ -637,3 +638,5 @@ XR5=00000000 XR6=00000000 XR7=00000000<br>
 0FF0:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 0FF8:  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 </pre><i><b>Prompted for user input. User entered </b><dd>1</dd></i><i><b>Prompted for user input. User entered </b><dd>l</dd></i><span color="red">1006: Input is not an integer.</span><i><b>Prompted for user input. User entered </b><dd>2</dd></i><i><b>Prompted for user input. User entered </b><dd>3</dd></i><i><b>Prompted for user input. User entered </b><dd>4</dd></i><i><b>Prompted for user input. User entered </b><dd>ab</dd></i><span color="red">runInputChar</span><i><b>Prompted for user input. User entered </b><dd>c</dd></i><i><b>Prompted for user input. User entered </b><dd>d</dd></i><i><b>Prompted for user input. User entered </b><dd>e</dd></i><i><b>Prompted for user input. User entered </b><dd>f</dd></i><i><b>Prompted for user input. User entered </b><dd>g</dd></i><pre>1</pre><pre>
+
+*/

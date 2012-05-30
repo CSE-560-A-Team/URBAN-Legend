@@ -1,47 +1,109 @@
 /*!
 \page stepByStep Step-by-Step Guide
 
+\tableofcontents
+
 <center><h1>How to run URBAN Legend</h1></center>
 <br>
 <b><center>Command line not yet supported.</center></b>
-<ol>
-  <li>
+
+\section launching Launching
     If you are running on Windows, simply double click the jar file to run it.<br/>
     If you are running Linux, right click the jar and click "Open With OpenJDK Java 6 Runtime",
     or with the runtime of your choice.
-    <center><img src="custom/Screenshots/Step0.png" alt="Step 1"  /></center>
-  </li>
-  <li>
+    <center><img src="custom/Screenshots/Launching.png" alt="Launching URBAN Legend"  /></center>
+
+\section mainscreen Main Screen
     If all goes well, the following screen should pop up.
     If this window does not appear go back to step one.
-    <center><img src="custom/Screenshots/Step1.png" alt="Step 2" /></center>
-  </li>
-  <li>
+    <center><img src="custom/Screenshots/MainScreen.png" alt="Main Screen" /></center>
+
+\section coding Coding
     Type your program into the upper left box of the window. You can also choose to save or load your program from the "File" menu, pictured below.
-    <center><img src="custom/Screenshots/Step2.png" alt="Step 3" /></center>
-  </li>
-  <li>
-    When you are done entering your program, choose "Parse" from the "File" menu, as shown:
-    <center><img src="custom/Screenshots/Step3.png" alt="Step 4" /></center>
-  </li>
-  <li>
-    The symbol table will be produced in the right most text box. The user report will be produced at the bottom most text box.
-    If your code contains errors, they will be highlighted for you; simply correct them before proceeding.
-    <center><img src="custom/Screenshots/Step4.png" alt="Step 5" /></center>
-  </li>
-  <li>
-    When your code is completely correct, choose "compile" from the menu to build the object file.
-    <center><img src="custom/Screenshots/Step5.png" alt="Step 6" /></center>
-  </li>
-  <li>
-    If you have not saved your file previously, you will be prompted to choose a filename for it.
+    <center><img src="custom/Screenshots/Coding.png" alt="Step 3" /></center>
+
+\section syntaxchecking Syntax checking
+    <p>When you are done entering your program, choose "Parse" from the "File" menu, as shown:<br/>
+    <center><img src="custom/Screenshots/SelectParse.png" alt="The 'Parse' Menu Item" /></center></p>
+    
+    <p>Any syntax errors that are encountered will be highlighted in the code editor and added to the
+    table at the bottom, as seen below:<br/>
+    <center><img src="custom/Screenshots/ErrorDisplay.png" alt="Highlighted Error Lines" /></center></p>
+    
+    <p>Those errors will also be added to the user report under each instruction.</p><br/>
+    
+    <p>Once you have corrected the errors in your code, choose Parse from the menu again. The symbol
+    table will be displayed in the panel to the right, and the user report will appear in the panel
+    at the bottom.
+    <center><img src="custom/Screenshots/NoMoreErrors.png" alt="Parse without error" /></center></p>
+
+\section building Building an Object File
+    <p>When your code is completely correct, choose "compile" from the menu to build the object file.
+    <center><img src="custom/Screenshots/SelectCompile.png" alt="Select the Compile Option" /></center></p>
+
+    <p>If you have not saved your file previously, you will be prompted to choose a filename for it.
     Pick a filename to which to save your program itself.
-    <center><img src="custom/Screenshots/Step6.png" alt="Step 7" /></center>
-  </li>
-  <li>
-    The object file will be generated alongside your program, using the program's filename and the
-    URBAN Legend Object (.ULO) extension.
-  </li>
-</ol>
-<p>Congratulations! You now know how to run URBAN.</p>
+    <center><img src="custom/Screenshots/SaveScreen.png" alt="Choose where to save your file" /></center></p>
+    
+    <p>You would be presented with the same screen if you selected <i>Save</i> or <i>Save As</i> from the
+    same menu.</p>
+
+    <p>Regardless of when you saved your program, the object file will be generated alongside it, using the
+    program's filename and the URBAN Legend Object (.ULO) extension.</p>
+
+\section linking Linking Your Program
+    <p>When you have compiled all sources you wish to link, switch to the Linker tab by clicking it, as shown:
+    <center><img src="custom/Screenshots/SwitchToLink.png" alt="Switch to the link tab" /></center></p>
+    
+    <p>In the Link tab, choose the Add File button to pick the files you want:
+    <center><img src="custom/Screenshots/LinkTab.png" alt="Press the Add File button" /></center></p>
+    
+    <p>In the dialog that pops up, select the file or files you wish to link, then press "Open."
+    <center><img src="custom/Screenshots/LinkLoad.png" alt="Choose your files" /></center></p>
+    
+    <p>Once you have verified that the files you wish to link are in the list in the order you
+    desire, press the "Link" button to link them, as shown:
+    <center><img src="custom/Screenshots/LinkTime.png" alt="Press the Link button" /></center></p>
+    
+    <p>In the dialog that is displayed, choose the output path and filename for the executable obtained
+    by linking the files, as you have done before and as is shown here:
+    <center><img src="custom/Screenshots/LinkSave.png" alt="Choose an executable name" /></center></p>
+    
+    <p>The executable will be written to the filename you specified, and a user report will be generated
+    in the bottom panel with any errors or other information to report:
+    <center><img src="custom/Screenshots/LinkOutput.png" alt="Linker Output" /></center></p>
+
+\section simulatorload Running Your Executable
+
+    <p>To run your program, you must load it in the simulator tab. Switch to the simulator tab as you
+    switched to the Linker tab above, then choose the "Load" button:
+    <center><img src="custom/Screenshots/SimulatorLoad.png" alt="Simulator Load Button" /></center></p>
+    
+    <p>Once you have selected the file, press the "Run" button to begin execution:
+    <center><img src="custom/Screenshots/SimulatorRun.png" alt="Simulator Run Button" /></center></p>
+    
+    <p>The output of your program will continue to be printed in the user report in the lower panel:
+    <center><img src="custom/Screenshots/SimulatorRunning.png" alt="Simulator Output" /></center></p>
+    
+\section simulatoroverview Understanding the Simulator
+
+    <p>The simulator comprises several tightly-packed information displays:
+    <center><img src="custom/Screenshots/SimulatorOverview.png" alt="Simulator Overview" /></center></p>
+    <ol>
+      <li><span style="color:red">Memory Editor</span>: This pane shows the system memory at any given time.
+          You can edit the memory at any given address by seeking to it, double-clicking it, entering
+          the new value, and pressing Enter.</li>
+      <li><span style="color:yellow; background:#C0C0C0;">Registers</span>: This set of entry boxes shows the contents of each register.
+      You can not presently manipulate them.</li>
+      <li><span style="color:green">Index Registers</span>: This set of entry boxes shows the contents of each index register.
+      You can not presently manipulate them.</li>
+      <li><span style="color:blue">Location Counters</span>: This list displays the value of the LCs for each thread.
+      You can not presently manipulate them.</li>
+      <li><span style="color:purple">Output box</span>: Displays the output printed by the program, as well as the loader
+      user report.</li>
+      <li><span style="color:#FF00FF">Input Box</span>: This is the box into which you will enter input requested by the
+      program.</li>
+      <li><span style="color:cyan">Index Registers</span>: This spinner sets the delay in milliseconds after each instruction
+      is executed. Defaults to 400; just under half a second.</li>
+    </ol>
 */

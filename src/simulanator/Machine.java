@@ -371,9 +371,9 @@ public class Machine {
 			for (ThreadListener tl : threadListeners)
 				tl.fetchDecodeExecute();
 		}
+		mainThread.removeThread(threadID);
 		for (ThreadListener tl : threadListeners)
 			tl.destroyThread(threadID);
-		mainThread.removeThread(threadID);
 	}
 
 	/**
@@ -485,5 +485,19 @@ public class Machine {
 	 */
 	public SortedMap<Integer, Machine> getThreadData() {
 		return Collections.unmodifiableSortedMap(threads);
+	}
+
+	/** Stop the current running thread. */
+	private void stopThread() {
+		running = false;
+	}
+	
+	/** Stops all threads, killing the program. */
+	public void stopAll() {
+		for (Entry<Integer, Machine> thread : threads.entrySet()) {
+			thread.getValue().stopThread();
+		}
+		threads.clear();
+		running = false;
 	}
 }
