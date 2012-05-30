@@ -247,7 +247,7 @@ public class Machine {
 			
 			for (int i = 1; i < 8; ++i)
 				res += "XR" + i + "="
-						+ IOFormat.formatHexInteger(registers[i], 8)
+						+ IOFormat.formatHexInteger(indexRegisters[i], 8)
 						+ (i == 4 || i == 7 ? "\n" : " ");
 			
 			res += "\n";
