@@ -4,7 +4,9 @@ import static assemblernator.ErrorReporting.makeError;
 import static assemblernator.InstructionFormatter.formatOther;
 import static assemblernator.Module.Value.BitLocation.Literal;
 import static assemblernator.OperandChecker.isValidConstant;
+import simulanator.Deformatter;
 import simulanator.Machine;
+import simulanator.Deformatter.OpcodeBreakdown;
 import assemblernator.AbstractInstruction;
 import assemblernator.ErrorReporting.ErrorHandler;
 import assemblernator.Instruction;
@@ -78,7 +80,13 @@ public class USI_DMP extends AbstractInstruction {
 
 	/** @see assemblernator.Instruction#execute(int, Machine) */
 	@Override public void execute(int instruction, Machine machine) {
-		// TODO: IMPLEMENT
+		OpcodeBreakdown breakDown = Deformatter.breakDownOther(instruction);
+		int level = breakDown.source;
+		if(level > 3 || level < 1) {
+			machine.hErr.reportError(makeError("runDmpOOR"), machine.getLC(), -1);
+		} else {
+			machine.output.putString(machine.dump(level));
+		}
 	}
 
 	// =========================================================
