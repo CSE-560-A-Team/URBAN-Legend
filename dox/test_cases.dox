@@ -326,6 +326,16 @@ Test cases used in the SP4 benchmark:
     <td>Noah</td>
     <td>Tests for error segmentation fault with the cause being number of words + address - 1 > 4095.</td>
   </tr>
+  <tr>
+    <td>\subpage testcase70</td>
+    <td>BossMan</td>
+    <td>Correct Arthmetic simulation</td>
+  </tr>
+  <tr>
+    <td>\subpage testcase71</td>
+    <td>Eric</td>
+    <td>Tests for errors on overflow in arthimetic</td>
+  </tr>
 </table>
 
 Test cases developed by third parties:
