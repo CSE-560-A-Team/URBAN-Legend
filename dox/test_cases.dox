@@ -176,6 +176,10 @@ Test cases used in the SP2 benchmark:
     <td>Josh</td>
     <td>Tests all canonical instructions and directives when passed the same, very wrong parameters.</td>
   </tr>
+</table>
+
+Test cases used in the SP3 benchmark:
+<table>
   <tr>
   	<td>\subpage testcase36</td>
   	<td>Noah</td>
