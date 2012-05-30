@@ -1,6 +1,6 @@
 /*!
 
-\page testcase37 Valid dual-memory offset external label address arithmetic.
+\page testcase37 Valid Ext offset Address Arith 
 <h1>Linker Load Phase</h1>
 justNop
 H:justNop:0:1:0:2012149,15:14:34:1:URBAN-ASM:justNop:

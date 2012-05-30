@@ -1,6 +1,6 @@
 /*!
 
-\page testcase42 Error attempted program link out of memory.
+\page testcase42 Program OOM
 <h1>Linker Load Phase</h1>
 
 lc4095

@@ -1,6 +1,6 @@
 /*!
 
-\page testcase40 Fatal Error, execution start address of program < load Address.
+\page testcase40 Invalid Execution Start 2
 <h1>Linker Load Phase</h1>
 
 offExeStart

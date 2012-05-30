@@ -176,6 +176,51 @@ Test cases used in the SP2 benchmark:
     <td>Josh</td>
     <td>Tests all canonical instructions and directives when passed the same, very wrong parameters.</td>
   </tr>
+  <tr>
+  	<td>\subpage testcase36</td>
+  	<td>Noah</td>
+  	<td>Tests dual memory access with external labels and address arithmetic. Shared load address.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase37</td>
+  	<td>Noah</td>
+  	<td>Tests dual memory access with offset external labels and address arithmetic. Shared load address.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase38</td>
+  	<td>Noah</td>
+  	<td>Tests duplicate label error.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase39</td>
+  	<td>Noah</td>
+  	<td>Tests invalid execution start address fatal error, where execution start address > program length.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase40</td>
+  	<td>Noah</td>
+  	<td>Tests invalid execution start address fatal error, where execution start address < load address.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase41</td>
+  	<td>Noah</td>
+  	<td>Tests negative address error.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase42</td>
+  	<td>Noah</td>
+  	<td>Tests program is linked out of memory error.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase43</td>
+  	<td>Noah</td>
+  	<td>Tests no matching entry linking record label for external reference error.</td>
+  </tr>
+  <tr>
+  	<td>\subpage testcase44</td>
+  	<td>Noah</td>
+  	<td>Tests valid execution start address.</td>
+  </tr>
 </table>
 
 Test cases used in the SP4 benchmark:

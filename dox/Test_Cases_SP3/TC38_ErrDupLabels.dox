@@ -1,6 +1,6 @@
 /*!
 
-\page testcase38 Error, duplicate entry labels.
+\page testcase38 Duplicate Entry Labels
 <h1>Linker Load Phase</h1>
 entLabels
 H:entLabels:0:3:0:2012149,14:52:49:1:URBAN-ASM:entLabels:

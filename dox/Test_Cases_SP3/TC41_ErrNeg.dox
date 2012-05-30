@@ -1,6 +1,6 @@
 /*!
 
-\page testcase41 Error, negative address in link.
+\page testcase41 Negative Address
 <h1>Linker Load Phase</h1>
 
 neg

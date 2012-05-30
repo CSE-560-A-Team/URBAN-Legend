@@ -1,6 +1,6 @@
 /*!
 
-\page testcase39 Fatal Error, execution start address of program > length of program.
+\page testcase39 Invalid Execution Start 1
 <h1>Linker Load Phase</h1>
 
 altExe
