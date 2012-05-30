@@ -311,6 +311,21 @@ Test cases used in the SP4 benchmark:
     <td>Ratul</td>
     <td>Tests for out of range shift/manipulate instructions.</td>
   </tr>
+      <tr>
+    <td>\subpage testcase60</td>
+    <td>Noah</td>
+    <td>Tests for how input handle valid and invalid inputs and how output handles outputting correclty.</td>
+  </tr>
+      <tr>
+    <td>\subpage testcase61</td>
+    <td>Noah</td>
+    <td>Tests for correctness of clr, clra, clrx instructions.</td>
+  </tr>
+      <tr>
+    <td>\subpage testcase62</td>
+    <td>Noah</td>
+    <td>Tests for error segmentation fault with the cause being number of words + address - 1 > 4095.</td>
+  </tr>
 </table>
 
 Test cases developed by third parties:
