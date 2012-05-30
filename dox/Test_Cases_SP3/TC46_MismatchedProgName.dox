@@ -2,16 +2,32 @@
  
 \page testcase46 Mismatched Program Name 
 <h1>Linker Load Phase</h1>
-<h2>Object Files</h2>
-<pre>
-H:LinkerTest1:0064:0003:0064:2012144,22:10:10:0001:URBAN-ASM:LinkerTest2:
-T:0064:00810001:A:R:00:00:LinkerTest2:
-T:0065:00820003:A:R:00:00:LinkerTest2:
-T:0066:00120000:R:A:00:00:LinkerTest2:
-E:0005:0000:0003:0000:LinkerTest2:
+
+<pre>LinkerTest1
+H:LinkerTest1:100:3:100:2012144,22:10:10:1:URBAN-ASM:LinkerTest2:
+303: Program Name does not match end of record name.
+T:100:00810001:A:R:0:0:LinkerTest2:
+Label does not match Program Name.
+T:101:00820003:A:R:0:0:LinkerTest2:
+Label does not match Program Name.
+T:102:00120000:R:A:0:0:LinkerTest2:
+Label does not match Program Name.
+E:5:0:3:0:LinkerTest2:
+Label does not match Program Name.
+
 </pre>
-<h2>Errors</h2>
-<pre>
-WARNING: 303: Program Name does not match end of record name.
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+<pre><i>&lt;The combined symbol table is empty.&gt;</i></pre>
+
+<h2>Complete loader file</h2>
+
+<pre>H:LinkerTest1:
+0064:0064:0003:2012144,22:10:10:URBAN-LLM:0001:LinkerTest1:
+T:0064:00810001:LinkerTest1:
+T:0065:00820003:LinkerTest1:
+T:0066:00120000:LinkerTest1:
+E:0005:0003:LinkerTest1:
 </pre>
 */
