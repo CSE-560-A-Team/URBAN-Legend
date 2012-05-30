@@ -206,7 +206,6 @@ public class Linker {
 			int execStartErrorModule = 0;
 			modules[0].offset = offset;
 
-			System.err.println("elem0: "+modules[0].linkRecord.size());
 			//linkerTable.putAll(modules[0].linkRecord);// put all link records from first module.
 			for(Map.Entry<String, Integer> lr : modules[0].linkRecord.entrySet()) {
 				linkerSymbolTable = linkerSymbolTable + 
@@ -215,14 +214,13 @@ public class Linker {
 						"\t" + "Offset: " + offset + 
 						"\t" + "Adjusted Address: " + (lr.getValue() + offset) + "\n";
 				linkerTable.put(lr.getKey(), lr.getValue());
-				System.err.println("skize: " + linkerTable.size());
 				
 			}
 			
 			//calc offset and adjust prog, linker record addr, and text record addr by offset.
 			//add LinkerModule with adjusted addresses to offsetModules.
 			for(int i = 0; i < modules.length - 1; ++i) {
-				if(modules[i+1].loadAddr <= modules[i].loadAddr) {
+				
 					//calc offset
 					offset = ((modules[i].loadAddr + modules[i].prgTotalLen) - modules[i+1].loadAddr);
 				
@@ -236,13 +234,14 @@ public class Linker {
 						break;
 					}
 				
-					totalLen += modules[i+1].prgTotalLen;
-					if(modules[i+1].execStart > execStartAddr) {
-						execStartAddr = modules[i+1].execStart;
-						execStartErrorModule = i+1; //record module in which exec start was last updated.
+					if(modules[i + 1].loadAddr <= modules[i].loadAddr) {
+						totalLen += modules[i+1].prgTotalLen;
+						if(modules[i+1].execStart > execStartAddr) {
+							execStartAddr = modules[i+1].execStart;
+							execStartErrorModule = i+1; //record module in which exec start was last updated.
+						}
 					}
-				}
-					System.err.println("elem"+(i+1)+": "+modules[i+1].linkRecord.size());
+					
 					//put all linker records of current module into linker table with offset.
 					for(Map.Entry<String, Integer> lr : modules[i+1].linkRecord.entrySet()) {
 						
