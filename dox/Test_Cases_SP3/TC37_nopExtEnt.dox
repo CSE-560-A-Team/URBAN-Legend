@@ -1,0 +1,55 @@
+/*!
+
+\page testcase37 Valid dual-memory offset external label address arithmetic.
+<h1>Linker Load Phase</h1>
+justNop
+H:justNop:0:1:0:2012149,15:14:34:1:URBAN-ASM:justNop:
+T:0:F4000000:A:A:0:0:justNop:
+E:3:0:1:0:justNop:
+
+extUse
+H:extUse:0:4:0:2012149,15:00:12:1:URBAN-ASM:extUse:
+T:0:00800000:A:E:0:1:extUse:
+M:0:+:E:lbl3:S:extUse:
+T:1:00810000:A:C:0:2:extUse:
+M:1:+:E:lbl1:+:E:lbl2:S:extUse:
+T:2:00820000:A:C:0:3:extUse:
+M:2:+:E:lbl3:-:E:lbl1:+:E:lbl2:S:extUse:
+T:3:02000000:C:R:3:0:extUse:
+M:3:+:E:lbl3:-:E:lbl2:+:E:lbl1:H:extUse:
+E:10:0:4:4:extUse:
+
+entLabels
+H:entLabels:0:3:0:2012149,14:52:49:1:URBAN-ASM:entLabels:
+L:lbl1:0:entLabels:
+L:lbl2:1:entLabels:
+L:lbl3:2:entLabels:
+T:0:00000000:A:A:0:0:entLabels:
+T:1:00000001:A:A:0:0:entLabels:
+T:2:00000002:A:A:0:0:entLabels:
+E:8:3:3:0:entLabels:
+
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+label: lbl3	Original Address: 2	Offset: 5	Adjusted Address: 7
+label: lbl2	Original Address: 1	Offset: 5	Adjusted Address: 6
+label: lbl1	Original Address: 0	Offset: 5	Adjusted Address: 5
+
+
+<h2>Complete loader file</h2>
+
+<pre>H:justNop:
+0000:0000:0008:2012149,15:14:34:URBAN-LLM:0001:justNop:
+T:0000:F4000000:justNop:
+T:0001:00800007:justNop:
+T:0002:0081000B:justNop:
+T:0003:00820008:justNop:
+T:0004:02006001:justNop:
+T:0005:00000000:justNop:
+T:0006:00000001:justNop:
+T:0007:00000002:justNop:
+E:000A:0008:justNop:
+</pre>
+*/

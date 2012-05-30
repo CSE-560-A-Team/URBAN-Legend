@@ -1,0 +1,33 @@
+/*!
+
+\page testcase42 Error attempted program link out of memory.
+<h1>Linker Load Phase</h1>
+
+lc4095
+H:lc4095:4095:1:4095:2012149,16:37:59:1:URBAN-ASM:lc4095:
+T:4095:F4000000:A:A:0:0:lc4095:
+E:3:0:1:0:lc4095:
+
+lc4095
+H:lc4095:4095:1:4095:2012149,16:37:59:1:URBAN-ASM:lc4095:
+152: Out of Memory.
+T:4095:F4000000:A:A:0:0:lc4095:
+E:3:0:1:0:lc4095:
+
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+<i>&lt;The combined symbol table is empty.&gt;</i>
+
+<h2>Isolated Linker Errors</h2>
+<span color="red">152: Out of Memory.</span>
+
+<h2>Complete loader file</h2>
+
+<pre>H:lc4095:
+0FFF:0FFF:0001:2012149,16:37:59:URBAN-LLM:0001:lc4095:
+T:0FFF:F4000000:lc4095:
+E:0003:0001:lc4095:
+</pre>
+*/

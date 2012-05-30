@@ -1,0 +1,46 @@
+/*!
+
+\page testcase42 Error referenced label does not exist.
+<h1>Linker Load Phase</h1>
+
+extUse
+H:extUse:0:4:0:2012149,15:00:12:1:URBAN-ASM:extUse:
+T:0:00800000:A:E:0:1:extUse:
+M:0:+:E:lbl3:S:extUse:
+700: No corresponding linker record for label, lbl3.
+T:1:00810000:A:C:0:2:extUse:
+M:1:+:E:lbl1:+:E:lbl2:S:extUse:
+700: No corresponding linker record for label, lbl1.
+700: No corresponding linker record for label, lbl2.
+T:2:00820000:A:C:0:3:extUse:
+M:2:+:E:lbl3:-:E:lbl1:+:E:lbl2:S:extUse:
+700: No corresponding linker record for label, lbl3.
+700: No corresponding linker record for label, lbl1.
+700: No corresponding linker record for label, lbl2.
+T:3:02000000:C:R:3:0:extUse:
+M:3:+:E:lbl3:-:E:lbl2:+:E:lbl1:H:extUse:
+700: No corresponding linker record for label, lbl3.
+700: No corresponding linker record for label, lbl2.
+700: No corresponding linker record for label, lbl1.
+E:10:0:4:4:extUse:
+
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+<i>&lt;The combined symbol table is empty.&gt;</i>
+
+<h2>Isolated Linker Errors</h2>
+<span color="red">700: No corresponding linker record for label, lbl3.</span><span color="red">700: No corresponding linker record for label, lbl1.</span><span color="red">700: No corresponding linker record for label, lbl2.</span><span color="red">700: No corresponding linker record for label, lbl3.</span><span color="red">700: No corresponding linker record for label, lbl1.</span><span color="red">700: No corresponding linker record for label, lbl2.</span><span color="red">700: No corresponding linker record for label, lbl3.</span><span color="red">700: No corresponding linker record for label, lbl2.</span><span color="red">700: No corresponding linker record for label, lbl1.</span>
+
+<h2>Complete loader file</h2>
+
+<pre>H:extUse:
+0000:0000:0004:2012149,15:00:12:URBAN-LLM:0001:extUse:
+T:0000:00800000:extUse:
+T:0001:00810000:extUse:
+T:0002:00820000:extUse:
+T:0003:02000000:extUse:
+E:0006:0004:extUse:
+</pre>
+*/

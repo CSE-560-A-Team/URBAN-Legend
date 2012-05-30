@@ -1,0 +1,37 @@
+/*!
+
+\page testcase41 Error, negative address in link.
+<h1>Linker Load Phase</h1>
+
+neg
+H:neg:0:3:0:2012149,14:53:32:1:URBAN-ASM:neg:
+T:0:8C880001:A:R:0:1:neg:
+M:0:+:N:NEGATE:S:neg:
+702: Non-literal value must be within range: [0, 4095].
+T:1:8C880000:A:C:0:2:neg:
+M:1:+:E:lbl1:-:E:lbl2:S:neg:
+700: No corresponding linker record for label, lbl1.
+700: No corresponding linker record for label, lbl2.
+T:2:8C880001:A:E:0:2:neg:
+M:2:+:N:NEGATE:+:E:lbl1:S:neg:
+700: No corresponding linker record for label, lbl1.
+702: Non-literal value must be within range: [0, 4095].
+E:8:0:3:3:neg:
+
+
+
+<h1>Linking Phase: Combined Symbol Table</h1>
+
+<i>&lt;The combined symbol table is empty.&gt;</i>
+
+<h2>Isolated Linker Errors</h2>
+<span color="red">702: Non-literal value must be within range: [0, 4095].</span><span color="red">700: No corresponding linker record for label, lbl1.</span><span color="red">700: No corresponding linker record for label, lbl2.</span><span color="red">700: No corresponding linker record for label, lbl1.</span><span color="red">702: Non-literal value must be within range: [0, 4095].</span>
+
+<h2>Complete loader file</h2>
+
+<pre>H:neg:
+0000:0000:0003:2012149,14:53:32:URBAN-LLM:0001:neg:
+T:0001:8C880000:neg:
+E:0003:0001:neg:
+</pre>
+*/
