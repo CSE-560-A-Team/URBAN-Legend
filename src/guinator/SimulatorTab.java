@@ -321,7 +321,7 @@ public class SimulatorTab extends JSplitPane {
 		/** Allows us to pause or sleep */
 		@Override public void fetchDecodeExecute() {
 			int d = (Integer) delaySpinbox.getValue();
-			if (d > 0)
+			if ((!pausing || singlestep) && d > 0)
 				try {
 					Thread.sleep(d);
 				} catch (InterruptedException e) {}
@@ -331,6 +331,7 @@ public class SimulatorTab extends JSplitPane {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+			singlestep = false;
 		}
 
 		/** Update register display */
