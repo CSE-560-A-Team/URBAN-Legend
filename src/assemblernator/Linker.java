@@ -524,7 +524,6 @@ public class Linker {
 					temp = new LinkerModule(input, hErr);
 					if(temp.success) { //add to list of linker modules only if object file is valid.
 						temp.filename = fileNames[fileIndex];
-						System.err.println("test:" + temp.linkRecord.size());
 						modules.add(temp);
 					}
 					hasNext = !temp.done; 
@@ -537,9 +536,5 @@ public class Linker {
 		
 		return modules.toArray(new LinkerModule[modules.size()]);
 	}
-	/**
-	public static String getLinkerReport() {
-		
-	}
-	*/
+
 }
